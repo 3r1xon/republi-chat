@@ -1,0 +1,22 @@
+<div id="signup">
+
+    <div id="signup-form">
+
+        <h1>Sign up</h1>
+
+        <flat-input [(text)]="userName" placeholder="Nickname"></flat-input>
+
+        <flat-input [(text)]="password" type="password" placeholder="Password"></flat-input>
+
+        <flat-input [(text)]="confirmPassword" type="password" placeholder="Confirm password"></flat-input>
+
+        <div>
+            <flat-button (click)="signUp()" width="125px" icon="login">Sign Up</flat-button>
+        </div>
+        
+        <p>{{alert}}</p>
+        
+        <a routerLink="/login">Already registered? Log In</a>
+    </div>
+
+</div>

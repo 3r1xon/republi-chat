@@ -1,0 +1,53 @@
+#message-box {
+    width: 100%;
+    min-height: 55px;
+    border-top: 1px solid rgba(255, 255, 255, 0.165);
+    height: auto;
+    display: flex;
+    animation: appear 500ms;
+    align-items: center;
+    position: relative;
+
+    p {
+        color: rgb(255, 255, 255);
+        word-wrap: break-word;
+    }
+
+    #user-image {
+        width: 45px;
+        height: 45px;
+        margin: 5px;
+        border-radius: 50%;
+    }
+
+    #message-info {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        top: 0;
+        left: 0;
+
+        div {
+            display: flex;
+        }
+
+        p {
+            margin-left: 5px;
+            margin-top: 5px;
+        }
+
+        #time {
+            opacity: 0.5;
+        }
+    }
+}
+
+@keyframes appear {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}

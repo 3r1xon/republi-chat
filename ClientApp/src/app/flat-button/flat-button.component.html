@@ -1,0 +1,12 @@
+<div id="master" matRipple>
+    <div id="flat-button" [ngStyle]="{
+            'background': background,
+            'width': width,
+            'height': height
+        }">
+            <p>
+                <ng-content></ng-content>
+            </p>
+        <mat-icon>{{icon}}</mat-icon>
+    </div>
+</div>

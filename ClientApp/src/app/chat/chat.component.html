@@ -1,0 +1,7 @@
+<div id="chat">
+
+  <message-box *ngFor="let message of _msService.messages"
+    [userName]="message.userName"
+    [date]="message.date">{{message.userMessage}}</message-box>
+
+</div>

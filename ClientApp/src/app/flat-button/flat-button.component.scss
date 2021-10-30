@@ -1,0 +1,19 @@
+#master {
+    display: flex;
+    cursor: pointer;
+    user-select: none;
+
+    #flat-button {
+        padding: 10px;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-radius: 5px;
+    
+        p {
+            color: white;
+            font-size: 18px;
+        }
+    }
+}

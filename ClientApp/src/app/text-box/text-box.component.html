@@ -1,0 +1,14 @@
+<div id="text-box">
+
+    <button id="upload" (click)="sendMessage()">
+        <mat-icon>upload</mat-icon>
+    </button>
+
+    <textarea id="text" rows="20" cols="50" (keydown.enter)="sendMessage()"
+    [(ngModel)]="message" placeholder="Scrivi qualcosa..."></textarea>
+
+    <button id="send" (click)="sendMessage()">
+        <mat-icon>send</mat-icon>
+    </button>
+
+</div>

@@ -1,0 +1,17 @@
+<div id="message-box">
+    <div id="user-image" [style.background]="'url(' + userImage + ')' + 'no-repeat center/cover'"></div>
+
+    <div id="message-info">
+
+        <div>
+            <p [style.color]="userColor">{{userName}}</p>
+            <p id="time">{{formatter()}}</p>
+        </div>
+
+        <div id="content">
+            <p>
+                <ng-content></ng-content>
+            </p>
+        </div>
+    </div>
+</div>
