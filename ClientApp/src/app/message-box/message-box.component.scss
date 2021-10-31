@@ -40,6 +40,15 @@
             opacity: 0.5;
         }
     }
+
+    #delete {
+        color: rgb(255, 0, 0);
+        position: absolute;
+        right: 0;
+        margin: 10px;
+        user-select: none;
+        cursor: pointer;
+    }
 }
 
 @keyframes appear {

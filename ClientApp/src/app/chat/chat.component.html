@@ -1,7 +1,8 @@
 <div id="chat">
 
-  <message-box *ngFor="let message of _msService.messages"
+  <message-box *ngFor="let message of _msService.messages; let i = index;"
     [userName]="message.userName"
-    [date]="message.date">{{message.userMessage}}</message-box>
+    [date]="message.date"
+    [uniqueId]="i">{{message.userMessage}}</message-box>
 
 </div>

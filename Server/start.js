@@ -13,9 +13,11 @@ app.get('/', (req, res) => {
   res.send('Server is working!');
 });
 
+
 app.listen(port, () => {
   console.log(`Server listening at http://localhost:${port}`);
 });
+
 
 app.post('/sendMessage', async (req, res) => {
 
@@ -45,6 +47,7 @@ app.post('/sendMessage', async (req, res) => {
   }
 });
 
+
 app.post('/getMessages', async (req, res) => {
 
   try {
@@ -70,6 +73,7 @@ app.post('/getMessages', async (req, res) => {
 
 });
 
+
 app.post('/signUp', (req, res) => {
   
   const user = {
@@ -91,6 +95,7 @@ app.post('/signUp', (req, res) => {
     }
   }
 });
+
 
 app.post('/logIn', async (req, res) => {
 
@@ -123,3 +128,20 @@ app.post('/logIn', async (req, res) => {
     res.status(400).send({ success: false, message: "Database error!" });
   }
 });
+
+
+app.post('/deleteMessage', async (req, res) => {
+
+  try {
+    const id_message = req.body.id_message;
+
+    await db.promise().query(`DELETE FROM MESSAGES WHERE ID_MESSAGE = ${id_message}`);
+
+    res.status(200).send({ success: true });
+  } catch (err) {
+    console.log(err);
+
+    res.status(400).send({ success: false, message: "Database error!" });
+  }
+
+})

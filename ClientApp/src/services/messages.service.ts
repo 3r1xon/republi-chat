@@ -36,4 +36,15 @@ export class MessagesService {
     });
   }
 
+  public deleteMessage(index: number) {
+
+    this.http.post<ServerResponse>(`${database.BASE_URL}/deleteMessage`, { 
+      id_message: this.messages[index].id 
+    }).subscribe((res: ServerResponse) => {
+      if (res.success) {
+        this.messages.splice(index, 1);
+      }
+    });
+  }
+
 }

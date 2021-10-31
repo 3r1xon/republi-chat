@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { format } from 'date-fns';
+import { MessagesService } from 'src/services/messages.service';
 
 @Component({
   selector: 'message-box',
@@ -8,7 +9,7 @@ import { format } from 'date-fns';
 })
 export class MessageBoxComponent implements OnInit {
 
-  constructor() { }
+  constructor(public _msService: MessagesService) { }
 
   ngOnInit(): void {
   }
@@ -23,6 +24,9 @@ export class MessageBoxComponent implements OnInit {
 
   @Input()
   public userColor: string = "#FFFFFF";
+
+  @Input()
+  public uniqueId: number = 0;
 
   formatter() {
     return format(this.date, 'MM/dd/yyyy HH:mm');
