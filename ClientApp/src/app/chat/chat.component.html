@@ -3,6 +3,9 @@
   <message-box *ngFor="let message of _msService.messages; let i = index;"
     [userName]="message.userName"
     [date]="message.date"
-    [uniqueId]="i">{{message.userMessage}}</message-box>
+    [text]="message.userMessage"
+    (onDelete)="deleteMessage(i)"
+    (onUserClick)="openSelectedUser($event)"
+    (onEdit)="editMessage(i)"></message-box>
 
 </div>

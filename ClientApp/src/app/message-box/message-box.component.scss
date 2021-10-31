@@ -31,6 +31,10 @@
             display: flex;
         }
 
+        #username {
+            cursor: pointer;
+        }
+
         p {
             margin-left: 5px;
             margin-top: 5px;
@@ -39,17 +43,74 @@
         #time {
             opacity: 0.5;
         }
+
+        textarea {
+            outline: none;
+            background: transparent;
+            color: #FFFFFF;
+            resize: none;
+        }
     }
 
-    #delete {
-        color: rgb(255, 0, 0);
+    #dots {
+        color: #FFFFFF;
         position: absolute;
         right: 0;
         margin: 10px;
         user-select: none;
-        cursor: pointer;
+
+        #more {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 100ms;
+            cursor: pointer;
+
+            &:hover {
+                background: lighten($color: #18191c, $amount: 5);
+            }
+        }
+        
+        #submenu {
+            width: 100px;
+            position: absolute;
+            background: #18191c;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            z-index: 1;
+            border-radius: 2px;
+            margin-top: -25px;
+            margin-left: -105px;
+            -webkit-box-shadow: 5px 5px 10px 1px rgba(0,0,0,0.5); 
+            box-shadow: 5px 5px 10px 1px rgba(0,0,0,0.5);
+            padding: 5px;
+
+            .submenu-section {
+                width: 100%;
+                display: flex;
+                justify-content: space-between;
+                font-size: 14px;
+                border-radius: 2px;
+                transition: 150ms;
+                cursor: pointer;
+
+                p, mat-icon {
+                    padding: 5px;
+                }
+
+                &:hover {
+                    background: lighten($color: #18191c, $amount: 10);
+                }
+            }
+        }
     }
-}
+    }
+
 
 @keyframes appear {
     0% {

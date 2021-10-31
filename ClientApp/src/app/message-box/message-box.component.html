@@ -4,16 +4,33 @@
     <div id="message-info">
 
         <div>
-            <p [style.color]="userColor">{{userName}}</p>
-            <p id="time">{{formatter()}}</p>
+            <p 
+                [style.color]="userColor" 
+                (click)="onUserClick.emit('onUserClick')"
+                id="username">{{userName}}</p>
+            <p id="time">{{dateFormatter()}}</p>
         </div>
 
         <div id="content">
-            <p>
-                <ng-content></ng-content>
+            <p *ngIf="!isEditing">
+                {{text}}
             </p>
+            <textarea *ngIf="isEditing" textarea id="text" cols="100">{{text}}</textarea>
         </div>
     </div>
 
-    <mat-icon id="delete" (click)="_msService.deleteMessage(uniqueId)">delete</mat-icon>
+    <div id="dots">
+
+        <mat-icon (click)="openSubMenu()" id="more">more_vert</mat-icon>
+        
+        <div id="submenu" *ngIf="subMenuOpen">
+            <div class="submenu-section" *ngFor="let section of subMenuSections"
+                (click)="section.onClick()">
+                <p [style.color]="section.color">{{section.name}}</p>
+                <mat-icon [style.color]="section.color">{{section.icon}}</mat-icon>
+            </div>
+        </div>
+
+    </div>
+
 </div>

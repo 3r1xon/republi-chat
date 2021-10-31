@@ -1,14 +1,21 @@
 <div id="text-box">
 
+    <div id="profile">
+        <img id="user-image" [src]="_user.currentUser?.profilePicture">
+        <p>{{_user.currentUser?.userName}}</p>
+    </div>
+
     <button id="upload" (click)="sendMessage()">
         <mat-icon>upload</mat-icon>
     </button>
 
     <textarea id="text" rows="20" cols="50" (keydown.enter)="sendMessage()"
-    [(ngModel)]="message" placeholder="Scrivi qualcosa..."></textarea>
+    [(ngModel)]="message" placeholder="Write anything..."></textarea>
 
     <button id="send" (click)="sendMessage()">
         <mat-icon>send</mat-icon>
     </button>
+
+    <mat-icon id="settings">settings</mat-icon>
 
 </div>

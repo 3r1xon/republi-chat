@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { MessagesService } from 'src/services/messages.service';
 import { database } from 'src/environments/database';
 import { ServerResponse } from 'src/interfaces/response.interface';
-import { format, parseISO } from 'date-fns';
+import { parseISO } from 'date-fns';
 
 @Component({
   selector: 'chat',
@@ -35,6 +35,18 @@ export class ChatComponent implements OnInit {
         });
       }
     });
+  }
+
+  deleteMessage(index: number) {
+    this._msService.deleteMessage(index);
+  } 
+
+  openSelectedUser(event: any) {
+    console.log(event);
+  }
+
+  editMessage(index: number) {
+
   }
 
 }

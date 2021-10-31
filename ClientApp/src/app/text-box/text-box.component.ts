@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MessagesService } from 'src/services/messages.service';
+import { UserService } from 'src/services/user.service';
 
 @Component({
   selector: 'text-box',
@@ -8,7 +9,10 @@ import { MessagesService } from 'src/services/messages.service';
 })
 export class TextBoxComponent implements OnInit {
 
-  constructor(private _msService: MessagesService) { }
+  constructor(
+    private _msService: MessagesService,
+    public _user: UserService
+    ) { }
 
   ngOnInit(): void {
   }

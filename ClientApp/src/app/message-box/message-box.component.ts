@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, EventEmitter, Output } from '@angular/core';
 import { format } from 'date-fns';
 import { MessagesService } from 'src/services/messages.service';
 
@@ -16,6 +16,31 @@ export class MessageBoxComponent implements OnInit {
 
   public userImage: string = "/assets/user-image.png";
 
+  public subMenuSections = [
+    {
+      name: "Delete",
+      icon: "delete",
+      color: "red",
+      onClick: () => this.onDelete.emit('delete')
+    },
+    {
+      name: "Edit",
+      icon: "edit",
+      color: "white",
+      onClick: () => {
+        this.onEdit.emit('onEdit');
+        this.isEditing = !this.isEditing;
+      }
+    },
+  ];
+
+  public subMenuOpen: boolean = false;
+
+  public isEditing: boolean = false;
+
+  @Input()
+  public text: string = "";
+
   @Input()
   public userName: string = "";
 
@@ -25,10 +50,20 @@ export class MessageBoxComponent implements OnInit {
   @Input()
   public userColor: string = "#FFFFFF";
 
-  @Input()
-  public uniqueId: number = 0;
+  @Output()
+  public onDelete = new EventEmitter<string>();
 
-  formatter() {
+  @Output()
+  public onUserClick = new EventEmitter<string>();
+  
+  @Output()
+  public onEdit = new EventEmitter<string>();
+
+  dateFormatter() {
     return format(this.date, 'MM/dd/yyyy HH:mm');
+  }
+
+  openSubMenu() {
+    this.subMenuOpen = !this.subMenuOpen;
   }
 }

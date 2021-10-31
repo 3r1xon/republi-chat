@@ -21,8 +21,6 @@ app.listen(port, () => {
 
 app.post('/sendMessage', async (req, res) => {
 
-  console.log(req.body.date);
-
   const msg = {
     id_user: req.body.id,
     userMessage: req.body.userMessage,
@@ -85,7 +83,13 @@ app.post('/signUp', (req, res) => {
     res.status(400).send({ success: false, message: 'Username or password invalid' });
   else {
     try {
-      db.promise().query(`INSERT INTO USERS (NICKNAME, PASSWORD) VALUES ('${user.userName}', '${user.password}')`);
+      db.promise().query(
+        `INSERT INTO USERS 
+        (NICKNAME, PASSWORD, COLOR) 
+        VALUES 
+        ('${user.userName}', '${user.password}', '#FFFFFF')
+        `
+        );
 
       res.status(201).send({ success: true, message: 'User correctly signed up' });
     } catch (err) {
@@ -127,6 +131,23 @@ app.post('/logIn', async (req, res) => {
     console.log(err);
     res.status(400).send({ success: false, message: "Database error!" });
   }
+});
+
+
+app.post('/editProfile', async (req, res) => {
+
+  await db.promise().query(
+    `
+    UPDATE
+    USERS
+    SET
+    NAME = '',
+    COLOR = '',
+    PROFILE_PICTURE = ''
+    WHERE ID_USER = {}
+    `
+  );
+  
 });
 
 

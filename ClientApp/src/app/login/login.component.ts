@@ -36,6 +36,8 @@ export class LoginComponent implements OnInit {
         this.alert = <string>response.message;
       } else {
         this.user.currentUser = <Account>response.data;
+        // TODO:
+        this.user.currentUser.profilePicture = "/assets/user-image.png";
         this.router.navigate(['mainpage']);
       }
     });
