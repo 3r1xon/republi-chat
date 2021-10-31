@@ -1,4 +1,11 @@
-import { Component, Input, OnInit, EventEmitter, Output } from '@angular/core';
+import { 
+  Component, 
+  Input, 
+  Output, 
+  OnInit, 
+  EventEmitter,
+  HostListener,
+  ElementRef } from '@angular/core';
 import { format } from 'date-fns';
 import { MessagesService } from 'src/services/messages.service';
 
@@ -9,7 +16,10 @@ import { MessagesService } from 'src/services/messages.service';
 })
 export class MessageBoxComponent implements OnInit {
 
-  constructor(public _msService: MessagesService) { }
+  constructor(
+    public _msService: MessagesService,
+    private eRef: ElementRef
+    ) { }
 
   ngOnInit(): void {
   }
@@ -65,5 +75,11 @@ export class MessageBoxComponent implements OnInit {
 
   openSubMenu() {
     this.subMenuOpen = !this.subMenuOpen;
+  }
+
+  @HostListener('document:click', ['$event'])
+  clickout(event: any) {
+    if (!this.eRef.nativeElement.contains(event.target))
+      this.subMenuOpen = false;
   }
 }

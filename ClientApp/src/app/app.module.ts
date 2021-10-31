@@ -16,6 +16,7 @@ import { FlatButtonComponent } from './flat-button/flat-button.component';
 import { MatRippleModule } from '@angular/material/core';
 import { LoginComponent } from './login/login.component';
 import { MainpageComponent } from './mainpage/mainpage.component';
+import { SettingsComponent } from './settings/settings.component';
 
 
 @NgModule({
@@ -28,7 +29,8 @@ import { MainpageComponent } from './mainpage/mainpage.component';
     FlatInputComponent,
     FlatButtonComponent,
     LoginComponent,
-    MainpageComponent
+    MainpageComponent,
+    SettingsComponent
   ],
   imports: [
     BrowserModule,

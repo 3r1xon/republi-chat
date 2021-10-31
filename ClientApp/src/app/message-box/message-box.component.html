@@ -21,7 +21,10 @@
 
     <div id="dots">
 
-        <mat-icon (click)="openSubMenu()" id="more">more_vert</mat-icon>
+        <mat-icon (click)="openSubMenu()" id="more"
+            [ngStyle]="{ 
+                background: subMenuOpen ? '#24252a' : 'transparent' 
+            }">more_vert</mat-icon>
         
         <div id="submenu" *ngIf="subMenuOpen">
             <div class="submenu-section" *ngFor="let section of subMenuSections"
