@@ -1,12 +1,15 @@
-const express = require('express');
-const cors = require('cors');
-const db = require('./db');
-const app = express();
-const port = 3000;
-const fm = require('date-fns');
+const express        = require('express');
+const cors           = require('cors');
+const db             = require('./db');
+const app            = express();
+const port           = 3000;
+const fm             = require('date-fns');
+const Authentication = require('./auth');
+const auth = new Authentication();
 
 app.use(cors());
 app.use(express.json());
+// app.use(auth);
 
 
 app.get('/', (req, res) => {
@@ -101,7 +104,7 @@ app.post('/signUp', (req, res) => {
 });
 
 
-app.post('/logIn', async (req, res) => {
+app.post('/logIn', auth.generateToken, async (req, res) => {
 
   const user = {
     userName: req.body.userName,

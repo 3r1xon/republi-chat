@@ -59,7 +59,7 @@ export class MessageBoxComponent implements OnInit {
 
   @Input()
   public userColor: string = "#FFFFFF";
-
+  
   @Output()
   public onDelete = new EventEmitter<string>();
 
