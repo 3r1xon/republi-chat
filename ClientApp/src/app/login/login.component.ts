@@ -35,7 +35,8 @@ export class LoginComponent implements OnInit {
       if (!response.success) {
         this.alert = <string>response.message;
       } else {
-        this.user.currentUser = <Account>response.data;
+        this.user.currentUser = <Account>response.data.user;
+        localStorage.setItem('TOKEN', response.data.TOKEN);
         // TODO:
         this.user.currentUser.profilePicture = "/assets/user-image.png";
         this.router.navigate(['mainpage']);

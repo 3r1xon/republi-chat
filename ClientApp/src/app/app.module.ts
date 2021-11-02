@@ -9,7 +9,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { FormsModule } from '@angular/forms';
 import { MessageBoxComponent } from './message-box/message-box.component';
 import { ChatComponent } from './chat/chat.component';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { SignupComponent } from './signup/signup.component';
 import { FlatInputComponent } from './flat-input/flat-input.component';
 import { FlatButtonComponent } from './flat-button/flat-button.component';
@@ -17,6 +17,8 @@ import { MatRippleModule } from '@angular/material/core';
 import { LoginComponent } from './login/login.component';
 import { MainpageComponent } from './mainpage/mainpage.component';
 import { SettingsComponent } from './settings/settings.component';
+import { InterceptorService } from 'src/services/interceptor.service';
+import { LoadingComponent } from './loading/loading.component';
 
 
 @NgModule({
@@ -30,7 +32,8 @@ import { SettingsComponent } from './settings/settings.component';
     FlatButtonComponent,
     LoginComponent,
     MainpageComponent,
-    SettingsComponent
+    SettingsComponent,
+    LoadingComponent
   ],
   imports: [
     BrowserModule,
@@ -41,7 +44,9 @@ import { SettingsComponent } from './settings/settings.component';
     HttpClientModule,
     MatRippleModule
   ],
-  providers: [],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: InterceptorService, multi: true },
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

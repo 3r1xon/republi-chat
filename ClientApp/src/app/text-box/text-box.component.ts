@@ -11,7 +11,7 @@ export class TextBoxComponent implements OnInit {
 
   constructor(
     private _msService: MessagesService,
-    public _user: UserService
+    public _user: UserService,
     ) { }
 
   ngOnInit(): void {
@@ -19,7 +19,7 @@ export class TextBoxComponent implements OnInit {
 
   public message: string = "";
 
-  public sendMessage() {
+  public async sendMessage() {
 
     if (this.message == "") return;
 

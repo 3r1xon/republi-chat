@@ -2,17 +2,9 @@ const jwt = require('jsonwebtoken');
 
 class Auth {
 
-    generateToken = (req, res, next) => {
-    
-        const user = {
-            userName: req.body.userName
-        };
+    generateToken = (user) => {
         
-        const token = jwt.sign(user, process.env.ACCESS_TOKEN);
-    
-        console.log(token);
-    
-        res.status(200).send({ success: true, data: token });
+        return jwt.sign(user, process.env.ACCESS_TOKEN);
     };
     
     authToken = (req, res, next) => {

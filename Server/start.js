@@ -5,7 +5,9 @@ const app            = express();
 const port           = 3000;
 const fm             = require('date-fns');
 const Authentication = require('./auth');
+const dotenv         = require('dotenv'); 
 const auth = new Authentication();
+dotenv.config();
 
 app.use(cors());
 app.use(express.json());
@@ -30,13 +32,18 @@ app.post('/sendMessage', async (req, res) => {
     date: req.body.date
   };
 
+  await new Promise(r => setTimeout(r, 5000));
+
   try {
     await db.promise().query(`INSERT INTO MESSAGES (ID_USER, MESSAGE, DATE) VALUES (${msg.id_user}, '${msg.userMessage}', '${msg.date}')`);
 
-    let id = await db.promise().query(`SELECT LAST_VALUE(ID_MESSAGE) AS ID_MESSAGE
+    let id = await db.promise().query(
+    `
+    SELECT LAST_VALUE(ID_MESSAGE) AS ID_MESSAGE
     FROM MESSAGES 
     WHERE ID_USER = ${msg.id_user} 
-    ORDER BY ID_MESSAGE DESC`);
+    ORDER BY ID_MESSAGE DESC
+    `);
 
     id = id[0][0].ID_MESSAGE;
 
@@ -53,14 +60,17 @@ app.post('/getMessages', async (req, res) => {
 
   try {
 
-    let messages = await db.promise().query(`SELECT
+    let messages = await db.promise().query(
+    `
+    SELECT
     M.ID_MESSAGE,
     M.ID_USER,
     U.NICKNAME,
     M.MESSAGE,
     M.DATE 
     FROM MESSAGES M
-    LEFT JOIN USERS U ON U.ID_USER = M.ID_USER`);
+    LEFT JOIN USERS U ON U.ID_USER = M.ID_USER
+    `);
 
     messages = messages[0];
   
@@ -87,7 +97,8 @@ app.post('/signUp', (req, res) => {
   else {
     try {
       db.promise().query(
-        `INSERT INTO USERS 
+        `
+        INSERT INTO USERS 
         (NICKNAME, PASSWORD, COLOR) 
         VALUES 
         ('${user.userName}', '${user.password}', '#FFFFFF')
@@ -104,7 +115,7 @@ app.post('/signUp', (req, res) => {
 });
 
 
-app.post('/logIn', auth.generateToken, async (req, res) => {
+app.post('/logIn', async (req, res) => {
 
   const user = {
     userName: req.body.userName,
@@ -121,9 +132,12 @@ app.post('/logIn', auth.generateToken, async (req, res) => {
     if (dbUser.NICKNAME == user.userName && dbUser.PASSWORD == user.password) {
 
       res.status(200).send({ success: true, data: {
-        id: dbUser.ID_USER,
-        userName: dbUser.NICKNAME,
-        name: dbUser.NAME
+        user: {
+          id: dbUser.ID_USER,
+          userName: dbUser.NICKNAME,
+          name: dbUser.NAME
+        },
+        TOKEN: auth.generateToken({ userName: dbUser.NICKNAME })
       }});
   
     } else {
