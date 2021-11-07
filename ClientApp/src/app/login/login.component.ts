@@ -31,14 +31,19 @@ export class LoginComponent implements OnInit {
     this.http.post<ServerResponse>(`${database.BASE_URL}/logIn`, {
       userName: this.userName,
       password: this.password
-    }).subscribe((response) => {
+    }).subscribe((response: any) => {
       if (!response.success) {
         this.alert = <string>response.message;
       } else {
-        this.user.currentUser = <Account>response.data.user;
-        localStorage.setItem('TOKEN', response.data.TOKEN);
-        // TODO:
-        this.user.currentUser.profilePicture = "/assets/user-image.png";
+
+        const { user, TOKENS } = response.data;
+
+        this.user.currentUser = <Account>user;
+
+        localStorage.clear();
+        localStorage.setItem('ACCESS_TOKEN', TOKENS.access_token);
+        document.cookie = `REFRESH_TOKEN=${TOKENS.refresh_token}`;
+
         this.router.navigate(['mainpage']);
       }
     });

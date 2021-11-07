@@ -4,14 +4,20 @@ const db             = require('./db');
 const app            = express();
 const port           = 3000;
 const fm             = require('date-fns');
-const Authentication = require('./auth');
+const Auth           = require('./auth');
 const dotenv         = require('dotenv'); 
-const auth = new Authentication();
-dotenv.config();
+const cookieParser   = require("cookie-parser");
 
-app.use(cors());
+
+const corsOptions = {
+  origin: "http://localhost:4200",
+  credentials: true
+};
+dotenv.config();
+app.use(cors(corsOptions));
 app.use(express.json());
-// app.use(auth);
+app.use(cookieParser());
+
 
 
 app.get('/', (req, res) => {
@@ -19,20 +25,20 @@ app.get('/', (req, res) => {
 });
 
 
+
 app.listen(port, () => {
   console.log(`Server listening at http://localhost:${port}`);
 });
 
 
-app.post('/sendMessage', async (req, res) => {
+
+app.post('/sendMessage', Auth.authToken, async (req, res) => {
 
   const msg = {
     id_user: req.body.id,
     userMessage: req.body.userMessage,
     date: req.body.date
   };
-
-  await new Promise(r => setTimeout(r, 5000));
 
   try {
     await db.promise().query(`INSERT INTO MESSAGES (ID_USER, MESSAGE, DATE) VALUES (${msg.id_user}, '${msg.userMessage}', '${msg.date}')`);
@@ -47,16 +53,17 @@ app.post('/sendMessage', async (req, res) => {
 
     id = id[0][0].ID_MESSAGE;
 
-    res.status(201).send({ success: true, data: id });
+    res.send({ success: true, data: id });
   } catch (err) {
     console.log(err);
     
-    res.status(400).send({ success: false, message: `Database error!` });
+    res.send({ success: false, message: `Database error!` });
   }
 });
 
 
-app.post('/getMessages', async (req, res) => {
+
+app.post('/getMessages', Auth.authToken, async (req, res) => {
 
   try {
 
@@ -66,23 +73,25 @@ app.post('/getMessages', async (req, res) => {
     M.ID_MESSAGE,
     M.ID_USER,
     U.NICKNAME,
+    U.PROFILE_PICTURE,
     M.MESSAGE,
-    M.DATE 
+    M.DATE
     FROM MESSAGES M
     LEFT JOIN USERS U ON U.ID_USER = M.ID_USER
     `);
 
     messages = messages[0];
   
-    res.status(201).send({ success: true, data: messages });
+    res.send({ success: true, data: messages });
   } catch (err) {
 
     console.log(err);
 
-    res.status(400).send({ success: false, message: "Database error!" });
+    res.send({ success: false, message: "Database error!" });
   }
 
 });
+
 
 
 app.post('/signUp', (req, res) => {
@@ -93,26 +102,27 @@ app.post('/signUp', (req, res) => {
   };
 
   if (user.userName == '' || user.password == '')
-    res.status(400).send({ success: false, message: 'Username or password invalid' });
+    res.send({ success: false, message: 'Username or password invalid' });
   else {
     try {
       db.promise().query(
         `
         INSERT INTO USERS 
-        (NICKNAME, PASSWORD, COLOR) 
+        (NICKNAME, PASSWORD, COLOR, PROFILE_PICTURE) 
         VALUES 
-        ('${user.userName}', '${user.password}', '#FFFFFF')
+        ('${user.userName}', '${user.password}', '#FFFFFF', '/assets/user-image.png')
         `
         );
 
-      res.status(201).send({ success: true, message: 'User correctly signed up' });
+      res.send({ success: true, message: 'User correctly signed up' });
     } catch (err) {
       console.log(err);
       
-      res.status(400).send({ success: false, message: `Nickname ${user.userName} already exist!` });
+      res.send({ success: false, message: `Nickname ${user.userName} already exist!` });
     }
   }
 });
+
 
 
 app.post('/logIn', async (req, res) => {
@@ -122,36 +132,45 @@ app.post('/logIn', async (req, res) => {
     password: req.body.password
   };
 
+
   try {
 
     let dbUser = await db.promise().query(`SELECT * FROM USERS WHERE NICKNAME = '${user.userName}' AND PASSWORD = '${user.password}'`);
     dbUser = dbUser[0][0];
 
-    console.log(dbUser);
-  
-    if (dbUser.NICKNAME == user.userName && dbUser.PASSWORD == user.password) {
+    if (dbUser) {
 
-      res.status(200).send({ success: true, data: {
+      //res.setHeader('TEST', '123');
+      res.header('Access-Control-Expose-Headers', 'auth-token');
+
+      res.set("Test", "123")
+      console.log(res.getHeader("Test"));
+
+      res.send({ success: true, data: {
         user: {
           id: dbUser.ID_USER,
           userName: dbUser.NICKNAME,
           name: dbUser.NAME
         },
-        TOKEN: auth.generateToken({ userName: dbUser.NICKNAME })
+        TOKENS: await Auth.generateToken({
+          id: dbUser.ID_USER, 
+          userName: dbUser.NICKNAME 
+        })
       }});
   
     } else {
-      res.status(400).send({ success: false, message: "User does not exist!" });
+      res.send({ success: false, message: "User does not exist!" });
     }
   }
   catch (err) {
     console.log(err);
-    res.status(400).send({ success: false, message: "Database error!" });
+    res.send({ success: false, message: "Database error!" });
   }
 });
 
 
-app.post('/editProfile', async (req, res) => {
+
+app.post('/editProfile', Auth.authToken, async (req, res) => {
 
   await db.promise().query(
     `
@@ -168,18 +187,65 @@ app.post('/editProfile', async (req, res) => {
 });
 
 
-app.post('/deleteMessage', async (req, res) => {
+
+app.post('/authorize', async (req, res) => {
+
+  const { REFRESH_TOKEN } = req.cookies;
+
+  let id_user = await db.promise().query(
+    `
+    SELECT 
+    ID_USER 
+    FROM SESSIONS 
+    WHERE REFRESH_TOKEN = '${REFRESH_TOKEN}'
+    `);
+
+  id_user = id_user[0][0];
+
+  if (id_user) {
+
+    let dbUser = await db.promise().query(
+      `
+      SELECT * 
+      FROM USERS
+      WHERE ID_USER = ${id_user.ID_USER}
+      `);
+
+    dbUser = dbUser[0][0];
+
+    res.send({ success: true, data: {
+      user: {
+        id: dbUser.ID_USER,
+        userName: dbUser.NICKNAME,
+        name: dbUser.NAME
+      },
+      TOKENS: await Auth.generateToken({
+        id: dbUser.ID_USER, 
+        userName: dbUser.NICKNAME 
+      })
+    }});
+
+  } else {
+    res.send({ success: false, message: "Token invalid!"});
+  }
+
+
+});
+
+
+
+app.post('/deleteMessage', Auth.authToken, async (req, res) => {
 
   try {
     const id_message = req.body.id_message;
 
     await db.promise().query(`DELETE FROM MESSAGES WHERE ID_MESSAGE = ${id_message}`);
 
-    res.status(200).send({ success: true });
+    res.send({ success: true });
   } catch (err) {
     console.log(err);
 
-    res.status(400).send({ success: false, message: "Database error!" });
+    res.send({ success: false, message: "Database error!" });
   }
 
-})
+});

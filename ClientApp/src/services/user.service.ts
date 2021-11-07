@@ -9,4 +9,5 @@ export class UserService {
   constructor() { }
 
   public currentUser?: Account;
+
 }
