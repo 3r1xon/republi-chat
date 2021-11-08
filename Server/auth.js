@@ -23,16 +23,33 @@ class Auth {
 
         try {
 
-            await db.promise().query(`DELETE FROM SESSIONS WHERE ID_USER = ${user.id}`);
-    
-            await db.promise().query(
+            const userExist = await db.promise().query(
+            `
+            SELECT 1 
+            FROM SESSIONS
+            WHERE ID_USER = ${user.id}
+            `);
+
+            if (userExist) {
+
+                await db.promise().query(
+                `
+                UPDATE SESSIONS
+                SET
+                TOKEN = '${ACCESS_TOKEN}',
+                REFRESH_TOKEN = '${REFRESH_TOKEN}'
+                WHERE ID_USER = ${user.id}
+                `);
+            } else {
+
+                await db.promise().query(
                 `
                 INSERT INTO SESSIONS
                 (ID_USER, TOKEN, REFRESH_TOKEN)
                 VALUES
                 (${user.id}, '${ACCESS_TOKEN}', '${REFRESH_TOKEN}')
                 `);
-
+            }
         } catch (err) {
             console.log(err);
         }
@@ -57,46 +74,54 @@ class Auth {
         });
 
         let session = await db.promise().query(
-            `
-            SELECT 
-            ID_USER
-            FROM SESSIONS
-            WHERE TOKEN = '${token}'
-            `);
+        `
+        SELECT 
+        ID_USER
+        FROM SESSIONS
+        WHERE TOKEN = '${token}'
+        `);
 
         session = session[0][0];
-
-        session = undefined;
         
-        if (session)
-            next();
-        else {
-            const { REFRESH_TOKEN } = req.cookies;
+        if (session) {
+            jwt.verify(token, process.env.ACCESS_TOKEN, (err, decoded) => {
+                if (decoded) {
+                    next();
+                } else {
 
-            let dbRefreshToken = await db.promise().query(
-                `
-                SELECT
-                S.REFRESH_TOKEN,
-                U.NICKNAME,
-                U.ID_USER
-                FROM SESSIONS S
-                LEFT JOIN USERS U ON U.ID_USER = S.ID_USER
-                WHERE S.REFRESH_TOKEN = '${REFRESH_TOKEN}'
-                `);
+                    const { REFRESH_TOKEN } = req.cookies;
 
-            dbRefreshToken = dbRefreshToken[0][0];
+                    jwt.verify(REFRESH_TOKEN, process.env.ACCESS_TOKEN, async (err, decoded) => {
+                        if (decoded) {
 
-            if (dbRefreshToken) {
-                const { access_token, refresh_token } = await this.generateToken({
-                    id: dbRefreshToken.ID_USER,
-                    userName: dbRefreshToken.NICKNAME
-                });
-
-                next();
-            } else {
-                return res.send({ success: false, message: "There has been an error with the token authentication" });
-            }
-
+                            let dbRefreshToken = await db.promise().query(
+                            `
+                            SELECT
+                            S.REFRESH_TOKEN,
+                            U.NICKNAME,
+                            U.ID_USER
+                            FROM SESSIONS S
+                            LEFT JOIN USERS U ON U.ID_USER = S.ID_USER
+                            WHERE S.REFRESH_TOKEN = '${REFRESH_TOKEN}'
+                            `);
+        
+                            dbRefreshToken = dbRefreshToken[0][0];
+        
+                            if (dbRefreshToken) {
+                                res.set(await this.generateToken({
+                                    id: dbRefreshToken.ID_USER,
+                                    userName: dbRefreshToken.NICKNAME
+                                }));
+                                next();
+                            } else {
+                                return res.send({ success: false, message: "There has been an error with the token authentication" });
+                            }
+                        } else res.send({ success: false, message: "Refresh token invalid!" });
+                    });
+                }
+            });
+        } else {
+            res.send({ success: false, message: "Token not found!" });
         }
     }
 }

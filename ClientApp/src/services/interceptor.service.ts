@@ -24,20 +24,21 @@ export class InterceptorService implements HttpInterceptor {
 
     const authReq = req.clone({
       headers: req.headers.set('Content-Type', 'application/json')
-      .set('Authorization', `Bearer ${localStorage.getItem('TOKEN')}`),
+      .set('Authorization', `Bearer ${localStorage.getItem('ACCESS_TOKEN')}`),
       withCredentials: true
     });
 
     return next.handle(authReq).pipe(tap((res: any) => {
 
       if (res instanceof HttpResponse) {
-        console.log(res.headers);
+        console.log(res);
+        const ACCESS_TOKEN = res.headers?.get("ACCESS_TOKEN");
+        const REFRESH_TOKEN = res.headers?.get("REFRESH_TOKEN");
 
-        console.log("verificato")
-        // console.log("----->", res.body.TOKENS);
-        console.log(res.headers.get("Test"));
-
-        // next.handle(authReq);
+        if (ACCESS_TOKEN && REFRESH_TOKEN) {
+          localStorage.setItem("ACCESS_TOKEN", ACCESS_TOKEN);
+          document.cookie = `REFRESH_TOKEN=${REFRESH_TOKEN}`;
+        }
 
         this._utils.loading = false;
       }

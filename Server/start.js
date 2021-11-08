@@ -11,7 +11,8 @@ const cookieParser   = require("cookie-parser");
 
 const corsOptions = {
   origin: "http://localhost:4200",
-  credentials: true
+  credentials: true,
+  exposedHeaders: ['ACCESS_TOKEN', 'REFRESH_TOKEN'],
 };
 dotenv.config();
 app.use(cors(corsOptions));
@@ -106,13 +107,13 @@ app.post('/signUp', (req, res) => {
   else {
     try {
       db.promise().query(
-        `
-        INSERT INTO USERS 
-        (NICKNAME, PASSWORD, COLOR, PROFILE_PICTURE) 
-        VALUES 
-        ('${user.userName}', '${user.password}', '#FFFFFF', '/assets/user-image.png')
-        `
-        );
+      `
+      INSERT INTO USERS 
+      (NICKNAME, PASSWORD, COLOR, PROFILE_PICTURE) 
+      VALUES 
+      ('${user.userName}', '${user.password}', '#FFFFFF', '/assets/user-image.png')
+      `
+      );
 
       res.send({ success: true, message: 'User correctly signed up' });
     } catch (err) {
@@ -140,22 +141,17 @@ app.post('/logIn', async (req, res) => {
 
     if (dbUser) {
 
-      //res.setHeader('TEST', '123');
-      res.header('Access-Control-Expose-Headers', 'auth-token');
-
-      res.set("Test", "123")
-      console.log(res.getHeader("Test"));
+      res.set(await Auth.generateToken({
+        id: dbUser.ID_USER, 
+        userName: dbUser.NICKNAME 
+      }));
 
       res.send({ success: true, data: {
         user: {
           id: dbUser.ID_USER,
           userName: dbUser.NICKNAME,
           name: dbUser.NAME
-        },
-        TOKENS: await Auth.generateToken({
-          id: dbUser.ID_USER, 
-          userName: dbUser.NICKNAME 
-        })
+        }
       }});
   
     } else {
@@ -193,23 +189,23 @@ app.post('/authorize', async (req, res) => {
   const { REFRESH_TOKEN } = req.cookies;
 
   let id_user = await db.promise().query(
-    `
-    SELECT 
-    ID_USER 
-    FROM SESSIONS 
-    WHERE REFRESH_TOKEN = '${REFRESH_TOKEN}'
-    `);
+  `
+  SELECT 
+  ID_USER 
+  FROM SESSIONS 
+  WHERE REFRESH_TOKEN = '${REFRESH_TOKEN}'
+  `);
 
   id_user = id_user[0][0];
 
   if (id_user) {
 
     let dbUser = await db.promise().query(
-      `
-      SELECT * 
-      FROM USERS
-      WHERE ID_USER = ${id_user.ID_USER}
-      `);
+    `
+    SELECT * 
+    FROM USERS
+    WHERE ID_USER = ${id_user.ID_USER}
+    `);
 
     dbUser = dbUser[0][0];
 
