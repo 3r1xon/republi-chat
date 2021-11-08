@@ -13,13 +13,13 @@ class Auth {
             refresh: false
         };
         
-        const token = jwt.sign(user, process.env.ACCESS_TOKEN);
+        const ACCESS_TOKEN = jwt.sign(user, process.env.ACCESS_TOKEN, {
+            expiresIn: "15m"
+        });
 
         user.refresh = true;
 
-        const refresh_token = jwt.sign(user, process.env.ACCESS_TOKEN);
-
-        const date = fm.format(new Date(), 'yyyy/MM/dd HH:mm:ss');
+        const REFRESH_TOKEN = jwt.sign(user, process.env.ACCESS_TOKEN);
 
         try {
 
@@ -28,9 +28,9 @@ class Auth {
             await db.promise().query(
                 `
                 INSERT INTO SESSIONS
-                (ID_USER, TOKEN, REFRESH_TOKEN, DATE_UTC)
+                (ID_USER, TOKEN, REFRESH_TOKEN)
                 VALUES
-                (${user.id}, '${token}', '${refresh_token}', '${date}')
+                (${user.id}, '${ACCESS_TOKEN}', '${REFRESH_TOKEN}')
                 `);
 
         } catch (err) {
@@ -38,8 +38,8 @@ class Auth {
         }
 
         return {
-            access_token: token,
-            refresh_token: refresh_token
+            ACCESS_TOKEN: ACCESS_TOKEN,
+            REFRESH_TOKEN: REFRESH_TOKEN
         };
     };
 
@@ -56,21 +56,12 @@ class Auth {
             message: "Authentication failed!"
         });
 
-        let tokenDuration = new Date();
-
-        tokenDuration.setHours(tokenDuration.getHours() - 1);
-
-        tokenDuration = fm.format(tokenDuration, 'yyyy/MM/dd HH:mm:ss');
-
-        const today = fm.format(new Date(), 'yyyy/MM/dd HH:mm:ss');
-
         let session = await db.promise().query(
             `
             SELECT 
             ID_USER
             FROM SESSIONS
             WHERE TOKEN = '${token}'
-            AND DATE_UTC BETWEEN '${tokenDuration}' AND '${today}'
             `);
 
         session = session[0][0];

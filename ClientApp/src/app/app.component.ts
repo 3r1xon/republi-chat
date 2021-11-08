@@ -22,7 +22,7 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     this.http.post<ServerResponse>(`${database.BASE_URL}/authorize`, {
-      refresh_token: document.cookie.split("REFRESH_TOKEN=")[1]
+      REFRESH_TOKEN: document.cookie.split("REFRESH_TOKEN=")[1]
     }).subscribe((response: ServerResponse) => {
       if (response.success) {
 
@@ -30,8 +30,8 @@ export class AppComponent implements OnInit {
   
           this._user.currentUser = <Account>user;
           localStorage.clear();
-          localStorage.setItem('ACCESS_TOKEN', TOKENS.access_token);
-          document.cookie = `REFRESH_TOKEN=${TOKENS.refresh_token}`;
+          localStorage.setItem('ACCESS_TOKEN', TOKENS.ACCESS_TOKEN);
+          document.cookie = `REFRESH_TOKEN=${TOKENS.REFRESH_TOKEN}`;
   
           this.router.navigate(['mainpage']);
       } else {

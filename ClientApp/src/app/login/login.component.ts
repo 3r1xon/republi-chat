@@ -41,8 +41,8 @@ export class LoginComponent implements OnInit {
         this.user.currentUser = <Account>user;
 
         localStorage.clear();
-        localStorage.setItem('ACCESS_TOKEN', TOKENS.access_token);
-        document.cookie = `REFRESH_TOKEN=${TOKENS.refresh_token}`;
+        localStorage.setItem('ACCESS_TOKEN', TOKENS.ACCESS_TOKEN);
+        document.cookie = `REFRESH_TOKEN=${TOKENS.ACCESS_TOKEN}`;
 
         this.router.navigate(['mainpage']);
       }
