@@ -35,13 +35,9 @@ export class LoginComponent implements OnInit {
       if (!response.success) {
         this.alert = <string>response.message;
       } else {
-        const { user, TOKENS } = response.data;
+        const { user }= response.data;
         
         this.user.currentUser = <Account>user;
-
-        localStorage.clear();
-        localStorage.setItem('ACCESS_TOKEN', TOKENS.ACCESS_TOKEN);
-        document.cookie = `REFRESH_TOKEN=${TOKENS.REFRESH_TOKEN}`;
 
         this.router.navigate(['mainpage']);
       }

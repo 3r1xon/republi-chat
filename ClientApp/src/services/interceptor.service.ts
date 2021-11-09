@@ -31,9 +31,8 @@ export class InterceptorService implements HttpInterceptor {
     return next.handle(authReq).pipe(tap((res: any) => {
 
       if (res instanceof HttpResponse) {
-        console.log(res);
-        const ACCESS_TOKEN = res.headers?.get("ACCESS_TOKEN");
-        const REFRESH_TOKEN = res.headers?.get("REFRESH_TOKEN");
+        const ACCESS_TOKEN = res.headers.get("ACCESS_TOKEN");
+        const REFRESH_TOKEN = res.headers.get("REFRESH_TOKEN");
 
         if (ACCESS_TOKEN && REFRESH_TOKEN) {
           localStorage.setItem("ACCESS_TOKEN", ACCESS_TOKEN);

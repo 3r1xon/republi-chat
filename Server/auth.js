@@ -23,13 +23,13 @@ class Auth {
 
         try {
 
-            const userExist = await db.promise().query(
+            let userExist = await db.promise().query(
             `
             SELECT 1 
             FROM SESSIONS
             WHERE ID_USER = ${user.id}
             `);
-
+            
             if (userExist) {
 
                 await db.promise().query(

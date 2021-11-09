@@ -209,23 +209,22 @@ app.post('/authorize', async (req, res) => {
 
     dbUser = dbUser[0][0];
 
+    res.set(await Auth.generateToken({
+      id: dbUser.ID_USER, 
+      userName: dbUser.NICKNAME 
+    }));
+
     res.send({ success: true, data: {
       user: {
         id: dbUser.ID_USER,
         userName: dbUser.NICKNAME,
         name: dbUser.NAME
-      },
-      TOKENS: await Auth.generateToken({
-        id: dbUser.ID_USER, 
-        userName: dbUser.NICKNAME 
-      })
+      }
     }});
 
   } else {
     res.send({ success: false, message: "Token invalid!"});
   }
-
-
 });
 
 

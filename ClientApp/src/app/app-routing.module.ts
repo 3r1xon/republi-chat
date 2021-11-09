@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { UserService } from 'src/services/user.service';
 import { LoginComponent } from './login/login.component';
 import { MainpageComponent } from './mainpage/mainpage.component';
 import { SettingsComponent } from './settings/settings.component';
@@ -9,8 +10,8 @@ const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'signup', component: SignupComponent, pathMatch: 'full' },
   { path: 'login', component: LoginComponent, pathMatch: 'full' },
-  { path: 'mainpage', component: MainpageComponent, pathMatch: 'full' },
-  { path: 'settings', component: SettingsComponent, pathMatch: 'full' }
+  { path: 'mainpage', component: MainpageComponent, pathMatch: 'full', canActivate: [UserService] },
+  { path: 'settings', component: SettingsComponent, pathMatch: 'full', canActivate: [UserService] }
 ];
 
 @NgModule({
