@@ -1,10 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { ServerResponse } from 'src/interfaces/response.interface';
-import { database } from 'src/environments/database';
 import { UserService } from 'src/services/user.service';
-import { Account } from 'src/interfaces/account.interface';
 
 
 @Component({
@@ -20,21 +17,7 @@ export class AppComponent implements OnInit {
     private http: HttpClient
     ) { }
 
-  ngOnInit() {
-    this.http.post<ServerResponse>(`${database.BASE_URL}/authorize`, {
-      REFRESH_TOKEN: document.cookie.split("REFRESH_TOKEN=")[1]
-    }).subscribe((response: ServerResponse) => {
-      if (response.success) {
-        const { user } = response.data;
-
-          this._user.currentUser = <Account>user;
-  
-          this.router.navigate(['mainpage']);
-      } else {
-        this.router.navigate(['login']);
-        localStorage.clear();
-        document.cookie = "";
-      }
-    });
+  async ngOnInit() {
+    await this._user.authorize();
   }
 }

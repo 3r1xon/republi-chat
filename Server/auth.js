@@ -27,8 +27,8 @@ class Auth {
             `
             SELECT 1 
             FROM SESSIONS
-            WHERE ID_USER = ${user.id}
-            `);
+            WHERE ID_USER = ?
+            `, [user.id]);
             
             if (userExist) {
 
@@ -36,10 +36,10 @@ class Auth {
                 `
                 UPDATE SESSIONS
                 SET
-                TOKEN = '${ACCESS_TOKEN}',
-                REFRESH_TOKEN = '${REFRESH_TOKEN}'
-                WHERE ID_USER = ${user.id}
-                `);
+                TOKEN = ?,
+                REFRESH_TOKEN = ?
+                WHERE ID_USER = ?
+                `, [ACCESS_TOKEN, REFRESH_TOKEN, user.id]);
             } else {
 
                 await db.promise().query(
@@ -47,8 +47,8 @@ class Auth {
                 INSERT INTO SESSIONS
                 (ID_USER, TOKEN, REFRESH_TOKEN)
                 VALUES
-                (${user.id}, '${ACCESS_TOKEN}', '${REFRESH_TOKEN}')
-                `);
+                (?, ?, ?)
+                `, [user.id, ACCESS_TOKEN, REFRESH_TOKEN]);
             }
         } catch (err) {
             console.log(err);
@@ -78,8 +78,8 @@ class Auth {
         SELECT 
         ID_USER
         FROM SESSIONS
-        WHERE TOKEN = '${token}'
-        `);
+        WHERE TOKEN = ?
+        `, [token]);
 
         session = session[0][0];
         
@@ -102,8 +102,8 @@ class Auth {
                             U.ID_USER
                             FROM SESSIONS S
                             LEFT JOIN USERS U ON U.ID_USER = S.ID_USER
-                            WHERE S.REFRESH_TOKEN = '${REFRESH_TOKEN}'
-                            `);
+                            WHERE S.REFRESH_TOKEN = ?
+                            `, [REFRESH_TOKEN]);
         
                             dbRefreshToken = dbRefreshToken[0][0];
         

@@ -27,7 +27,7 @@
             }">more_vert</mat-icon>
         
         <div id="submenu" *ngIf="subMenuOpen">
-            <div class="submenu-section" *ngFor="let section of subMenuSections"
+            <div class="submenu-section" *ngFor="let section of subMenuSections" matRipple
                 (click)="section.onClick()">
                 <p [style.color]="section.color">{{section.name}}</p>
                 <mat-icon [style.color]="section.color">{{section.icon}}</mat-icon>

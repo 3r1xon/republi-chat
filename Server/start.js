@@ -42,15 +42,21 @@ app.post('/sendMessage', Auth.authToken, async (req, res) => {
   };
 
   try {
-    await db.promise().query(`INSERT INTO MESSAGES (ID_USER, MESSAGE, DATE) VALUES (${msg.id_user}, '${msg.userMessage}', '${msg.date}')`);
+    await db.promise().query(
+    `
+    INSERT INTO MESSAGES 
+    (ID_USER, MESSAGE, DATE) 
+    VALUES 
+    (?, ?, ?)
+    `, [msg.id_user, msg.userMessage, msg.date]);
 
     let id = await db.promise().query(
     `
     SELECT LAST_VALUE(ID_MESSAGE) AS ID_MESSAGE
     FROM MESSAGES 
-    WHERE ID_USER = ${msg.id_user} 
+    WHERE ID_USER = ?
     ORDER BY ID_MESSAGE DESC
-    `);
+    `, [msg.id_user]);
 
     id = id[0][0].ID_MESSAGE;
 
@@ -95,7 +101,7 @@ app.post('/getMessages', Auth.authToken, async (req, res) => {
 
 
 
-app.post('/signUp', (req, res) => {
+app.post('/signUp', async (req, res) => {
   
   const user = {
     userName: req.body.userName,
@@ -106,14 +112,14 @@ app.post('/signUp', (req, res) => {
     res.send({ success: false, message: 'Username or password invalid' });
   else {
     try {
-      db.promise().query(
+
+      await db.promise().query(
       `
       INSERT INTO USERS 
       (NICKNAME, PASSWORD, COLOR, PROFILE_PICTURE) 
       VALUES 
-      ('${user.userName}', '${user.password}', '#FFFFFF', '/assets/user-image.png')
-      `
-      );
+      (?, ?, '#FFFFFF', '/assets/user-image.png')
+      `, [user.userName, user.password]);
 
       res.send({ success: true, message: 'User correctly signed up' });
     } catch (err) {
@@ -136,22 +142,24 @@ app.post('/logIn', async (req, res) => {
 
   try {
 
-    let dbUser = await db.promise().query(`SELECT * FROM USERS WHERE NICKNAME = '${user.userName}' AND PASSWORD = '${user.password}'`);
+    let dbUser = await db.promise().query(
+    `
+    SELECT * 
+    FROM USERS 
+    WHERE NICKNAME = ? AND PASSWORD = ?
+    `, [user.userName, user.password]);
+
     dbUser = dbUser[0][0];
 
     if (dbUser) {
 
       res.set(await Auth.generateToken({
-        id: dbUser.ID_USER, 
+        id: dbUser.ID_USER,
         userName: dbUser.NICKNAME 
       }));
 
       res.send({ success: true, data: {
-        user: {
-          id: dbUser.ID_USER,
-          userName: dbUser.NICKNAME,
-          name: dbUser.NAME
-        }
+        user: dbUser
       }});
   
     } else {
@@ -193,8 +201,8 @@ app.post('/authorize', async (req, res) => {
   SELECT 
   ID_USER 
   FROM SESSIONS 
-  WHERE REFRESH_TOKEN = '${REFRESH_TOKEN}'
-  `);
+  WHERE REFRESH_TOKEN = ?
+  `, [REFRESH_TOKEN]);
 
   id_user = id_user[0][0];
 
@@ -204,8 +212,8 @@ app.post('/authorize', async (req, res) => {
     `
     SELECT * 
     FROM USERS
-    WHERE ID_USER = ${id_user.ID_USER}
-    `);
+    WHERE ID_USER = ?
+    `, [id_user.ID_USER]);
 
     dbUser = dbUser[0][0];
 
@@ -234,7 +242,11 @@ app.post('/deleteMessage', Auth.authToken, async (req, res) => {
   try {
     const id_message = req.body.id_message;
 
-    await db.promise().query(`DELETE FROM MESSAGES WHERE ID_MESSAGE = ${id_message}`);
+    await db.promise().query(
+    `
+    DELETE FROM MESSAGES 
+    WHERE ID_MESSAGE = ?
+    `, [id_message]);
 
     res.send({ success: true });
   } catch (err) {
