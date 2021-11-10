@@ -17,9 +17,9 @@ export class MessagesService {
   public messages: Array<Message> = [];
 
   public sendMessage(message: string) {
-
+    console.log(this._user.currentUser)
     const msg = {
-      id: this._user.currentUser?.id,
+      id: this._user.currentUser?.ID_USER,
       userMessage: message,
       date: new Date()
     };
@@ -29,7 +29,7 @@ export class MessagesService {
         this.messages.push({
           id: res.data,
           userMessage: msg.userMessage,
-          userName: this._user.currentUser?.userName ?? '',
+          userName: this._user.currentUser?.NICKNAME ?? '',
           date: msg.date
         });
       }

@@ -19,6 +19,7 @@ import { MainpageComponent } from './mainpage/mainpage.component';
 import { SettingsComponent } from './settings/settings.component';
 import { InterceptorService } from 'src/services/interceptor.service';
 import { LoadingComponent } from './loading/loading.component';
+import { FlatWindowMenuComponent } from './flat-window-menu/flat-window-menu.component';
 
 
 @NgModule({
@@ -33,7 +34,8 @@ import { LoadingComponent } from './loading/loading.component';
     LoginComponent,
     MainpageComponent,
     SettingsComponent,
-    LoadingComponent
+    LoadingComponent,
+    FlatWindowMenuComponent
   ],
   imports: [
     BrowserModule,

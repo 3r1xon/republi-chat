@@ -18,35 +18,12 @@ export class MessageBoxComponent implements OnInit {
 
   constructor(
     public _msService: MessagesService,
-    private eRef: ElementRef
     ) { }
 
   ngOnInit(): void {
   }
 
   public userImage: string = "/assets/user-image.png";
-
-  public subMenuSections = [
-    {
-      name: "Delete",
-      icon: "delete",
-      color: "red",
-      onClick: () => this.onDelete.emit('delete')
-    },
-    {
-      name: "Edit",
-      icon: "edit",
-      color: "white",
-      onClick: () => {
-        this.onEdit.emit('onEdit');
-        this.isEditing = !this.isEditing;
-      }
-    },
-  ];
-
-  public subMenuOpen: boolean = false;
-
-  public isEditing: boolean = false;
 
   @Input()
   public text: string = "";
@@ -61,25 +38,10 @@ export class MessageBoxComponent implements OnInit {
   public userColor: string = "#FFFFFF";
   
   @Output()
-  public onDelete = new EventEmitter<string>();
-
-  @Output()
   public onUserClick = new EventEmitter<string>();
-  
-  @Output()
-  public onEdit = new EventEmitter<string>();
 
   dateFormatter() {
     return format(this.date, 'MM/dd/yyyy HH:mm');
   }
 
-  openSubMenu() {
-    this.subMenuOpen = !this.subMenuOpen;
-  }
-
-  @HostListener('document:click', ['$event'])
-  clickout(event: any) {
-    if (!this.eRef.nativeElement.contains(event.target))
-      this.subMenuOpen = false;
-  }
 }

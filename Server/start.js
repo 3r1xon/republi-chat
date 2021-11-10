@@ -34,7 +34,7 @@ app.listen(port, () => {
 
 
 app.post('/sendMessage', Auth.authToken, async (req, res) => {
-
+  
   const msg = {
     id_user: req.body.id,
     userMessage: req.body.userMessage,
