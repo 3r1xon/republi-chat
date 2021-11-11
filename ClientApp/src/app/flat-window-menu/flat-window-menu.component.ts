@@ -1,4 +1,6 @@
-import { Component, ElementRef, HostListener, OnInit } from '@angular/core';
+import { Component, ElementRef, HostListener, Input, OnInit, Output } from '@angular/core';
+import { SubMenu } from 'src/interfaces/submenu.interface';
+import { EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'flat-window-menu',
@@ -12,34 +14,25 @@ export class FlatWindowMenuComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  public subMenuSections = [
-    {
-      name: "Delete",
-      icon: "delete",
-      color: "red",
-      onClick: () => {} //this.onDelete.emit('delete')
-    },
-    {
-      name: "Edit",
-      icon: "edit",
-      color: "white",
-      onClick: () => {
-        // this.onEdit.emit('onEdit');
-        // this.isEditing = !this.isEditing;
-      }
-    },
-  ];
+  @Input()
+  public subMenu: Array<SubMenu>;
+  
+  public state: boolean = false;
 
-  public subMenuOpen: boolean = false;
+  @Output()
+  public open = new EventEmitter();
 
   openSubMenu() {
-    this.subMenuOpen = !this.subMenuOpen;
+    this.state = !this.state;
+    this.open.emit(this.state);
   }
 
   @HostListener('document:click', ['$event'])
   clickout(event: any) {
-    if (!this.eRef.nativeElement.contains(event.target))
-      this.subMenuOpen = false;
+    if (!this.eRef.nativeElement.contains(event.target)) {
+      this.state = false;
+      this.open.emit(this.state);
+    }
   }
 
 }

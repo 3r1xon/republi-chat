@@ -63,10 +63,9 @@ export class UserService implements CanActivate {
 
   async logOut() {
     localStorage.clear();
-    document.cookie = "";
+    document.cookie = "REFRESH_TOKEN=";
     this.userAuth = false;
-    this.currentUser = undefined;
-    this.router.navigate(['login']);
+    window.location.reload();
   }
 
 }

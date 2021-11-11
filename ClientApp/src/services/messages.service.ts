@@ -29,7 +29,7 @@ export class MessagesService {
         this.messages.push({
           id: res.data,
           userMessage: msg.userMessage,
-          userName: this._user.currentUser?.NICKNAME ?? '',
+          userName: this._user.currentUser?.NICKNAME,
           date: msg.date
         });
       }

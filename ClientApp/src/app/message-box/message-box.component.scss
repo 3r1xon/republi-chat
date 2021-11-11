@@ -7,6 +7,11 @@
     animation: appear 500ms;
     align-items: center;
     position: relative;
+    transition: 150ms;
+
+    &:hover {
+        background: rgb(67 67 67);
+    }
 
     p {
         color: rgb(255, 255, 255);

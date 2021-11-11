@@ -1,4 +1,7 @@
-<div id="message-box">
+<div id="message-box" [ngStyle]="{ 
+        background: active ? 'rgb(67 67 67)' : '' 
+    }">
+    
     <div id="user-image" [style.background]="'url(' + userImage + ')' + 'no-repeat center/cover'"></div>
 
     <div id="message-info">
@@ -19,6 +22,7 @@
 
     </div>
 
-    <flat-window-menu></flat-window-menu>
+    <flat-window-menu [subMenu]="options" 
+    (open)="setToggle($event)"></flat-window-menu>
 
 </div>
