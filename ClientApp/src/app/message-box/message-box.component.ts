@@ -7,7 +7,8 @@ import {
   HostListener,
   ElementRef
 } from '@angular/core';
-import { format } from 'date-fns';
+import { format, parseISO } from 'date-fns';
+import { Message } from 'src/interfaces/message.interface';
 import { SubMenu } from 'src/interfaces/submenu.interface';
 import { MessagesService } from 'src/services/messages.service';
 
@@ -26,9 +27,9 @@ export class MessageBoxComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  public userImage: string = "/assets/user-image.png";
-
   public active: boolean = false;
+
+  public userImage: string = "";
 
   @Input()
   public options: Array<SubMenu> = [
@@ -48,25 +49,15 @@ export class MessageBoxComponent implements OnInit {
     },
   ];
 
-
   @Input()
-  public text: string = "";
+  public message: Message;
 
-  @Input()
-  public userName: string = "";
-
-  @Input()
-  public date: Date = new Date();
-
-  @Input()
-  public userColor: string = "#FFFFFF";
-  
   @Output()
   public onUserClick = new EventEmitter<string>();
 
 
   dateFormatter() {
-    return format(this.date, 'MM/dd/yyyy HH:mm');
+    return format(this.message.date, 'MM/dd/yyyy HH:mm');
   }
 
   setToggle($event) {

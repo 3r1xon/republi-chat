@@ -38,7 +38,7 @@ app.post('/sendMessage', Auth.authToken, async (req, res) => {
   const msg = {
     id_user: req.body.id,
     userMessage: req.body.userMessage,
-    date: req.body.date
+    date: fm.format(new Date(req.body.date), 'yyyy-MM-dd HH:mm')
   };
 
   try {
@@ -70,26 +70,26 @@ app.post('/sendMessage', Auth.authToken, async (req, res) => {
 
 
 
-app.post('/getMessages', Auth.authToken, async (req, res) => {
+app.get('/getMessages', Auth.authToken, async (req, res) => {
 
   try {
 
     let messages = await db.promise().query(
     `
     SELECT
-    M.ID_MESSAGE,
-    M.ID_USER,
-    U.NICKNAME,
-    U.PROFILE_PICTURE,
-    M.MESSAGE,
-    M.DATE
+    M.ID_MESSAGE as id,
+    U.COLOR as userColor,
+    U.NICKNAME as userName,
+    U.PROFILE_PICTURE as userImage,
+    M.MESSAGE as userMessage,
+    M.DATE as date
     FROM MESSAGES M
     LEFT JOIN USERS U ON U.ID_USER = M.ID_USER
     `);
 
     messages = messages[0];
   
-    res.send({ success: true, data: messages });
+    res.send({ success: true, data: messages});
   } catch (err) {
 
     console.log(err);
@@ -144,7 +144,12 @@ app.post('/logIn', async (req, res) => {
 
     let dbUser = await db.promise().query(
     `
-    SELECT * 
+    SELECT
+    ID_USER as id,
+    NICKNAME as userName,
+    NAME as name,
+    COLOR as userColor,
+    PROFILE_PICTURE as profilePicture 
     FROM USERS 
     WHERE NICKNAME = ? AND PASSWORD = ?
     `, [user.userName, user.password]);
@@ -210,7 +215,10 @@ app.post('/authorize', async (req, res) => {
 
     let dbUser = await db.promise().query(
     `
-    SELECT * 
+    SELECT
+    ID_USER as id,
+    NICKNAME as userName,
+    NAME as name
     FROM USERS
     WHERE ID_USER = ?
     `, [id_user.ID_USER]);
@@ -218,17 +226,11 @@ app.post('/authorize', async (req, res) => {
     dbUser = dbUser[0][0];
 
     res.set(await Auth.generateToken({
-      id: dbUser.ID_USER, 
-      userName: dbUser.NICKNAME 
+      id: dbUser.id, 
+      userName: dbUser.userName 
     }));
 
-    res.send({ success: true, data: {
-      user: {
-        id: dbUser.ID_USER,
-        userName: dbUser.NICKNAME,
-        name: dbUser.NAME
-      }
-    }});
+    res.send({ success: true, data: dbUser });
 
   } else {
     res.send({ success: false, message: "Token invalid!"});

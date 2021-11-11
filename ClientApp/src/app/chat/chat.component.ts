@@ -4,6 +4,7 @@ import { MessagesService } from 'src/services/messages.service';
 import { database } from 'src/environments/database';
 import { ServerResponse } from 'src/interfaces/response.interface';
 import { parseISO } from 'date-fns';
+import { Message } from 'src/interfaces/message.interface';
 
 @Component({
   selector: 'chat',
@@ -22,15 +23,18 @@ export class ChatComponent implements OnInit {
 
   getMessages() {
 
-    this.http.post<ServerResponse>(`${database.BASE_URL}/getMessages`, {}).subscribe((res: ServerResponse) => {
+    this.http.get<ServerResponse>(`${database.BASE_URL}/getMessages`).subscribe((res: ServerResponse) => {
       if (res.success) {
         this._msService.messages = [];
-        res.data.forEach((msg: any) => {
+
+        res.data.forEach((msg: Message) => {
           this._msService.messages.push({
-            id: msg.ID_MESSAGE,
-            userName: msg.NICKNAME,
-            userMessage: msg.MESSAGE,
-            date: parseISO(msg.DATE)
+            id: msg.id,
+            userName: msg.userName,
+            userMessage: msg.userMessage,
+            date: new Date(msg.date),
+            userImage: "",
+            userColor: "#FFFFFF"
           });
         });
       }

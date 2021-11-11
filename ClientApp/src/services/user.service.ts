@@ -35,7 +35,7 @@ export class UserService implements CanActivate {
       return response.message;
     } else {
       const { user } = response.data;
-      
+
       this.currentUser = <Account>user;
       this.userAuth = true;
 
@@ -48,12 +48,10 @@ export class UserService implements CanActivate {
       REFRESH_TOKEN: document.cookie.split("REFRESH_TOKEN=")[1]
     }).toPromise();
     if (response.success) {
-      const { user } = response.data;
+      this.currentUser = <Account>response.data;
+      this.userAuth = true;
 
-        this.currentUser = <Account>user;
-        this.userAuth = true;
-
-        this.router.navigate(['mainpage']);
+      this.router.navigate(['mainpage']);
     } else {
       this.router.navigate(['login']);
       localStorage.clear();

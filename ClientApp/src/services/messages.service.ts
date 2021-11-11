@@ -17,20 +17,21 @@ export class MessagesService {
   public messages: Array<Message> = [];
 
   public sendMessage(message: string) {
-    console.log(this._user.currentUser)
     const msg = {
-      id: this._user.currentUser?.ID_USER,
+      id: this._user.currentUser?.id,
       userMessage: message,
-      date: new Date()
+      date: new Date().getTime()
     };
 
     this.http.post<ServerResponse>(`${database.BASE_URL}/sendMessage`, msg).subscribe((res: ServerResponse) => {
       if (res.success) {
         this.messages.push({
           id: res.data,
+          userName: this._user.currentUser?.userName,
           userMessage: msg.userMessage,
-          userName: this._user.currentUser?.NICKNAME,
-          date: msg.date
+          userColor: "#FFFFFF",
+          userImage: "",
+          date: new Date(msg.date)
         });
       }
     });

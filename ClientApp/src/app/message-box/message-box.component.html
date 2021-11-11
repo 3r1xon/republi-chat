@@ -2,21 +2,21 @@
         background: active ? 'rgb(67 67 67)' : '' 
     }">
     
-    <div id="user-image" [style.background]="'url(' + userImage + ')' + 'no-repeat center/cover'"></div>
+    <div id="user-image" [style.background]="'url(' + message.userImage + ')' + 'no-repeat center/cover'"></div>
 
     <div id="message-info">
 
         <div>
             <p 
-                [style.color]="userColor" 
+                [style.color]="message.userColor" 
                 (click)="onUserClick.emit('onUserClick')"
-                id="username">{{userName}}</p>
+                id="username">{{message.userName}}</p>
             <p id="time">{{dateFormatter()}}</p>
         </div>
 
         <div id="content">
             <p>
-                {{text}}
+                {{message.userMessage}}
             </p>
         </div>
 

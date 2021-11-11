@@ -13,6 +13,8 @@ class Auth {
             refresh: false
         };
         
+        console.log(user);
+        
         const ACCESS_TOKEN = jwt.sign(user, process.env.ACCESS_TOKEN, {
             expiresIn: "15m"
         });
@@ -29,6 +31,8 @@ class Auth {
             FROM SESSIONS
             WHERE ID_USER = ?
             `, [user.id]);
+
+            userExist = userExist[0][0];
             
             if (userExist) {
 

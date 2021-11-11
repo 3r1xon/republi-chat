@@ -1,7 +1,7 @@
 export interface Account {
-    ID_USER: number;
-    NICKNAME: string;
-    profilePicture?: string;
-    USER_COLOR?: string;
-    NAME: string;
+    id: number;
+    userName: string;
+    profilePicture?: any;
+    userColor?: string;
+    name: string;
 }

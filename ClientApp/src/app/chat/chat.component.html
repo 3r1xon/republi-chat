@@ -1,9 +1,7 @@
 <div id="chat">
 
   <message-box *ngFor="let message of _msService.messages; let i = index;"
-    [userName]="message.userName"
-    [date]="message.date"
-    [text]="message.userMessage"
+    [message]="message"
     (onUserClick)="openSelectedUser($event)"
     ></message-box>
 
