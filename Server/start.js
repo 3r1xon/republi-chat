@@ -159,8 +159,8 @@ app.post('/logIn', async (req, res) => {
     if (dbUser) {
 
       res.set(await Auth.generateToken({
-        id: dbUser.ID_USER,
-        userName: dbUser.NICKNAME 
+        id: dbUser.id,
+        userName: dbUser.userName 
       }));
 
       res.send({ success: true, data: {
