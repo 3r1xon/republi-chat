@@ -5,6 +5,7 @@ import { ServerResponse } from 'src/interfaces/response.interface';
 import { database } from 'src/environments/database';
 import { Account } from 'src/interfaces/account.interface';
 import { HttpClient } from '@angular/common/http';
+import { CookieService } from 'ngx-cookie-service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +14,8 @@ export class UserService implements CanActivate {
 
   constructor(
     private http: HttpClient,
-    private router: Router) {}
+    private router: Router,
+    private cookieService: CookieService) {}
 
   public currentUser?: Account;
 
@@ -26,26 +28,24 @@ export class UserService implements CanActivate {
     return this.userAuth;
   }
 
-  async logIn(userName: string, password: string): Promise<any> {
+  public async logIn(userName: string, password: string): Promise<any> {
     const response = await this.http.post<ServerResponse>(`${database.BASE_URL}/logIn`, {
       userName: userName,
       password: password
     }).toPromise();
-    if (!response.success) {
-      return response.message;
-    } else {
-      const { user } = response.data;
-
-      this.currentUser = <Account>user;
+    if (response.success) {
+      this.currentUser = <Account>response.data.user;
       this.userAuth = true;
 
       this.router.navigate(['mainpage']);
+    } else {
+      return response.message;
     }
   }
 
-  async authorize() {
+  public async authorize() {
     const response = await this.http.post<ServerResponse>(`${database.BASE_URL}/authorize`, {
-      REFRESH_TOKEN: document.cookie.split("REFRESH_TOKEN=")[1]
+      REFRESH_TOKEN: this.cookieService.get("REFRESH_TOKEN")
     }).toPromise();
     if (response.success) {
       this.currentUser = <Account>response.data;
@@ -55,13 +55,13 @@ export class UserService implements CanActivate {
     } else {
       this.router.navigate(['login']);
       localStorage.clear();
-      document.cookie = "";
+      this.cookieService.deleteAll();
     }
   }
 
-  async logOut() {
+  public async logOut() {
     localStorage.clear();
-    document.cookie = "REFRESH_TOKEN=";
+    this.cookieService.deleteAll();
     this.userAuth = false;
     window.location.reload();
   }

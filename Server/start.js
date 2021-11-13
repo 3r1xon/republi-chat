@@ -9,6 +9,7 @@ const dotenv         = require('dotenv');
 const cookieParser   = require("cookie-parser");
 
 
+
 const corsOptions = {
   origin: "http://localhost:4200",
   credentials: true,
@@ -80,7 +81,7 @@ app.get('/getMessages', Auth.authToken, async (req, res) => {
     M.ID_MESSAGE as id,
     U.COLOR as userColor,
     U.NICKNAME as userName,
-    U.PROFILE_PICTURE as userImage,
+    '' as userImage,
     M.MESSAGE as userMessage,
     M.DATE as date
     FROM MESSAGES M
@@ -149,7 +150,7 @@ app.post('/logIn', async (req, res) => {
     NICKNAME as userName,
     NAME as name,
     COLOR as userColor,
-    PROFILE_PICTURE as profilePicture 
+    '' as profilePicture 
     FROM USERS 
     WHERE NICKNAME = ? AND PASSWORD = ?
     `, [user.userName, user.password]);

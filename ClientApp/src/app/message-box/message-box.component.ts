@@ -7,7 +7,7 @@ import {
   HostListener,
   ElementRef
 } from '@angular/core';
-import { format, parseISO } from 'date-fns';
+import { format } from 'date-fns';
 import { Message } from 'src/interfaces/message.interface';
 import { SubMenu } from 'src/interfaces/submenu.interface';
 import { MessagesService } from 'src/services/messages.service';
@@ -32,18 +32,29 @@ export class MessageBoxComponent implements OnInit {
   public userImage: string = "";
 
   @Input()
+  public uniqueID: number;
+
+  @Input()
   public options: Array<SubMenu> = [
     {
       name: "Delete",
       icon: "delete",
-      color: "red",
+      color: "#ff0000",
       onClick: () => {
+        this._msService.deleteMessage(this.uniqueID);
       }
     },
     {
       name: "Edit",
       icon: "edit",
-      color: "white",
+      color: "#ffffff",
+      onClick: () => {
+      }
+    },
+    {
+      name: "Report",
+      icon: "flag",
+      color: "#ffffff",
       onClick: () => {
       }
     },

@@ -1,0 +1,32 @@
+<div id="settings">
+
+    <div id="menu">
+
+        <div *ngFor="let submenu of menus; let i = index" id="submenu" matRipple matRippleColor="#ffffff47"
+            (click)="changeRoute(i)">
+            <p [style.color]="submenu.color">{{submenu.name}}</p>
+        </div>
+
+    </div>
+
+    <div id="section">
+
+        <div id="navigator">
+            
+            <div id="spacer">
+
+                <h1>{{currentRoute}}</h1>
+                
+                <div id="back" routerLink="/mainpage"> 
+                    <mat-icon>arrow_back</mat-icon>
+                </div>
+
+            </div>
+
+        </div>
+
+        <router-outlet name="settings"></router-outlet>
+        
+    </div>
+
+</div>

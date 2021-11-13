@@ -3,7 +3,6 @@ import { RouterModule, Routes } from '@angular/router';
 import { UserService } from 'src/services/user.service';
 import { LoginComponent } from './login/login.component';
 import { MainpageComponent } from './mainpage/mainpage.component';
-import { SettingsComponent } from './settings/settings.component';
 import { SignupComponent } from './signup/signup.component';
 
 const routes: Routes = [
@@ -11,7 +10,11 @@ const routes: Routes = [
   { path: 'signup', component: SignupComponent, pathMatch: 'full' },
   { path: 'login', component: LoginComponent, pathMatch: 'full' },
   { path: 'mainpage', component: MainpageComponent, pathMatch: 'full', canActivate: [UserService] },
-  { path: 'settings', component: SettingsComponent, pathMatch: 'full', canActivate: [UserService] }
+  { 
+    path: 'settings', 
+    loadChildren: () => import('./settings/settings.module').then((m) => m.SettingsModule), 
+    canActivate: [UserService] 
+  }
 ];
 
 @NgModule({

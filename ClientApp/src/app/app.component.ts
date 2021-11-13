@@ -1,6 +1,4 @@
-import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { UserService } from 'src/services/user.service';
 
 
@@ -13,8 +11,6 @@ export class AppComponent implements OnInit {
 
   constructor(
     private _user: UserService,
-    private router: Router,
-    private http: HttpClient
     ) { }
 
   async ngOnInit() {

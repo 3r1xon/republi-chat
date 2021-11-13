@@ -23,7 +23,4 @@ export class LoginComponent implements OnInit {
   async logIn() {
     this.alert = await this._user.logIn(this.userName, this.password) ?? "";
   }
-
-
-
 }

@@ -9,6 +9,7 @@ import {
 import { Observable } from 'rxjs';
 import { UtilsService } from './utils.service';
 import { tap } from 'rxjs/operators';
+import { CookieService } from 'ngx-cookie-service';
 
 
 @Injectable({
@@ -16,7 +17,10 @@ import { tap } from 'rxjs/operators';
 })
 export class InterceptorService implements HttpInterceptor {
 
-  constructor(public _utils: UtilsService) { }
+  constructor(
+    private _utils: UtilsService,
+    private cookieService: CookieService
+    ) { }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 
@@ -36,7 +40,7 @@ export class InterceptorService implements HttpInterceptor {
 
         if (ACCESS_TOKEN && REFRESH_TOKEN) {
           localStorage.setItem("ACCESS_TOKEN", ACCESS_TOKEN);
-          document.cookie = `REFRESH_TOKEN=${REFRESH_TOKEN}`;
+          this.cookieService.set("REFRESH_TOKEN", REFRESH_TOKEN);
         }
 
         this._utils.loading = false;

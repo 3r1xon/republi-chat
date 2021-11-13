@@ -7,10 +7,10 @@
     <div id="message-info">
 
         <div>
-            <p 
+            <p  id="username"
                 [style.color]="message.userColor" 
                 (click)="onUserClick.emit('onUserClick')"
-                id="username">{{message.userName}}</p>
+                >{{message.userName}}</p>
             <p id="time">{{dateFormatter()}}</p>
         </div>
 

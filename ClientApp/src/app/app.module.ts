@@ -16,11 +16,11 @@ import { FlatButtonComponent } from './flat-button/flat-button.component';
 import { MatRippleModule } from '@angular/material/core';
 import { LoginComponent } from './login/login.component';
 import { MainpageComponent } from './mainpage/mainpage.component';
-import { SettingsComponent } from './settings/settings.component';
 import { InterceptorService } from 'src/services/interceptor.service';
 import { LoadingComponent } from './loading/loading.component';
 import { FlatWindowMenuComponent } from './flat-window-menu/flat-window-menu.component';
-
+import { SettingsRoutingModule } from './settings/settings-routing.module';
+import { CookieService } from 'ngx-cookie-service';
 
 @NgModule({
   declarations: [
@@ -33,21 +33,22 @@ import { FlatWindowMenuComponent } from './flat-window-menu/flat-window-menu.com
     FlatButtonComponent,
     LoginComponent,
     MainpageComponent,
-    SettingsComponent,
     LoadingComponent,
-    FlatWindowMenuComponent
+    FlatWindowMenuComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
+    SettingsRoutingModule,
     BrowserAnimationsModule,
     MatIconModule,
     FormsModule,
     HttpClientModule,
-    MatRippleModule
+    MatRippleModule,
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: InterceptorService, multi: true },
+    CookieService
   ],
   bootstrap: [AppComponent]
 })

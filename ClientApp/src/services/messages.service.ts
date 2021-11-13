@@ -16,36 +16,55 @@ export class MessagesService {
 
   public messages: Array<Message> = [];
 
-  public sendMessage(message: string) {
+  public async getMessages() {
+    const res = await this.http.get<ServerResponse>(`${database.BASE_URL}/getMessages`).toPromise();
+
+    if (res.success) {
+      this.messages = [];
+
+      res.data.forEach((msg: Message) => {
+        this.messages.push({
+          id: msg.id,
+          userName: msg.userName,
+          userMessage: msg.userMessage,
+          date: new Date(msg.date),
+          userImage: "",
+          userColor: "#FFFFFF"
+        });
+      });
+    }
+  }
+
+  public async sendMessage(message: string) {
     const msg = {
       id: this._user.currentUser?.id,
       userMessage: message,
       date: new Date().getTime()
     };
 
-    this.http.post<ServerResponse>(`${database.BASE_URL}/sendMessage`, msg).subscribe((res: ServerResponse) => {
-      if (res.success) {
-        this.messages.push({
-          id: res.data,
-          userName: this._user.currentUser?.userName,
-          userMessage: msg.userMessage,
-          userColor: "#FFFFFF",
-          userImage: "",
-          date: new Date(msg.date)
-        });
-      }
-    });
+    const res = await this.http.post<ServerResponse>(`${database.BASE_URL}/sendMessage`, msg).toPromise();
+
+    if (res.success) {
+      this.messages.push({
+        id: res.data,
+        userName: this._user.currentUser?.userName,
+        userMessage: msg.userMessage,
+        userColor: "#FFFFFF",
+        userImage: "",
+        date: new Date(msg.date)
+      });
+    }
   }
 
-  public deleteMessage(index: number) {
+  public async deleteMessage(index: number) {
 
-    this.http.post<ServerResponse>(`${database.BASE_URL}/deleteMessage`, { 
+    const res = await this.http.post<ServerResponse>(`${database.BASE_URL}/deleteMessage`, { 
       id_message: this.messages[index].id 
-    }).subscribe((res: ServerResponse) => {
-      if (res.success) {
-        this.messages.splice(index, 1);
-      }
-    });
+    }).toPromise();
+    
+    if (res.success) {
+      this.messages.splice(index, 1);
+    }
   }
 
 }
