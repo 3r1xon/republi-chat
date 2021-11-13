@@ -12,7 +12,7 @@ const routes: Routes = [
   { path: 'mainpage', component: MainpageComponent, pathMatch: 'full', canActivate: [UserService] },
   { 
     path: 'settings', 
-    loadChildren: () => import('./settings/settings.module').then((m) => m.SettingsModule), 
+    loadChildren: () => import('./settings/settings.module').then((m) => m.SettingsModule),
     canActivate: [UserService] 
   }
 ];

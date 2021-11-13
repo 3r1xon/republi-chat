@@ -26,7 +26,8 @@ export class SettingsComponent implements OnInit {
         this.router.navigate([
           { 
             outlets: { 
-              settings: ['profile'] 
+              primary: ['settings'],
+              settings: ['profile']
             }
           }
         ]);

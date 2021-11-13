@@ -4,13 +4,15 @@ import { ProfileComponent } from './profile/profile.component';
 import { SettingsComponent } from './mainsettings/settings.component';
 
 const routes: Routes = [
-  { 
-    path: '', 
-    component: SettingsComponent, 
+  {
+    path: '',
+    component: SettingsComponent,
+    pathMatch: 'full',
     children: [
-      { 
-        path: 'profile', 
-        component: ProfileComponent, 
+      {
+        path: 'profile',
+        component: ProfileComponent,
+        pathMatch: 'full',
         outlet: 'settings'
       }
     ]
