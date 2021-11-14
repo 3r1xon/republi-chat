@@ -18,6 +18,8 @@
             height: 25px;
             padding: 5px;
             margin: 5px;
+            display: flex;
+            justify-content: space-between;
             cursor: pointer;
             border: 1px solid #ffffff60;
             border-radius: 5px;
@@ -32,7 +34,7 @@
 
         #navigator {
             width: 100%;
-            height: 100px;
+            height: 10vh;
             display: flex;
             justify-content: center;
             align-items: center;

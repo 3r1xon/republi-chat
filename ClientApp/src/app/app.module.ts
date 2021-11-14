@@ -19,8 +19,10 @@ import { MainpageComponent } from './mainpage/mainpage.component';
 import { InterceptorService } from 'src/services/interceptor.service';
 import { LoadingComponent } from './loading/loading.component';
 import { FlatWindowMenuComponent } from './flat-window-menu/flat-window-menu.component';
-import { SettingsRoutingModule } from './settings/settings-routing.module';
 import { CookieService } from 'ngx-cookie-service';
+import { SettingsComponent } from './settings/mainsettings/settings.component';
+import { ProfileComponent } from './settings/profile/profile.component';
+import { PrivacyComponent } from './settings/privacy/privacy.component';
 
 @NgModule({
   declarations: [
@@ -35,11 +37,13 @@ import { CookieService } from 'ngx-cookie-service';
     MainpageComponent,
     LoadingComponent,
     FlatWindowMenuComponent,
+    SettingsComponent,
+    ProfileComponent,
+    PrivacyComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    SettingsRoutingModule,
     BrowserAnimationsModule,
     MatIconModule,
     FormsModule,
@@ -48,7 +52,7 @@ import { CookieService } from 'ngx-cookie-service';
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: InterceptorService, multi: true },
-    CookieService
+    CookieService,
   ],
   bootstrap: [AppComponent]
 })

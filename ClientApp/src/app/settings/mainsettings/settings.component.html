@@ -3,8 +3,9 @@
     <div id="menu">
 
         <div *ngFor="let submenu of menus; let i = index" id="submenu" matRipple matRippleColor="#ffffff47"
-            (click)="changeRoute(i)">
-            <p [style.color]="submenu.color">{{submenu.name}}</p>
+            (click)="changeRoute(i)" [style.color]="submenu.color">
+            <p>{{submenu.name}}</p>
+            <mat-icon>{{submenu.icon}}</mat-icon>
         </div>
 
     </div>
@@ -16,7 +17,7 @@
             <div id="spacer">
 
                 <h1>{{currentRoute}}</h1>
-                
+
                 <div id="back" routerLink="/mainpage"> 
                     <mat-icon>arrow_back</mat-icon>
                 </div>

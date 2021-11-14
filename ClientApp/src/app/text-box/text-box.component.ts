@@ -28,5 +28,4 @@ export class TextBoxComponent implements OnInit {
     this.message = "";
     
   }
-
 }
