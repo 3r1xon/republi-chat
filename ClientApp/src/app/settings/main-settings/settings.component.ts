@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserService } from 'src/services/user.service';
-import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'settings',
@@ -12,8 +11,7 @@ export class SettingsComponent implements OnInit {
 
   constructor(
     private _user: UserService,
-    private router: Router,
-    private activatedRoute: ActivatedRoute
+    private router: Router
     ) { }
 
   ngOnInit(): void {
@@ -25,14 +23,7 @@ export class SettingsComponent implements OnInit {
       color: "#FFFFFF",
       icon: "person",
       onClick: () => {
-        this.router.navigate([
-          { 
-            outlets: { 
-              settings: [''] 
-            }
-          }], {
-            relativeTo: this.activatedRoute 
-        });
+        this.router.navigateByUrl('/settings/profile');
       }
     },
     {
@@ -40,14 +31,7 @@ export class SettingsComponent implements OnInit {
       color: "#FFFFFF",
       icon: "security",
       onClick: () => {
-        this.router.navigate([
-          { 
-            outlets: { 
-              settings: ['privacy'] 
-            }
-          }], {
-            relativeTo: this.activatedRoute 
-        });
+        this.router.navigateByUrl('/settings/privacy');
       }
     },
     {

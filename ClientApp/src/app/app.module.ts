@@ -20,7 +20,7 @@ import { InterceptorService } from 'src/services/interceptor.service';
 import { LoadingComponent } from './loading/loading.component';
 import { FlatWindowMenuComponent } from './flat-window-menu/flat-window-menu.component';
 import { CookieService } from 'ngx-cookie-service';
-import { SettingsComponent } from './settings/mainsettings/settings.component';
+import { SettingsComponent } from './settings/main-settings/settings.component';
 import { ProfileComponent } from './settings/profile/profile.component';
 import { PrivacyComponent } from './settings/privacy/privacy.component';
 
