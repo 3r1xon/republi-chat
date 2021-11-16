@@ -4,6 +4,9 @@
 
         <div id="image">
             <img src="/assets/user-image.png">
+            <input type="file"
+                id="file"
+                (change)="onChange($event.target.files)">
         </div>
 
         <div id="banner-info">

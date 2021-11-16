@@ -77,7 +77,7 @@ class Auth {
 
         let session = await db.promise().query(
         `
-        SELECT 
+        SELECT
         ID_USER
         FROM SESSIONS
         WHERE TOKEN = ?

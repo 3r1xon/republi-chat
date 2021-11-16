@@ -53,6 +53,7 @@ import { PrivacyComponent } from './settings/privacy/privacy.component';
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: InterceptorService, multi: true },
     CookieService,
+    // File
   ],
   bootstrap: [AppComponent]
 })
