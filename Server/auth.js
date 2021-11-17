@@ -13,13 +13,13 @@ class Auth {
             refresh: false
         };
         
-        const ACCESS_TOKEN = jwt.sign(user, process.env.ACCESS_TOKEN, {
+        const ACCESS_TOKEN = jwt.sign(user, process.env.SECRET_KEY, {
             expiresIn: "15m"
         });
 
         user.refresh = true;
 
-        const REFRESH_TOKEN = jwt.sign(user, process.env.ACCESS_TOKEN);
+        const REFRESH_TOKEN = jwt.sign(user, process.env.SECRET_KEY);
 
         try {
 
@@ -86,14 +86,14 @@ class Auth {
         session = session[0][0];
         
         if (session) {
-            jwt.verify(token, process.env.ACCESS_TOKEN, (err, decoded) => {
+            jwt.verify(token, process.env.SECRET_KEY, (err, decoded) => {
                 if (decoded) {
                     next();
                 } else {
 
                     const { REFRESH_TOKEN } = req.cookies;
 
-                    jwt.verify(REFRESH_TOKEN, process.env.ACCESS_TOKEN, async (err, decoded) => {
+                    jwt.verify(REFRESH_TOKEN, process.env.SECRET_KEY, async (err, decoded) => {
                         if (decoded) {
 
                             let dbRefreshToken = await db.promise().query(
