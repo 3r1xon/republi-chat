@@ -61,11 +61,11 @@ app.post('/sendMessage', Auth.authToken, async (req, res) => {
 
     id = id[0][0].ID_MESSAGE;
 
-    res.send({ success: true, data: id });
+    res.status(201).send({ success: true, data: id });
   } catch (err) {
     console.log(err);
     
-    res.send({ success: false, message: `Database error!` });
+    res.status(500).send({ success: false, message: `Database error!` });
   }
 });
 
@@ -90,12 +90,12 @@ app.get('/getMessages', Auth.authToken, async (req, res) => {
 
     messages = messages[0];
   
-    res.send({ success: true, data: messages});
+    res.status(200).send({ success: true, data: messages });
   } catch (err) {
 
     console.log(err);
 
-    res.send({ success: false, message: "Database error!" });
+    res.status(500).send({ success: false, message: "Database error!" });
   }
 
 });
@@ -110,7 +110,7 @@ app.post('/signUp', async (req, res) => {
   };
 
   if (user.userName == '' || user.password == '')
-    res.send({ success: false, message: 'Username or password invalid' });
+    res.status(400).send({ success: false, message: 'Username or password invalid' });
   else {
     try {
 
@@ -122,11 +122,11 @@ app.post('/signUp', async (req, res) => {
       (?, ?, '#FFFFFF', '/assets/user-image.png')
       `, [user.userName, user.password]);
 
-      res.send({ success: true, message: 'User correctly signed up' });
+      res.status(201).send({ success: true, message: 'User correctly signed up' });
     } catch (err) {
       console.log(err);
       
-      res.send({ success: false, message: `Nickname ${user.userName} already exist!` });
+      res.status(409).send({ success: false, message: `Nickname ${user.userName} already exist!` });
     }
   }
 });
@@ -164,17 +164,17 @@ app.post('/logIn', async (req, res) => {
         userName: dbUser.userName 
       }));
 
-      res.send({ success: true, data: {
+      res.status(200).send({ success: true, data: {
         user: dbUser
       }});
   
     } else {
-      res.send({ success: false, message: "User does not exist!" });
+      res.status(400).send({ success: false, message: "User does not exist!" });
     }
   }
   catch (err) {
     console.log(err);
-    res.send({ success: false, message: "Database error!" });
+    res.status(500).send({ success: false, message: "Database error!" });
   }
 });
 
@@ -231,10 +231,10 @@ app.post('/authorize', async (req, res) => {
       userName: dbUser.userName 
     }));
 
-    res.send({ success: true, data: dbUser });
+    res.status(200).send({ success: true, data: dbUser });
 
   } else {
-    res.send({ success: false, message: "Token invalid!"});
+    res.status(401).send({ success: false, message: "Token not registered in your user!"});
   }
 });
 
@@ -251,11 +251,11 @@ app.post('/deleteMessage', Auth.authToken, async (req, res) => {
     WHERE ID_MESSAGE = ?
     `, [id_message]);
 
-    res.send({ success: true });
+    res.status(200).send({ success: true });
   } catch (err) {
     console.log(err);
 
-    res.send({ success: false, message: "Database error!" });
+    res.status(500).send({ success: false, message: "Database error!" });
   }
 
 });

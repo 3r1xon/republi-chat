@@ -4,44 +4,62 @@
     color: #FFFFFF;
     user-select: none;
 
+
     #banner {
         width: 100%;
         height: 10vh;
         display: flex;
         align-items: center;
-
-        #image {
+        
+        #image-upload {
             width: 75px;
             height: 75px;
-            margin: 10px;
-            border: 5px solid #111111;
             border-radius: 50%;
-
-            #file {
+            margin: 15px;
+            border: 5px solid #111111;
+            
+            #picture {
                 width: 75px;
                 height: 75px;
-                pointer-events: visible;
-                opacity: 0;
-                position: absolute;
-                top: 0;
-                left: 0;
-                bottom: 0;
-                right: 0;
-            }
-            
-            img {
-                width: 100%;
-                height: 100%;
-                border-radius: 50%;
                 cursor: pointer;
-                transition: 150ms;
-                -webkit-user-drag: none;
+                border-radius: 50%;
+                transition: 100ms;
 
                 &:hover {
-                    opacity: 0.45;
+                    opacity: 0.5;
                 }
             }
+    
+            #file-input {
+                display: none;
+                visibility: hidden;
+                width: 0;
+                height: 0;
+            }
+
         }
+
+
+        // #image {
+        //     width: 75;
+        //     height: 75px;
+        //     margin: 10px;
+        //     border: 5px solid #111111;
+        //     border-radius: 50%;
+            
+        //     img {
+        //         width: 100%;
+        //         height: 100%;
+        //         border-radius: 50%;
+        //         cursor: pointer;
+        //         transition: 150ms;
+        //         -webkit-user-drag: none;
+                
+        //         &:hover {
+        //             opacity: 0.45;
+        //         }
+        //     }
+        // }
 
         #banner-info {
             height: 100%;
