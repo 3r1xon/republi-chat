@@ -46,6 +46,7 @@ export class InterceptorService implements HttpInterceptor {
         this._utils.loading = false;
       }
     }, (err) => {
+      this._utils.loading = false;
       console.log(err);
     }));
   }

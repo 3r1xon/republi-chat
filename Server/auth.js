@@ -70,7 +70,7 @@ class Auth {
     
         const token = authHeader.split(' ')[1];
     
-        if (token == null) return res.send({ 
+        if (token == null) return res.status(401).send({ 
             success: false, 
             message: "Authentication failed!"
         });
@@ -116,14 +116,14 @@ class Auth {
                                 }));
                                 next();
                             } else {
-                                return res.send({ success: false, message: "There has been an error with the token authentication" });
+                                return res.status(401).send({ success: false, message: "There has been an error with the token authentication" });
                             }
-                        } else res.send({ success: false, message: "Refresh token invalid!" });
+                        } else res.status(401).send({ success: false, message: "Refresh token invalid!" });
                     });
                 }
             });
         } else {
-            res.send({ success: false, message: "Token not found!" });
+            res.status(401).send({ success: false, message: "Token not found!" });
         }
     }
 }
