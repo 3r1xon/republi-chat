@@ -198,41 +198,27 @@ app.post('/editProfile', Auth.authToken, async (req, res) => {
 
 
 
-app.post('/authorize', async (req, res) => {
+app.post('/authorize', Auth.authToken, async (req, res) => {
 
-  const { REFRESH_TOKEN } = req.cookies;
+  const ACCESS_TOKEN = req.headers.ACCESS_TOKEN ?? req.headers['authorization'].split(' ')[1];
 
-  let id_user = await db.promise().query(
+  let dbUser = await db.promise().query(
   `
-  SELECT 
-  ID_USER 
-  FROM SESSIONS 
-  WHERE REFRESH_TOKEN = ?
-  `, [REFRESH_TOKEN]);
+  SELECT
+  U.ID_USER as id,
+  U.NICKNAME as userName,
+  U.NAME as name,
+  U.COLOR as userColor,
+  '' as profilePicture 
+  FROM USERS U
+  LEFT JOIN SESSIONS S ON S.ID_USER = U.ID_USER
+  WHERE S.TOKEN = ?
+  `, [ACCESS_TOKEN]);
+  
+  dbUser = dbUser[0][0];
 
-  id_user = id_user[0][0];
-
-  if (id_user) {
-
-    let dbUser = await db.promise().query(
-    `
-    SELECT
-    ID_USER as id,
-    NICKNAME as userName,
-    NAME as name
-    FROM USERS
-    WHERE ID_USER = ?
-    `, [id_user.ID_USER]);
-
-    dbUser = dbUser[0][0];
-
-    res.set(await Auth.generateToken({
-      id: dbUser.id, 
-      userName: dbUser.userName 
-    }));
-
+  if (dbUser) {
     res.status(200).send({ success: true, data: dbUser });
-
   } else {
     res.status(401).send({ success: false, message: "Token not registered in your user!"});
   }

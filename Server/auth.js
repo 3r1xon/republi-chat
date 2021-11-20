@@ -66,11 +66,9 @@ class Auth {
     
     static authToken = async (req, res, next) => {
         
-        const authHeader = req.headers['authorization'];
-    
-        const token = authHeader.split(' ')[1];
-    
-        if (token == null) return res.status(401).send({ 
+        const ACCESS_TOKEN = req.headers['authorization'].split(' ')[1];
+        
+        if (ACCESS_TOKEN == null) return res.status(401).send({ 
             success: false, 
             message: "Authentication failed!"
         });
@@ -81,12 +79,12 @@ class Auth {
         ID_USER
         FROM SESSIONS
         WHERE TOKEN = ?
-        `, [token]);
+        `, [ACCESS_TOKEN]);
 
         session = session[0][0];
         
         if (session) {
-            jwt.verify(token, process.env.SECRET_KEY, (err, decoded) => {
+            jwt.verify(ACCESS_TOKEN, process.env.SECRET_KEY, (err, decoded) => {
                 if (decoded) {
                     next();
                 } else {
