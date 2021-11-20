@@ -23,6 +23,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { SettingsComponent } from './settings/main-settings/settings.component';
 import { ProfileComponent } from './settings/profile/profile.component';
 import { PrivacyComponent } from './settings/privacy/privacy.component';
+import { UnauthorizedComponent } from './unauthorized/unauthorized.component';
 
 @NgModule({
   declarations: [
@@ -39,7 +40,8 @@ import { PrivacyComponent } from './settings/privacy/privacy.component';
     FlatWindowMenuComponent,
     SettingsComponent,
     ProfileComponent,
-    PrivacyComponent
+    PrivacyComponent,
+    UnauthorizedComponent
   ],
   imports: [
     BrowserModule,

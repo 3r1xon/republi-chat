@@ -65,7 +65,7 @@ class Auth {
 
     
     static authToken = async (req, res, next) => {
-        
+
         const ACCESS_TOKEN = req.headers['authorization'].split(' ')[1];
         
         if (ACCESS_TOKEN == null) return res.status(401).send({ 

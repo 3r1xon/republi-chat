@@ -7,12 +7,14 @@ import { SettingsComponent } from './settings/main-settings/settings.component';
 import { PrivacyComponent } from './settings/privacy/privacy.component';
 import { ProfileComponent } from './settings/profile/profile.component';
 import { SignupComponent } from './signup/signup.component';
+import { UnauthorizedComponent } from './unauthorized/unauthorized.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'signup', component: SignupComponent, pathMatch: 'full' },
   { path: 'login', component: LoginComponent, pathMatch: 'full' },
   { path: 'mainpage', component: MainpageComponent, pathMatch: 'full', canActivate: [UserService] },
+  { path: 'unauthorized', component: UnauthorizedComponent, pathMatch: 'full' },
   { 
     path: 'settings',
     component: SettingsComponent,

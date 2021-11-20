@@ -4,7 +4,8 @@ import {
   HttpInterceptor,
   HttpHandler,
   HttpRequest,
-  HttpResponse
+  HttpResponse,
+  HttpErrorResponse
 } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { UtilsService } from './utils.service';
@@ -45,9 +46,8 @@ export class InterceptorService implements HttpInterceptor {
 
         this._utils.loading = false;
       }
-    }, (err) => {
+    }, (err: HttpErrorResponse) => {
       this._utils.loading = false;
-      console.log(err);
     }));
   }
 

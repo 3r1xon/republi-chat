@@ -7,5 +7,5 @@ export class UtilsService {
 
   constructor() { }
 
-  public loading: boolean = true;
+  public loading: boolean = false;
 }

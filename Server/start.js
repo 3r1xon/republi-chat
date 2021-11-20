@@ -200,7 +200,7 @@ app.post('/editProfile', Auth.authToken, async (req, res) => {
 
 app.post('/authorize', Auth.authToken, async (req, res) => {
 
-  const ACCESS_TOKEN = req.headers.ACCESS_TOKEN ?? req.headers['authorization'].split(' ')[1];
+  const ACCESS_TOKEN = res.getHeader("ACCESS_TOKEN") ?? req.headers['authorization'].split(' ')[1];
 
   let dbUser = await db.promise().query(
   `

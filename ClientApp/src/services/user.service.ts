@@ -25,6 +25,8 @@ export class UserService implements CanActivate {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Observable<boolean|UrlTree>|Promise<boolean|UrlTree>|boolean|UrlTree {
+    if (!this.userAuth)
+      this.router.navigate(['unauthorized']);
     return this.userAuth;
   }
 
@@ -37,21 +39,25 @@ export class UserService implements CanActivate {
       this.currentUser = <Account>response.data.user;
       this.userAuth = true;
 
-      this.router.navigate(['mainpage']);
+      await this.router.navigate(['mainpage']);
     } else {
       return response.message;
     }
   }
 
-  public async authorize() {
+  public async authorize(): Promise<any> {
+    const REFRESH_TOKEN = this.cookieService.get("REFRESH_TOKEN");
+
+    if (!REFRESH_TOKEN) return;
+    
     const response = await this.http.post<ServerResponse>(`${database.BASE_URL}/authorize`, {
-      REFRESH_TOKEN: this.cookieService.get("REFRESH_TOKEN")
+      REFRESH_TOKEN: REFRESH_TOKEN
     }).toPromise();
     if (response.success) {
       this.currentUser = <Account>response.data;
       this.userAuth = true;
 
-      this.router.navigate(['mainpage']);
+      await this.router.navigate(['mainpage']);
     } else {
       this.router.navigate(['login']);
       localStorage.clear();
@@ -59,10 +65,11 @@ export class UserService implements CanActivate {
     }
   }
 
-  public async logOut() {
+  public async logOut(): Promise<any> {
     localStorage.clear();
     this.cookieService.deleteAll();
     this.userAuth = false;
+    await this.router.navigate(['login']);
     window.location.reload();
   }
 

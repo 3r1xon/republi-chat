@@ -22,32 +22,32 @@ export class SettingsComponent implements OnInit {
       name: "Profile",
       color: "#FFFFFF",
       icon: "person",
-      onClick: () => {
-        this.router.navigateByUrl('/settings/profile');
+      onClick: async () => {
+        await this.router.navigateByUrl('/settings/profile');
       }
     },
     {
       name: "Privacy",
       color: "#FFFFFF",
       icon: "security",
-      onClick: () => {
-        this.router.navigateByUrl('/settings/privacy');
+      onClick: async () => {
+        await this.router.navigateByUrl('/settings/privacy');
       }
     },
     {
       name: "Log out",
       color: "#ff0000",
       icon: "logout",
-      onClick: () => { 
-        this._user.logOut();
+      onClick: async () => { 
+        await this._user.logOut();
       }
     },
   ];
 
   public currentRoute: string = this.menus[0].name;
 
-  changeRoute(index: number) {
-    this.menus[index].onClick();
+  async changeRoute(index: number) {
+    await this.menus[index].onClick();
     this.currentRoute = this.menus[index].name;
   }
 

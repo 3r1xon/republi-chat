@@ -41,7 +41,7 @@ class Start:
 
         self.checkNodeModules()
 
-        os.system("node start.js")
+        os.system("nodemon start.js")
 
 
 
