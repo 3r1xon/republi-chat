@@ -7,8 +7,8 @@ const fm             = require('date-fns');
 const Auth           = require('./auth');
 const dotenv         = require('dotenv'); 
 const cookieParser   = require("cookie-parser");
-const multer         = require('multer');
-const multerMid      = multer();
+const expFormidable  = require('express-formidable');
+const fetch          = require('node-fetch');
 
 
 
@@ -159,6 +159,8 @@ app.post('/logIn', async (req, res) => {
 
     dbUser = dbUser[0][0];
 
+    dbUser.profilePicture = `data:image/png;base64, ${dbUser.profilePicture.toString("base64")}`;
+
     if (dbUser) {
 
       res.set(await Auth.generateToken({
@@ -182,37 +184,33 @@ app.post('/logIn', async (req, res) => {
 
 
 
-app.post('/editProfile', [Auth.authToken, multerMid.single], async (req, res) => {
+app.post('/editProfile', [Auth.authToken, expFormidable()], async (req, res) => {
 
-  // await db.promise().query(
-  //   `
-  //   UPDATE
-  //   USERS
-  //   SET
-  //   NAME = '',
-  //   COLOR = '',
-  //   PROFILE_PICTURE = ''
-  //   WHERE ID_USER = {}
-  //   `
-  // );
-  const file = req.file;
+  let file = req.files.image.path;
 
-  // let file = req.body.arrayBuffer();
+  const file_64 = await fetch("https://images.8tracks.com/cover/i/010/157/987/image-5806.jpg?rect=0,0,500,500&q=98&fm=jpg&fit=max&w=960&h=960")
+  .then((response) => response.buffer())
+  .then((buffer) => {
+    const b64 = buffer.toString('base64');
+    return b64;
+  })
+  .catch(console.error);
 
-  // file = Buffer.from(file).toString("base64");
+  file = Buffer.from(file_64);
 
-  console.log(file);
-
-  // await db.promise().query(
-  // `
-  // UPDATE
-  // USERS
-  // SET
-  // PROFILE_PICTURE = ?
-  // WHERE ID_USER = ?
-  // `, [file, 6]);
+  await db.promise().query(
+  `
+  UPDATE
+  USERS
+  SET
+  PROFILE_PICTURE = ?
+  WHERE ID_USER = ?
+  `, [file, 6]);
   
-  res.status(201).send({ success: true });
+  res.status(201).send({ 
+    success: true,
+    data: file_64
+   });
 });
 
 
@@ -235,6 +233,8 @@ app.post('/authorize', Auth.authToken, async (req, res) => {
   `, [ACCESS_TOKEN]);
   
   dbUser = dbUser[0][0];
+
+  dbUser.profilePicture = `data:image/png;base64, ${dbUser.profilePicture.toString("base64")}`;
 
   if (dbUser) {
     res.status(200).send({ success: true, data: dbUser });

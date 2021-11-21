@@ -12,7 +12,7 @@ class Auth {
             ...user,
             refresh: false
         };
-        
+
         const ACCESS_TOKEN = jwt.sign(user, process.env.SECRET_KEY, {
             expiresIn: "15m"
         });
@@ -31,7 +31,7 @@ class Auth {
             `, [user.id]);
 
             userExist = userExist[0][0];
-            
+
             if (userExist) {
 
                 await db.promise().query(
@@ -63,11 +63,11 @@ class Auth {
     };
 
 
-    
+
     static authToken = async (req, res, next) => {
 
         const ACCESS_TOKEN = req.headers['authorization'].split(' ')[1];
-        
+
         if (ACCESS_TOKEN == null) return res.status(401).send({ 
             success: false, 
             message: "Authentication failed!"
@@ -76,13 +76,13 @@ class Auth {
         let session = await db.promise().query(
         `
         SELECT
-        ID_USER
+        1
         FROM SESSIONS
         WHERE TOKEN = ?
         `, [ACCESS_TOKEN]);
 
         session = session[0][0];
-        
+ 
         if (session) {
             jwt.verify(ACCESS_TOKEN, process.env.SECRET_KEY, (err, decoded) => {
                 if (decoded) {
@@ -103,21 +103,16 @@ class Auth {
                             LEFT JOIN SESSIONS S ON S.ID_USER = U.ID_USER
                             WHERE S.REFRESH_TOKEN = ?
                             `, [REFRESH_TOKEN]);
-        
+
                             dbRefreshToken = dbRefreshToken[0][0];
-        
+
                             if (dbRefreshToken) {
                                 res.set(await this.generateToken({
                                     id: dbRefreshToken.ID_USER,
                                     userName: dbRefreshToken.NICKNAME
                                 }));
-                                console.log("REFRESHATO")
                                 next();
                             } else {
-                                console.log("FAILED WITH: ");
-                                console.log(dbRefreshToken);
-                                console.log(REFRESH_TOKEN);
-
                                 return res.status(401).send({ success: false, message: "There has been an error with the token authentication" });
                             }
                         } else res.status(401).send({ success: false, message: "Refresh token invalid!" });
@@ -127,6 +122,12 @@ class Auth {
         } else {
             res.status(401).send({ success: false, message: "Token not found!" });
         }
+    }
+
+
+
+    static authority = async (req, res, next) => {
+
     }
 }
 

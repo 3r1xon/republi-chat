@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { database } from 'src/environments/database';
+import { ServerResponse } from 'src/interfaces/response.interface';
 import { FileUploadService } from 'src/services/file-upload.service';
 import { UserService } from 'src/services/user.service';
 
@@ -14,34 +15,40 @@ export class ProfileComponent implements OnInit {
   constructor(
     public _user: UserService,
     public _fileUpload: FileUploadService,
-    private http: HttpClient
+    private http: HttpClient,
   ) { }
 
   ngOnInit(): void {
   }
 
 
-  onChange(event) {
+  async onChange(event) {
     const file = <File>event[0];
 
     const fd = new FormData();
     fd.append("image", file, file.name);
+    
+    const res = await this.http.post<ServerResponse>(`${database.BASE_URL}/editProfile`, fd).toPromise();
+    
+    if (res.success) {
+      this._user.currentUser.profilePicture = res.data;
+      console.log(this._user.currentUser.profilePicture);
+    }
+    // const reader = new FileReader();
+    // reader.readAsDataURL(file);
 
-    const res = this.http.post(`${database.BASE_URL}/editProfile`, fd).toPromise();
+    // reader.onload = async () => {
+    //   const file_64 = reader.result;
 
-    // let reader = new FileReader();
-    // reader.readAsDataURL(fileToUpload);
-
-    // reader.onload = () => {
-    //   this._user.currentUser.profilePicture = reader.result;
+    //   const fd = new FormData();
+    //   fd.append("image", file, file.name);
+  
+    //   const res = await this.http.post<ServerResponse>(`${database.BASE_URL}/editProfile`, fd).toPromise();
+  
+    //   if (res.success) {
+    //     this._user.currentUser.profilePicture = file_64;
+    //   }
     // };
-
-    // const formData = new FormData();
-
-    // formData.append("file", fileToUpload, fileToUpload.name);
-
-    // const res = this.http.post(`${database.BASE_URL}/editProfile`, fileToUpload).toPromise();
-
   }
 
 }

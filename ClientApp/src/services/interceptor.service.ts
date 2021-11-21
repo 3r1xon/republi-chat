@@ -11,6 +11,7 @@ import { Observable } from 'rxjs';
 import { UtilsService } from './utils.service';
 import { tap } from 'rxjs/operators';
 import { CookieService } from 'ngx-cookie-service';
+import { UserService } from './user.service';
 
 
 @Injectable({
@@ -20,6 +21,7 @@ export class InterceptorService implements HttpInterceptor {
 
   constructor(
     private _utils: UtilsService,
+    private _user: UserService,
     private cookieService: CookieService
     ) { }
 
@@ -47,6 +49,8 @@ export class InterceptorService implements HttpInterceptor {
       }
     }, (err: HttpErrorResponse) => {
       this._utils.loading = false;
+
+      if (err.status == 401) this._user.userAuth = false;
     }));
   }
 
