@@ -1,7 +1,7 @@
 {
   "scripts": {
     "start": "node start.js",
-    "live": "nodemon start.js" 
+    "live": "nodemon start.js"
   },
   "dependencies": {
     "cookie-parser": "^1.4.5",
@@ -10,6 +10,7 @@
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",
+    "multer": "^1.4.3",
     "mysql2": "^2.3.2"
   }
 }

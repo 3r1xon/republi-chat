@@ -24,6 +24,7 @@
                 cursor: pointer;
                 border-radius: 50%;
                 transition: 100ms;
+                -webkit-user-drag: none;
 
                 &:hover {
                     opacity: 0.5;

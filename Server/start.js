@@ -7,6 +7,8 @@ const fm             = require('date-fns');
 const Auth           = require('./auth');
 const dotenv         = require('dotenv'); 
 const cookieParser   = require("cookie-parser");
+const multer         = require('multer');
+const multerMid      = multer();
 
 
 
@@ -146,12 +148,12 @@ app.post('/logIn', async (req, res) => {
     let dbUser = await db.promise().query(
     `
     SELECT
-    ID_USER as id,
-    NICKNAME as userName,
-    NAME as name,
-    COLOR as userColor,
-    '' as profilePicture 
-    FROM USERS 
+    U.ID_USER as id,
+    U.NICKNAME as userName,
+    U.NAME as name,
+    U.COLOR as userColor,
+    U.PROFILE_PICTURE as profilePicture 
+    FROM USERS U
     WHERE NICKNAME = ? AND PASSWORD = ?
     `, [user.userName, user.password]);
 
@@ -180,20 +182,37 @@ app.post('/logIn', async (req, res) => {
 
 
 
-app.post('/editProfile', Auth.authToken, async (req, res) => {
+app.post('/editProfile', [Auth.authToken, multerMid.single], async (req, res) => {
 
-  await db.promise().query(
-    `
-    UPDATE
-    USERS
-    SET
-    NAME = '',
-    COLOR = '',
-    PROFILE_PICTURE = ''
-    WHERE ID_USER = {}
-    `
-  );
+  // await db.promise().query(
+  //   `
+  //   UPDATE
+  //   USERS
+  //   SET
+  //   NAME = '',
+  //   COLOR = '',
+  //   PROFILE_PICTURE = ''
+  //   WHERE ID_USER = {}
+  //   `
+  // );
+  const file = req.file;
+
+  // let file = req.body.arrayBuffer();
+
+  // file = Buffer.from(file).toString("base64");
+
+  console.log(file);
+
+  // await db.promise().query(
+  // `
+  // UPDATE
+  // USERS
+  // SET
+  // PROFILE_PICTURE = ?
+  // WHERE ID_USER = ?
+  // `, [file, 6]);
   
+  res.status(201).send({ success: true });
 });
 
 
@@ -209,7 +228,7 @@ app.post('/authorize', Auth.authToken, async (req, res) => {
   U.NICKNAME as userName,
   U.NAME as name,
   U.COLOR as userColor,
-  '' as profilePicture 
+  U.PROFILE_PICTURE as profilePicture 
   FROM USERS U
   LEFT JOIN SESSIONS S ON S.ID_USER = U.ID_USER
   WHERE S.TOKEN = ?
@@ -226,7 +245,7 @@ app.post('/authorize', Auth.authToken, async (req, res) => {
 
 
 
-app.post('/deleteMessage', Auth.authToken, async (req, res) => {
+app.delete('/deleteMessage', Auth.authToken, async (req, res) => {
 
   try {
     const id_message = req.body.id_message;

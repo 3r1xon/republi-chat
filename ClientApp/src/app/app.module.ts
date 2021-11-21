@@ -55,7 +55,6 @@ import { UnauthorizedComponent } from './unauthorized/unauthorized.component';
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: InterceptorService, multi: true },
     CookieService,
-    // File
   ],
   bootstrap: [AppComponent]
 })

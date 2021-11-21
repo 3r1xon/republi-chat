@@ -97,11 +97,10 @@ class Auth {
                             let dbRefreshToken = await db.promise().query(
                             `
                             SELECT
-                            S.REFRESH_TOKEN,
                             U.NICKNAME,
                             U.ID_USER
-                            FROM SESSIONS S
-                            LEFT JOIN USERS U ON U.ID_USER = S.ID_USER
+                            FROM USERS U
+                            LEFT JOIN SESSIONS S ON S.ID_USER = U.ID_USER
                             WHERE S.REFRESH_TOKEN = ?
                             `, [REFRESH_TOKEN]);
         
@@ -112,8 +111,13 @@ class Auth {
                                     id: dbRefreshToken.ID_USER,
                                     userName: dbRefreshToken.NICKNAME
                                 }));
+                                console.log("REFRESHATO")
                                 next();
                             } else {
+                                console.log("FAILED WITH: ");
+                                console.log(dbRefreshToken);
+                                console.log(REFRESH_TOKEN);
+
                                 return res.status(401).send({ success: false, message: "There has been an error with the token authentication" });
                             }
                         } else res.status(401).send({ success: false, message: "Refresh token invalid!" });

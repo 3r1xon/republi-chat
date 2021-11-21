@@ -28,8 +28,7 @@ export class InterceptorService implements HttpInterceptor {
     this._utils.loading = true;
 
     const authReq = req.clone({
-      headers: req.headers.set('Content-Type', 'application/json')
-      .set('Authorization', `Bearer ${localStorage.getItem('ACCESS_TOKEN')}`),
+      headers: req.headers.set('Authorization', `Bearer ${localStorage.getItem('ACCESS_TOKEN')}`),
       withCredentials: true
     });
 

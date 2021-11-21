@@ -5,10 +5,10 @@
         <div id="image-upload">
 
             <label for="file-input">
-              <img src="/assets/user-image.png" id="picture"/>
+              <img [src]="_user.currentUser.profilePicture" id="picture"/>
             </label>
           
-            <input id="file-input" type="file" />
+            <input id="file-input" type="file" (change)="onChange($event.target.files)" />
 
         </div>
 
