@@ -32,23 +32,7 @@ export class ProfileComponent implements OnInit {
     
     if (res.success) {
       this._user.currentUser.profilePicture = res.data;
-      console.log(this._user.currentUser.profilePicture);
     }
-    // const reader = new FileReader();
-    // reader.readAsDataURL(file);
-
-    // reader.onload = async () => {
-    //   const file_64 = reader.result;
-
-    //   const fd = new FormData();
-    //   fd.append("image", file, file.name);
-  
-    //   const res = await this.http.post<ServerResponse>(`${database.BASE_URL}/editProfile`, fd).toPromise();
-  
-    //   if (res.success) {
-    //     this._user.currentUser.profilePicture = file_64;
-    //   }
-    // };
   }
 
 }

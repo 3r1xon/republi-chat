@@ -1,8 +1,8 @@
 <div id="message-box" [ngStyle]="{ 
         background: active ? 'rgb(67 67 67)' : '' 
     }">
-    
-    <div id="user-image" [style.background]="'url(' + message.userImage + ')' + 'no-repeat center/cover'"></div>
+
+    <img id="user-image" [src]="message.userImage">
 
     <div id="message-info">
 

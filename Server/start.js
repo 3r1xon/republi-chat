@@ -7,8 +7,8 @@ const fm             = require('date-fns');
 const Auth           = require('./auth');
 const dotenv         = require('dotenv'); 
 const cookieParser   = require("cookie-parser");
-const expFormidable  = require('express-formidable');
-const fetch          = require('node-fetch');
+const multer         = require('multer');
+const upload         = multer({});
 
 
 
@@ -83,7 +83,7 @@ app.get('/getMessages', Auth.authToken, async (req, res) => {
     M.ID_MESSAGE as id,
     U.COLOR as userColor,
     U.NICKNAME as userName,
-    '' as userImage,
+    TO_BASE64(U.PROFILE_PICTURE) as userImage,
     M.MESSAGE as userMessage,
     M.DATE as date
     FROM MESSAGES M
@@ -135,6 +135,36 @@ app.post('/signUp', async (req, res) => {
 
 
 
+app.post('/authorize', Auth.authToken, async (req, res) => {
+
+  const ACCESS_TOKEN = res.getHeader("ACCESS_TOKEN") ?? req.headers['authorization'].split(' ')[1];
+
+  let dbUser = await db.promise().query(
+  `
+  SELECT
+  U.ID_USER as id,
+  U.NICKNAME as userName,
+  U.NAME as name,
+  U.COLOR as userColor,
+  TO_BASE64(U.PROFILE_PICTURE) as profilePicture 
+  FROM USERS U
+  LEFT JOIN SESSIONS S ON S.ID_USER = U.ID_USER
+  WHERE S.TOKEN = ?
+  `, [ACCESS_TOKEN]);
+  
+  dbUser = dbUser[0][0];
+
+  // dbUser.profilePicture = `data:image/png;base64, ${dbUser.profilePicture?.toString("base64")}`;
+
+  if (dbUser) {
+    res.status(200).send({ success: true, data: dbUser });
+  } else {
+    res.status(401).send({ success: false, message: "Token not registered in your user!"});
+  }
+});
+
+
+
 app.post('/logIn', async (req, res) => {
 
   const user = {
@@ -152,14 +182,14 @@ app.post('/logIn', async (req, res) => {
     U.NICKNAME as userName,
     U.NAME as name,
     U.COLOR as userColor,
-    U.PROFILE_PICTURE as profilePicture 
+    TO_BASE64(U.PROFILE_PICTURE) as profilePicture 
     FROM USERS U
     WHERE NICKNAME = ? AND PASSWORD = ?
     `, [user.userName, user.password]);
 
     dbUser = dbUser[0][0];
 
-    dbUser.profilePicture = `data:image/png;base64, ${dbUser.profilePicture.toString("base64")}`;
+    // dbUser.profilePicture = `data:image/png;base64, ${dbUser.profilePicture?.toString("base64")}`;
 
     if (dbUser) {
 
@@ -184,62 +214,30 @@ app.post('/logIn', async (req, res) => {
 
 
 
-app.post('/editProfile', [Auth.authToken, expFormidable()], async (req, res) => {
+app.post('/editProfile', [Auth.authToken, upload.single("image")], async (req, res) => {
 
-  let file = req.files.image.path;
+  let file = req.file.buffer;
 
-  const file_64 = await fetch("https://images.8tracks.com/cover/i/010/157/987/image-5806.jpg?rect=0,0,500,500&q=98&fm=jpg&fit=max&w=960&h=960")
-  .then((response) => response.buffer())
-  .then((buffer) => {
-    const b64 = buffer.toString('base64');
-    return b64;
-  })
-  .catch(console.error);
+  try {
 
-  file = Buffer.from(file_64);
+    await db.promise().query(
+    `
+    UPDATE
+    USERS
+    SET
+    PROFILE_PICTURE = ?
+    WHERE ID_USER = ?
+    `, [file, 8]);
 
-  await db.promise().query(
-  `
-  UPDATE
-  USERS
-  SET
-  PROFILE_PICTURE = ?
-  WHERE ID_USER = ?
-  `, [file, 6]);
-  
-  res.status(201).send({ 
-    success: true,
-    data: file_64
-   });
-});
+    res.status(201).send({ 
+      success: true,
+      data: file.toString("base64")
+    });
 
+  } catch(err) {
+    console.log(err);
 
-
-app.post('/authorize', Auth.authToken, async (req, res) => {
-
-  const ACCESS_TOKEN = res.getHeader("ACCESS_TOKEN") ?? req.headers['authorization'].split(' ')[1];
-
-  let dbUser = await db.promise().query(
-  `
-  SELECT
-  U.ID_USER as id,
-  U.NICKNAME as userName,
-  U.NAME as name,
-  U.COLOR as userColor,
-  U.PROFILE_PICTURE as profilePicture 
-  FROM USERS U
-  LEFT JOIN SESSIONS S ON S.ID_USER = U.ID_USER
-  WHERE S.TOKEN = ?
-  `, [ACCESS_TOKEN]);
-  
-  dbUser = dbUser[0][0];
-
-  dbUser.profilePicture = `data:image/png;base64, ${dbUser.profilePicture.toString("base64")}`;
-
-  if (dbUser) {
-    res.status(200).send({ success: true, data: dbUser });
-  } else {
-    res.status(401).send({ success: false, message: "Token not registered in your user!"});
+    res.status(500).send({ success: false, message: "Database error!" });
   }
 });
 

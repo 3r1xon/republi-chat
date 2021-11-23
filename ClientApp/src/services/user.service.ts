@@ -6,6 +6,7 @@ import { database } from 'src/environments/database';
 import { Account } from 'src/interfaces/account.interface';
 import { HttpClient } from '@angular/common/http';
 import { CookieService } from 'ngx-cookie-service';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Injectable({
   providedIn: 'root'
@@ -15,6 +16,7 @@ export class UserService implements CanActivate {
   constructor(
     private http: HttpClient,
     private router: Router,
+    private sanitizer: DomSanitizer,
     private cookieService: CookieService) {}
 
   public currentUser?: Account;
@@ -37,6 +39,7 @@ export class UserService implements CanActivate {
     }).toPromise();
     if (response.success) {
       this.currentUser = <Account>response.data.user;
+      this.currentUser.profilePicture = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/png;base64,' + this.currentUser.profilePicture);
       this.userAuth = true;
 
       await this.router.navigate(['mainpage']);
@@ -55,8 +58,8 @@ export class UserService implements CanActivate {
     }).toPromise();
     if (response.success) {
       this.currentUser = <Account>response.data;
+      this.currentUser.profilePicture = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/png;base64,' + this.currentUser.profilePicture);
       this.userAuth = true;
-
       await this.router.navigate(['mainpage']);
     } else {
       this.router.navigate(['login']);

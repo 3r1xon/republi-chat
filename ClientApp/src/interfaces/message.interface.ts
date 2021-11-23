@@ -3,6 +3,6 @@ export interface Message {
     userName: string;
     userMessage: string;
     userColor: string;
-    userImage: string;
+    userImage: any;
     date: Date;
 }
