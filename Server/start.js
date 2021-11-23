@@ -154,8 +154,6 @@ app.post('/authorize', Auth.authToken, async (req, res) => {
   
   dbUser = dbUser[0][0];
 
-  // dbUser.profilePicture = `data:image/png;base64, ${dbUser.profilePicture?.toString("base64")}`;
-
   if (dbUser) {
     res.status(200).send({ success: true, data: dbUser });
   } else {
@@ -188,8 +186,6 @@ app.post('/logIn', async (req, res) => {
     `, [user.userName, user.password]);
 
     dbUser = dbUser[0][0];
-
-    // dbUser.profilePicture = `data:image/png;base64, ${dbUser.profilePicture?.toString("base64")}`;
 
     if (dbUser) {
 
