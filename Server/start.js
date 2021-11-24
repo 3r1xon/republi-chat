@@ -210,9 +210,11 @@ app.post('/logIn', async (req, res) => {
 
 
 
-app.post('/editProfile', [Auth.authToken, upload.single("image")], async (req, res) => {
+app.post('/editProfile/:id', [Auth.authToken, upload.single("image")], async (req, res) => {
 
   let file = req.file.buffer;
+
+  const userID = req.params.id;
 
   try {
 
@@ -223,7 +225,7 @@ app.post('/editProfile', [Auth.authToken, upload.single("image")], async (req, r
     SET
     PROFILE_PICTURE = ?
     WHERE ID_USER = ?
-    `, [file, 8]);
+    `, [file, userID]);
 
     res.status(201).send({ 
       success: true,

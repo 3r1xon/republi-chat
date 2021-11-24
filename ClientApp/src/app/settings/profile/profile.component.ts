@@ -28,7 +28,10 @@ export class ProfileComponent implements OnInit {
     const fd = new FormData();
     fd.append("image", file, file.name);
     
-    const res = await this.http.post<ServerResponse>(`${database.BASE_URL}/editProfile`, fd).toPromise();
+    const res = await this.http.post<ServerResponse>(
+      `${database.BASE_URL}/editProfile/${this._user.currentUser.id}`, 
+      fd
+      ).toPromise();
     
     if (res.success) {
       this._user.currentUser.profilePicture = res.data;
