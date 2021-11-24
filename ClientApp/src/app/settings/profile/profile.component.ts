@@ -29,7 +29,7 @@ export class ProfileComponent implements OnInit {
     fd.append("image", file, file.name);
     
     const res = await this.http.post<ServerResponse>(
-      `${database.BASE_URL}/editProfile/${this._user.currentUser.id}`, 
+      `${database.BASE_URL}/authentication/editProfile/${this._user.currentUser.id}`, 
       fd
       ).toPromise();
     

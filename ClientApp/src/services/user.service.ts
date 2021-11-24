@@ -33,7 +33,7 @@ export class UserService implements CanActivate {
   }
 
   public async logIn(userName: string, password: string): Promise<any> {
-    const response = await this.http.post<ServerResponse>(`${database.BASE_URL}/logIn`, {
+    const response = await this.http.post<ServerResponse>(`${database.BASE_URL}/authentication/logIn`, {
       userName: userName,
       password: password
     }).toPromise();
@@ -53,7 +53,7 @@ export class UserService implements CanActivate {
 
     if (!REFRESH_TOKEN) return;
     
-    const response = await this.http.post<ServerResponse>(`${database.BASE_URL}/authorize`, {
+    const response = await this.http.post<ServerResponse>(`${database.BASE_URL}/authentication/authorize`, {
       REFRESH_TOKEN: REFRESH_TOKEN
     }).toPromise();
     if (response.success) {

@@ -19,7 +19,7 @@ export class MessagesService {
   public messages: Array<Message> = [];
 
   public async getMessages() {
-    const res = await this.http.get<ServerResponse>(`${database.BASE_URL}/getMessages`).toPromise();
+    const res = await this.http.get<ServerResponse>(`${database.BASE_URL}/messages/getMessages`).toPromise();
 
     if (res.success) {
       this.messages = [];
@@ -44,7 +44,7 @@ export class MessagesService {
       date: new Date().getTime()
     };
 
-    const res = await this.http.post<ServerResponse>(`${database.BASE_URL}/sendMessage`, msg).toPromise();
+    const res = await this.http.post<ServerResponse>(`${database.BASE_URL}/messages/sendMessage`, msg).toPromise();
 
     if (res.success) {
       this.messages.push({
@@ -59,7 +59,7 @@ export class MessagesService {
   }
 
   public async deleteMessage(index: number) {
-    const res = await this.http.delete<ServerResponse>(`${database.BASE_URL}/deleteMessage`, { 
+    const res = await this.http.delete<ServerResponse>(`${database.BASE_URL}/messages/deleteMessage`, { 
       body: {
         id_message: this.messages[index].id
       } 

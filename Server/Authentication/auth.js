@@ -1,5 +1,5 @@
 const jwt          = require('jsonwebtoken');
-const db           = require('./db');
+const db           = require('../Database/db');
 const fm           = require('date-fns');
 
 

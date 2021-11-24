@@ -32,7 +32,7 @@ export class SignupComponent implements OnInit {
       return;
     }
 
-    this.http.post<ServerResponse>(`${database.BASE_URL}/signUp`, {
+    this.http.post<ServerResponse>(`${database.BASE_URL}/authentication/signUp`, {
       userName: this.userName,
       password: this.password
     }).subscribe((response) => { 
