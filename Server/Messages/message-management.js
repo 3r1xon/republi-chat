@@ -7,9 +7,9 @@ const fm             = require('date-fns');
 
 
 router.post('/sendMessage', Auth.authToken, async (req, res) => {
-  
+
   const msg = {
-    id_user: req.body.id,
+    id_user: res.locals._id,
     userMessage: req.body.userMessage,
     date: fm.format(new Date(req.body.date), 'yyyy-MM-dd HH:mm')
   };

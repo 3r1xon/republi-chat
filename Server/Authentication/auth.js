@@ -76,13 +76,15 @@ class Auth {
         let session = await db.promise().query(
         `
         SELECT
-        1
+        ID_USER
         FROM SESSIONS
         WHERE TOKEN = ?
         `, [ACCESS_TOKEN]);
 
         session = session[0][0];
- 
+        
+        res.locals._id = session.ID_USER;
+
         if (session) {
             jwt.verify(ACCESS_TOKEN, process.env.SECRET_KEY, (err, decoded) => {
                 if (decoded) {
@@ -128,6 +130,54 @@ class Auth {
 
     static authority = async (req, res, next) => {
 
+        const ACCESS_TOKEN = req.headers['authorization'].split(' ')[1];
+        const TABLE_NAME = "";
+
+        try {
+
+            let idFromToken = await db.promise().query(
+            `
+            SELECT ID_USER
+            FROM SESSIONS
+            WHERE TOKEN = ? 
+            `, [ACCESS_TOKEN]);
+
+            idFromToken = idFromToken[0][0];
+            
+            if (idFromToken) {
+
+                let pk = await db.promise().query(
+                `
+                SHOW KEYS 
+                FROM ${TABLE_NAME} 
+                WHERE Key_name = 'PRIMARY'
+                `);
+
+                pk = pk[0][0].Column_name;
+
+                let idValidate = await db.promise().query(
+                `
+                SELECT ID_USER
+                FROM ${TABLE_NAME}
+                WHERE ${pk} = ?
+                `, [idFromToken]);
+                
+                idValidate = idValidate[0][0];
+
+                if (idFromToken == idValidate) {
+                    next();
+                } else {
+                    res.status(401).send({ success: false, message: "User is not authorized to perform this operation!" });
+                }
+
+            } else {
+                res.status(401).send({ success: false, message: "Token is not valid!" });
+            }
+
+        } catch(err) {
+            console.log(err);
+            res.status(500).send({ success: false, message: "Database error!" });
+        }
     }
 }
 
