@@ -1,0 +1,18 @@
+@media only screen and (max-width: 600px) {
+
+  #profile {
+    visibility: hidden;
+  }
+
+  #right {
+    visibility: hidden;
+  }
+
+  #text-box {
+    position: relative;
+  }
+
+  #control {
+    position: absolute;
+  }
+}

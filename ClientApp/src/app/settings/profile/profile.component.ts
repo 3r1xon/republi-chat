@@ -29,12 +29,12 @@ export class ProfileComponent implements OnInit {
     fd.append("image", file, file.name);
     
     const res = await this.http.post<ServerResponse>(
-      `${database.BASE_URL}/authentication/editProfile/${this._user.currentUser.id}`, 
-      fd
-      ).toPromise();
+    `${database.BASE_URL}/authentication/editProfile`, 
+    fd
+    ).toPromise();
     
     if (res.success) {
-      this._user.currentUser.profilePicture = res.data;
+      this._user.currentUser.profilePicture = this._fileUpload.sanitizeIMG(res.data);
     }
   }
 

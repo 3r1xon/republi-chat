@@ -49,7 +49,7 @@ router.post('/authorize', Auth.authToken, async (req, res) => {
   U.NICKNAME as userName,
   U.NAME as name,
   U.COLOR as userColor,
-  TO_BASE64(U.PROFILE_PICTURE) as profilePicture 
+  TO_BASE64(U.PROFILE_PICTURE) as profilePicture
   FROM USERS U
   LEFT JOIN SESSIONS S ON S.ID_USER = U.ID_USER
   WHERE S.TOKEN = ?
@@ -113,11 +113,35 @@ router.post('/logIn', async (req, res) => {
 
 
 
-router.post('/editProfile/:id', [Auth.authToken, upload.single("image")], async (req, res) => {
+router.delete('/logout', Auth.authToken, async (req, res) => {
 
-  let file = req.file.buffer;
+  const userID = res.locals._id;
 
-  const userID = req.params.id;
+  try {
+
+    await db.promise().query(
+    `
+    DELETE
+    FROM SESSIONS
+    WHERE ID_USER = ?
+    `, [userID]);
+
+    res.status(200).send({ success: true });
+
+  } catch(err) {
+    console.log(err);
+    res.status(500).send({ success: false, message: "Database error!" });
+  }
+  
+});
+
+
+
+router.post('/editProfile', [Auth.authToken, upload.single("image")], async (req, res) => {
+
+  const file = req.file.buffer;
+
+  const userID = res.locals._id;
 
   try {
 
@@ -131,8 +155,8 @@ router.post('/editProfile/:id', [Auth.authToken, upload.single("image")], async 
     `, [file, userID]);
 
     res.status(201).send({ 
-    success: true,
-    data: file.toString("base64")
+      success: true,
+      data: file.toString("base64")
     });
 
   } catch(err) {

@@ -7,6 +7,7 @@ import { Account } from 'src/interfaces/account.interface';
 import { HttpClient } from '@angular/common/http';
 import { CookieService } from 'ngx-cookie-service';
 import { DomSanitizer } from '@angular/platform-browser';
+import { FileUploadService } from './file-upload.service';
 
 @Injectable({
   providedIn: 'root'
@@ -17,6 +18,7 @@ export class UserService implements CanActivate {
     private http: HttpClient,
     private router: Router,
     private sanitizer: DomSanitizer,
+    private _fileUpload: FileUploadService,
     private cookieService: CookieService) {}
 
   public currentUser?: Account;
@@ -39,7 +41,7 @@ export class UserService implements CanActivate {
     }).toPromise();
     if (response.success) {
       this.currentUser = <Account>response.data.user;
-      this.currentUser.profilePicture = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/png;base64,' + this.currentUser.profilePicture);
+      this.currentUser.profilePicture = this._fileUpload.sanitizeIMG(this.currentUser.profilePicture);
       this.userAuth = true;
 
       await this.router.navigate(['mainpage']);
@@ -58,7 +60,7 @@ export class UserService implements CanActivate {
     }).toPromise();
     if (response.success) {
       this.currentUser = <Account>response.data;
-      this.currentUser.profilePicture = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/png;base64,' + this.currentUser.profilePicture);
+      this.currentUser.profilePicture = this._fileUpload.sanitizeIMG(this.currentUser.profilePicture);
       this.userAuth = true;
       await this.router.navigate(['mainpage']);
     } else {
@@ -69,11 +71,16 @@ export class UserService implements CanActivate {
   }
 
   public async logOut(): Promise<any> {
+    await this.http.delete(`${database.BASE_URL}/authentication/logout`).toPromise();
+
     localStorage.clear();
     this.cookieService.deleteAll();
+
     this.userAuth = false;
+
     await this.router.navigate(['login']);
     window.location.reload();
   }
+
 
 }

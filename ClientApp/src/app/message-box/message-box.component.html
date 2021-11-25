@@ -2,7 +2,7 @@
         background: active ? 'rgb(67 67 67)' : '' 
     }">
 
-    <img id="user-image" [src]="message.userImage">
+    <img id="user-image" [src]="message.userImage" (click)="onUserClick.emit('onUserClick')">
 
     <div id="message-info">
 

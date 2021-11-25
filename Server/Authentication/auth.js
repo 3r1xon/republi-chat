@@ -82,10 +82,11 @@ class Auth {
         `, [ACCESS_TOKEN]);
 
         session = session[0][0];
-        
-        res.locals._id = session.ID_USER;
 
         if (session) {
+
+            res.locals._id = session.ID_USER;
+
             jwt.verify(ACCESS_TOKEN, process.env.SECRET_KEY, (err, decoded) => {
                 if (decoded) {
                     next();

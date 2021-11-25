@@ -5,17 +5,23 @@
         <p>{{_user.currentUser?.userName}}</p>
     </div>
 
-    <button id="upload" (click)="sendMessage()">
-        <mat-icon>upload</mat-icon>
-    </button>
+    <div id="control">
 
-    <textarea id="text" rows="20" cols="50" (keydown.enter)="sendMessage()"
-    [(ngModel)]="message" placeholder="Write anything..."></textarea>
+        <button id="upload" (click)="sendMessage()">
+            <mat-icon>upload</mat-icon>
+        </button>
+        
+        <textarea id="text" rows="20" cols="50" (keydown.enter)="sendMessage()"
+        [(ngModel)]="message" placeholder="Write anything..."></textarea>
+        
+        <button id="send" (click)="sendMessage()">
+            <mat-icon>send</mat-icon>
+        </button>
+        
+    </div>
 
-    <button id="send" (click)="sendMessage()">
-        <mat-icon>send</mat-icon>
-    </button>
-
-    <mat-icon id="settings" routerLink="/settings/">settings</mat-icon>
+    <div id="right">
+        <mat-icon id="settings" routerLink="/settings/">settings</mat-icon>
+    </div>
 
 </div>

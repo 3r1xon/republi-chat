@@ -4,7 +4,7 @@ import { Message } from 'src/interfaces/message.interface';
 import { UserService } from './user.service';
 import { database } from 'src/environments/database';
 import { ServerResponse } from 'src/interfaces/response.interface';
-import { DomSanitizer } from '@angular/platform-browser';
+import { FileUploadService } from './file-upload.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +13,7 @@ export class MessagesService {
 
   constructor(
     private _user: UserService,
-    private sanitizer: DomSanitizer,
+    private _fileUpload: FileUploadService,
     private http: HttpClient) { }
 
   public messages: Array<Message> = [];
@@ -30,7 +30,7 @@ export class MessagesService {
           userName: msg.userName,
           userMessage: msg.userMessage,
           date: new Date(msg.date),
-          userImage: this.sanitizer.bypassSecurityTrustResourceUrl('data:image/png;base64,' + msg.userImage),
+          userImage: this._fileUpload.sanitizeIMG(msg.userImage),
           userColor: "#FFFFFF"
         });
       });

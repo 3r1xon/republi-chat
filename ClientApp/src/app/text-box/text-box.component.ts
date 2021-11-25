@@ -5,7 +5,7 @@ import { UserService } from 'src/services/user.service';
 @Component({
   selector: 'text-box',
   templateUrl: './text-box.component.html',
-  styleUrls: ['./text-box.component.scss']
+  styleUrls: ['./text-box.component.scss', './text-box.component.media.scss']
 })
 export class TextBoxComponent implements OnInit {
 
