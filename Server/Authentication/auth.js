@@ -129,56 +129,60 @@ class Auth {
 
 
 
-    static authority = async (req, res, next) => {
+    static authority = (TABLE_NAME) => {
 
-        const ACCESS_TOKEN = req.headers['authorization'].split(' ')[1];
-        const TABLE_NAME = "";
+        return async (req, res, next) => {
 
-        try {
+            const ACCESS_TOKEN = req.headers['authorization'].split(' ')[1];
+            // Primary key of the table that needs to be checked for authority
+            const PK_ID = req.body._id;
 
-            let idFromToken = await db.promise().query(
-            `
-            SELECT ID_USER
-            FROM SESSIONS
-            WHERE TOKEN = ? 
-            `, [ACCESS_TOKEN]);
+            try {
 
-            idFromToken = idFromToken[0][0];
-            
-            if (idFromToken) {
-
-                let pk = await db.promise().query(
-                `
-                SHOW KEYS 
-                FROM ${TABLE_NAME} 
-                WHERE Key_name = 'PRIMARY'
-                `);
-
-                pk = pk[0][0].Column_name;
-
-                let idValidate = await db.promise().query(
+                let idFromToken = await db.promise().query(
                 `
                 SELECT ID_USER
-                FROM ${TABLE_NAME}
-                WHERE ${pk} = ?
-                `, [idFromToken]);
-                
-                idValidate = idValidate[0][0];
+                FROM SESSIONS
+                WHERE TOKEN = ? 
+                `, [ACCESS_TOKEN]);
 
-                if (idFromToken == idValidate) {
-                    next();
+                idFromToken = idFromToken[0][0].ID_USER;
+
+                if (idFromToken) {
+
+                    let pk = await db.promise().query(
+                    `
+                    SHOW KEYS 
+                    FROM ${TABLE_NAME} 
+                    WHERE Key_name = 'PRIMARY'
+                    `);
+
+                    pk = pk[0][0].Column_name;
+
+                    let idValidate = await db.promise().query(
+                    `
+                    SELECT ID_USER
+                    FROM ${TABLE_NAME}
+                    WHERE ${pk} = ?
+                    `, [PK_ID]);
+
+                    idValidate = idValidate[0][0].ID_USER;
+                    
+                    if (idFromToken == idValidate) {
+                        next();
+                    } else {
+                        res.status(401).send({ success: false, message: "User is not authorized to perform this operation!" });
+                    }
+
                 } else {
-                    res.status(401).send({ success: false, message: "User is not authorized to perform this operation!" });
+                    res.status(401).send({ success: false, message: "Token is not valid!" });
                 }
 
-            } else {
-                res.status(401).send({ success: false, message: "Token is not valid!" });
+            } catch(err) {
+                console.log(err);
+                res.status(500).send({ success: false, message: "Database error!" });
             }
-
-        } catch(err) {
-            console.log(err);
-            res.status(500).send({ success: false, message: "Database error!" });
-        }
+        };
     }
 }
 

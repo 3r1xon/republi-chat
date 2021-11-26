@@ -42,6 +42,7 @@ router.post('/sendMessage', Auth.authToken, async (req, res) => {
 });
 
 
+
 router.get('/getMessages', Auth.authToken, async (req, res) => {
 
   try {
@@ -73,10 +74,7 @@ router.get('/getMessages', Auth.authToken, async (req, res) => {
 
 
 
-
-
-
-router.delete('/deleteMessage', Auth.authToken, async (req, res) => {
+router.delete('/deleteMessage', [Auth.authority("MESSAGES"), Auth.authToken], async (req, res) => {
 
   try {
     const id_message = req.body.id_message;
