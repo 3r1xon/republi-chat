@@ -134,6 +134,7 @@ class Auth {
         return async (req, res, next) => {
 
             const ACCESS_TOKEN = res.getHeader("ACCESS_TOKEN") ?? req.headers['authorization'].split(' ')[1];
+            
             // Primary key of the table that needs to be checked for authority
             const PK_ID = req.body._id;
 

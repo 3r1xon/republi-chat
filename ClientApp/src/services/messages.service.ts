@@ -31,7 +31,8 @@ export class MessagesService {
           userMessage: msg.userMessage,
           date: new Date(msg.date),
           userImage: this._fileUpload.sanitizeIMG(msg.userImage),
-          userColor: "#FFFFFF"
+          userColor: "#FFFFFF",
+          auth: msg.userName == this._user.currentUser.userName
         });
       });
     }
@@ -53,7 +54,8 @@ export class MessagesService {
         userMessage: msg.userMessage,
         userColor: "#FFFFFF",
         userImage: this._user.currentUser.profilePicture,
-        date: new Date(msg.date)
+        date: new Date(msg.date),
+        auth: true
       });
     }
   }

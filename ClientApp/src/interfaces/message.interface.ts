@@ -5,4 +5,5 @@ export interface Message {
     userColor: string;
     userImage: any;
     date: Date;
+    auth: boolean;
 }

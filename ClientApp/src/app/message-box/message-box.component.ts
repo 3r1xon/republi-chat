@@ -25,6 +25,42 @@ export class MessageBoxComponent implements OnInit {
     ) { }
 
   ngOnInit(): void {
+    if (this._msService.messages[this.uniqueID].auth) {
+      this.options = [
+        {
+          name: "Delete",
+          icon: "delete",
+          color: "#ff0000",
+          onClick: () => {
+            this._msService.deleteMessage(this.uniqueID);
+          }
+        },
+        {
+          name: "Edit",
+          icon: "edit",
+          color: "#ffffff",
+          onClick: () => {
+          }
+        },
+        {
+          name: "Report",
+          icon: "flag",
+          color: "#ffffff",
+          onClick: () => {
+          }
+        },
+      ];
+    } else {
+      this.options = [
+        {
+          name: "Report",
+          icon: "flag",
+          color: "#ffffff",
+          onClick: () => {
+          }
+        },
+      ];
+    }
   }
 
   public active: boolean = false;
@@ -35,30 +71,7 @@ export class MessageBoxComponent implements OnInit {
   public uniqueID: number;
 
   @Input()
-  public options: Array<SubMenu> = [
-    {
-      name: "Delete",
-      icon: "delete",
-      color: "#ff0000",
-      onClick: () => {
-        this._msService.deleteMessage(this.uniqueID);
-      }
-    },
-    {
-      name: "Edit",
-      icon: "edit",
-      color: "#ffffff",
-      onClick: () => {
-      }
-    },
-    {
-      name: "Report",
-      icon: "flag",
-      color: "#ffffff",
-      onClick: () => {
-      }
-    },
-  ];
+  public options: Array<SubMenu> = [];
 
   @Input()
   public message: Message;
