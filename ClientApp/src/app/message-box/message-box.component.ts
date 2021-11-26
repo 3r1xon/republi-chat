@@ -25,7 +25,7 @@ export class MessageBoxComponent implements OnInit {
     ) { }
 
   ngOnInit(): void {
-    if (this._msService.messages[this.uniqueID].auth) {
+    if (this.message.auth) {
       this.options = [
         {
           name: "Delete",
