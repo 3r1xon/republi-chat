@@ -61,7 +61,7 @@ export class MessagesService {
   public async deleteMessage(index: number) {
     const res = await this.http.delete<ServerResponse>(`${database.BASE_URL}/messages/deleteMessage`, { 
       body: {
-        id_message: this.messages[index].id
+        _id: this.messages[index].id
       } 
     }).toPromise();
     

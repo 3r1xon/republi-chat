@@ -74,10 +74,10 @@ router.get('/getMessages', Auth.authToken, async (req, res) => {
 
 
 
-router.delete('/deleteMessage', [Auth.authority("MESSAGES"), Auth.authToken], async (req, res) => {
+router.delete('/deleteMessage', [Auth.authToken, Auth.authority("MESSAGES")], async (req, res) => {
 
   try {
-    const id_message = req.body.id_message;
+    const id_message = req.body._id;
 
     await db.promise().query(
     `
