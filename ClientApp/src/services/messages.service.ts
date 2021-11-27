@@ -5,6 +5,7 @@ import { UserService } from './user.service';
 import { database } from 'src/environments/database';
 import { ServerResponse } from 'src/interfaces/response.interface';
 import { FileUploadService } from './file-upload.service';
+import { WebSocketService } from './websocket.service';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +15,8 @@ export class MessagesService {
   constructor(
     private _user: UserService,
     private _fileUpload: FileUploadService,
-    private http: HttpClient) { }
+    private http: HttpClient
+  ) { }
 
   public messages: Array<Message> = [];
 

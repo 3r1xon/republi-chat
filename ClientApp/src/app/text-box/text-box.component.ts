@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MessagesService } from 'src/services/messages.service';
 import { UserService } from 'src/services/user.service';
+import { WebSocketService } from 'src/services/websocket.service';
 
 @Component({
   selector: 'text-box',
@@ -11,6 +12,7 @@ export class TextBoxComponent implements OnInit {
 
   constructor(
     private _msService: MessagesService,
+    private _webSocket: WebSocketService,
     public _user: UserService,
     ) { }
 
@@ -23,9 +25,11 @@ export class TextBoxComponent implements OnInit {
 
     if (this.message == "") return;
 
-    this._msService.sendMessage(this.message);
+    await this._msService.sendMessage(this.message);
 
     this.message = "";
+
+    this._webSocket.sendMessage();
     
   }
 }

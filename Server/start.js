@@ -3,8 +3,8 @@ const cors           = require('cors');
 const app            = express();
 const port           = 3000;
 const dotenv         = require('dotenv'); 
-const cookieParser   = require("cookie-parser");
-
+const cookieParser   = require('cookie-parser');
+const webSocket      = require('ws');
 
 
 const corsOptions = {
@@ -29,6 +29,21 @@ app.get('/', (req, res) => {
 
 
 
-app.listen(port, () => {
+const server = app.listen(port, () => {
   console.log(`Server listening at http://localhost:${port}`);
+});
+
+
+
+const wss = new webSocket.Server({ server });
+
+
+
+wss.on('connection', (ws) => {
+
+  ws.on('message', (message) => {
+    ws.send(JSON.stringify(message));
+  });
+
+  // ws.send("LISTENING");
 });

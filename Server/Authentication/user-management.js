@@ -93,7 +93,7 @@ router.post('/logIn', async (req, res) => {
     if (dbUser) {
 
       res.set(await Auth.generateToken({
-        id: dbUser.id,
+        _id: dbUser.id,
         userName: dbUser.userName 
       }));
 

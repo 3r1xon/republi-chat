@@ -28,7 +28,7 @@ class Auth {
             SELECT 1 
             FROM SESSIONS
             WHERE ID_USER = ?
-            `, [user.id]);
+            `, [user._id]);
 
             userExist = userExist[0][0];
 
@@ -41,7 +41,7 @@ class Auth {
                 TOKEN = ?,
                 REFRESH_TOKEN = ?
                 WHERE ID_USER = ?
-                `, [ACCESS_TOKEN, REFRESH_TOKEN, user.id]);
+                `, [ACCESS_TOKEN, REFRESH_TOKEN, user._id]);
             } else {
 
                 await db.promise().query(
@@ -50,7 +50,7 @@ class Auth {
                 (ID_USER, TOKEN, REFRESH_TOKEN)
                 VALUES
                 (?, ?, ?)
-                `, [user.id, ACCESS_TOKEN, REFRESH_TOKEN]);
+                `, [user._id, ACCESS_TOKEN, REFRESH_TOKEN]);
             }
         } catch (err) {
             console.log(err);
@@ -111,7 +111,7 @@ class Auth {
 
                             if (dbRefreshToken) {
                                 res.set(await this.generateToken({
-                                    id: dbRefreshToken.ID_USER,
+                                    _id: dbRefreshToken.ID_USER,
                                     userName: dbRefreshToken.NICKNAME
                                 }));
                                 next();
@@ -128,7 +128,7 @@ class Auth {
     }
 
 
-
+    // This middleware needs to be called ALWAYS after the authToken or it won't work
     static authority = (TABLE_NAME) => {
 
         return async (req, res, next) => {
@@ -140,34 +140,28 @@ class Auth {
 
                 const idFromToken = res.locals._id
 
-                if (idFromToken) {
+                let pk = await db.promise().query(
+                `
+                SHOW KEYS 
+                FROM ${TABLE_NAME} 
+                WHERE Key_name = 'PRIMARY'
+                `);
 
-                    let pk = await db.promise().query(
-                    `
-                    SHOW KEYS 
-                    FROM ${TABLE_NAME} 
-                    WHERE Key_name = 'PRIMARY'
-                    `);
+                pk = pk[0][0].Column_name;
 
-                    pk = pk[0][0].Column_name;
+                let idValidate = await db.promise().query(
+                `
+                SELECT ID_USER
+                FROM ${TABLE_NAME}
+                WHERE ${pk} = ?
+                `, [PK_ID]);
 
-                    let idValidate = await db.promise().query(
-                    `
-                    SELECT ID_USER
-                    FROM ${TABLE_NAME}
-                    WHERE ${pk} = ?
-                    `, [PK_ID]);
-
-                    idValidate = idValidate[0][0].ID_USER;
-                    
-                    if (idFromToken == idValidate) {
-                        next();
-                    } else {
-                        res.status(401).send({ success: false, message: "User is not authorized to perform this operation!" });
-                    }
-
+                idValidate = idValidate[0][0].ID_USER;
+                
+                if (idFromToken == idValidate) {
+                    next();
                 } else {
-                    res.status(401).send({ success: false, message: "Token is not valid!" });
+                    res.status(401).send({ success: false, message: "User is not authorized to perform this operation!" });
                 }
 
             } catch(err) {
