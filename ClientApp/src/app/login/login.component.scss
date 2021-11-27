@@ -2,17 +2,19 @@
 
 #login {
     width: 100%;
-    height: 100vh;
-    background: rgb(18 18 18);
+    height: 90vh;
+    background: #121212;
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
 
 
     #particle-container {
         width: 100%;
         height: 100%;
         position: absolute;
+        animation: particlesSpawn 3s;
 
         .particle {
             position: absolute;
@@ -42,10 +44,9 @@
 
     #rect {
         width: 100%;
-        height: 45vh;
         background: rgb(31,26,36);
-        background: linear-gradient(120deg, rgba(31,26,36,1) 55%, rgba(170, 163, 163, 0.767) 100%);
-        transform: skewY(8deg);
+        background: linear-gradient(120deg, rgba(31, 26, 36, 0.836) 55%, rgba(170, 163, 163, 0.5) 100%);
+        animation: onOpenLogIn 1s forwards;
     }
 
     #login-form {
@@ -54,6 +55,7 @@
         align-items: center;
         justify-content: center;
         flex-direction: column;
+        animation: fadeIn 1s;
 
 
         h1 {
@@ -81,11 +83,34 @@
         a {
             font-size: 18px;
             text-decoration: none;
+            color: hotpink;
         }
     }
 
     footer {
-        position: absolute;
-        bottom: 0;
+        width: 100%;
+    }
+}
+
+@keyframes onOpenLogIn {
+    0% {
+        transform: skewY(-8deg);
+        height: 60vh;
+    }
+    
+    100% {
+        transform: skewY(8deg);
+        height: 45vh;
+    }
+}
+
+
+@keyframes particlesSpawn {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
     }
 }

@@ -1,7 +1,7 @@
 #flat-input {
     position: relative;
     border-radius: 5px;
-    margin: 10px;
+    margin: 15px;
     
     #placeholder {
         position: absolute;
@@ -47,6 +47,14 @@
     font-size: 12px;
     transform: translate(0, -50%);
     pointer-events: none;
+}
+
+#required {
+    font-size: 14px;
+    position: absolute;
+    left: 0;
+    right: 0;
+    text-align: center;
 }
 
 .small {

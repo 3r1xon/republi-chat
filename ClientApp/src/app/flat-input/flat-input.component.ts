@@ -32,27 +32,44 @@ import {
 export class FlatInputComponent {
     @Input()
     type: string = "text";
+
     @Input()
     placeholder: string = 'Placeholder example';
+
     @Input()
     color: string = 'royalblue';
+
+    @Input()
+    borderColor: string = "grey";
+
     @Input()
     icon?: string;
+
     @Input()
     hint?: string;
+
     @Input()
     text: string = '';
+
     @Input()
     size: string = 'big' || 'medium' || 'small';
+
+    @Input()
+    required: boolean = false;
+
     @Output()
     textChange = new EventEmitter<string>();
-
+    public empty: boolean = false;
     public placeholderAnimated: boolean = false;
     constructor() { }
     onFocus() {
       this.placeholderAnimated = true;
     }
     onFocusOut() {
+      if (this.required && this.text == "") {
+        this.borderColor = "#ff0000";
+        this.empty = true;
+      } else this.empty = false;
       if (!this.text) this.placeholderAnimated = false;
       if (this.text.length > 0) return;
       this.placeholderAnimated = false;

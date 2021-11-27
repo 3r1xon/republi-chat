@@ -17,7 +17,6 @@ export class UserService implements CanActivate {
   constructor(
     private http: HttpClient,
     private router: Router,
-    private sanitizer: DomSanitizer,
     private _fileUpload: FileUploadService,
     private cookieService: CookieService) {}
 
@@ -32,22 +31,6 @@ export class UserService implements CanActivate {
     if (!this.userAuth)
       this.router.navigate(['unauthorized']);
     return this.userAuth;
-  }
-
-  public async logIn(userName: string, password: string): Promise<any> {
-    const response = await this.http.post<ServerResponse>(`${database.BASE_URL}/authentication/logIn`, {
-      userName: userName,
-      password: password
-    }).toPromise();
-    if (response.success) {
-      this.currentUser = <Account>response.data.user;
-      this.currentUser.profilePicture = this._fileUpload.sanitizeIMG(this.currentUser.profilePicture);
-      this.userAuth = true;
-
-      await this.router.navigate(['mainpage']);
-    } else {
-      return response.message;
-    }
   }
 
   public async authorize(): Promise<any> {

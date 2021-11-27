@@ -39,11 +39,12 @@ export class SignupComponent implements OnInit {
       userName: this.userName,
       password: this.password
     }).subscribe((response) => { 
-      if (!response.success) {
-        this.alert = <string>response.message;
-      } else {
+      if (response.success) {
         this.router.navigate(['login']);
       }
+    }, 
+    (response) => {
+      this.alert = response.error.message;
     });
   }
 

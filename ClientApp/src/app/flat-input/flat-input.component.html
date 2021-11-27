@@ -1,5 +1,5 @@
 <div id="flat-input" [ngStyle]="{
-    'border': placeholderAnimated ? '2px solid ' + color : '1px solid gray',
+    'border': placeholderAnimated ? '2px solid ' + color : (required && empty ? '1px solid ' + borderColor : '1px solid gray'),
     'padding': placeholderAnimated ? '0px ' : '1px',
     'margin-bottom': hint ? '10px' : '0px'
 }" [ngClass]="{
@@ -13,9 +13,10 @@
     <mat-icon [style.color]="color" *ngIf="icon">{{icon}}</mat-icon>
 </div>
 <label id="placeholder" [ngStyle]="{
-    'color': placeholderAnimated ? color : 'grey'
+    'color': placeholderAnimated ? color : borderColor
 }" [@placeholderAnimated] = "placeholderAnimated ? 'moved' : 'static'">{{placeholder}}</label>
 </div>
 <label id="hint" *ngIf="hint" [ngStyle]="{
-'color': placeholderAnimated ? color : 'grey'
+'color': placeholderAnimated ? color : borderColor
 }">{{hint}}</label>
+<p id="required" *ngIf="empty" [style.color]="borderColor">This field is required *</p>

@@ -1,4 +1,10 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { database } from 'src/environments/database';
+import { Account } from 'src/interfaces/account.interface';
+import { ServerResponse } from 'src/interfaces/response.interface';
+import { FileUploadService } from 'src/services/file-upload.service';
 import { UserService } from 'src/services/user.service';
 
 @Component({
@@ -9,7 +15,10 @@ import { UserService } from 'src/services/user.service';
 export class LoginComponent implements OnInit {
 
   constructor(
-    private _user: UserService
+    private _user: UserService,
+    private _fileUpload: FileUploadService,
+    private router: Router,
+    private http: HttpClient
     ) { }
 
   ngOnInit(): void {
@@ -24,6 +33,18 @@ export class LoginComponent implements OnInit {
   public alert: string = "";
 
   async logIn() {
-    this.alert = await this._user.logIn(this.userName, this.password) ?? "";
+    this.http.post<ServerResponse>(`${database.BASE_URL}/authentication/logIn`, {
+      userName: this.userName,
+      password: this.password
+    })
+      .subscribe(async (response) => {
+        this._user.currentUser = <Account>response.data.user;
+        this._user.currentUser.profilePicture = this._fileUpload.sanitizeIMG(this._user.currentUser.profilePicture);
+        this._user.userAuth = true;
+        await this.router.navigate(['mainpage']);
+      }, 
+      (response) => {
+        this.alert = response.error.message;
+      });
   }
 }

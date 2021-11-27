@@ -1,15 +1,17 @@
 #signup {
     width: 100%;
-    height: 100vh;
-    background: rgb(18 18 18);
+    height: 90vh;
+    background: #121212;
     display: flex;
     justify-content: center;
+    flex-direction: column;
     align-items: center;
 
     #particle-container {
         width: 100%;
         height: 100%;
         position: absolute;
+        animation: particlesSpawn 3s;
 
         .particle {
             position: absolute;
@@ -38,10 +40,9 @@
 
     #rect {
         width: 100%;
-        height: 60vh;
         background: rgb(31,26,36);
-        background: linear-gradient(120deg, rgba(31,26,36,1) 70%, rgba(170, 163, 163, 0.767) 100%);
-        transform: skewY(-8deg);
+        background: linear-gradient(120deg, rgba(31, 26, 36, 0.836) 55%, rgba(170, 163, 163, 0.5) 100%);
+        animation: onOpenSignUp 1s forwards;
     }
 
     #signup-form {
@@ -50,6 +51,7 @@
         align-items: center;
         justify-content: center;
         flex-direction: column;
+        animation: fadeIn 1s;
 
         h1 {
             color: #ffffff;
@@ -65,18 +67,45 @@
             flex-direction: row-reverse;
 
             flat-button {
-                margin: 10px;
+                margin: 15px;
             }
         }
 
         p {
             color: #ff0000;
         }
+
+        a {
+            font-size: 18px;
+            text-decoration: none;
+            color: hotpink;
+        }
     }
 
     footer {
-        position: absolute;
-        bottom: 0;
+        width: 100%;
     }
 
+}
+
+@keyframes onOpenSignUp {
+    0% {
+        transform: skewY(8deg);
+        height: 45vh;
+    }
+
+    100% {
+        transform: skewY(-8deg);
+        height: 60vh;
+    }
+}
+
+@keyframes particlesSpawn {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
 }

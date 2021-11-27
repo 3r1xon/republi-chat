@@ -10,11 +10,11 @@
 
         <h1>Sign up</h1>
 
-        <flat-input [(text)]="userName" placeholder="Nickname"></flat-input>
+        <flat-input [(text)]="userName" placeholder="Nickname" required="true"></flat-input>
 
-        <flat-input [(text)]="password" type="password" placeholder="Password"></flat-input>
+        <flat-input [(text)]="password" type="password" placeholder="Password" required="true"></flat-input>
 
-        <flat-input [(text)]="confirmPassword" type="password" placeholder="Confirm password"></flat-input>
+        <flat-input [(text)]="confirmPassword" type="password" placeholder="Confirm password" required="true"></flat-input>
 
         <div>
             <flat-button (click)="signUp()" width="125px" icon="login">Sign Up</flat-button>
