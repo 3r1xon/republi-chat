@@ -17,7 +17,10 @@ export class SignupComponent implements OnInit {
     ) { }
 
   ngOnInit(): void {
+    this.particleNumber = Array(30).fill(0);
   }
+
+  public particleNumber: Array<any> = []; 
 
   public userName: string = "";
   public password: string = "";

@@ -1,15 +1,21 @@
 <div id="login">
 
+    <div id="particle-container">
+        <div class="particle" *ngFor="let particle of particleNumber"></div>
+    </div>
+
+    <div id="rect"></div>
+
     <div id="login-form" (keyup.enter)="logIn()">
 
-        <h1>Log In</h1>
+        <h1>Log in</h1>
 
         <flat-input [(text)]="userName" placeholder="Nickname"></flat-input>
 
         <flat-input [(text)]="password" type="password" placeholder="Password"></flat-input>
 
         <div>
-            <flat-button (click)="logIn()" width="125px" icon="login">Log In</flat-button>
+            <flat-button (click)="logIn()" width="125px" icon="login">Log in</flat-button>
         </div>
         
         <p>{{alert}}</p>
@@ -17,5 +23,6 @@
         <a routerLink="/signup">Not registered? Sign up</a>
     </div>
 
+    <footer></footer>
 
 </div>

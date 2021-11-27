@@ -1,4 +1,3 @@
-import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { MessagesService } from 'src/services/messages.service';
 
@@ -10,15 +9,14 @@ import { MessagesService } from 'src/services/messages.service';
 export class ChatComponent implements OnInit {
 
   constructor(
-    public _msService: MessagesService, 
-    private http: HttpClient) { }
+    public _msService: MessagesService) { }
 
   ngOnInit(): void {
     this._msService.getMessages();
   }
 
   deleteMessage(index: number) {
-    this._msService.deleteMessage(index);
+    
   } 
 
   openSelectedUser(event: any) {

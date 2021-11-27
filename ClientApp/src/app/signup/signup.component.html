@@ -1,5 +1,11 @@
 <div id="signup">
 
+    <div id="particle-container">
+        <div class="particle" *ngFor="let particle of particleNumber"></div>
+    </div>
+
+    <div id="rect"></div>
+
     <div id="signup-form" (keyup.enter)="signUp()">
 
         <h1>Sign up</h1>
@@ -18,5 +24,7 @@
         
         <a routerLink="/login">Already registered? Log In</a>
     </div>
+
+    <footer></footer>
 
 </div>

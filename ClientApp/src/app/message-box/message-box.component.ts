@@ -31,8 +31,12 @@ export class MessageBoxComponent implements OnInit {
           name: "Delete",
           icon: "delete",
           color: "#ff0000",
-          onClick: () => {
-            this._msService.deleteMessage(this.uniqueID);
+          onClick: async () => {
+            const res = await this._msService.deleteMessage(this.message.id);
+
+            if (res.success) {
+              this._msService.messages.splice(this.uniqueID, 1);
+            }
           }
         },
         {

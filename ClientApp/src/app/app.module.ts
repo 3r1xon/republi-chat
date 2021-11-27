@@ -24,6 +24,7 @@ import { SettingsComponent } from './settings/main-settings/settings.component';
 import { ProfileComponent } from './settings/profile/profile.component';
 import { PrivacyComponent } from './settings/privacy/privacy.component';
 import { UnauthorizedComponent } from './unauthorized/unauthorized.component';
+import { FooterComponent } from './footer/footer.component';
 
 @NgModule({
   declarations: [
@@ -41,7 +42,8 @@ import { UnauthorizedComponent } from './unauthorized/unauthorized.component';
     SettingsComponent,
     ProfileComponent,
     PrivacyComponent,
-    UnauthorizedComponent
+    UnauthorizedComponent,
+    FooterComponent
   ],
   imports: [
     BrowserModule,

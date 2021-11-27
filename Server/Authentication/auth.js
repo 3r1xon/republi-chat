@@ -133,21 +133,12 @@ class Auth {
 
         return async (req, res, next) => {
 
-            const ACCESS_TOKEN = res.getHeader("ACCESS_TOKEN") ?? req.headers['authorization'].split(' ')[1];
-            
             // Primary key of the table that needs to be checked for authority
             const PK_ID = req.body._id;
 
             try {
 
-                let idFromToken = await db.promise().query(
-                `
-                SELECT ID_USER
-                FROM SESSIONS
-                WHERE TOKEN = ? 
-                `, [ACCESS_TOKEN]);
-
-                idFromToken = idFromToken[0][0].ID_USER;
+                const idFromToken = res.locals._id
 
                 if (idFromToken) {
 
