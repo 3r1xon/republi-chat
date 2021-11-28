@@ -7,6 +7,7 @@ const cookieParser   = require('cookie-parser');
 const webSocket      = require('ws');
 
 
+
 const corsOptions = {
   origin: "http://localhost:4200",
   credentials: true,
@@ -42,8 +43,7 @@ const wss = new webSocket.Server({ server });
 wss.on('connection', (ws) => {
 
   ws.on('message', (message) => {
-    ws.send(JSON.stringify(message));
+    ws.send(message.toString());
   });
-
-  // ws.send("LISTENING");
+  
 });

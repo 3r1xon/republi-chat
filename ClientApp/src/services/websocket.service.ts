@@ -1,5 +1,8 @@
 import { Injectable } from '@angular/core';
+import { Message } from 'src/interfaces/message.interface';
+import { FileUploadService } from './file-upload.service';
 import { MessagesService } from './messages.service';
+import { UserService } from './user.service';
 
 @Injectable({
   providedIn: 'root'
@@ -7,7 +10,9 @@ import { MessagesService } from './messages.service';
 export class WebSocketService {
 
   constructor(
-    private _msService: MessagesService
+    private _msService: MessagesService,
+    private _fileUpload: FileUploadService,
+    private _user: UserService
   ) { }
 
   private webSocket: WebSocket;
@@ -20,8 +25,17 @@ export class WebSocketService {
     };
 
     this.webSocket.onmessage = (event) => {
-      console.log(event);
-      this._msService.messages.push(JSON.parse(event.data));
+      const msg: Message = <Message>JSON.parse(event.data);
+      
+      this._msService.messages.push({
+        id: msg.id,
+        userName: msg.userName,
+        userMessage: msg.userMessage,
+        date: new Date(msg.date),
+        userImage: this._fileUpload.sanitizeIMG(msg.userImage),
+        userColor: "#FFFFFF",
+        auth: msg.userName == this._user.currentUser.userName
+      });
     }
 
     this.webSocket.onclose = (event) => {
@@ -34,7 +48,15 @@ export class WebSocketService {
   }
 
   public sendMessage() {
-    this.webSocket.send(JSON.stringify(this._msService.messages[this._msService.messages.length-1]));
+    this.webSocket.send(JSON.stringify({
+      id: -1,
+      userName: "WBS",
+      userMessage: "Listening",
+      userColor: "#FFFFFF",
+      userImage: "",
+      date: new Date(),
+      auth: false
+    }));
   }
 
 }

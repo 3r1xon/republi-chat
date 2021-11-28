@@ -14,7 +14,7 @@ class Auth {
         };
 
         const ACCESS_TOKEN = jwt.sign(user, process.env.SECRET_KEY, {
-            expiresIn: "15m"
+            expiresIn: "5s"
         });
 
         user.refresh = true;
@@ -22,6 +22,15 @@ class Auth {
         const REFRESH_TOKEN = jwt.sign(user, process.env.SECRET_KEY);
 
         try {
+
+            // await db.promise().query(
+            // `
+            // REPLACE 
+            // INTO SESSIONS 
+            // (ID_USER, TOKEN, REFRESH_TOKEN) 
+            // VALUES
+            // (?, ?, ?)
+            // `, [user._id, ACCESS_TOKEN, REFRESH_TOKEN]);
 
             let userExist = await db.promise().query(
             `
