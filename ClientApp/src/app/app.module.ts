@@ -26,6 +26,7 @@ import { PrivacyComponent } from './settings/privacy/privacy.component';
 import { UnauthorizedComponent } from './unauthorized/unauthorized.component';
 import { FooterComponent } from './footer/footer.component';
 
+
 @NgModule({
   declarations: [
     AppComponent,

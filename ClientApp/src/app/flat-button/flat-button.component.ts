@@ -14,7 +14,7 @@ export class FlatButtonComponent {
   @Input()
   public background: string = "royalblue";
   @Input()
-  public width: string = "200px";
+  public width: string = "auto";
   @Input()
   public height: string = "auto";
 }

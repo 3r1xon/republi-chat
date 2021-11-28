@@ -3,7 +3,7 @@ const Auth           = require('../Authentication/auth');
 const router         = express.Router();
 const db             = require('../Database/db');
 const fm             = require('date-fns');
-
+const socket         = require('../start');
 
 
 router.post('/sendMessage', Auth.authToken, async (req, res) => {
@@ -14,26 +14,37 @@ router.post('/sendMessage', Auth.authToken, async (req, res) => {
     date: fm.format(new Date(req.body.date), 'yyyy-MM-dd HH:mm')
   };
 
+
   try {
     await db.promise().query(
     `
-    INSERT INTO MESSAGES 
-    (ID_USER, MESSAGE, DATE) 
-    VALUES 
+    INSERT INTO MESSAGES
+    (ID_USER, MESSAGE, DATE)
+    VALUES
     (?, ?, ?)
     `, [msg.id_user, msg.userMessage, msg.date]);
 
-    let id = await db.promise().query(
+    let message = await db.promise().query(
     `
-    SELECT LAST_VALUE(ID_MESSAGE) AS ID_MESSAGE
-    FROM MESSAGES 
-    WHERE ID_USER = ?
-    ORDER BY ID_MESSAGE DESC
+    SELECT 
+    LAST_VALUE(M.ID_MESSAGE) AS id,
+    U.COLOR as userColor,
+    U.NICKNAME as userName,
+    U.NAME as name,
+    TO_BASE64(U.PROFILE_PICTURE) as userImage,
+    M.MESSAGE as userMessage,
+    M.DATE as date
+    FROM MESSAGES M
+    LEFT JOIN USERS U ON U.ID_USER = M.ID_USER
+    WHERE M.ID_USER = ?
+    ORDER BY M.ID_MESSAGE DESC
     `, [msg.id_user]);
 
-    id = id[0][0].ID_MESSAGE;
+    message = message[0][0];
 
-    res.status(201).send({ success: true, data: id });
+    socket.emit("message", JSON.stringify(message));
+
+    res.status(201).send({ success: true });
   } catch (err) {
     console.log(err);
     
@@ -52,6 +63,7 @@ router.get('/getMessages', Auth.authToken, async (req, res) => {
     SELECT
     M.ID_MESSAGE as id,
     U.COLOR as userColor,
+    U.NAME as name,
     U.NICKNAME as userName,
     TO_BASE64(U.PROFILE_PICTURE) as userImage,
     M.MESSAGE as userMessage,
@@ -84,6 +96,8 @@ router.delete('/deleteMessage', [Auth.authToken, Auth.authority("MESSAGES")], as
     DELETE FROM MESSAGES 
     WHERE ID_MESSAGE = ?
     `, [id_message]);
+
+    socket.emit("deleteMessage", `${id_message}`);
 
     res.status(200).send({ success: true });
   } catch (err) {

@@ -22,23 +22,24 @@ export class SignupComponent implements OnInit {
 
   public particleNumber: Array<any> = []; 
 
-  public userName: string = "";
-  public password: string = "";
+  public user = {
+    userName: "",
+    name: "",
+    password: "",
+  };
+
   public confirmPassword: string = "";
 
   public alert: string = "";
 
   signUp() {
 
-    if (this.password != this.confirmPassword) {
+    if (this.user.password != this.confirmPassword) {
       this.alert = "Password is not the same!";
       return;
     }
 
-    this.http.post<ServerResponse>(`${database.BASE_URL}/authentication/signUp`, {
-      userName: this.userName,
-      password: this.password
-    }).subscribe((response) => { 
+    this.http.post<ServerResponse>(`${database.BASE_URL}/authentication/signUp`, this.user).subscribe((response) => { 
       if (response.success) {
         this.router.navigate(['login']);
       }

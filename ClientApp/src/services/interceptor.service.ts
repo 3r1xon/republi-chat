@@ -12,6 +12,7 @@ import { UtilsService } from './utils.service';
 import { tap } from 'rxjs/operators';
 import { CookieService } from 'ngx-cookie-service';
 import { UserService } from './user.service';
+import { database } from 'src/environments/database';
 
 
 @Injectable({
@@ -25,9 +26,16 @@ export class InterceptorService implements HttpInterceptor {
     private cookieService: CookieService
     ) { }
 
+  private loadingWhiteList: Array<string> = [
+    `${database.BASE_URL}/messages/sendMessage`,
+    `${database.BASE_URL}/messages/deleteMessage`
+  ];
+
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 
-    this._utils.loading = true;
+    const route = this.loadingWhiteList.find(route => route == req.url);
+    
+    this._utils.loading = route != req.url;
 
     const authReq = req.clone({
       headers: req.headers.set('Authorization', `Bearer ${localStorage.getItem('ACCESS_TOKEN')}`),

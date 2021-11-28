@@ -14,7 +14,7 @@ class Auth {
         };
 
         const ACCESS_TOKEN = jwt.sign(user, process.env.SECRET_KEY, {
-            expiresIn: "5s"
+            expiresIn: "15m"
         });
 
         user.refresh = true;

@@ -5,6 +5,7 @@ import { UserService } from './user.service';
 import { database } from 'src/environments/database';
 import { ServerResponse } from 'src/interfaces/response.interface';
 import { FileUploadService } from './file-upload.service';
+import { WebSocketService } from './websocket.service';
 
 
 @Injectable({
@@ -15,8 +16,28 @@ export class MessagesService {
   constructor(
     private _user: UserService,
     private _fileUpload: FileUploadService,
+    private _webSocket: WebSocketService,
     private http: HttpClient
-  ) { }
+  ) { 
+    this._webSocket.listen("message").subscribe((message: string) => {
+      const msg = JSON.parse(message);
+      console.log(msg)
+      this.messages.push({
+        id: msg.id,
+        name: msg.name,
+        userMessage: msg.userMessage,
+        date: new Date(msg.date),
+        userImage: this._fileUpload.sanitizeIMG(msg.userImage),
+        userColor: "#FFFFFF",
+        auth: msg.userName == this._user.currentUser.userName
+      });
+    });
+
+    this._webSocket.listen("deleteMessage").subscribe((_id: number) => {
+      const index = this.messages.findIndex(msg => msg.id == _id);
+      this.messages.splice(index, 1);
+    });
+  }
 
   public messages: Array<Message> = [];
 
@@ -29,7 +50,7 @@ export class MessagesService {
       res.data.forEach((msg: Message) => {
         this.messages.push({
           id: msg.id,
-          userName: msg.userName,
+          name: msg.name,
           userMessage: msg.userMessage,
           date: new Date(msg.date),
           userImage: this._fileUpload.sanitizeIMG(msg.userImage),
@@ -47,26 +68,14 @@ export class MessagesService {
       date: new Date().getTime()
     };
 
-    const res = await this.http.post<ServerResponse>(`${database.BASE_URL}/messages/sendMessage`, msg).toPromise();
-
-    if (res.success) {
-      this.messages.push({
-        id: res.data,
-        userName: this._user.currentUser?.userName,
-        userMessage: msg.userMessage,
-        userColor: "#FFFFFF",
-        userImage: this._user.currentUser.profilePicture,
-        date: new Date(msg.date),
-        auth: true
-      });
-    }
+    await this.http.post<ServerResponse>(`${database.BASE_URL}/messages/sendMessage`, msg).toPromise();
   }
 
   public async deleteMessage(_id: number) {
     return await this.http.delete<ServerResponse>(`${database.BASE_URL}/messages/deleteMessage`, { 
       body: {
         _id: _id
-      } 
+      }
     }).toPromise();
   }
 

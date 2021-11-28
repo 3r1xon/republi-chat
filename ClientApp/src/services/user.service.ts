@@ -6,8 +6,8 @@ import { database } from 'src/environments/database';
 import { Account } from 'src/interfaces/account.interface';
 import { HttpClient } from '@angular/common/http';
 import { CookieService } from 'ngx-cookie-service';
-import { DomSanitizer } from '@angular/platform-browser';
 import { FileUploadService } from './file-upload.service';
+import { UtilsService } from './utils.service';
 
 @Injectable({
   providedIn: 'root'
@@ -18,6 +18,7 @@ export class UserService implements CanActivate {
     private http: HttpClient,
     private router: Router,
     private _fileUpload: FileUploadService,
+    private _utils: UtilsService,
     private cookieService: CookieService) {}
 
   public currentUser?: Account;
@@ -28,7 +29,7 @@ export class UserService implements CanActivate {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Observable<boolean|UrlTree>|Promise<boolean|UrlTree>|boolean|UrlTree {
-    if (!this.userAuth)
+    if (!this.userAuth && !this._utils.loading)
       this.router.navigate(['unauthorized']);
     return this.userAuth;
   }

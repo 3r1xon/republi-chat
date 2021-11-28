@@ -2,22 +2,35 @@
     
     <div id="banner">
 
-        <div id="image-upload">
+        <div id="profile-info">
 
-            <label for="file-input">
-              <img [src]="_user.currentUser.profilePicture" id="picture"/>
-            </label>
-          
-            <input id="file-input" type="file" (change)="onChange($event.target.files)" />
+            <div id="image-upload">
+    
+                <label for="file-input">
+                  <img [src]="_user.currentUser.profilePicture" id="picture"/>
+                </label>
+              
+                <input id="file-input" type="file" (change)="onChange($event.target.files)" />
+    
+            </div>
+    
+            <div id="banner-info">
+    
+                <div style="display: flex;">
+                    <h2>{{_user.currentUser.name}}</h2>
+                </div>
+    
+                <p>{{_user.currentUser.userName}}</p>
+    
+            </div>
 
         </div>
 
-        <div id="banner-info">
 
-            <h2>{{_user.currentUser.userName}}</h2>
-
-        </div>
+        <flat-button id="save" icon="save">Save</flat-button>
 
     </div>
+
+    <flat-input [(text)]="user.name" placeholder="Name"></flat-input>
     
 </div>

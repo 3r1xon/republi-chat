@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { database } from 'src/environments/database';
+import { Account } from 'src/interfaces/account.interface';
 import { ServerResponse } from 'src/interfaces/response.interface';
 import { FileUploadService } from 'src/services/file-upload.service';
 import { UserService } from 'src/services/user.service';
@@ -21,6 +22,8 @@ export class ProfileComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  public user: Account = { ...this._user.currentUser };
+
 
   async onChange(event) {
     const file = <File>event[0];
@@ -36,6 +39,11 @@ export class ProfileComponent implements OnInit {
     if (res.success) {
       this._user.currentUser.profilePicture = this._fileUpload.sanitizeIMG(res.data);
     }
+  }
+
+  async save() {
+
+
   }
 
 }

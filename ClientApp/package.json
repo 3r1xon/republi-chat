@@ -23,6 +23,7 @@
     "date-fns": "^2.25.0",
     "ngx-cookie-service": "^13.0.0",
     "rxjs": "~6.6.0",
+    "socket.io-client": "^4.4.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.11.4"
   },

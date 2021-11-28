@@ -11,10 +11,11 @@ router.post('/signUp', async (req, res) => {
   
   const user = {
     userName: req.body.userName,
-    password: req.body.password
+    password: req.body.password,
+    name: req.body.name
   };
 
-  if (user.userName == '' || user.password == '')
+  if (user.userName == '' || user.password == '' || user.name == '')
     res.status(400).send({ success: false, message: 'Username or password invalid' });
   else {
     try {
@@ -22,10 +23,10 @@ router.post('/signUp', async (req, res) => {
       await db.promise().query(
       `
       INSERT INTO USERS 
-      (NICKNAME, PASSWORD, COLOR, PROFILE_PICTURE) 
+      (NICKNAME, PASSWORD, NAME, COLOR, PROFILE_PICTURE) 
       VALUES 
-      (?, ?, '#FFFFFF', '/assets/user-image.png')
-      `, [user.userName, user.password]);
+      (?, ?, ?, '#FFFFFF', '/assets/user-image.png')
+      `, [user.userName, user.password, user.name]);
 
       res.status(201).send({ success: true, message: 'User correctly signed up' });
     } catch (err) {
