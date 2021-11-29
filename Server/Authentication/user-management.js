@@ -142,6 +142,8 @@ router.post('/editProfile', [Auth.authToken, upload.single("image")], async (req
 
   const file = req.file.buffer;
 
+  const user = {};
+
   const userID = res.locals._id;
 
   try {
@@ -151,9 +153,11 @@ router.post('/editProfile', [Auth.authToken, upload.single("image")], async (req
     UPDATE
     USERS
     SET
+    NAME = ?,
+    COLOR = ?, 
     PROFILE_PICTURE = ?
     WHERE ID_USER = ?
-    `, [file, userID]);
+    `, [user.name, user.color, file, userID]);
 
     res.status(201).send({ 
       success: true,

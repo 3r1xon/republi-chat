@@ -62,7 +62,20 @@ export class FlatInputComponent implements OnInit{
   size: string = 'big' || 'medium' || 'small';
 
   @Input()
+  set enabled(flag) {
+    if (!flag) {
+      this.disabled = true;
+      this.color = 'grey';
+    } else {
+      this.disabled = false;
+      this.color = 'royalblue';
+    }
+  }
+
+  @Input()
   required: boolean = false;
+
+  disabled: boolean = false;
 
   @Output()
   textChange = new EventEmitter<string>();

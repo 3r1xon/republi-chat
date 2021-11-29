@@ -1,14 +1,15 @@
 <div id="flat-input" [ngStyle]="{
     'border': placeholderAnimated ? '2px solid ' + color : (required && empty ? '1px solid ' + borderColor : '1px solid gray'),
     'padding': placeholderAnimated ? '0px ' : '1px',
-    'margin-bottom': hint ? '10px' : '0px'
+    'margin-bottom': hint ? '10px' : '0px',
+    'background': disabled ? '#3c3c3ceb' : 'transparent'
 }" [ngClass]="{
     'small': size == 'small',
     'medium': size == 'medium',
     'big': size == 'big'
 }">
 <div id="main-content">
-    <input [placeholder]="getPlaceholder()" [type]="type" [(ngModel)]="text" (focus)="onFocus()" (focusout)="onFocusOut()"
+    <input [placeholder]="getPlaceholder()" [disabled]="disabled" [type]="type" [(ngModel)]="text" (focus)="onFocus()" (focusout)="onFocusOut()"
     (ngModelChange)="textChange.emit(text)"/>
     <mat-icon [style.color]="color" *ngIf="icon">{{icon}}</mat-icon>
 </div>

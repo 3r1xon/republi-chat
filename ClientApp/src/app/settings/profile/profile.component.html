@@ -27,10 +27,20 @@
         </div>
 
 
-        <flat-button id="save" icon="save">Save</flat-button>
+        <flat-button background="#46a35e" id="save" icon="save">Save</flat-button>
 
     </div>
 
-    <flat-input [(text)]="user.name" placeholder="Name"></flat-input>
-    
+    <div id="settings">
+
+        <div class="aligned">
+            <flat-input [(text)]="user.name" [enabled]="editName" placeholder="Name"></flat-input>
+            
+            <flat-button class="edit" icon="edit" (click)="editName = !editName">Modifica</flat-button>
+        </div>
+
+        <input id="user-color" [(ngModel)]="user.userColor" type="color">
+
+    </div>
+
 </div>
