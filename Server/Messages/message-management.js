@@ -27,7 +27,7 @@ router.post('/sendMessage', Auth.authToken, async (req, res) => {
     let message = await db.promise().query(
     `
     SELECT 
-    LAST_VALUE(M.ID_MESSAGE) AS id,
+    MAX(M.ID_MESSAGE) AS id,
     U.COLOR as userColor,
     U.NICKNAME as userName,
     U.NAME as name,
