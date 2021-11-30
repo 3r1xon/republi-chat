@@ -1,7 +1,6 @@
 const jwt          = require('jsonwebtoken');
 const db           = require('../Database/db');
 const fm           = require('date-fns');
-const mariadb = require('mariadb');
 
 
 class Auth {
