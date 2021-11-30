@@ -23,9 +23,9 @@ router.post('/signUp', async (req, res) => {
       await db.query(
       `
       INSERT INTO USERS 
-      (NICKNAME, PASSWORD, NAME, COLOR, PROFILE_PICTURE) 
+      (NICKNAME, PASSWORD, NAME) 
       VALUES 
-      (?, ?, ?, '#FFFFFF', '/assets/user-image.png')
+      (?, ?, ?)
       `, [user.userName, user.password, user.name]);
 
       res.status(201).send({ success: true, message: 'User correctly signed up' });
@@ -55,10 +55,8 @@ router.post('/authorize', Auth.authToken, async (req, res) => {
   LEFT JOIN SESSIONS S ON S.ID_USER = U.ID_USER
   WHERE S.TOKEN = ?
   `, [ACCESS_TOKEN]);
-  
-  dbUser = dbUser[0];
 
-  console.log(dbUser)
+  dbUser = dbUser[0];
 
   if (dbUser) {
     res.status(200).send({ success: true, data: dbUser });

@@ -21,7 +21,7 @@ export class MessagesService {
   ) { 
     this._webSocket.listen("message").subscribe((message: string) => {
       const msg = JSON.parse(message);
-      console.log(msg)
+
       this.messages.push({
         id: msg.id,
         name: msg.name,
@@ -47,7 +47,7 @@ export class MessagesService {
     if (res.success) {
       this.messages = [];
 
-      res.data.forEach((msg: Message) => {
+      res.data?.forEach((msg: Message) => {
         this.messages.push({
           id: msg.id,
           name: msg.name,
