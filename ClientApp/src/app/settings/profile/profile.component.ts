@@ -26,7 +26,12 @@ export class ProfileComponent implements OnInit {
 
   public editName: boolean = false;
 
+  private file;
+
   async onChange(event) {
+
+    this.file = <File>event[0];
+
     const file = <File>event[0];
 
     const fd = new FormData();
@@ -44,12 +49,13 @@ export class ProfileComponent implements OnInit {
 
   async save() {
 
+    // let fd;
     // if (this.file) {
-      
+    //   fd = new FormData();
+    //   fd.append("image", this.file, this.file.name);
+    // } else {
+    //   this.user.profilePicture = null;
     // }
-    // const fd = new FormData();
-    // fd.append("image", this.file, this.file.name);
-
 
     // const res = await this.http.post<ServerResponse>(
     // `${database.BASE_URL}/authentication/editProfile`, {

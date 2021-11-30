@@ -5,29 +5,29 @@
         <div id="profile-info">
 
             <div id="image-upload">
-    
+
                 <label for="file-input">
                   <img [src]="_user.currentUser.profilePicture" id="picture"/>
                 </label>
               
                 <input id="file-input" type="file" (change)="onChange($event.target.files)" />
-    
+
             </div>
-    
+
             <div id="banner-info">
-    
+
                 <div style="display: flex;">
                     <h2>{{_user.currentUser.name}}</h2>
                 </div>
-    
+
                 <p>{{_user.currentUser.userName}}</p>
-    
+
             </div>
 
         </div>
 
 
-        <flat-button background="#46a35e" id="save" icon="save">Save</flat-button>
+        <flat-button background="#46a35e" id="save" icon="save" (click)="save()">Save</flat-button>
 
     </div>
 
@@ -35,7 +35,7 @@
 
         <div class="aligned">
             <flat-input [(text)]="user.name" [enabled]="editName" placeholder="Name"></flat-input>
-            
+
             <flat-button class="edit" icon="edit" (click)="editName = !editName">Modifica</flat-button>
         </div>
 

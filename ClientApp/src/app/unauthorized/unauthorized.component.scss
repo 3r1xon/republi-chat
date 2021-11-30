@@ -5,5 +5,36 @@
     align-items: center;
     flex-direction: column;
     justify-content: center;
-    background: red;
+    background: #121212;
+    color: #FFFFFF;
+
+    #security {
+        font-size: 48px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 10px;
+    }
+
+    #message {
+        display: flex;
+        align-items: center;
+        padding: 25px;
+        flex-direction: column;
+        justify-content: center;
+        background: rgb(0, 0, 0);
+
+        div {
+            text-align: center;
+        }
+    }
+
+    flat-button {
+        margin: 15px;
+    }
+
+
+    .danger {
+        color: #ff0000;
+    }
 }

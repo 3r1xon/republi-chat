@@ -23,7 +23,7 @@ export class InterceptorService implements HttpInterceptor {
   constructor(
     private _utils: UtilsService,
     private _user: UserService,
-    private cookieService: CookieService
+    private cookieService: CookieService,
     ) { }
 
   private loadingWhiteList: Array<string> = [
@@ -58,7 +58,9 @@ export class InterceptorService implements HttpInterceptor {
     }, (err: HttpErrorResponse) => {
       this._utils.loading = false;
 
-      if (err.status == 401) this._user.userAuth = false;
+      if (err.status == 401) { 
+        this._user.deAuth();
+      }
     }));
   }
 

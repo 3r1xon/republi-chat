@@ -28,7 +28,7 @@ export class MessagesService {
         userMessage: msg.userMessage,
         date: new Date(msg.date),
         userImage: this._fileUpload.sanitizeIMG(msg.userImage),
-        userColor: "#FFFFFF",
+        userColor: msg.userColor,
         auth: msg.userName == this._user.currentUser.userName
       });
     });
@@ -47,14 +47,14 @@ export class MessagesService {
     if (res.success) {
       this.messages = [];
 
-      res.data?.forEach((msg: Message) => {
+      res.data?.forEach((msg) => {
         this.messages.push({
           id: msg.id,
           name: msg.name,
           userMessage: msg.userMessage,
           date: new Date(msg.date),
           userImage: this._fileUpload.sanitizeIMG(msg.userImage),
-          userColor: "#FFFFFF",
+          userColor: msg.userColor,
           auth: msg.userName == this._user.currentUser.userName
         });
       });

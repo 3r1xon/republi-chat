@@ -30,7 +30,7 @@ export class UserService implements CanActivate {
     state: RouterStateSnapshot
   ): Observable<boolean|UrlTree>|Promise<boolean|UrlTree>|boolean|UrlTree {
     if (!this.userAuth && !this._utils.loading)
-      this.router.navigate(['unauthorized']);
+      this.deAuth();
     return this.userAuth;
   }
 
@@ -64,6 +64,19 @@ export class UserService implements CanActivate {
 
     await this.router.navigate(['login']);
     window.location.reload();
+  }
+
+  public async deAuth() {
+    // await this.http.delete(`${database.BASE_URL}/authentication/logout`).toPromise();
+
+    // localStorage.clear();
+    // this.cookieService.deleteAll();
+
+    // this.userAuth = false;
+    // this.currentUser = null;
+    
+    // await this.router.navigate(['unauthorized']);
+
   }
 
 

@@ -32,7 +32,7 @@
                     border-radius: 50%;
                     transition: 100ms;
                     -webkit-user-drag: none;
-    
+
                     &:hover {
                         opacity: 0.5;
                     }
@@ -80,6 +80,7 @@
         flex-direction: column;
 
         #user-color {
+            
         }
     }
 }
