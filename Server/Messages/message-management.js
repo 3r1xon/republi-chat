@@ -16,18 +16,21 @@ router.post('/sendMessage', Auth.authToken, async (req, res) => {
 
 
   try {
-    await db.promise().query(
+    let _id = await db.query(
     `
     INSERT INTO MESSAGES
     (ID_USER, MESSAGE, DATE)
     VALUES
     (?, ?, ?)
+    RETURNING ID_MESSAGE
     `, [msg.id_user, msg.userMessage, msg.date]);
 
-    let message = await db.promise().query(
+    _id = _id[0].ID_MESSAGE;
+
+    let message = await db.query(
     `
     SELECT 
-    MAX(M.ID_MESSAGE) AS id,
+    M.ID_MESSAGE as id,
     U.COLOR as userColor,
     U.NICKNAME as userName,
     U.NAME as name,
@@ -36,11 +39,11 @@ router.post('/sendMessage', Auth.authToken, async (req, res) => {
     M.DATE as date
     FROM MESSAGES M
     LEFT JOIN USERS U ON U.ID_USER = M.ID_USER
-    WHERE M.ID_USER = ?
+    WHERE M.ID_MESSAGE = ?
     ORDER BY M.ID_MESSAGE DESC
-    `, [msg.id_user]);
+    `, [_id]);
 
-    message = message[0][0];
+    message = message[0];
 
     socket.emit("message", JSON.stringify(message));
 
@@ -58,7 +61,7 @@ router.get('/getMessages', Auth.authToken, async (req, res) => {
 
   try {
 
-    let messages = await db.promise().query(
+    let messages = await db.query(
     `
     SELECT
     M.ID_MESSAGE as id,
@@ -71,8 +74,6 @@ router.get('/getMessages', Auth.authToken, async (req, res) => {
     FROM MESSAGES M
     LEFT JOIN USERS U ON U.ID_USER = M.ID_USER
     `);
-
-    messages = messages[0];
   
     res.status(200).send({ success: true, data: messages });
   } catch (err) {
@@ -91,7 +92,7 @@ router.delete('/deleteMessage', [Auth.authToken, Auth.authority("MESSAGES")], as
   try {
     const id_message = req.body._id;
 
-    await db.promise().query(
+    await db.query(
     `
     DELETE FROM MESSAGES 
     WHERE ID_MESSAGE = ?

@@ -45,7 +45,7 @@ class Start:
 
 
 
-    def startMySQL(self):
+    def startMariaDB(self):
         pass
 
 

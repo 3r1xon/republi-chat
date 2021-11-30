@@ -1,7 +1,7 @@
 const jwt          = require('jsonwebtoken');
 const db           = require('../Database/db');
 const fm           = require('date-fns');
-
+const mariadb = require('mariadb');
 
 
 class Auth {
@@ -23,7 +23,7 @@ class Auth {
 
         try {
 
-            // await db.promise().query(
+            // await db.query(
             // `
             // REPLACE 
             // INTO SESSIONS 
@@ -32,18 +32,18 @@ class Auth {
             // (?, ?, ?)
             // `, [user._id, ACCESS_TOKEN, REFRESH_TOKEN]);
 
-            let userExist = await db.promise().query(
+            let userExist = await db.query(
             `
             SELECT 1 
             FROM SESSIONS
             WHERE ID_USER = ?
             `, [user._id]);
 
-            userExist = userExist[0][0];
+            userExist = userExist[0];
 
             if (userExist) {
 
-                await db.promise().query(
+                await db.query(
                 `
                 UPDATE SESSIONS
                 SET
@@ -53,7 +53,7 @@ class Auth {
                 `, [ACCESS_TOKEN, REFRESH_TOKEN, user._id]);
             } else {
 
-                await db.promise().query(
+                await db.query(
                 `
                 INSERT INTO SESSIONS
                 (ID_USER, TOKEN, REFRESH_TOKEN)
@@ -82,7 +82,7 @@ class Auth {
             message: "Authentication failed!"
         });
 
-        let session = await db.promise().query(
+        let session = await db.query(
         `
         SELECT
         ID_USER
@@ -90,7 +90,7 @@ class Auth {
         WHERE TOKEN = ?
         `, [ACCESS_TOKEN]);
 
-        session = session[0][0];
+        session = session[0];
 
         if (session) {
 
@@ -106,7 +106,7 @@ class Auth {
                     jwt.verify(REFRESH_TOKEN, process.env.SECRET_KEY, async (err, decoded) => {
                         if (decoded) {
 
-                            let dbRefreshToken = await db.promise().query(
+                            let dbRefreshToken = await db.query(
                             `
                             SELECT
                             U.NICKNAME,
@@ -116,7 +116,7 @@ class Auth {
                             WHERE S.REFRESH_TOKEN = ?
                             `, [REFRESH_TOKEN]);
 
-                            dbRefreshToken = dbRefreshToken[0][0];
+                            dbRefreshToken = dbRefreshToken[0];
 
                             if (dbRefreshToken) {
                                 res.set(await this.generateToken({
@@ -149,23 +149,23 @@ class Auth {
 
                 const idFromToken = res.locals._id
 
-                let pk = await db.promise().query(
+                let pk = await db.query(
                 `
                 SHOW KEYS 
                 FROM ${TABLE_NAME} 
                 WHERE Key_name = 'PRIMARY'
                 `);
 
-                pk = pk[0][0].Column_name;
+                pk = pk[0].Column_name;
 
-                let idValidate = await db.promise().query(
+                let idValidate = await db.query(
                 `
                 SELECT ID_USER
                 FROM ${TABLE_NAME}
                 WHERE ${pk} = ?
                 `, [PK_ID]);
 
-                idValidate = idValidate[0][0].ID_USER;
+                idValidate = idValidate[0].ID_USER;
                 
                 if (idFromToken == idValidate) {
                     next();

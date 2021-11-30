@@ -20,7 +20,7 @@ router.post('/signUp', async (req, res) => {
   else {
     try {
 
-      await db.promise().query(
+      await db.query(
       `
       INSERT INTO USERS 
       (NICKNAME, PASSWORD, NAME, COLOR, PROFILE_PICTURE) 
@@ -43,7 +43,7 @@ router.post('/authorize', Auth.authToken, async (req, res) => {
 
   const ACCESS_TOKEN = res.getHeader("ACCESS_TOKEN") ?? req.headers['authorization'].split(' ')[1];
 
-  let dbUser = await db.promise().query(
+  let dbUser = await db.query(
   `
   SELECT
   U.ID_USER as id,
@@ -56,7 +56,9 @@ router.post('/authorize', Auth.authToken, async (req, res) => {
   WHERE S.TOKEN = ?
   `, [ACCESS_TOKEN]);
   
-  dbUser = dbUser[0][0];
+  dbUser = dbUser[0];
+
+  console.log(dbUser)
 
   if (dbUser) {
     res.status(200).send({ success: true, data: dbUser });
@@ -77,7 +79,7 @@ router.post('/logIn', async (req, res) => {
 
   try {
 
-    let dbUser = await db.promise().query(
+    let dbUser = await db.query(
     `
     SELECT
     U.ID_USER as id,
@@ -89,7 +91,7 @@ router.post('/logIn', async (req, res) => {
     WHERE NICKNAME = ? AND PASSWORD = ?
     `, [user.userName, user.password]);
 
-    dbUser = dbUser[0][0];
+    dbUser = dbUser[0];
 
     if (dbUser) {
 
@@ -120,7 +122,7 @@ router.delete('/logout', Auth.authToken, async (req, res) => {
 
   try {
 
-    await db.promise().query(
+    await db.query(
     `
     DELETE
     FROM SESSIONS
@@ -146,18 +148,18 @@ router.post('/editProfile', [Auth.authToken, upload.single("image")], async (req
 
   const userID = res.locals._id;
 
+  console.log(userID)
+
   try {
 
-    await db.promise().query(
+    await db.query(
     `
     UPDATE
     USERS
     SET
-    NAME = ?,
-    COLOR = ?, 
     PROFILE_PICTURE = ?
     WHERE ID_USER = ?
-    `, [user.name, user.color, file, userID]);
+    `, [file, userID]);
 
     res.status(201).send({ 
       success: true,
