@@ -98,4 +98,8 @@ export class FlatInputComponent implements OnInit{
     if (!this.placeholderAnimated) return '';
     return this.placeholder;
   }
+
+  showToolTip() {
+    console.log("tooltip")
+  }
 }

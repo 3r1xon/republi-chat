@@ -10,8 +10,9 @@
 }">
 <div id="main-content">
     <input [placeholder]="getPlaceholder()" [disabled]="disabled" [type]="type" [(ngModel)]="text" (focus)="onFocus()" (focusout)="onFocusOut()"
-    (ngModelChange)="textChange.emit(text)"/>
+    (ngModelChange)="textChange.emit(text)" autocomplete="off"/>
     <mat-icon [style.color]="color" *ngIf="icon">{{icon}}</mat-icon>
+    <mat-icon [style.color]="color" (mouseenter)="showToolTip()">info</mat-icon>
 </div>
 <label id="placeholder" [ngStyle]="{
     'color': placeholderAnimated ? color : borderColor
@@ -20,4 +21,4 @@
 <label id="hint" *ngIf="hint" [ngStyle]="{
 'color': placeholderAnimated ? color : borderColor
 }">{{hint}}</label>
-<p id="required" *ngIf="empty" [style.color]="borderColor">This field is required *</p>
+<label id="required" *ngIf="empty" [style.color]="borderColor">This field is required *</label>

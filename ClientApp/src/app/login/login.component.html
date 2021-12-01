@@ -6,7 +6,7 @@
 
     <div id="rect"></div>
 
-    <div id="login-form" (keyup.enter)="logIn()">
+    <form id="login-form" (keyup.enter)="logIn()">
 
         <h1>Log in</h1>
 
@@ -21,7 +21,8 @@
         <p>{{alert}}</p>
         
         <a routerLink="/signup">Not registered? Sign up</a>
-    </div>
+
+    </form>
 
     <footer></footer>
 

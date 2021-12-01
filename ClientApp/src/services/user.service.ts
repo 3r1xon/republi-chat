@@ -67,16 +67,16 @@ export class UserService implements CanActivate {
   }
 
   public async deAuth() {
-    // await this.http.delete(`${database.BASE_URL}/authentication/logout`).toPromise();
+    await this.http.delete(`${database.BASE_URL}/authentication/logout`).toPromise();
 
-    // localStorage.clear();
-    // this.cookieService.deleteAll();
+    localStorage.clear();
+    this.cookieService.deleteAll();
 
-    // this.userAuth = false;
-    // this.currentUser = null;
+    this.currentUser = null;
     
-    // await this.router.navigate(['unauthorized']);
-
+    await this.router.navigate(['unauthorized']);
+    
+    this.userAuth = false;
   }
 
 

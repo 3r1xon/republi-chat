@@ -14,7 +14,7 @@ const routes: Routes = [
   { path: 'signup', component: SignupComponent, pathMatch: 'full' },
   { path: 'login', component: LoginComponent, pathMatch: 'full' },
   { path: 'mainpage', component: MainpageComponent, pathMatch: 'full', canActivate: [UserService] },
-  { path: 'unauthorized', component: UnauthorizedComponent, pathMatch: 'full' },
+  { path: 'unauthorized', component: UnauthorizedComponent, pathMatch: 'full', canActivate: [UserService] },
   { 
     path: 'settings',
     component: SettingsComponent,
