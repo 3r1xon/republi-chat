@@ -1,5 +1,5 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { MessagesService } from 'src/services/messages.service';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Message } from 'src/interfaces/message.interface';
 
 @Component({
   selector: 'rep-chat',
@@ -9,24 +9,14 @@ import { MessagesService } from 'src/services/messages.service';
 export class REPChatComponent implements OnInit, OnDestroy {
 
   constructor(
-    public _msService: MessagesService,
   ) { }
 
+  @Input()
+  public messages: Array<Message>;
+
   ngOnInit(): void {
-    this._msService.getMessages();
   }
 
   ngOnDestroy(): void {
   }
-
-  deleteMessage(index: number) {
-  } 
-
-  openSelectedUser(event: any) {
-    console.log(event);
-  }
-
-  editMessage(index: number) {
-  }
-
 }
