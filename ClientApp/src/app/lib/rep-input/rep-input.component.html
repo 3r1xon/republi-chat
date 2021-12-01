@@ -12,7 +12,8 @@
     <input [placeholder]="getPlaceholder()" [disabled]="disabled" [type]="type" [(ngModel)]="text" (focus)="onFocus()" (focusout)="onFocusOut()"
     (ngModelChange)="textChange.emit(text)" autocomplete="off"/>
     <mat-icon [style.color]="color" *ngIf="icon">{{icon}}</mat-icon>
-    <mat-icon [style.color]="color" (mouseenter)="showToolTip()">info</mat-icon>
+    <mat-icon [style.color]="color" *ngIf="tooltip" (mouseover)="toggleTooltip()" (mouseout)="toggleTooltip()">info</mat-icon>
+    <rep-tooltip [@openClose]="tooltipVisible">{{tooltip}}</rep-tooltip>
 </div>
 <label id="placeholder" [ngStyle]="{
     'color': placeholderAnimated ? color : borderColor

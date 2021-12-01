@@ -27,6 +27,16 @@ import {
         animate('50ms ease-in-out'),
       ]),
     ]),
+
+    trigger('openClose', [
+      state('false', style({
+        opacity: '0',
+      })),
+      state('true', style({
+        opacity: '1',
+      })),
+      transition('true <=> false', animate('150ms')),
+    ]),
   ],
 })
 export class REPInputComponent implements OnInit{
@@ -38,31 +48,31 @@ export class REPInputComponent implements OnInit{
   }
 
   @Input()
-  type: string = "text";
+  public type: string = "text";
 
   @Input()
-  placeholder: string = 'Placeholder example';
+  public placeholder: string = 'Placeholder example';
 
   @Input()
-  color: string = 'royalblue';
+  public color: string = 'royalblue';
 
   @Input()
-  borderColor: string = "grey";
+  public borderColor: string = "grey";
 
   @Input()
-  icon?: string;
+  public icon?: string;
 
   @Input()
-  hint?: string;
+  public hint?: string;
 
   @Input()
-  text: string = '';
+  public text: string = '';
 
   @Input()
-  size: string = 'big' || 'medium' || 'small';
+  public size: string = 'big' || 'medium' || 'small';
 
   @Input()
-  set enabled(flag) {
+  public set enabled(flag) {
     if (!flag) {
       this.disabled = true;
       this.color = 'grey';
@@ -73,9 +83,15 @@ export class REPInputComponent implements OnInit{
   }
 
   @Input()
-  required: boolean = false;
+  public tooltip: string = "";
 
-  disabled: boolean = false;
+  @Input()
+  public required: boolean = false;
+
+  public disabled: boolean = false;
+
+  public tooltipVisible: boolean = false;
+
 
   @Output()
   textChange = new EventEmitter<string>();
@@ -99,7 +115,8 @@ export class REPInputComponent implements OnInit{
     return this.placeholder;
   }
 
-  showToolTip() {
-    console.log("tooltip")
+  toggleTooltip() {
+    this.tooltipVisible = !this.tooltipVisible;
   }
+
 }

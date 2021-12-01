@@ -10,9 +10,9 @@
 
         <h1>Sign up</h1>
 
-        <rep-input [(text)]="user.userName" placeholder="Nickname" required="true"></rep-input>
+        <rep-input [(text)]="user.userName" tooltip="Your personal access name, it will not be visible to others" placeholder="Nickname" required="true"></rep-input>
 
-        <rep-input [(text)]="user.name" placeholder="Name" required="true"></rep-input>
+        <rep-input [(text)]="user.name" tooltip="The name that will be visible to all other users" placeholder="Name" required="true"></rep-input>
 
         <rep-input [(text)]="user.password" type="password" placeholder="Password" required="true"></rep-input>
 

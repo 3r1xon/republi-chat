@@ -27,6 +27,7 @@ import { InterceptorService } from 'src/services/interceptor.service';
 import { AppComponent } from './app.component';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
+import { REPTooltipComponent } from './lib/rep-tooltip/rep-tooltip.component';
 
 
 
@@ -42,6 +43,7 @@ import { MatIconModule } from '@angular/material/icon';
     REPLoadingComponent,
     REPWindowComponent,
     REPFooterComponent,
+    REPTooltipComponent,
 
     PSignupComponent,
     PLoginComponent,
