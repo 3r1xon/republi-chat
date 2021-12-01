@@ -1,9 +1,7 @@
-<div id="chat">
+<div id="chat" #content>
 
-  <rep-message *ngFor="let message of messages; let i = index;"
+  <rep-message #messages *ngFor="let message of messages; let i = index;"
     [message]="message"
-    [uniqueID]="i"
-    (onUserClick)="openSelectedUser($event)"
-    ></rep-message>
+    [uniqueID]="i"></rep-message>
 
 </div>
