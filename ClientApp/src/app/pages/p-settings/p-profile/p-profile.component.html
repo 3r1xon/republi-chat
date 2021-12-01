@@ -17,7 +17,7 @@
             <div id="banner-info">
 
                 <div style="display: flex;">
-                    <h2>{{_user.currentUser.name}}</h2>
+                    <h2 [style.color]="_user.currentUser.userColor">{{_user.currentUser.name}}</h2>
                 </div>
 
                 <p>{{_user.currentUser.userName}}</p>

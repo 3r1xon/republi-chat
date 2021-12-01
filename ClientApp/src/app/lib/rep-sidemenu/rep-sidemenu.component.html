@@ -1,0 +1,12 @@
+<div id="rep-sidemenu">
+
+    <div id="tabs">
+
+        <div id="tab" *ngFor="let tab of tabs; let i = index;"
+            [style.borderRight]="i % 2 == 0 ? '1px solid #ffffff2a' : ''">
+            {{tab}}
+        </div>
+
+    </div>
+
+</div>

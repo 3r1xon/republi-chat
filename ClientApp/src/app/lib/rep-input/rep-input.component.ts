@@ -63,9 +63,6 @@ export class REPInputComponent implements OnInit{
   public icon?: string;
 
   @Input()
-  public hint?: string;
-
-  @Input()
   public text: string = '';
 
   @Input()

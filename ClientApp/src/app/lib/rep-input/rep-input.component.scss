@@ -28,7 +28,7 @@
             font-size: 20px;
             background: transparent;
             border: none;
-            color: white;
+            color: #FFFFFF;
             font-size: 16px;
             font-family: roboto;
         }
@@ -41,16 +41,9 @@
     
 }
 
-#hint {
-    padding-left: 10px;
-    font-family: roboto;
-    font-size: 12px;
-    transform: translate(0, -50%);
-    pointer-events: none;
-}
-
 #required {
     font-size: 14px;
+    margin-top: -5px;
     position: absolute;
     left: 0;
     right: 0;

@@ -55,7 +55,7 @@ export class MessagesService {
           date: new Date(msg.date),
           userImage: this._fileUpload.sanitizeIMG(msg.userImage),
           userColor: msg.userColor,
-          auth: msg.userName == this._user.currentUser.userName
+          auth: !!msg.auth
         });
       });
     }

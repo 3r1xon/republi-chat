@@ -1,0 +1,29 @@
+#rep-sidemenu {
+    height: 100%;
+    background: #111111;
+    border-right: 1px solid #ffffff2a;
+
+    #tabs {
+        width: 100%;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        border-bottom: 1px solid #ffffff2a;
+
+        #tab {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #FFFFFF;
+            background: #111111;
+            cursor: pointer;
+            transition: 150ms;
+
+            &:hover {
+                background: lighten($color: #ffffff2a, $amount: 15);
+            }
+        }
+    }
+}

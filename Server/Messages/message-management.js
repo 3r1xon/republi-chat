@@ -32,8 +32,8 @@ router.post('/sendMessage', Auth.authToken, async (req, res) => {
     SELECT 
     M.ID_MESSAGE as id,
     U.COLOR as userColor,
-    U.NICKNAME as userName,
     U.NAME as name,
+    U.NICKNAME as userName,
     TO_BASE64(U.PROFILE_PICTURE) as userImage,
     M.MESSAGE as userMessage,
     M.DATE as date
@@ -61,19 +61,21 @@ router.get('/getMessages', Auth.authToken, async (req, res) => {
 
   try {
 
+    const _id = res.locals._id;
+
     let messages = await db.query(
     `
     SELECT
     M.ID_MESSAGE as id,
     U.COLOR as userColor,
     U.NAME as name,
-    U.NICKNAME as userName,
     TO_BASE64(U.PROFILE_PICTURE) as userImage,
     M.MESSAGE as userMessage,
-    M.DATE as date
+    M.DATE as date,
+    IF(U.ID_USER = ?, TRUE, FALSE) AS auth
     FROM MESSAGES M
     LEFT JOIN USERS U ON U.ID_USER = M.ID_USER
-    `);
+    `, [_id]);
   
     res.status(200).send({ success: true, data: messages });
   } catch (err) {

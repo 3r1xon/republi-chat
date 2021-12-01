@@ -1,4 +1,7 @@
 <div id="mainpage">
-    <rep-chat [messages]="_msService.messages"></rep-chat>
+    <div id="content">
+        <rep-sidemenu></rep-sidemenu>
+        <rep-chat [messages]="_msService.messages"></rep-chat>
+    </div>
     <rep-textbox></rep-textbox>
 </div>
