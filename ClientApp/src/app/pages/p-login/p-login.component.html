@@ -1,0 +1,29 @@
+<div id="login">
+
+    <div id="particle-container">
+        <div class="particle" *ngFor="let particle of particleNumber"></div>
+    </div>
+
+    <div id="rect"></div>
+
+    <form id="login-form" (keyup.enter)="logIn()">
+
+        <h1>Log in</h1>
+
+        <rep-input [(text)]="userName" placeholder="Nickname"></rep-input>
+
+        <rep-input [(text)]="password" type="password" placeholder="Password"></rep-input>
+
+        <div>
+            <rep-button (click)="logIn()" icon="login">Log in</rep-button>
+        </div>
+        
+        <p>{{alert}}</p>
+        
+        <a routerLink="/signup">Not registered? Sign up</a>
+
+    </form>
+
+    <rep-footer></rep-footer>
+
+</div>

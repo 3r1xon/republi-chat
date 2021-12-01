@@ -1,0 +1,46 @@
+<div id="profile">
+    
+    <div id="banner">
+
+        <div id="profile-info">
+
+            <div id="image-upload">
+
+                <label for="file-input">
+                  <img [src]="_user.currentUser.profilePicture" id="picture"/>
+                </label>
+              
+                <input id="file-input" type="file" (change)="onChange($event.target.files)" />
+
+            </div>
+
+            <div id="banner-info">
+
+                <div style="display: flex;">
+                    <h2>{{_user.currentUser.name}}</h2>
+                </div>
+
+                <p>{{_user.currentUser.userName}}</p>
+
+            </div>
+
+        </div>
+
+
+        <rep-button background="#46a35e" id="save" icon="save" (click)="save()">Save</rep-button>
+
+    </div>
+
+    <div id="settings">
+
+        <div class="aligned">
+            <rep-input [(text)]="user.name" [enabled]="editName" placeholder="Name"></rep-input>
+
+            <rep-button class="edit" icon="edit" (click)="editName = !editName">Modifica</rep-button>
+        </div>
+
+        <input id="user-color" [(ngModel)]="user.userColor" type="color">
+
+    </div>
+
+</div>

@@ -1,50 +1,55 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
-import { TextBoxComponent } from './text-box/text-box.component';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatIconModule } from '@angular/material/icon';
-import { FormsModule } from '@angular/forms';
-import { MessageBoxComponent } from './message-box/message-box.component';
-import { ChatComponent } from './chat/chat.component';
+import { REPTextBoxComponent } from './lib/rep-textbox/rep-textbox.component';
+import { REPInputComponent } from './lib/rep-input/rep-input.component';
+import { REPMessageComponent } from './lib/rep-message/rep-message.component';
+import { REPChatComponent } from './lib/rep-chat/rep-chat.component';
+import { REPLoadingComponent } from './lib/rep-loading/rep-loading.component';
+import { REPWindowComponent } from './lib/rep-window/rep-window.component';
+import { REPButtonComponent } from './lib/rep-button/rep-button.component';
+import { REPFooterComponent } from './lib/rep-footer/rep-footer.component';
+
+import { PSignupComponent } from './pages/p-signup/p-signup.component';
+import { PLoginComponent } from './pages/p-login/p-login.component';
+import { PMainpageComponent } from './pages/p-mainpage/p-mainpage.component';
+import { PSettingsComponent } from './pages/p-settings/p-main/p-main.component';
+import { PProfileComponent } from './pages/p-settings/p-profile/p-profile.component';
+import { PPrivacyComponent } from './pages/p-settings/p-privacy/p-privacy.component';
+import { PUnauthorizedComponent } from './pages/p-unauthorized/p-unauthorized.component';
+
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { SignupComponent } from './signup/signup.component';
-import { FlatInputComponent } from './flat-input/flat-input.component';
-import { FlatButtonComponent } from './flat-button/flat-button.component';
-import { MatRippleModule } from '@angular/material/core';
-import { LoginComponent } from './login/login.component';
-import { MainpageComponent } from './mainpage/mainpage.component';
-import { InterceptorService } from 'src/services/interceptor.service';
-import { LoadingComponent } from './loading/loading.component';
-import { FlatWindowMenuComponent } from './flat-window-menu/flat-window-menu.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CookieService } from 'ngx-cookie-service';
-import { SettingsComponent } from './settings/main-settings/settings.component';
-import { ProfileComponent } from './settings/profile/profile.component';
-import { PrivacyComponent } from './settings/privacy/privacy.component';
-import { UnauthorizedComponent } from './unauthorized/unauthorized.component';
-import { FooterComponent } from './footer/footer.component';
+import { AppRoutingModule } from './app-routing.module';
+import { MatRippleModule } from '@angular/material/core';
+import { InterceptorService } from 'src/services/interceptor.service';
+import { AppComponent } from './app.component';
+import { FormsModule } from '@angular/forms';
+import { MatIconModule } from '@angular/material/icon';
+
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    TextBoxComponent,
-    MessageBoxComponent,
-    ChatComponent,
-    SignupComponent,
-    FlatInputComponent,
-    FlatButtonComponent,
-    LoginComponent,
-    MainpageComponent,
-    LoadingComponent,
-    FlatWindowMenuComponent,
-    SettingsComponent,
-    ProfileComponent,
-    PrivacyComponent,
-    UnauthorizedComponent,
-    FooterComponent
+
+    REPTextBoxComponent,
+    REPMessageComponent,
+    REPChatComponent,
+    REPInputComponent,
+    REPButtonComponent,
+    REPLoadingComponent,
+    REPWindowComponent,
+    REPFooterComponent,
+
+    PSignupComponent,
+    PLoginComponent,
+    PMainpageComponent,
+    PSettingsComponent,
+    PProfileComponent,
+    PPrivacyComponent,
+    PUnauthorizedComponent,
   ],
   imports: [
     BrowserModule,

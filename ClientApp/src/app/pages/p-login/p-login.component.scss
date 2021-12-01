@@ -1,0 +1,117 @@
+@import 'src/app/colors.scss';
+
+#login {
+    width: 100%;
+    height: 90vh;
+    background: #121212;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+
+    #particle-container {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        animation: particlesSpawn 3s;
+
+        .particle {
+            position: absolute;
+             border-radius: 50%;
+        }
+        
+        @for $i from 1 through 30 {
+            @keyframes particle-animation-#{$i} {
+                100% {
+                    transform: translate3d((random(90) * 1vw), (random(90) * 1vh), (random(100) * 1px));
+                }
+            }
+            
+            .particle:nth-child(#{$i}){
+                animation: particle-animation-#{$i} 60s infinite;
+                $size: random(5) + 5 + px;
+                opacity: random(100)/100;
+                height: $size;
+                width: $size;
+                animation-delay: -$i * .2s;
+                transform: translate3d((random(90) * 1vw), (random(90) * 1vh), (random(100) * 1px));
+                background: hsl(random(360), 70%, 50%);
+            }
+        }
+    }
+
+
+    #rect {
+        width: 100%;
+        background: rgb(31,26,36);
+        background: linear-gradient(120deg, rgba(31, 26, 36, 0.836) 55%, rgba(170, 163, 163, 0.5) 100%);
+        animation: onOpenLogIn 1s forwards;
+    }
+
+    #login-form {
+        position: absolute;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        animation: fadeIn 1s;
+
+
+        h1 {
+            color: #ffffff;
+        }
+
+        rep-input {
+            margin: 10px;
+        }
+
+        div {
+            width: 80%;
+            display: flex;
+            flex-direction: row-reverse;
+
+            rep-button {
+                margin: 10px;
+            }
+        }
+
+        p {
+            color: #ff0000;
+        }
+
+        a {
+            margin: 15px;
+            font-size: 18px;
+            text-decoration: none;
+            color: hotpink;
+        }
+    }
+
+    rep-footer {
+        width: 100%;
+    }
+}
+
+@keyframes onOpenLogIn {
+    0% {
+        transform: skewY(-8deg);
+        height: 60vh;
+    }
+    
+    100% {
+        transform: skewY(8deg);
+        height: 45vh;
+    }
+}
+
+
+@keyframes particlesSpawn {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}

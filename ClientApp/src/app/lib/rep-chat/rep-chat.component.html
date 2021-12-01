@@ -1,0 +1,9 @@
+<div id="chat">
+
+  <rep-message *ngFor="let message of _msService.messages; let i = index;"
+    [message]="message"
+    [uniqueID]="i"
+    (onUserClick)="openSelectedUser($event)"
+    ></rep-message>
+
+</div>
