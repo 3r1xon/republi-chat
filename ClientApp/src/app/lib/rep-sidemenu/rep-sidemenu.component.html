@@ -3,8 +3,21 @@
     <div id="tabs">
 
         <div id="tab" *ngFor="let tab of tabs; let i = index;"
-            [style.borderRight]="i % 2 == 0 ? '1px solid #ffffff2a' : ''">
-            {{tab}}
+            [style.borderRight]="i % 2 == 0 ? '1px solid #ffffff2a' : ''"
+            (click)="selectedTab = i">
+            {{tab.tabname}}
+        </div>
+
+    </div>
+
+    <div id="sections">
+
+        <div id="section" 
+            *ngFor="let section of tabs[selectedTab].sections">
+            <p id="sectionName">
+                {{section.sectionName}}
+            </p>
+            <rep-window [subMenu]="options"></rep-window>
         </div>
 
     </div>
