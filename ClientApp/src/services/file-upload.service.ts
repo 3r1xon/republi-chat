@@ -9,6 +9,9 @@ export class FileUploadService {
   constructor(private sanitizer: DomSanitizer) { }
 
   public sanitizeIMG(base64: string) {
+
+    if (base64 == null) return;
+
     const extensions = {
       "/": "jpg",
       "i": "png",

@@ -1,6 +1,4 @@
 import { Injectable } from '@angular/core';
-import { FileUploadService } from './file-upload.service';
-import { UserService } from './user.service';
 import { io } from 'socket.io-client';
 import { database } from 'src/environments/database';
 import { Observable } from 'rxjs';
@@ -29,14 +27,6 @@ export class WebSocketService {
 
   public emit(eventName: string, data: any) {
     this.socket.emit(eventName, data);
-  }
-
-  public closeWebSocket() {
-
-  }
-
-  public sendMessage() {
-    
   }
 
 }

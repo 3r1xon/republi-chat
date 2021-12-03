@@ -1,25 +1,33 @@
-<div id="rep-sidemenu">
+<nav id="rep-sidemenu">
 
     <div id="tabs">
 
-        <div id="tab" *ngFor="let tab of tabs; let i = index;"
+        <div id="tab" *ngFor="let tab of entries; let i = index;"
             [style.borderRight]="i % 2 == 0 ? '1px solid #ffffff2a' : ''"
+            [style.borderLeft]="i % 2 == 1 ? '1px solid #ffffff2a' : ''"
             (click)="selectedTab = i">
             {{tab.tabname}}
         </div>
 
     </div>
 
+
     <div id="sections">
 
         <div id="section" 
-            *ngFor="let section of tabs[selectedTab].sections">
+            *ngFor="let section of entries[selectedTab].sections">
             <p id="sectionName">
-                {{section.sectionName}}
+                {{section.name}}
             </p>
             <rep-window [subMenu]="options"></rep-window>
         </div>
 
     </div>
+    
+    <div id="new">
+    
+        <mat-icon>add</mat-icon>
+    
+    </div>
 
-</div>
+</nav>

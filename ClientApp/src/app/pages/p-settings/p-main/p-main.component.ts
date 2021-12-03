@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { SubMenu } from 'src/interfaces/submenu.interface';
 import { UserService } from 'src/services/user.service';
 
 @Component({
@@ -16,7 +17,7 @@ export class PSettingsComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  public menus = [
+  public menus: Array<SubMenu> = [
     {
       name: "Profile",
       color: "#FFFFFF",
@@ -31,6 +32,14 @@ export class PSettingsComponent implements OnInit {
       icon: "security",
       onClick: async () => {
         await this.router.navigateByUrl('/settings/privacy');
+      }
+    },
+    {
+      name: "New channel",
+      color: "#388e3c",
+      icon: "add",
+      onClick: async () => {
+        await this.router.navigateByUrl('/settings/newchannel');
       }
     },
     {

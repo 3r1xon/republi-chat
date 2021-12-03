@@ -2,6 +2,9 @@
     display: flex;
     cursor: pointer;
     user-select: none;
+    border: none;
+    background: transparent;
+    text-decoration: none;
 
     #flat-button {
         padding: 10px;

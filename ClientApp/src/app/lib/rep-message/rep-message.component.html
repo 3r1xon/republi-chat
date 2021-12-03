@@ -2,7 +2,8 @@
         background: active ? 'rgb(67 67 67)' : '' 
     }">
 
-    <img id="user-image" [src]="message.userImage" (click)="onUserClick.emit('onUserClick')">
+    <img id="user-image" [src]="message.userImage" onerror="this.src = '/assets/user-image.png'"
+    (click)="onUserClick.emit('onUserClick')">
 
     <div id="message-info">
 

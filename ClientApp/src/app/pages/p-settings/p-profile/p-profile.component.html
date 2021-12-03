@@ -7,7 +7,7 @@
             <div id="image-upload">
 
                 <label for="file-input">
-                  <img [src]="_user.currentUser.profilePicture" id="picture"/>
+                  <img [src]="_user.currentUser.profilePicture" id="picture" onerror="this.src = '/assets/user-image.png'"/>
                 </label>
               
                 <input id="file-input" type="file" (change)="onChange($event.target.files)" />
@@ -26,6 +26,7 @@
 
         </div>
 
+        <!-- <rep-button background="#c62828" id="delete" icon="delete">Delete profile</rep-button> -->
 
         <rep-button background="#46a35e" id="save" icon="save" (click)="save()">Save</rep-button>
 
@@ -33,13 +34,19 @@
 
     <div id="settings">
 
-        <div class="aligned">
-            <rep-input [(text)]="user.name" [enabled]="editName" placeholder="Name"></rep-input>
+        <rep-message [message]="exampleMsg" [options]="exampleMsgOptions"></rep-message>
 
-            <rep-button class="edit" icon="edit" (click)="editName = !editName">Modifica</rep-button>
+        <div class="aligned">
+            <rep-input
+            [(text)]="user.name"
+            [(text)]="exampleMsg.name"
+            [maxLength]="30"
+            placeholder="Name"></rep-input>
         </div>
 
-        <input id="user-color" [(ngModel)]="user.userColor" type="color">
+        <input id="user-color"
+        [(ngModel)]="user.userColor"
+        [(ngModel)]="exampleMsg.userColor" type="color">
 
     </div>
 

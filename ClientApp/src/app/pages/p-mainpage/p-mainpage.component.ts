@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { SubMenu } from 'src/interfaces/submenu.interface';
 import { MessagesService } from 'src/services/messages.service';
 import { UserService } from 'src/services/user.service';
 
@@ -14,7 +15,35 @@ export class PMainpageComponent implements OnInit {
     ) { }
 
   ngOnInit(): void {
-    this._msService.getMessages();
+    this._msService.getChannelMessages();
   }
+
+  public channels: Array<{ 
+    tabname: string, 
+    sections: Array<SubMenu> 
+  }> = [
+    {
+      tabname: "Channels",
+      sections: [
+        {
+          name: "Channel 1",
+          onClick: () => {
+
+          }
+        }
+      ]
+    },
+    {
+      tabname: "Friends",
+      sections: [
+        {
+          name: "Friend 1",
+          onClick: () => {
+
+          }
+        }
+      ]
+    }
+  ]
 
 }

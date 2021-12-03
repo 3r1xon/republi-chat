@@ -19,6 +19,29 @@ export class MessagesService {
     private _webSocket: WebSocketService,
     private http: HttpClient
   ) { 
+  }
+
+  public messages: Array<Message> = [];
+
+  public async getChannelMessages() {
+    const res = await this.http.get<ServerResponse>(`${database.BASE_URL}/messages/getMessages`).toPromise();
+
+    if (res.success) {
+      this.messages = [];
+
+      res.data?.forEach((msg) => {
+        this.messages.push({
+          id: msg.id,
+          name: msg.name,
+          userMessage: msg.userMessage,
+          date: new Date(msg.date),
+          userImage: this._fileUpload.sanitizeIMG(msg.userImage),
+          userColor: msg.userColor,
+          auth: !!msg.auth
+        });
+      });
+    }
+
     this._webSocket.listen("message").subscribe((message: string) => {
       const msg = JSON.parse(message);
 
@@ -37,28 +60,6 @@ export class MessagesService {
       const index = this.messages.findIndex(msg => msg.id == _id);
       this.messages.splice(index, 1);
     });
-  }
-
-  public messages: Array<Message> = [];
-
-  public async getMessages() {
-    const res = await this.http.get<ServerResponse>(`${database.BASE_URL}/messages/getMessages`).toPromise();
-
-    if (res.success) {
-      this.messages = [];
-
-      res.data?.forEach((msg) => {
-        this.messages.push({
-          id: msg.id,
-          name: msg.name,
-          userMessage: msg.userMessage,
-          date: new Date(msg.date),
-          userImage: this._fileUpload.sanitizeIMG(msg.userImage),
-          userColor: msg.userColor,
-          auth: !!msg.auth
-        });
-      });
-    }
   }
 
   public async sendMessage(message: string) {

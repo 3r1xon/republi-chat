@@ -4,9 +4,16 @@
 }">more_vert</mat-icon>
     
 <div id="submenu" *ngIf="state">
-    <div class="submenu-section" *ngFor="let section of subMenu" matRipple
-        (click)="section.onClick()">
-        <p [style.color]="section.color">{{section.name}}</p>
-        <mat-icon [style.color]="section.color">{{section.icon}}</mat-icon>
+    <div class="submenu-section" *ngFor="let section of subMenu" matRipple 
+        (mouseenter)="section.highlighted = true"
+        (mouseleave)="section.highlighted = false"
+        [ngStyle]="{ 
+            background: section.highlighted ? (section.color ? section.color : '#24252a') : '',
+            color: section.highlighted ? '#FFFFFF' : (section.color ? section.color : '#FFFFFF')
+        }"
+        (click)="section.onClick(); state = false; section.highlighted = false;">
+        
+        <p>{{section.name}}</p>
+        <mat-icon>{{section.icon}}</mat-icon>
     </div>
 </div>

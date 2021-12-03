@@ -31,9 +31,11 @@ import {
     trigger('openClose', [
       state('false', style({
         opacity: '0',
+        visibility: 'hidden'
       })),
       state('true', style({
         opacity: '1',
+        visibility: 'visible'
       })),
       transition('true <=> false', animate('150ms')),
     ]),
@@ -67,6 +69,9 @@ export class REPInputComponent implements OnInit{
 
   @Input()
   public size: string = 'big' || 'medium' || 'small';
+
+  @Input()
+  public maxLength: number;
 
   @Input()
   public set enabled(flag) {

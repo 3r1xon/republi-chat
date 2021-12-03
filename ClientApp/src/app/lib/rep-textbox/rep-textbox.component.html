@@ -1,7 +1,7 @@
 <div id="text-box">
 
     <div id="profile">
-        <img id="user-image" [src]="_user.currentUser?.profilePicture">
+        <img id="user-image" [src]="_user.currentUser?.profilePicture" onerror="this.src = '/assets/user-image.png'">
         <p [style.color]="_user.currentUser.userColor">{{_user.currentUser.name}}</p>
     </div>
 

@@ -17,6 +17,7 @@ import { PSettingsComponent } from './pages/p-settings/p-main/p-main.component';
 import { PProfileComponent } from './pages/p-settings/p-profile/p-profile.component';
 import { PPrivacyComponent } from './pages/p-settings/p-privacy/p-privacy.component';
 import { PUnauthorizedComponent } from './pages/p-unauthorized/p-unauthorized.component';
+import { PNewChannelComponent } from './pages/p-settings/p-newchannel/p-newchannel.component';
 
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -54,6 +55,7 @@ import { REPSidemenuComponent } from './lib/rep-sidemenu/rep-sidemenu.component'
     PProfileComponent,
     PPrivacyComponent,
     PUnauthorizedComponent,
+    PNewChannelComponent,
   ],
   imports: [
     BrowserModule,

@@ -3,4 +3,5 @@ export interface SubMenu {
     icon?: string;
     color?: string;
     onClick: any;
+    highlighted?: boolean;
 }

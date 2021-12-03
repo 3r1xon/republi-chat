@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { SubMenu } from 'src/interfaces/submenu.interface';
 
 @Component({
@@ -15,32 +15,20 @@ export class REPSidemenuComponent implements OnInit {
 
   public selectedTab: number = 0;
 
+  
   public options: Array<SubMenu> = [
     {
       name: "Remove",
-      icon: "trash",
-      color: "red",
+      icon: "delete",
+      color: "#c62828",
       onClick: () => {}
     }
-  ]
+  ];
 
-  public tabs: any = [
-    {
-      tabname: "Channels",
-      sections: [
-        {
-          sectionName: "Channel 1"
-        }
-      ]
-    },
-    {
-      tabname: "Friends",
-      sections: [
-        {
-          sectionName: "Friend 1"
-        }
-      ]
-    }
-  ]
+  @Input()
+  public entries: Array<{ 
+    tabname: string, 
+    sections: Array<SubMenu> 
+  }>;
 
 }

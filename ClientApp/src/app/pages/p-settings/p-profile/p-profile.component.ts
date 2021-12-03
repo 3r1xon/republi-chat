@@ -2,7 +2,9 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { database } from 'src/environments/database';
 import { Account } from 'src/interfaces/account.interface';
+import { Message } from 'src/interfaces/message.interface';
 import { ServerResponse } from 'src/interfaces/response.interface';
+import { SubMenu } from 'src/interfaces/submenu.interface';
 import { FileUploadService } from 'src/services/file-upload.service';
 import { UserService } from 'src/services/user.service';
 
@@ -24,6 +26,36 @@ export class PProfileComponent implements OnInit {
   public user: Account = { ...this._user.currentUser };
 
   public editName: boolean = false;
+
+  public exampleMsg: Message = {
+    name: this.user.name,
+    userMessage: "Hey, how are you doing?",
+    userColor: this.user.userColor,
+    userImage: this.user.profilePicture,
+    date: new Date(),
+    auth: false
+  };
+
+  exampleMsgOptions: Array<SubMenu> = [
+    {
+      name: "Example",
+      icon: "info_outline",
+      onClick: () => {
+
+        const messages = [
+          "Hey, how are you doing?",
+          "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+          "I'm waiting, waiting, waiting, sittin' up, waiting, waiting, waiting, contemplating, my heart racing.",
+          "Help me make the most of freedom and of pleasure, nothing ever lasts forever..."
+        ];
+
+        let i = messages.findIndex(msg => msg == this.exampleMsg.userMessage);
+        i++;
+        i == messages.length ? i = 0 : i = i;
+        this.exampleMsg.userMessage = messages[i];
+      }
+    }
+  ];
 
   private file;
 

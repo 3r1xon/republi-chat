@@ -25,12 +25,15 @@ export class REPMessageComponent implements OnInit {
     ) { }
 
   ngOnInit(): void {
+    
+    if (this.options) return;
+
     if (this.message.auth) {
       this.options = [
         {
           name: "Delete",
           icon: "delete",
-          color: "#ff0000",
+          color: "#c62828",
           onClick: async () => {
             await this._msService.deleteMessage(this.message.id);
           }
@@ -38,14 +41,12 @@ export class REPMessageComponent implements OnInit {
         {
           name: "Edit",
           icon: "edit",
-          color: "#ffffff",
           onClick: () => {
           }
         },
         {
           name: "Report",
           icon: "flag",
-          color: "#ffffff",
           onClick: () => {
           }
         },
@@ -55,7 +56,6 @@ export class REPMessageComponent implements OnInit {
         {
           name: "Report",
           icon: "flag",
-          color: "#ffffff",
           onClick: () => {
           }
         },
@@ -71,7 +71,7 @@ export class REPMessageComponent implements OnInit {
   public uniqueID: number;
 
   @Input()
-  public options: Array<SubMenu> = [];
+  public options: Array<SubMenu>;
 
   @Input()
   public message: Message;
