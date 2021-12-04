@@ -1,13 +1,8 @@
 <div id="mainpage">
 
-    <div id="content">
-
-        <rep-sidemenu [entries]="channels"></rep-sidemenu>
-
-        <rep-chat [messages]="_msService.messages"></rep-chat>
-
-    </div>
-
-    <rep-textbox></rep-textbox>
+    <rep-sidemenu [entries]="channels"
+    (onNew)="addNew()"></rep-sidemenu>
+    
+    <rep-chat [messages]="_msService.messages"></rep-chat>
 
 </div>

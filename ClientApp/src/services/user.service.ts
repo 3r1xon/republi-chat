@@ -80,4 +80,9 @@ export class UserService implements CanActivate {
   }
 
 
+  public deleteProfile() {
+    return this.http.delete<ServerResponse>(`${database.BASE_URL}/authentication/deleteProfile`);
+  }
+
+
 }

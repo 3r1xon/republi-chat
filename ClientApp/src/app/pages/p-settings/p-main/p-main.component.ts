@@ -22,25 +22,19 @@ export class PSettingsComponent implements OnInit {
       name: "Profile",
       color: "#FFFFFF",
       icon: "person",
-      onClick: async () => {
-        await this.router.navigateByUrl('/settings/profile');
-      }
+      route: '/settings/profile'
     },
     {
       name: "Privacy",
       color: "#FFFFFF",
       icon: "security",
-      onClick: async () => {
-        await this.router.navigateByUrl('/settings/privacy');
-      }
+      route: '/settings/privacy'
     },
     {
       name: "New channel",
-      color: "#388e3c",
+      color: "#FFFFFF",
       icon: "add",
-      onClick: async () => {
-        await this.router.navigateByUrl('/settings/newchannel');
-      }
+      route: '/settings/newchannel'
     },
     {
       name: "Log out",
@@ -52,10 +46,14 @@ export class PSettingsComponent implements OnInit {
     },
   ];
 
-  public currentRoute: string = this.menus[0].name;
+  public currentRoute: string = this.menus.find(menu => menu.route == this.router.url).name;
 
   async changeRoute(index: number) {
-    await this.menus[index].onClick();
+    if (this.menus[index].route)
+      await this.router.navigateByUrl(this.menus[index].route)
+    else 
+      this.menus[index].onClick();
+  
     this.currentRoute = this.menus[index].name;
   }
 

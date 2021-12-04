@@ -15,6 +15,7 @@ const corsOptions = {
 const io             = require('socket.io')(server, {
   cors: corsOptions
 });
+
 module.exports = io;
 
 
@@ -26,6 +27,7 @@ app.use(cookieParser());
 
 app.use('/authentication', require('./Authentication/user-management'));
 app.use('/messages', require('./Messages/message-management'));
+app.use('/channels', require('./Channels/channel-management'));
 
 
 

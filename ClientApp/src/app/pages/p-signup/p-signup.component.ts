@@ -24,6 +24,7 @@ export class PSignupComponent implements OnInit {
   public user = {
     userName: "",
     name: "",
+    email: "",
     password: "",
   };
 

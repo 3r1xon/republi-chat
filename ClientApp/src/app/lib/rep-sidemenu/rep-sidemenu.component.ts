@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { SubMenu } from 'src/interfaces/submenu.interface';
 
 @Component({
@@ -30,5 +30,8 @@ export class REPSidemenuComponent implements OnInit {
     tabname: string, 
     sections: Array<SubMenu> 
   }>;
+
+  @Output()
+  public onNew = new EventEmitter();
 
 }

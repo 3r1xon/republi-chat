@@ -12,7 +12,8 @@ router.post('/signUp', async (req, res) => {
   const user = {
     userName: req.body.userName,
     password: req.body.password,
-    name: req.body.name
+    name: req.body.name,
+    email: req.body.email
   };
 
   if (user.userName == '' || user.password == '' || user.name == '')
@@ -23,10 +24,10 @@ router.post('/signUp', async (req, res) => {
       await db.query(
       `
       INSERT INTO USERS 
-      (NICKNAME, PASSWORD, NAME) 
+      (NICKNAME, PASSWORD, NAME, EMAIL) 
       VALUES 
-      (?, ?, ?)
-      `, [user.userName, user.password, user.name]);
+      (?, ?, ?, ?)
+      `, [user.userName, user.password, user.name, user.email]);
 
       res.status(201).send({ success: true, message: 'User correctly signed up' });
     } catch (err) {
@@ -50,6 +51,7 @@ router.post('/authorize', Auth.authToken, async (req, res) => {
   U.NICKNAME as userName,
   U.NAME as name,
   U.COLOR as userColor,
+  U.EMAIL as email,
   TO_BASE64(U.PROFILE_PICTURE) as profilePicture
   FROM USERS U
   LEFT JOIN SESSIONS S ON S.ID_USER = U.ID_USER
@@ -84,6 +86,7 @@ router.post('/logIn', async (req, res) => {
     U.NICKNAME as userName,
     U.NAME as name,
     U.COLOR as userColor,
+    U.EMAIL as email,
     TO_BASE64(U.PROFILE_PICTURE) as profilePicture 
     FROM USERS U
     WHERE NICKNAME = ? AND PASSWORD = ?
@@ -146,8 +149,6 @@ router.post('/editProfile', [Auth.authToken, upload.single("image")], async (req
 
   const userID = res.locals._id;
 
-  console.log(userID)
-
   try {
 
     await db.query(
@@ -162,6 +163,33 @@ router.post('/editProfile', [Auth.authToken, upload.single("image")], async (req
     res.status(201).send({ 
       success: true,
       data: file.toString("base64")
+    });
+
+  } catch(err) {
+    console.log(err);
+
+    res.status(500).send({ success: false, message: "Database error!" });
+  }
+});
+
+
+
+router.delete('/deleteProfile', Auth.authToken, async (req, res) => {
+
+  try {
+    
+    const _id = res.locals._id;
+
+    await db.query(
+    `
+    DELETE
+    FROM USERS
+    WHERE 
+    ID_USER = ?
+    `, [_id]);
+
+    res.status(201).send({ 
+      success: true,
     });
 
   } catch(err) {

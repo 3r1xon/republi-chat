@@ -14,12 +14,14 @@
 
         <rep-input [(text)]="user.name" [maxLength]="30" tooltip="The name that will be visible to all other users" placeholder="Name" required="true"></rep-input>
 
+        <rep-input [(text)]="user.email" [maxLength]="30" tooltip="It will be useful for us for account validation" placeholder="Email" required="true"></rep-input>
+
         <rep-input [(text)]="user.password" [maxLength]="30" type="password" placeholder="Password" required="true"></rep-input>
 
         <rep-input [(text)]="confirmPassword" [maxLength]="30" type="password" placeholder="Confirm password" required="true"></rep-input>
 
         <div>
-            <rep-button (click)="signUp()" icon="login">Sign Up</rep-button>
+            <rep-button (onClick)="signUp()" icon="login">Sign Up</rep-button>
         </div>
         
         <p>{{alert}}</p>

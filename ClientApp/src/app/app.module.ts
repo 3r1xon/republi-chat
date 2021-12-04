@@ -30,6 +30,7 @@ import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { REPTooltipComponent } from './lib/rep-tooltip/rep-tooltip.component';
 import { REPSidemenuComponent } from './lib/rep-sidemenu/rep-sidemenu.component';
+import { REPToggleComponent } from './lib/rep-toggle/rep-toggle.component';
 
 
 
@@ -47,6 +48,7 @@ import { REPSidemenuComponent } from './lib/rep-sidemenu/rep-sidemenu.component'
     REPFooterComponent,
     REPTooltipComponent,
     REPSidemenuComponent,
+    REPToggleComponent,
 
     PSignupComponent,
     PLoginComponent,

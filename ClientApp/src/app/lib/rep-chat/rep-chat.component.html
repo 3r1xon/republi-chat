@@ -1,7 +1,17 @@
 <div id="chat" #content>
 
-  <rep-message #messages *ngFor="let message of messages; let i = index;"
+  <div id="messages">
+
+    <rep-message #messages *ngFor="let message of messages; let i = index;"
     [message]="message"
     [uniqueID]="i"></rep-message>
+    
+  </div>
+  
+  <div id="textbox">
+
+    <rep-textbox></rep-textbox>
+    
+  </div>
 
 </div>

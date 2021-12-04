@@ -9,16 +9,16 @@
                 <label for="file-input">
                   <img src="/assets/upload.png" id="picture"/>
                 </label>
-              
-                <input id="file-input" type="file" />
+
+                <input id="file-input" type="file" (change)="onChange($event.target.files)" />
 
             </div>
 
-            <rep-input placeholder="Channel name" required="true"></rep-input>
+            <rep-input placeholder="Channel name" [(text)]="channel.name" required="true"></rep-input>
 
         </div>
 
-        <rep-button background="#46a35e" id="save" icon="save" (click)="save()">Save</rep-button>
+        <rep-button background="#46a35e" id="save" icon="save" (onClick)="save()">Save</rep-button>
 
     </div>
 

@@ -1,0 +1,15 @@
+<div id="rep-toggle">
+
+    <label id="switch">
+        <input type="checkbox" 
+        [(ngModel)]="checked" 
+        [checked]="checked"
+        (ngModelChange)="checkedChange.emit(checked)">
+        <span id="slider"></span>
+    </label>
+    
+    <mat-icon *ngIf="!checked">{{iconOnFalse}}</mat-icon>
+
+    <mat-icon *ngIf="checked">{{iconOnTrue}}</mat-icon>
+
+</div>

@@ -6,6 +6,7 @@ import { database } from 'src/environments/database';
 import { ServerResponse } from 'src/interfaces/response.interface';
 import { FileUploadService } from './file-upload.service';
 import { WebSocketService } from './websocket.service';
+import { Channel } from 'src/interfaces/channel.interface';
 
 
 @Injectable({
@@ -40,26 +41,27 @@ export class MessagesService {
           auth: !!msg.auth
         });
       });
+      
+      this._webSocket.listen("message").subscribe((message: string) => {
+        const msg = JSON.parse(message);
+  
+        this.messages.push({
+          id: msg.id,
+          name: msg.name,
+          userMessage: msg.userMessage,
+          date: new Date(msg.date),
+          userImage: this._fileUpload.sanitizeIMG(msg.userImage),
+          userColor: msg.userColor,
+          auth: msg.userName == this._user.currentUser.userName
+        });
+      });
+  
+      this._webSocket.listen("deleteMessage").subscribe((_id: number) => {
+        const index = this.messages.findIndex(msg => msg.id == _id);
+        this.messages.splice(index, 1);
+      });
     }
 
-    this._webSocket.listen("message").subscribe((message: string) => {
-      const msg = JSON.parse(message);
-
-      this.messages.push({
-        id: msg.id,
-        name: msg.name,
-        userMessage: msg.userMessage,
-        date: new Date(msg.date),
-        userImage: this._fileUpload.sanitizeIMG(msg.userImage),
-        userColor: msg.userColor,
-        auth: msg.userName == this._user.currentUser.userName
-      });
-    });
-
-    this._webSocket.listen("deleteMessage").subscribe((_id: number) => {
-      const index = this.messages.findIndex(msg => msg.id == _id);
-      this.messages.splice(index, 1);
-    });
   }
 
   public async sendMessage(message: string) {
@@ -78,6 +80,10 @@ export class MessagesService {
         _id: _id
       }
     }).toPromise();
+  }
+
+  public createChannel(channel: Channel) {
+    return this.http.post(`${database.BASE_URL}/channels/createChannel`, channel)
   }
 
 }

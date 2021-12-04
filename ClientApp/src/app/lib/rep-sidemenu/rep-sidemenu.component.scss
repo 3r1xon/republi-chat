@@ -1,4 +1,6 @@
 #rep-sidemenu {
+    display: flex;
+    flex-direction: column;
     height: 100%;
     background: #111111;
     border-right: 1px solid #ffffff2a;

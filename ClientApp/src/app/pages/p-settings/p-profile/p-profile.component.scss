@@ -53,19 +53,39 @@
 
 
 
-        #save {
+        #manage {
+            display: flex;
             align-self: flex-end;
             margin: 10px;
+
+            rep-button {
+                margin: 15px;
+            }
         }
     }
 
-    rep-input {
+    rep-input, rep-toggle {
         margin: 10px;
     }
 
-    .aligned {
+    form {
+        width: 80%;
+        height: 80%;
+        margin: 25px;
+        padding: 10px;
+        background: #111111;
         display: flex;
         align-items: center;
+        flex-direction: column;
+        justify-content: center;
+        border-radius: 10px;
+    }
+
+    .aligned {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-evenly;
     }
 
     .edit {

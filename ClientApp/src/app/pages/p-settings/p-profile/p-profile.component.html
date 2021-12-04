@@ -26,9 +26,13 @@
 
         </div>
 
-        <!-- <rep-button background="#c62828" id="delete" icon="delete">Delete profile</rep-button> -->
-
-        <rep-button background="#46a35e" id="save" icon="save" (click)="save()">Save</rep-button>
+        <div id="manage">
+            
+            <rep-button background="#c62828" id="delete" icon="dangerous" (onClick)="deleteProfile()">Delete profile</rep-button>
+            
+            <rep-button background="#46a35e" id="save" icon="save" (onClick)="save()" [enabled]="false">Save</rep-button>
+        
+        </div>
 
     </div>
 
@@ -36,17 +40,44 @@
 
         <rep-message [message]="exampleMsg" [options]="exampleMsgOptions"></rep-message>
 
-        <div class="aligned">
-            <rep-input
-            [(text)]="user.name"
-            [(text)]="exampleMsg.name"
-            [maxLength]="30"
-            placeholder="Name"></rep-input>
-        </div>
+        <form>
 
-        <input id="user-color"
+            <div class="aligned">
+    
+                <rep-input
+                [(text)]="user.name"
+                [(text)]="exampleMsg.name"
+                [maxLength]="30"
+                required="true"
+                [enabled]="editName"
+                placeholder="Name"></rep-input>
+    
+                <rep-toggle [(checked)]="editName" iconOnTrue="lock_open" iconOnFalse="lock"></rep-toggle>
+    
+            </div>
+
+            <div class="aligned">
+
+                <rep-input 
+                [(text)]="user.email"
+                placeholder="Email" 
+                required="true"
+                [enabled]="editEmail"
+                ></rep-input>
+
+                <rep-toggle
+                [(checked)]="editEmail"
+                iconOnTrue="lock_open" 
+                iconOnFalse="lock"></rep-toggle>
+
+            </div>
+                
+        </form>
+        
+
+        <!-- <input id="user-color"
         [(ngModel)]="user.userColor"
-        [(ngModel)]="exampleMsg.userColor" type="color">
+        [(ngModel)]="exampleMsg.userColor" type="color"> -->
 
     </div>
 

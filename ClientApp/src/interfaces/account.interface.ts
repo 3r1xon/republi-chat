@@ -4,4 +4,5 @@ export interface Account {
     profilePicture?: any;
     userColor?: string;
     name: string;
+    email: string;
 }

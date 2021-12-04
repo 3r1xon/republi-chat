@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { database } from 'src/environments/database';
 import { Account } from 'src/interfaces/account.interface';
 import { Message } from 'src/interfaces/message.interface';
@@ -18,6 +19,7 @@ export class PProfileComponent implements OnInit {
     public _user: UserService,
     public _fileUpload: FileUploadService,
     private http: HttpClient,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -26,6 +28,7 @@ export class PProfileComponent implements OnInit {
   public user: Account = { ...this._user.currentUser };
 
   public editName: boolean = false;
+  public editEmail: boolean = false;
 
   public exampleMsg: Message = {
     name: this.user.name,
@@ -63,40 +66,48 @@ export class PProfileComponent implements OnInit {
 
     this.file = <File>event[0];
 
-    const file = <File>event[0];
+    // const file = <File>event[0];
 
-    const fd = new FormData();
-    fd.append("image", file, file.name);
+    // const fd = new FormData();
+    // fd.append("image", file, file.name);
     
-    const res = await this.http.post<ServerResponse>(
-    `${database.BASE_URL}/authentication/editProfile`, 
-    fd
-    ).toPromise();
+    // const res = await this.http.post<ServerResponse>(
+    // `${database.BASE_URL}/authentication/editProfile`, 
+    // fd
+    // ).toPromise();
     
-    if (res.success) {
-      this._user.currentUser.profilePicture = this._fileUpload.sanitizeIMG(res.data);
-    }
+    // if (res.success) {
+    //   this._user.currentUser.profilePicture = this._fileUpload.sanitizeIMG(res.data);
+    // }
   }
 
   async save() {
 
-    // let fd;
-    // if (this.file) {
-    //   fd = new FormData();
-    //   fd.append("image", this.file, this.file.name);
-    // } else {
-    //   this.user.profilePicture = null;
-    // }
+    let fd;
+    if (this.file) {
+      fd = new FormData();
+      fd.append("image", this.file, this.file.name);
+    } else {
+      this.user.profilePicture = null;
+    }
 
-    // const res = await this.http.post<ServerResponse>(
-    // `${database.BASE_URL}/authentication/editProfile`, {
-    //   body: {
-    //     fd,
-    //     user: this.user
-    //   }
-    // }
-    // ).toPromise();
+    const res = await this.http.post<ServerResponse>(
+    `${database.BASE_URL}/authentication/editProfile`, {
+      body: {
+        fd,
+        user: this.user
+      }
+    }
+    ).toPromise();
 
+  }
+
+  async deleteProfile() {
+    const res = await this._user.deleteProfile().toPromise();
+
+    if (res.success) {
+      this.router.navigate(['login']);
+    }
   }
 
 }

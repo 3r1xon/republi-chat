@@ -1,6 +1,8 @@
-<button id="master" matRipple>
+<button id="master" [disabled]="!enabled" matRipple
+    (click)="checkClick()">
     <div id="flat-button" [ngStyle]="{
             'background': background,
+            'opacity': enabled ? '1' : '0.5',
             'width': width,
             'height': height
         }">
