@@ -17,7 +17,6 @@ export class PMainpageComponent implements OnInit {
     ) { }
 
   ngOnInit(): void {
-    this.router.navigateByUrl('/settings/profile');
     this._msService.getChannelMessages();
   }
 
