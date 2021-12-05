@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { ControlValueAccessor, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { database } from 'src/environments/database';
 import { Account } from 'src/interfaces/account.interface';
@@ -11,27 +12,49 @@ import { UserService } from 'src/services/user.service';
   templateUrl: './p-login.component.html',
   styleUrls: ['./p-login.component.scss']
 })
-export class PLoginComponent implements OnInit {
+export class PLoginComponent implements OnInit, ControlValueAccessor {
 
   constructor(
     private _user: UserService,
     private _fileUpload: FileUploadService,
     private router: Router,
-    private http: HttpClient
+    private http: HttpClient,
+    private fb: FormBuilder
     ) { }
 
   ngOnInit(): void {
-    this.particleNumber = Array(30).fill(0);
+    this.particles = Array(30).fill(0);
+
+    this.form = this.fb.group({
+      userName: ['', Validators.required],
+      password: ['', Validators.required]
+    });
   }
 
-  public particleNumber: Array<any> = []; 
+  public particles: Array<any> = []; 
 
   public userName: string = "";
+
   public password: string = "";
 
   public alert: string = "";
 
+  public form: FormGroup;
+
+  writeValue() {
+
+  }
+
+  registerOnChange() {
+
+  }
+
+  registerOnTouched() {
+    
+  }
+
   async logIn() {
+
     this.http.post<ServerResponse>(`${database.BASE_URL}/authentication/logIn`, {
       userName: this.userName,
       password: this.password

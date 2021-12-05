@@ -1,12 +1,12 @@
 <div id="login">
 
     <div id="particle-container">
-        <div class="particle" *ngFor="let particle of particleNumber"></div>
+        <div class="particle" *ngFor="let particle of particles"></div>
     </div>
 
     <div id="rect"></div>
 
-    <form id="login-form" (keyup.enter)="logIn()">
+    <form id="login-form" (ngSubmit)="logIn()" [formGroup]="form">
 
         <h1>Log in</h1>
 
@@ -15,7 +15,7 @@
         <rep-input [(text)]="password" [maxLength]="30" type="password" placeholder="Password"></rep-input>
 
         <div>
-            <rep-button (onClick)="logIn()" icon="login">Log in</rep-button>
+            <rep-button [enabled]="form.valid" (onClick)="logIn()" icon="login">Log in</rep-button>
         </div>
         
         <p>{{alert}}</p>

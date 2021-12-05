@@ -26,14 +26,14 @@ export class InterceptorService implements HttpInterceptor {
     private cookieService: CookieService,
     ) { }
 
-  private loadingWhiteList: Array<string> = [
+  private loadingBlackList: Array<string> = [
     `${database.BASE_URL}/messages/sendMessage`,
     `${database.BASE_URL}/messages/deleteMessage`
   ];
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 
-    const route = this.loadingWhiteList.find(route => route == req.url);
+    const route = this.loadingBlackList.find(route => route == req.url);
     
     this._utils.loading = route != req.url;
 

@@ -9,6 +9,9 @@ import { REPLoadingComponent } from './lib/rep-loading/rep-loading.component';
 import { REPWindowComponent } from './lib/rep-window/rep-window.component';
 import { REPButtonComponent } from './lib/rep-button/rep-button.component';
 import { REPFooterComponent } from './lib/rep-footer/rep-footer.component';
+import { REPTooltipComponent } from './lib/rep-tooltip/rep-tooltip.component';
+import { REPSidemenuComponent } from './lib/rep-sidemenu/rep-sidemenu.component';
+import { REPToggleComponent } from './lib/rep-toggle/rep-toggle.component';
 
 import { PSignupComponent } from './pages/p-signup/p-signup.component';
 import { PLoginComponent } from './pages/p-login/p-login.component';
@@ -26,11 +29,8 @@ import { AppRoutingModule } from './app-routing.module';
 import { MatRippleModule } from '@angular/material/core';
 import { InterceptorService } from 'src/services/interceptor.service';
 import { AppComponent } from './app.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
-import { REPTooltipComponent } from './lib/rep-tooltip/rep-tooltip.component';
-import { REPSidemenuComponent } from './lib/rep-sidemenu/rep-sidemenu.component';
-import { REPToggleComponent } from './lib/rep-toggle/rep-toggle.component';
 
 
 
@@ -67,6 +67,8 @@ import { REPToggleComponent } from './lib/rep-toggle/rep-toggle.component';
     FormsModule,
     HttpClientModule,
     MatRippleModule,
+    FormsModule,
+    ReactiveFormsModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: InterceptorService, multi: true },

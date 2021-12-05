@@ -41,7 +41,9 @@ import {
     ]),
   ],
 })
-export class REPInputComponent implements OnInit{
+export class REPInputComponent implements OnInit {
+
+  constructor() { }
 
   ngOnInit() {
     if (this.text != '') {
@@ -94,15 +96,17 @@ export class REPInputComponent implements OnInit{
 
   public tooltipVisible: boolean = false;
 
-
   @Output()
   textChange = new EventEmitter<string>();
+
   public empty: boolean = false;
+
   public placeholderAnimated: boolean = false;
-  constructor() { }
+  
   onFocus() {
     this.placeholderAnimated = true;
   }
+
   onFocusOut() {
     if (this.required && this.text == "") {
       this.borderColor = "#ff0000";
@@ -112,6 +116,7 @@ export class REPInputComponent implements OnInit{
     if (this.text.length > 0) return;
     this.placeholderAnimated = false;
   }
+
   getPlaceholder() {
     if (!this.placeholderAnimated) return '';
     return this.placeholder;
