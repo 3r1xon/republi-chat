@@ -1,0 +1,34 @@
+#rep-request {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    backdrop-filter: blur(2px);
+    position: relative;
+    
+    dialog {
+        min-width: 500px;
+        min-height: 300px;
+        border-radius: 5px;
+        display: flex;
+        flex-direction: column;
+        background: #1e1e1e;
+        position: absolute; 
+        border: none;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+
+        #bar {
+            width: 100%;
+            height: 25px;
+            display: flex;
+            flex-direction: row-reverse;
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
+
+            #close {
+                color: #ff0000;
+            }
+        }
+    }
+}

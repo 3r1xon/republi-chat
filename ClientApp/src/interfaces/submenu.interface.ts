@@ -2,7 +2,7 @@ export interface SubMenu {
     name: string;
     icon?: string;
     color?: string;
-    onClick?: any;
+    onClick?: Function;
     route?: string;
     highlighted?: boolean;
 }

@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { database } from 'src/environments/database';
 import { ServerResponse } from 'src/interfaces/response.interface';
@@ -12,34 +13,46 @@ export class PSignupComponent implements OnInit {
 
   constructor(
     private http: HttpClient,
-    private router: Router
+    private router: Router,
+    private fb: FormBuilder
     ) { }
 
   ngOnInit(): void {
     this.particleNumber = Array(30).fill(0);
   }
 
-  public particleNumber: Array<any> = []; 
-
-  public user = {
-    userName: "",
-    name: "",
-    email: "",
-    password: "",
-  };
-
-  public confirmPassword: string = "";
+  public particleNumber: Array<any> = [];
 
   public alert: string = "";
 
+  public form: FormGroup = this.fb.group({
+    userName: ['',
+      [Validators.required, Validators.maxLength(30)]
+    ],
+    name: ['',
+      [Validators.required, Validators.maxLength(30)]
+    ],
+    email: ['',
+      [Validators.required, Validators.email]
+    ],
+    password: ['',
+      [Validators.required, Validators.maxLength(30)]
+    ],
+    confirmPassword: ['',
+      [Validators.required, Validators.maxLength(30)]
+    ]
+  });
+
   signUp() {
 
-    if (this.user.password != this.confirmPassword) {
+    const user = this.form.value;
+
+    if (user.password != user.confirmPassword) {
       this.alert = "Password is not the same!";
       return;
     }
 
-    this.http.post<ServerResponse>(`${database.BASE_URL}/authentication/signUp`, this.user).subscribe((response) => { 
+    this.http.post<ServerResponse>(`${database.BASE_URL}/authentication/signUp`, user).subscribe((response) => { 
       if (response.success) {
         this.router.navigate(['login']);
       }

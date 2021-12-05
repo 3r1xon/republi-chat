@@ -28,6 +28,7 @@ export class PProfileComponent implements OnInit {
   public user: Account = { ...this._user.currentUser };
 
   public editName: boolean = false;
+
   public editEmail: boolean = false;
 
   public exampleMsg: Message = {

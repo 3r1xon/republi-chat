@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { ControlValueAccessor, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { database } from 'src/environments/database';
 import { Account } from 'src/interfaces/account.interface';
@@ -12,7 +12,7 @@ import { UserService } from 'src/services/user.service';
   templateUrl: './p-login.component.html',
   styleUrls: ['./p-login.component.scss']
 })
-export class PLoginComponent implements OnInit, ControlValueAccessor {
+export class PLoginComponent implements OnInit {
 
   constructor(
     private _user: UserService,
@@ -24,40 +24,28 @@ export class PLoginComponent implements OnInit, ControlValueAccessor {
 
   ngOnInit(): void {
     this.particles = Array(30).fill(0);
-
-    this.form = this.fb.group({
-      userName: ['', Validators.required],
-      password: ['', Validators.required]
-    });
   }
 
   public particles: Array<any> = []; 
 
-  public userName: string = "";
-
-  public password: string = "";
-
   public alert: string = "";
 
-  public form: FormGroup;
-
-  writeValue() {
-
-  }
-
-  registerOnChange() {
-
-  }
-
-  registerOnTouched() {
-    
-  }
+  public form: FormGroup = this.fb.group({
+    userName: ['', // Default value
+      [Validators.required, Validators.maxLength(30)]
+    ],
+    password: ['', // Default value
+      [Validators.required, Validators.maxLength(30)]
+    ]
+  });
 
   async logIn() {
 
+    if (!this.form.valid) return;
+
     this.http.post<ServerResponse>(`${database.BASE_URL}/authentication/logIn`, {
-      userName: this.userName,
-      password: this.password
+      userName: this.form.value.userName,
+      password: this.form.value.password
     })
       .subscribe(async (response) => {
         this._user.currentUser = <Account>response.data.user;

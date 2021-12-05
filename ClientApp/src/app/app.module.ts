@@ -12,6 +12,7 @@ import { REPFooterComponent } from './lib/rep-footer/rep-footer.component';
 import { REPTooltipComponent } from './lib/rep-tooltip/rep-tooltip.component';
 import { REPSidemenuComponent } from './lib/rep-sidemenu/rep-sidemenu.component';
 import { REPToggleComponent } from './lib/rep-toggle/rep-toggle.component';
+import { REPRequestComponent } from './lib/rep-request/rep-request.component';
 
 import { PSignupComponent } from './pages/p-signup/p-signup.component';
 import { PLoginComponent } from './pages/p-login/p-login.component';
@@ -49,6 +50,7 @@ import { MatIconModule } from '@angular/material/icon';
     REPTooltipComponent,
     REPSidemenuComponent,
     REPToggleComponent,
+    REPRequestComponent,
 
     PSignupComponent,
     PLoginComponent,

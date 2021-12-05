@@ -8,4 +8,6 @@ export class UtilsService {
   constructor() { }
 
   public loading: boolean = false;
+
+  public request: boolean = false;
 }

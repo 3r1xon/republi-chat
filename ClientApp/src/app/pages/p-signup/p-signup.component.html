@@ -6,22 +6,41 @@
 
     <div id="rect"></div>
 
-    <form id="signup-form" (keyup.enter)="signUp()">
+    <form id="signup-form" (ngSubmit)="signUp()" [formGroup]="form">
 
         <h1>Sign up</h1>
 
-        <rep-input [(text)]="user.userName" [maxLength]="30" tooltip="Your personal access name, it will not be visible to others" placeholder="Nickname" required="true"></rep-input>
+        <rep-input 
+            formControlName="userName" 
+            [maxLength]="30" 
+            tooltip="Your personal access name, it will not be visible to others" 
+            placeholder="Nickname" required="true"></rep-input>
 
-        <rep-input [(text)]="user.name" [maxLength]="30" tooltip="The name that will be visible to all other users" placeholder="Name" required="true"></rep-input>
+        <rep-input 
+            formControlName="name" 
+            [maxLength]="30" 
+            tooltip="The name that will be visible to all other users" 
+            placeholder="Name" required="true"></rep-input>
 
-        <rep-input [(text)]="user.email" [maxLength]="30" tooltip="It will be useful for us for account validation" placeholder="Email" required="true"></rep-input>
+        <rep-input 
+            formControlName="email" 
+            tooltip="It will be useful for us for account validation" 
+            placeholder="Email" required="true"></rep-input>
 
-        <rep-input [(text)]="user.password" [maxLength]="30" type="password" placeholder="Password" required="true"></rep-input>
+        <rep-input 
+            formControlName="password" 
+            [maxLength]="30" 
+            type="password" 
+            placeholder="Password" required="true"></rep-input>
 
-        <rep-input [(text)]="confirmPassword" [maxLength]="30" type="password" placeholder="Confirm password" required="true"></rep-input>
+        <rep-input 
+            formControlName="confirmPassword" 
+            [maxLength]="30" 
+            type="password" 
+            placeholder="Confirm password" required="true"></rep-input>
 
         <div>
-            <rep-button (onClick)="signUp()" icon="login">Sign Up</rep-button>
+            <rep-button [enabled]="form.valid" icon="login">Sign Up</rep-button>
         </div>
         
         <p>{{alert}}</p>

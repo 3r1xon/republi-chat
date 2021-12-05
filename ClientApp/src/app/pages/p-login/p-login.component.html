@@ -10,14 +10,23 @@
 
         <h1>Log in</h1>
 
-        <rep-input [(text)]="userName" [maxLength]="30" placeholder="Nickname"></rep-input>
+        <rep-input 
+            formControlName="userName" 
+            placeholder="Nickname"
+            [maxLength]="30" 
+        ></rep-input>
 
-        <rep-input [(text)]="password" [maxLength]="30" type="password" placeholder="Password"></rep-input>
+        <rep-input 
+            formControlName="password" 
+            type="password" 
+            placeholder="Password"
+            [maxLength]="30" 
+        ></rep-input>
 
         <div>
-            <rep-button [enabled]="form.valid" (onClick)="logIn()" icon="login">Log in</rep-button>
+            <rep-button [enabled]="form.valid" icon="login">Log in</rep-button>
         </div>
-        
+
         <p>{{alert}}</p>
         
         <a routerLink="/signup">Not registered? Sign up</a>

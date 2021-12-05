@@ -1,4 +1,4 @@
-import {Component, Input, Output, EventEmitter, OnInit} from '@angular/core';
+import {Component, Input, Output, EventEmitter, OnInit, forwardRef} from '@angular/core';
 import {
   trigger,
   state,
@@ -6,11 +6,19 @@ import {
   animate,
   transition
 } from '@angular/animations';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 @Component({
   selector: 'rep-input',
   templateUrl: './rep-input.component.html',
   styleUrls: ['./rep-input.component.scss'],
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      multi: true,
+      useExisting: forwardRef(() => REPInputComponent)
+    }
+  ],
   animations: [
     trigger('placeholderAnimated', [
       state('static', style({
@@ -41,7 +49,7 @@ import {
     ]),
   ],
 })
-export class REPInputComponent implements OnInit {
+export class REPInputComponent implements OnInit, ControlValueAccessor {
 
   constructor() { }
 
@@ -49,6 +57,7 @@ export class REPInputComponent implements OnInit {
     if (this.text != '') {
       this.placeholderAnimated = true;
     }
+    this.prevValue = this.text;
   }
 
   @Input()
@@ -76,14 +85,12 @@ export class REPInputComponent implements OnInit {
   public maxLength: number;
 
   @Input()
-  public set enabled(flag) {
-    if (!flag) {
-      this.disabled = true;
-      this.color = 'grey';
-    } else {
-      this.disabled = false;
-      this.color = 'royalblue';
-    }
+  public autocomplete: string = "off";
+
+  @Input()
+  public set enabled(flag: boolean) {
+    this.disabled = !flag;
+    this.color = !flag ? 'grey' : 'royalblue';
   }
 
   @Input()
@@ -96,8 +103,10 @@ export class REPInputComponent implements OnInit {
 
   public tooltipVisible: boolean = false;
 
+  private prevValue: string;
+
   @Output()
-  textChange = new EventEmitter<string>();
+  public textChange = new EventEmitter<string>();
 
   public empty: boolean = false;
 
@@ -124,6 +133,24 @@ export class REPInputComponent implements OnInit {
 
   toggleTooltip() {
     this.tooltipVisible = !this.tooltipVisible;
+  }
+
+  onChange: any = () => {};
+  
+  onTouch: any = () => {};
+
+  registerOnChange(fn: any): void {
+    this.onChange = fn;
+  }
+
+  registerOnTouched(fn: any): void {
+    if (this.text != this.prevValue) {
+      this.onTouch = fn;
+    }
+  }
+
+  writeValue(text: string) {
+    this.text = text;
   }
 
 }
