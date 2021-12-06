@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { database } from 'src/environments/database';
+import { server } from 'src/environments/server';
 import { ServerResponse } from 'src/interfaces/response.interface';
 
 @Component({
@@ -52,7 +52,7 @@ export class PSignupComponent implements OnInit {
       return;
     }
 
-    this.http.post<ServerResponse>(`${database.BASE_URL}/authentication/signUp`, user).subscribe((response) => { 
+    this.http.post<ServerResponse>(`${server.BASE_URL}/authentication/signUp`, user).subscribe((response) => { 
       if (response.success) {
         this.router.navigate(['login']);
       }

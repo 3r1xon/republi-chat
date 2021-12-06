@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { database } from 'src/environments/database';
+import { server } from 'src/environments/server';
 import { Account } from 'src/interfaces/account.interface';
 import { ServerResponse } from 'src/interfaces/response.interface';
 import { FileUploadService } from 'src/services/file-upload.service';
@@ -43,7 +43,7 @@ export class PLoginComponent implements OnInit {
 
     if (!this.form.valid) return;
 
-    this.http.post<ServerResponse>(`${database.BASE_URL}/authentication/logIn`, {
+    this.http.post<ServerResponse>(`${server.BASE_URL}/authentication/logIn`, {
       userName: this.form.value.userName,
       password: this.form.value.password
     })

@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { database } from 'src/environments/database';
+import { server } from 'src/environments/server';
 import { Account } from 'src/interfaces/account.interface';
 import { Message } from 'src/interfaces/message.interface';
 import { ServerResponse } from 'src/interfaces/response.interface';
@@ -73,7 +73,7 @@ export class PProfileComponent implements OnInit {
     // fd.append("image", file, file.name);
     
     // const res = await this.http.post<ServerResponse>(
-    // `${database.BASE_URL}/authentication/editProfile`, 
+    // `${server.BASE_URL}/authentication/editProfile`, 
     // fd
     // ).toPromise();
     
@@ -93,7 +93,7 @@ export class PProfileComponent implements OnInit {
     }
 
     const res = await this.http.post<ServerResponse>(
-    `${database.BASE_URL}/authentication/editProfile`, {
+    `${server.BASE_URL}/authentication/editProfile`, {
       body: {
         fd,
         user: this.user

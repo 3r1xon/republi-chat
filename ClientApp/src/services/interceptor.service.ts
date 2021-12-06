@@ -12,7 +12,7 @@ import { UtilsService } from './utils.service';
 import { tap } from 'rxjs/operators';
 import { CookieService } from 'ngx-cookie-service';
 import { UserService } from './user.service';
-import { database } from 'src/environments/database';
+import { server } from 'src/environments/server';
 
 
 @Injectable({
@@ -27,8 +27,8 @@ export class InterceptorService implements HttpInterceptor {
     ) { }
 
   private loadingBlackList: Array<string> = [
-    `${database.BASE_URL}/messages/sendMessage`,
-    `${database.BASE_URL}/messages/deleteMessage`
+    `${server.BASE_URL}/messages/sendMessage`,
+    `${server.BASE_URL}/messages/deleteMessage`
   ];
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {

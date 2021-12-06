@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { Observable } from 'rxjs';
 import { ServerResponse } from 'src/interfaces/response.interface';
-import { database } from 'src/environments/database';
+import { server } from 'src/environments/server';
 import { Account } from 'src/interfaces/account.interface';
 import { HttpClient } from '@angular/common/http';
 import { CookieService } from 'ngx-cookie-service';
@@ -39,7 +39,7 @@ export class UserService implements CanActivate {
 
     if (!REFRESH_TOKEN) return;
     
-    const response = await this.http.post<ServerResponse>(`${database.BASE_URL}/authentication/authorize`, {
+    const response = await this.http.post<ServerResponse>(`${server.BASE_URL}/authentication/authorize`, {
       REFRESH_TOKEN: REFRESH_TOKEN
     }).toPromise();
     if (response.success) {
@@ -55,7 +55,7 @@ export class UserService implements CanActivate {
   }
 
   public async logOut(): Promise<any> {
-    await this.http.delete(`${database.BASE_URL}/authentication/logout`).toPromise();
+    await this.http.delete(`${server.BASE_URL}/authentication/logout`).toPromise();
 
     localStorage.clear();
     this.cookieService.deleteAll();
@@ -67,7 +67,7 @@ export class UserService implements CanActivate {
   }
 
   public async deAuth() {
-    await this.http.delete(`${database.BASE_URL}/authentication/logout`).toPromise();
+    await this.http.delete(`${server.BASE_URL}/authentication/logout`).toPromise();
 
     localStorage.clear();
     this.cookieService.deleteAll();
@@ -81,7 +81,7 @@ export class UserService implements CanActivate {
 
 
   public deleteProfile() {
-    return this.http.delete<ServerResponse>(`${database.BASE_URL}/authentication/deleteProfile`);
+    return this.http.delete<ServerResponse>(`${server.BASE_URL}/authentication/deleteProfile`);
   }
 
 

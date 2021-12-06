@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { io } from 'socket.io-client';
-import { database } from 'src/environments/database';
+import { server } from 'src/environments/server';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -10,7 +10,7 @@ export class WebSocketService {
 
   constructor(
   ) { 
-    this.socket = io(database.WEB_SOCKET);
+    this.socket = io(server.WEB_SOCKET);
   }
 
   public isConnected: boolean = false;

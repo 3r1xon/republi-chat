@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Message } from 'src/interfaces/message.interface';
 import { UserService } from './user.service';
-import { database } from 'src/environments/database';
+import { server } from 'src/environments/server';
 import { ServerResponse } from 'src/interfaces/response.interface';
 import { FileUploadService } from './file-upload.service';
 import { WebSocketService } from './websocket.service';
@@ -25,7 +25,7 @@ export class MessagesService {
   public messages: Array<Message> = [];
 
   public async getChannelMessages() {
-    const res = await this.http.get<ServerResponse>(`${database.BASE_URL}/messages/getMessages`).toPromise();
+    const res = await this.http.get<ServerResponse>(`${server.BASE_URL}/messages/getMessages`).toPromise();
 
     if (res.success) {
       this.messages = [];
@@ -71,11 +71,11 @@ export class MessagesService {
       date: new Date().getTime()
     };
 
-    await this.http.post<ServerResponse>(`${database.BASE_URL}/messages/sendMessage`, msg).toPromise();
+    await this.http.post<ServerResponse>(`${server.BASE_URL}/messages/sendMessage`, msg).toPromise();
   }
 
   public async deleteMessage(_id: number) {
-    return await this.http.delete<ServerResponse>(`${database.BASE_URL}/messages/deleteMessage`, { 
+    return await this.http.delete<ServerResponse>(`${server.BASE_URL}/messages/deleteMessage`, { 
       body: {
         _id: _id
       }
@@ -83,7 +83,7 @@ export class MessagesService {
   }
 
   public createChannel(channel: Channel) {
-    return this.http.post(`${database.BASE_URL}/channels/createChannel`, channel)
+    return this.http.post(`${server.BASE_URL}/channels/createChannel`, channel)
   }
 
 }
