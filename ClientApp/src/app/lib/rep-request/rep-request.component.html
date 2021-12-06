@@ -1,6 +1,7 @@
-<div id="rep-request">
+<div id="rep-request" *ngIf="_utils.request"
+    (click)="disable()">
 
-    <dialog open>
+    <dialog open (click)="$event.stopPropagation()">
 
         <div id="bar">
 

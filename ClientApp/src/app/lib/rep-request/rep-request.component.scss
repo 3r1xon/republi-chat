@@ -2,8 +2,9 @@
     width: 100%;
     height: 100%;
     display: flex;
-    backdrop-filter: blur(2px);
-    position: relative;
+    backdrop-filter: blur(1px);
+    position: absolute;
+    z-index: 9999;
     
     dialog {
         min-width: 500px;

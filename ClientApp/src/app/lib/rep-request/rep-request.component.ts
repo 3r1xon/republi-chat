@@ -15,4 +15,13 @@ export class REPRequestComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  public enable() {
+    this._utils.request = true;
+  }
+
+  public disable() {
+    this._utils.request = false;
+  }
+
+
 }
