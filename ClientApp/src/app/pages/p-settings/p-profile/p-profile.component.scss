@@ -68,30 +68,6 @@
         margin: 10px;
     }
 
-    form {
-        width: 80%;
-        height: 80%;
-        margin: 25px;
-        padding: 10px;
-        background: #111111;
-        display: flex;
-        align-items: center;
-        flex-direction: column;
-        justify-content: center;
-        border-radius: 10px;
-    }
-
-    .aligned {
-        width: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: space-evenly;
-    }
-
-    .edit {
-        margin-top: 15px;
-    }
-
     #settings {
         width: 100%;
         display: flex;
@@ -103,8 +79,30 @@
             width: 100%;
         }
 
-        #user-color {
-            
+
+        form {
+            width: 80%;
+            height: 80%;
+            margin: 25px;
+            padding: 10px;
+            background: #111111;
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            justify-content: center;
+            border-radius: 10px;
+        }
+    
+        .aligned {
+            width: 100%;
+            margin: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-evenly;
+        }
+    
+        .edit {
+            margin-top: 15px;
         }
     }
 }

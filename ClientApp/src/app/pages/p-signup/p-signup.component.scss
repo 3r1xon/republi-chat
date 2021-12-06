@@ -52,13 +52,16 @@
         justify-content: center;
         flex-direction: column;
         animation: fadeIn 1s;
+        overflow-y: auto;
+        left: 0;
+        right: 0;
 
         h1 {
             color: #ffffff;
         }
 
         rep-input {
-            margin: 10px;
+            margin: 25px 0 10px 0;
         }
 
         div {

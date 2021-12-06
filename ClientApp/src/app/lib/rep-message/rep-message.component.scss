@@ -1,7 +1,5 @@
 #message-box {
-    width: 100%;
     min-height: 55px;
-    border-top: 1px solid #ffffff2a;
     height: auto;
     display: flex;
     animation: appear 500ms;
@@ -28,11 +26,13 @@
     }
 
     #message-info {
+        width: 100%;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
         top: 0;
         left: 0;
+        word-break: normal;
 
         div {
             display: flex;
@@ -53,9 +53,8 @@
     }
 
     rep-window {
-        position: absolute;
-        right: 0;
         margin: 10px;
+        align-self: flex-start;
     }
 }
 
