@@ -46,6 +46,7 @@
     }
 
     #signup-form {
+        height: 80vh;
         position: absolute;
         display: flex;
         align-items: center;
@@ -64,14 +65,9 @@
             margin: 25px 0 10px 0;
         }
 
-        div {
-            width: 80%;
-            display: flex;
-            flex-direction: row-reverse;
-
-            rep-button {
-                margin: 15px;
-            }
+        rep-button {
+            margin: 10px -130px 10px 0;
+            justify-self: flex-end;
         }
 
         p {

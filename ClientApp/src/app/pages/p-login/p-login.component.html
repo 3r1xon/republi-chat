@@ -10,10 +10,10 @@
 
         <h1>Log in</h1>
 
-        <rep-input 
+        <rep-input
             formControlName="userName" 
             placeholder="Nickname"
-            [maxLength]="30" 
+            [maxLength]="100" 
         ></rep-input>
 
         <rep-input 
@@ -23,7 +23,7 @@
             [maxLength]="30" 
         ></rep-input>
 
-        <div>
+        <div id="button">
             <rep-button [enabled]="form.valid" icon="login">Log in</rep-button>
         </div>
 
@@ -32,6 +32,7 @@
         <a routerLink="/signup">Not registered? Sign up</a>
 
     </form>
+
 
     <rep-footer></rep-footer>
 

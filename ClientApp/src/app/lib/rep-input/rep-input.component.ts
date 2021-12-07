@@ -35,18 +35,6 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
         animate('50ms ease-in-out'),
       ]),
     ]),
-
-    trigger('openClose', [
-      state('false', style({
-        opacity: '0',
-        visibility: 'hidden'
-      })),
-      state('true', style({
-        opacity: '1',
-        visibility: 'visible'
-      })),
-      transition('true <=> false', animate('150ms')),
-    ]),
   ],
 })
 export class REPInputComponent implements OnInit, ControlValueAccessor {

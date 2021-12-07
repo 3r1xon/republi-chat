@@ -9,6 +9,7 @@
         'medium': size == 'medium',
         'big': size == 'big'
     }">
+
     <div id="main-content">
         <input 
             [placeholder]="getPlaceholder()"
@@ -23,12 +24,14 @@
         />
         <mat-icon [style.color]="color" *ngIf="icon">{{icon}}</mat-icon>
         <mat-icon [style.color]="placeholderAnimated ? color : borderColor" *ngIf="tooltip" (mouseover)="toggleTooltip()" (mouseout)="toggleTooltip()">info_outline</mat-icon>
-        <rep-tooltip [@openClose]="tooltipVisible">{{tooltip}}</rep-tooltip>
+        <rep-tooltip *ngIf="tooltipVisible">{{tooltip}}</rep-tooltip>
     </div>
+
     <label id="placeholder" [ngStyle]="{
         'color': placeholderAnimated ? color : borderColor
     }" [@placeholderAnimated] = "placeholderAnimated ? 'moved' : 'static'">{{placeholder}}</label>
     </div>
+    
     <label id="required" *ngIf="empty" [style.color]="borderColor">This field is required *</label>
 
 </div>

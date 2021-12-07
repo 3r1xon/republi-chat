@@ -55,18 +55,18 @@
         align-items: center;
         justify-content: center;
         flex-direction: column;
+        z-index: 10;
         animation: fadeIn 1s;
-
 
         h1 {
             color: #ffffff;
         }
 
         rep-input {
-            margin: 20px;
+            margin: 15px;
         }
 
-        div {
+        #button {
             width: 80%;
             display: flex;
             flex-direction: row-reverse;
