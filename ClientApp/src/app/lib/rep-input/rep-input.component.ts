@@ -123,7 +123,9 @@ export class REPInputComponent implements OnInit, ControlValueAccessor {
     this.tooltipVisible = !this.tooltipVisible;
   }
 
-  onChange: any = () => {};
+  onChange: any = () => {
+    this.textChange.emit(this.text);
+  };
   
   onTouch: any = () => {};
 

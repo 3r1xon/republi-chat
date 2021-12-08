@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Channel } from 'src/interfaces/channel.interface';
+import { REPButton } from 'src/interfaces/repbutton.interface';
 import { MessagesService } from 'src/services/messages.service';
 
 @Component({
@@ -19,6 +20,16 @@ export class PNewChannelComponent implements OnInit {
     name: '',
     picture: null,
   };
+
+  public readonly channelActions: Array<REPButton> = [
+    {
+      name: "Create channel",
+      icon: "save",
+      enabled: false,
+      background: "#46a35e",
+      onClick: () => { this.save() }
+    }
+  ];
 
   async save() {
     const res = await this._msService.createChannel(this.channel).toPromise();

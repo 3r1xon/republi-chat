@@ -15,8 +15,8 @@ router.post('/signUp', async (req, res) => {
     name: req.body.name,
   };
 
-  if (user.userName == '' || user.password == '' || user.name == '')
-    res.status(400).send({ success: false, message: 'Username or password invalid' });
+  if (user.email == '' || user.password == '' || user.name == '')
+    res.status(400).send({ success: false, message: 'Email or password invalid' });
   else {
 
     try {
@@ -70,6 +70,7 @@ router.post('/authorize', Auth.authToken, async (req, res) => {
   `
   SELECT
   U.ID_USER as id,
+  U.USER_CODE as userCode,
   U.NAME as name,
   U.COLOR as userColor,
   U.EMAIL as email,
@@ -104,6 +105,7 @@ router.post('/logIn', async (req, res) => {
     `
     SELECT
     U.ID_USER as id,
+    U.USER_CODE as userCode,
     U.NAME as name,
     U.COLOR as userColor,
     U.EMAIL as email,
@@ -118,7 +120,7 @@ router.post('/logIn', async (req, res) => {
 
       res.set(await Auth.generateToken({
         _id: dbUser.id,
-        userName: dbUser.userName 
+        email: dbUser.email 
       }));
 
       res.status(200).send({ success: true, data: {

@@ -1,0 +1,22 @@
+#rep-separator {
+    height: 1px;
+    display: flex;
+    align-items: center;
+
+    #content {
+        white-space: nowrap;
+        width: auto;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 15px;
+        opacity: 0.5;
+    }
+
+    .line {
+        width: 100%;
+        height: 1px;
+        opacity: 0.5;
+        background: grey;
+    }
+}

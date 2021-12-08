@@ -1,7 +1,7 @@
 <div id="rep-actions">
 
     <rep-button *ngFor="let button of actions"
-        [enabled]="button.enabled ? button.enabled : true"
+        [enabled]="button.enabled == undefined ? true : button.enabled"
         [background]="button.background"
         [icon]="button.icon"
         (onClick)="button.onClick()">

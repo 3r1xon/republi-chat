@@ -120,7 +120,7 @@ class Auth {
                             if (dbRefreshToken) {
                                 res.set(await this.generateToken({
                                     _id: dbRefreshToken.ID_USER,
-                                    userName: dbRefreshToken.EMAIL
+                                    email: dbRefreshToken.EMAIL
                                 }));
                                 next();
                             } else {

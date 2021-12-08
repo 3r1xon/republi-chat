@@ -44,7 +44,9 @@ export class MessagesService {
       
       this._webSocket.listen("message").subscribe((message: string) => {
         const msg = JSON.parse(message);
-  
+
+        const isUserMessage = msg.userCode == this._user.currentUser.userCode && msg.name == this._user.currentUser.name;
+
         this.messages.push({
           id: msg.id,
           name: msg.name,
@@ -52,7 +54,7 @@ export class MessagesService {
           date: new Date(msg.date),
           userImage: this._fileUpload.sanitizeIMG(msg.userImage),
           userColor: msg.userColor,
-          auth: msg.userName == this._user.currentUser.userName
+          auth: isUserMessage
         });
       });
   

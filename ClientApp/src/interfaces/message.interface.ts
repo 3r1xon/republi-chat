@@ -1,7 +1,7 @@
 export interface Message {
     id?: number;
     name: string;
-    userName?: string;
+    userCode?: string;
     userMessage: string;
     userColor: string;
     userImage: any;

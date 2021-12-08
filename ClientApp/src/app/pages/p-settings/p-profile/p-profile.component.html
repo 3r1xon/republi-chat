@@ -20,26 +20,29 @@
                     <h2 [style.color]="_user.currentUser.userColor">{{_user.currentUser.name}}</h2>
                 </div>
 
-                <p>{{_user.currentUser.userName}}</p>
+                <div style="display: flex;">
+
+                    <p>{{_user.currentUser.userCode}}</p>
+                    <mat-icon id="info">info</mat-icon>
+                    <rep-tooltip>This is your unique code, give this code to a friend in order to be added in his friend list</rep-tooltip>
+
+                </div>
 
             </div>
 
         </div>
 
-        <div id="manage">
-            
-            <rep-button background="#c62828" id="delete" icon="dangerous" (onClick)="deleteProfile()">Delete profile</rep-button>
-            
-            <rep-button background="#46a35e" id="save" icon="save" (onClick)="save()" [enabled]="false">Save</rep-button>
-        
-        </div>
+        <rep-actions [actions]="topbarActions"></rep-actions>
 
     </div>
 
+    
     <div id="settings">
-
+        
         <rep-message [message]="exampleMsg" [options]="exampleMsgOptions"></rep-message>
-
+        
+        <rep-separator>Personal informations</rep-separator>
+        
         <form>
 
             <div class="aligned">
@@ -72,12 +75,18 @@
 
             </div>
                 
-        </form>
-        
+        </form>        
+
+        <rep-separator>Strict settings</rep-separator>
 
         <!-- <input id="user-color"
         [(ngModel)]="user.userColor"
         [(ngModel)]="exampleMsg.userColor" type="color"> -->
+
+        <div id="strict">
+            <rep-actions [actions]="strictActions"></rep-actions>
+        </div>
+
 
     </div>
 

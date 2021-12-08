@@ -1,25 +1,25 @@
 <div id="p-newchannel">
 
-    <div id="banner">
+    <rep-separator>Channel picture</rep-separator>
 
-        <div id="profile-info">
+    <div id="image-upload">
 
-            <div id="image-upload">
+        <label for="file-input">
+            <img src="/assets/upload.png" id="picture"/>
+        </label>
 
-                <label for="file-input">
-                  <img src="/assets/upload.png" id="picture"/>
-                </label>
-
-                <input id="file-input" type="file" (change)="onChange($event.target.files)" />
-
-            </div>
-
-            <rep-input placeholder="Channel name" [(text)]="channel.name" required="true"></rep-input>
-
-        </div>
-
-        <rep-button background="#46a35e" id="save" icon="save" (onClick)="save()">Save</rep-button>
+        <input id="file-input" type="file" (change)="onChange($event.target.files)" />
 
     </div>
+
+    <rep-separator>Channel informations</rep-separator>
+
+    <div id="channel-info">
+
+        <rep-input placeholder="Channel name" [(text)]="channel.name" required="true"></rep-input>
+
+    </div>
+        
+    <rep-actions [actions]="channelActions"></rep-actions>
 
 </div>

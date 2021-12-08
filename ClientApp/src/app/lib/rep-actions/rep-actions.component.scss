@@ -1,4 +1,10 @@
 #rep-actions {
     display: flex;
     align-items: center;
+    height: 100%;
+
+    rep-button {
+        height: 100%;
+        margin: 0 10px 0 10px;
+    }
 }

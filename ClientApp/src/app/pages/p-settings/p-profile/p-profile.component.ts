@@ -42,7 +42,7 @@ export class PProfileComponent implements OnInit {
     auth: false
   };
 
-  exampleMsgOptions: Array<REPButton> = [
+  public exampleMsgOptions: Array<REPButton> = [
     {
       name: "Example",
       icon: "info_outline",
@@ -60,6 +60,25 @@ export class PProfileComponent implements OnInit {
         i == messages.length ? i = 0 : i = i;
         this.exampleMsg.userMessage = messages[i];
       }
+    }
+  ];
+  
+  public readonly topbarActions: Array<REPButton> = [
+    {
+      name: "Save",
+      icon: "save",
+      enabled: false,
+      background: "#46a35e",
+      onClick: () => { this.save() }
+    }
+  ];
+
+  public readonly strictActions: Array<REPButton> = [
+    {
+      name: "Delete profile",
+      icon: "dangerous",
+      background: "#c62828",
+      onClick: () => { this.deleteProfile() }
     }
   ];
 
