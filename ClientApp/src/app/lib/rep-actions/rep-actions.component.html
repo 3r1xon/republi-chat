@@ -1,0 +1,11 @@
+<div id="rep-actions">
+
+    <rep-button *ngFor="let button of actions"
+        [enabled]="button.enabled ? button.enabled : true"
+        [background]="button.background"
+        [icon]="button.icon"
+        (onClick)="button.onClick()">
+        {{button.name}}
+    </rep-button>
+
+</div>

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { SubMenu } from 'src/interfaces/submenu.interface';
+import { REPButton } from 'src/interfaces/repbutton.interface';
 import { MessagesService } from 'src/services/messages.service';
 import { UserService } from 'src/services/user.service';
 
@@ -22,7 +22,7 @@ export class PMainpageComponent implements OnInit {
 
   public channels: Array<{ 
     tabname: string, 
-    sections: Array<SubMenu> 
+    sections: Array<REPButton> 
   }> = [
     {
       tabname: "Channels",

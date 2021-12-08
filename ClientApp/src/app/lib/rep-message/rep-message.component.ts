@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 import { format } from 'date-fns';
 import { Message } from 'src/interfaces/message.interface';
-import { SubMenu } from 'src/interfaces/submenu.interface';
+import { REPButton } from 'src/interfaces/repbutton.interface';
 import { MessagesService } from 'src/services/messages.service';
 
 @Component({
@@ -71,7 +71,7 @@ export class REPMessageComponent implements OnInit {
   public uniqueID: number;
 
   @Input()
-  public options: Array<SubMenu>;
+  public options: Array<REPButton>;
 
   @Input()
   public message: Message;

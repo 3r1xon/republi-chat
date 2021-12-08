@@ -1,4 +1,4 @@
-<div id="rep-request" *ngIf="_utils.request"
+<div id="rep-request" *ngIf="_utils.rqsBody?.visible"
     (click)="disable()">
 
     <dialog open (click)="$event.stopPropagation()">
@@ -10,13 +10,19 @@
         </div>
 
         <div id="title">
-
+            <h1>{{_utils.rqsBody.title}}</h1>
         </div>
 
         <div id="message">
-
+            <p>
+                {{_utils.rqsBody.message}}
+            </p>
         </div>
+
+        <rep-actions [actions]="_utils.rqsBody.actions"></rep-actions>
 
     </dialog>
 
 </div>
+
+<!-- *ngIf="_utils.rqsBody?.visible" -->

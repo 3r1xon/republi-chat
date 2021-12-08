@@ -16,12 +16,6 @@ export class REPButtonComponent {
   public background: string = "royalblue";
 
   @Input()
-  public width: string = "auto";
-
-  @Input()
-  public height: string = "auto";
-
-  @Input()
   public enabled: boolean = true;
 
   @Output()

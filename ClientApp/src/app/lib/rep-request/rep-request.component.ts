@@ -16,11 +16,11 @@ export class REPRequestComponent implements OnInit {
   }
 
   public enable() {
-    this._utils.request = true;
+    this._utils.rqsBody.visible = true;
   }
 
   public disable() {
-    this._utils.request = false;
+    this._utils.rqsBody.visible = false;
   }
 
 

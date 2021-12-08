@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { SubMenu } from 'src/interfaces/submenu.interface';
+import { REPButton } from 'src/interfaces/repbutton.interface';
 import { UserService } from 'src/services/user.service';
 
 @Component({
@@ -17,7 +17,7 @@ export class PSettingsComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  public menus: Array<SubMenu> = [
+  public menus: Array<REPButton> = [
     {
       name: "Profile",
       color: "#FFFFFF",

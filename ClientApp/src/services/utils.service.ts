@@ -1,4 +1,6 @@
 import { Injectable } from '@angular/core';
+import { Request } from 'src/interfaces/request.interface';
+import { REPButton } from 'src/interfaces/repbutton.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +14,40 @@ export class UtilsService {
   // and then the variable will be set to false again.
   public loading: boolean = false;
 
-  // This bool will show the request
-  public request: boolean = true;
+  public rqsBody: Request;
+
+  public showRequest(title: string, message: string, onAccept: Function, actions?: Array<REPButton>) {
+
+    if (actions) {
+      this.rqsBody = {
+        title: title,
+        message: message,
+        actions: actions,
+        visible: true
+      };
+    }
+    else {
+      this.rqsBody = {
+        title: title,
+        message: message,
+        actions: [
+          {
+            name: "Yes",
+            onClick: onAccept,
+            background: "red"
+          },
+          {
+            name: "No",
+            onClick: () => {
+              this.rqsBody.visible = false;
+            },
+            background: "green"
+          }
+        ],
+        visible: true
+      };
+    }
+    // this.rqsBody.onAccept = onAccept
+
+  }
 }

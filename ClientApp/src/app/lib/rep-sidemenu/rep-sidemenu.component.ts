@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
-import { SubMenu } from 'src/interfaces/submenu.interface';
+import { REPButton } from 'src/interfaces/repbutton.interface';
 
 @Component({
   selector: 'rep-sidemenu',
@@ -16,7 +16,7 @@ export class REPSidemenuComponent implements OnInit {
   public selectedTab: number = 0;
 
   
-  public options: Array<SubMenu> = [
+  public options: Array<REPButton> = [
     {
       name: "Remove",
       icon: "delete",
@@ -28,7 +28,7 @@ export class REPSidemenuComponent implements OnInit {
   @Input()
   public entries: Array<{ 
     tabname: string, 
-    sections: Array<SubMenu> 
+    sections: Array<REPButton> 
   }>;
 
   @Output()

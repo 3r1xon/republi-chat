@@ -1,5 +1,5 @@
 import { Component, ElementRef, HostListener, Input, OnInit, Output } from '@angular/core';
-import { SubMenu } from 'src/interfaces/submenu.interface';
+import { REPButton } from 'src/interfaces/repbutton.interface';
 import { EventEmitter } from '@angular/core';
 
 @Component({
@@ -15,7 +15,7 @@ export class REPWindowComponent implements OnInit {
   }
 
   @Input()
-  public subMenu: Array<SubMenu>;
+  public subMenu: Array<REPButton>;
   
   public state: boolean = false;
 

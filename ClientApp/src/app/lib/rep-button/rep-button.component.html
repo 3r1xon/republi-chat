@@ -1,15 +1,13 @@
-<button id="master" [disabled]="!enabled" matRipple
+<button id="master" [disabled]="!enabled"
     (click)="checkClick()">
-    <div id="flat-button" [ngStyle]="{
+    <div id="flat-button" matRipple [ngStyle]="{
             'background': background,
             'opacity': enabled ? '1' : '0.5',
-            'width': width,
-            'height': height,
             'cursor': enabled ? 'pointer' : 'default'
         }">
             <p>
                 <ng-content></ng-content>
             </p>
-        <mat-icon>{{icon}}</mat-icon>
+        <mat-icon *ngIf="icon">{{icon}}</mat-icon>
     </div>
 </button>

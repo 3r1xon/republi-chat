@@ -5,9 +5,10 @@ import { server } from 'src/environments/server';
 import { Account } from 'src/interfaces/account.interface';
 import { Message } from 'src/interfaces/message.interface';
 import { ServerResponse } from 'src/interfaces/response.interface';
-import { SubMenu } from 'src/interfaces/submenu.interface';
+import { REPButton } from 'src/interfaces/repbutton.interface';
 import { FileUploadService } from 'src/services/file-upload.service';
 import { UserService } from 'src/services/user.service';
+import { UtilsService } from 'src/services/utils.service';
 
 @Component({
   templateUrl: './p-profile.component.html',
@@ -18,6 +19,7 @@ export class PProfileComponent implements OnInit {
   constructor(
     public _user: UserService,
     public _fileUpload: FileUploadService,
+    private _utils: UtilsService,
     private http: HttpClient,
     private router: Router
   ) { }
@@ -40,7 +42,7 @@ export class PProfileComponent implements OnInit {
     auth: false
   };
 
-  exampleMsgOptions: Array<SubMenu> = [
+  exampleMsgOptions: Array<REPButton> = [
     {
       name: "Example",
       icon: "info_outline",
@@ -104,11 +106,17 @@ export class PProfileComponent implements OnInit {
   }
 
   async deleteProfile() {
-    const res = await this._user.deleteProfile().toPromise();
 
-    if (res.success) {
-      this.router.navigate(['login']);
-    }
+    this._utils.showRequest(
+      "Are you sure you want to continue?",
+      "By doing so your account will be deleted along with all your messages and other data...",
+      async () => {
+        const res = await this._user.deleteProfile().toPromise();
+    
+        if (res.success) 
+          this.router.navigate(['login']);
+
+      });
   }
 
 }
