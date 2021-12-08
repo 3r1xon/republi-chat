@@ -4,36 +4,58 @@ const Auth           = require('./auth');
 const multer         = require('multer');
 const upload         = multer({});
 const db             = require('../Database/db');
-
+const nanoid         = require('nanoid');
 
 
 router.post('/signUp', async (req, res) => {
   
   const user = {
-    userName: req.body.userName,
+    email: req.body.email,
     password: req.body.password,
     name: req.body.name,
-    email: req.body.email
   };
 
   if (user.userName == '' || user.password == '' || user.name == '')
     res.status(400).send({ success: false, message: 'Username or password invalid' });
   else {
+
     try {
+
+      let dbValue = await db.query(
+      `
+      SELECT
+      USER_CODE
+      FROM USERS
+      WHERE NAME = ?
+      ORDER BY ID_USER DESC
+      LIMIT 1
+      `, [user.name]);
+
+      dbValue = dbValue[0].USER_CODE;
+
+      if (dbValue == undefined) {
+        dbValue = "000";
+      }
+
+      let USER_CODE = parseInt(dbValue, 10) + 1;
+
+      USER_CODE += "";
+
+      while (USER_CODE.length < 4) USER_CODE = "0" + USER_CODE;
 
       await db.query(
       `
       INSERT INTO USERS 
-      (NICKNAME, PASSWORD, NAME, EMAIL) 
+      (USER_CODE, PASSWORD, NAME, EMAIL) 
       VALUES 
       (?, ?, ?, ?)
-      `, [user.userName, user.password, user.name, user.email]);
+      `, [USER_CODE, user.password, user.name, user.email]);
 
       res.status(201).send({ success: true, message: 'User correctly signed up' });
     } catch (err) {
       console.log(err);
       
-      res.status(409).send({ success: false, message: `Nickname ${user.userName} already exist!` });
+      res.status(409).send({ success: false, message: `Email ${user.email} is already in use!` });
     }
   }
 });
@@ -48,7 +70,6 @@ router.post('/authorize', Auth.authToken, async (req, res) => {
   `
   SELECT
   U.ID_USER as id,
-  U.NICKNAME as userName,
   U.NAME as name,
   U.COLOR as userColor,
   U.EMAIL as email,
@@ -72,7 +93,7 @@ router.post('/authorize', Auth.authToken, async (req, res) => {
 router.post('/logIn', async (req, res) => {
 
   const user = {
-    userName: req.body.userName,
+    email: req.body.email,
     password: req.body.password
   };
 
@@ -83,14 +104,13 @@ router.post('/logIn', async (req, res) => {
     `
     SELECT
     U.ID_USER as id,
-    U.NICKNAME as userName,
     U.NAME as name,
     U.COLOR as userColor,
     U.EMAIL as email,
     TO_BASE64(U.PROFILE_PICTURE) as profilePicture 
     FROM USERS U
-    WHERE NICKNAME = ? AND PASSWORD = ?
-    `, [user.userName, user.password]);
+    WHERE EMAIL = ? AND PASSWORD = ?
+    `, [user.email, user.password]);
 
     dbUser = dbUser[0];
 

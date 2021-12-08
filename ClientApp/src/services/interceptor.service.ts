@@ -58,7 +58,7 @@ export class InterceptorService implements HttpInterceptor {
     }, (err: HttpErrorResponse) => {
       this._utils.loading = false;
 
-      if (err.status == 401 && this._user.userAuth) { 
+      if (err.status == 401) { 
         this._user.deAuth();
       }
     }));

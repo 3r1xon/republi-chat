@@ -31,9 +31,9 @@ router.post('/sendMessage', Auth.authToken, async (req, res) => {
     `
     SELECT 
     M.ID_MESSAGE as id,
+    U.ID_USER,
     U.COLOR as userColor,
     U.NAME as name,
-    U.NICKNAME as userName,
     TO_BASE64(U.PROFILE_PICTURE) as userImage,
     M.MESSAGE as userMessage,
     M.DATE as date

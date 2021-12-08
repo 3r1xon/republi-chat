@@ -108,7 +108,7 @@ class Auth {
                             let dbRefreshToken = await db.query(
                             `
                             SELECT
-                            U.NICKNAME,
+                            U.EMAIL,
                             U.ID_USER
                             FROM USERS U
                             LEFT JOIN SESSIONS S ON S.ID_USER = U.ID_USER
@@ -120,7 +120,7 @@ class Auth {
                             if (dbRefreshToken) {
                                 res.set(await this.generateToken({
                                     _id: dbRefreshToken.ID_USER,
-                                    userName: dbRefreshToken.NICKNAME
+                                    userName: dbRefreshToken.EMAIL
                                 }));
                                 next();
                             } else {

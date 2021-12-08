@@ -31,8 +31,8 @@ export class PLoginComponent implements OnInit {
   public alert: string = "";
 
   public form: FormGroup = this.fb.group({
-    userName: ['', // Default value
-      [Validators.required, Validators.maxLength(30)]
+    email: ['', // Default value
+      [Validators.required, Validators.maxLength(30), Validators.email]
     ],
     password: ['', // Default value
       [Validators.required, Validators.maxLength(30)]
@@ -44,7 +44,7 @@ export class PLoginComponent implements OnInit {
     if (!this.form.valid) return;
 
     this.http.post<ServerResponse>(`${server.BASE_URL}/authentication/logIn`, {
-      userName: this.form.value.userName,
+      email: this.form.value.email,
       password: this.form.value.password
     })
       .subscribe(async (response) => {

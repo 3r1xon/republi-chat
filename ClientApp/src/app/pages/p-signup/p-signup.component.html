@@ -11,12 +11,6 @@
         <h1>Sign up</h1>
 
         <rep-input 
-            formControlName="userName" 
-            [maxLength]="30" 
-            tooltip="Your personal access name, it will not be visible to others" 
-            placeholder="Nickname" required="true"></rep-input>
-
-        <rep-input 
             formControlName="name" 
             [maxLength]="30" 
             tooltip="The name that will be visible to all other users" 
@@ -24,7 +18,7 @@
 
         <rep-input 
             formControlName="email" 
-            tooltip="It will be useful for us for account validation" 
+            tooltip="It will be useful for login and account validation" 
             placeholder="Email" required="true"></rep-input>
 
         <rep-input 

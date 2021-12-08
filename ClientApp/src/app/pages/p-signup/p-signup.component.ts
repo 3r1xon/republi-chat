@@ -26,9 +26,6 @@ export class PSignupComponent implements OnInit {
   public alert: string = "";
 
   public form: FormGroup = this.fb.group({
-    userName: ['',
-      [Validators.required, Validators.maxLength(30)]
-    ],
     name: ['',
       [Validators.required, Validators.maxLength(30)]
     ],

@@ -16,6 +16,9 @@ export class REPButtonComponent {
   public background: string = "royalblue";
 
   @Input()
+  public color: string = "#FFFFFF";
+
+  @Input()
   public enabled: boolean = true;
 
   @Output()
