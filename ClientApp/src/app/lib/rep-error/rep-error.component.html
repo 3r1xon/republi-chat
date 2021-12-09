@@ -1,0 +1,36 @@
+<div id="obscure" *ngIf="_utils.bugReport?.visible" (click)="hideError()">
+
+    <div id="rep-error" (click)="$event.stopPropagation()">
+
+        <div id="icon">
+
+            <mat-icon>bug_report</mat-icon>
+
+        </div>
+
+        <div id="info">
+            
+            <div id="error">
+
+                <div id="title">
+                    <p>
+                        {{_utils.bugReport.title}}
+                    </p>
+                </div>
+
+                <div id="message">
+                    <p>
+                        {{_utils.bugReport.callstack}}
+                    </p>
+                </div>
+
+                
+            </div>
+
+            <rep-actions [actions]="errorActions"></rep-actions>
+
+        </div>
+    
+    </div>
+
+</div>

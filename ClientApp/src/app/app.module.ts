@@ -15,6 +15,7 @@ import { REPToggleComponent } from './lib/rep-toggle/rep-toggle.component';
 import { REPRequestComponent } from './lib/rep-request/rep-request.component';
 import { REPActionsComponent } from './lib/rep-actions/rep-actions.component';
 import { REPSeparatorComponent } from './lib/rep-separator/rep-separator.component';
+import { REPErrorComponent } from './lib/rep-error/rep-error.component';
 
 import { PSignupComponent } from './pages/p-signup/p-signup.component';
 import { PLoginComponent } from './pages/p-login/p-login.component';
@@ -56,6 +57,7 @@ import { GlobalErrorHandler } from './lib/error-handler';
     REPRequestComponent,
     REPActionsComponent,
     REPSeparatorComponent,
+    REPErrorComponent,
 
     PSignupComponent,
     PLoginComponent,

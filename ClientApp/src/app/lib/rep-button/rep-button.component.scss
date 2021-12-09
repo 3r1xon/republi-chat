@@ -1,6 +1,5 @@
 #master {
     width: 100%;
-    height: 100%;
     display: flex;
     user-select: none;
     border: none;
@@ -11,7 +10,7 @@
     #flat-button {
         width: 100%;
         height: 100%;
-        padding: 5px;
+        padding: 10px;
         display: flex;
         align-items: center;
         justify-content: space-between;

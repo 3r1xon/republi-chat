@@ -11,12 +11,10 @@ export class GlobalErrorHandler implements ErrorHandler {
     ) {}
 
   handleError(error: any) {
-    if (!(error instanceof HttpErrorResponse)) {
-      error = error.rejection;
-    } else return;
-    
-    this.zone.run(() =>
-      this._utils.showRequest(error?.status, error?.message, () => { })
-    );
+    if (error instanceof HttpErrorResponse) return;
+
+    this.zone.run(() => { 
+      this._utils.showBugReport(error.rejection, error); 
+    });
   }
 }

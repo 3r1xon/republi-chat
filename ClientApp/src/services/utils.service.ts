@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Request } from 'src/interfaces/request.interface';
 import { REPButton } from 'src/interfaces/repbutton.interface';
+import { BugReport } from 'src/interfaces/bugreport.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -48,6 +49,18 @@ export class UtilsService {
       };
     }
     // this.rqsBody.onAccept = onAccept
+
+  }
+
+  public bugReport: BugReport;
+
+  public showBugReport(title: string, callstack: string) {
+
+    this.bugReport = {
+      title: title,
+      callstack: callstack,
+      visible: true
+    };
 
   }
 }
