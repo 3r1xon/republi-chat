@@ -3,8 +3,8 @@
     height: 100%;
     display: flex;
     background: #95959536;
-    //backdrop-filter: blur(1px);
-    position: absolute;
+    backdrop-filter: blur(1px);
+    position: fixed;
     z-index: 9999;
     
     dialog {

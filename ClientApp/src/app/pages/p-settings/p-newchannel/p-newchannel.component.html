@@ -1,5 +1,7 @@
 <div id="p-newchannel">
 
+    <h1>Create new channel</h1>
+
     <rep-separator>Channel picture</rep-separator>
 
     <div id="image-upload">
@@ -14,12 +16,29 @@
 
     <rep-separator>Channel informations</rep-separator>
 
-    <div id="channel-info">
+    <div class="channel-info">
 
         <rep-input placeholder="Channel name" [(text)]="channel.name" required="true"></rep-input>
 
     </div>
+
+    <p>You will be able to edit the channel and all its settings once you first created it.</p>
         
-    <rep-actions [actions]="channelActions"></rep-actions>
+    <rep-actions [actions]="newChannelActions"></rep-actions>
+
+    <rep-separator>Or</rep-separator>
+
+    <h1>Add an existing channel</h1>
+
+    <div class="channel-info">
+
+        <rep-input placeholder="Channel name" required="true"></rep-input>
+
+        <rep-input placeholder="Channel code" required="true"
+        tooltip="Multiple channels can have the same name, but they cannot have the same code"></rep-input>
+
+    </div>
+
+    <rep-actions [actions]="existingChannelActions"></rep-actions>
 
 </div>

@@ -37,6 +37,12 @@ export class PSettingsComponent implements OnInit {
       route: '/settings/newchannel'
     },
     {
+      name: "Channel settings",
+      color: "#FFFFFF",
+      icon: "admin_panel_settings",
+      route: '/settings/newchannel'
+    },
+    {
       name: "Log out",
       color: "#ff0000",
       icon: "logout",

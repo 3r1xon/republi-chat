@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { ErrorHandler, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { REPTextBoxComponent } from './lib/rep-textbox/rep-textbox.component';
@@ -34,6 +34,7 @@ import { InterceptorService } from 'src/services/interceptor.service';
 import { AppComponent } from './app.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
+import { GlobalErrorHandler } from './lib/error-handler';
 
 
 
@@ -77,7 +78,15 @@ import { MatIconModule } from '@angular/material/icon';
     ReactiveFormsModule
   ],
   providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: InterceptorService, multi: true },
+    { 
+      provide: HTTP_INTERCEPTORS, 
+      useClass: InterceptorService, 
+      multi: true 
+    },
+    {
+      provide: ErrorHandler,
+      useClass: GlobalErrorHandler,
+    },
     CookieService,
   ],
   bootstrap: [AppComponent]

@@ -21,13 +21,23 @@ export class PNewChannelComponent implements OnInit {
     picture: null,
   };
 
-  public readonly channelActions: Array<REPButton> = [
+  public readonly newChannelActions: Array<REPButton> = [
     {
       name: "Create channel",
       icon: "save",
       enabled: false,
       background: "#46a35e",
       onClick: () => { this.save() }
+    }
+  ];
+
+  public readonly existingChannelActions: Array<REPButton> = [
+    {
+      name: "Add channel",
+      icon: "add",
+      enabled: false,
+      background: "#46a35e",
+      onClick: () => { }
     }
   ];
 
