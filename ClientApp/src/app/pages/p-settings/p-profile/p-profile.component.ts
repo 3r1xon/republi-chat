@@ -68,7 +68,7 @@ export class PProfileComponent implements OnInit {
       name: "Save",
       icon: "save",
       enabled: false,
-      background: "#46a35e",
+      background: "success",
       onClick: () => { this.save() }
     }
   ];
@@ -77,7 +77,7 @@ export class PProfileComponent implements OnInit {
     {
       name: "Delete profile",
       icon: "dangerous",
-      background: "#c62828",
+      background: "danger",
       onClick: () => { this.deleteProfile() }
     }
   ];

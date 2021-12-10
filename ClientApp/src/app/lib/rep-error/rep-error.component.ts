@@ -18,12 +18,19 @@ export class REPErrorComponent implements OnInit {
 
   public readonly errorActions: Array<REPButton> = [
     {
+      name: "Send report",
+      background: "warning",
+      icon: "report_problem",
+      onClick: () => { }
+    },
+    {
       name: "Close",
       background: "royalblue",
+      icon: "close",
       onClick: () => {
         this.hideError();
       }
-    }
+    },
   ];
 
   public hideError() {

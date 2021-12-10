@@ -36,7 +36,6 @@
 
     </div>
 
-    
     <div id="settings">
         
         <rep-message [message]="exampleMsg" [options]="exampleMsgOptions"></rep-message>
@@ -46,7 +45,7 @@
         <form>
 
             <div class="aligned">
-    
+
                 <rep-input
                 [(text)]="user.name"
                 [(text)]="exampleMsg.name"
@@ -54,9 +53,9 @@
                 required="true"
                 [enabled]="editName"
                 placeholder="Name"></rep-input>
-    
+
                 <rep-toggle [(checked)]="editName" iconOnTrue="lock_open" iconOnFalse="lock"></rep-toggle>
-    
+
             </div>
 
             <div class="aligned">
@@ -74,8 +73,8 @@
                 iconOnFalse="lock"></rep-toggle>
 
             </div>
-                
-        </form>        
+
+        </form>
 
         <rep-separator>Strict settings</rep-separator>
 
@@ -86,7 +85,6 @@
         <div id="strict">
             <rep-actions [actions]="strictActions"></rep-actions>
         </div>
-
 
     </div>
 

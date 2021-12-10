@@ -9,11 +9,22 @@ export class REPButtonComponent {
 
   constructor() { }
 
+  private readonly defColors = {
+    success: "#46a35e",
+    warning: "#F59E0B",
+    danger: "#c62828"
+  };
+
   @Input()
   public icon: string = "open_in_new";
 
   @Input()
-  public background: string = "royalblue";
+  public set background(color: string) {
+    if (color in this.defColors) this.backColor = this.defColors[color];
+    else this.backColor = color;
+  };
+
+  public backColor: string = "royalblue";
 
   @Input()
   public color: string = "#FFFFFF";
