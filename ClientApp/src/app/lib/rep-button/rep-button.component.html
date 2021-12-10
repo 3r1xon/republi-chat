@@ -1,9 +1,9 @@
-<button id="master" [disabled]="!enabled" #trigger
+<button id="master" [disabled]="!disabled" #trigger
     (click)="checkClick()">
     <div id="flat-button" matRipple [matRippleTrigger]="trigger" [ngStyle]="{
             'background': backColor,
-            'opacity': enabled ? '1' : '0.5',
-            'cursor': enabled ? 'pointer' : 'default'
+            'opacity': disabled ? '1' : '0.5',
+            'cursor': disabled ? 'pointer' : 'default'
         }">
             <p [style.color]="color">
                 <ng-content></ng-content>

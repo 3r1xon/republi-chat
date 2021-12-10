@@ -18,11 +18,11 @@
 
     <rep-separator>Channel informations</rep-separator>
 
-    <div class="channel-info">
+    <form class="channel-info" [formGroup]="formCreation">
 
-        <rep-input placeholder="Channel name" [(text)]="channel.name" required="true"></rep-input>
+        <rep-input formControlName="channelName" placeholder="Channel name" [(text)]="channel.name" required="true"></rep-input>
 
-    </div>
+    </form>
 
     <p>You will be able to edit the channel and all its settings once you first created it.</p>
         
@@ -34,14 +34,14 @@
         <h1>Add an existing channel</h1>
     </div>
 
-    <div class="channel-info">
+    <form class="channel-info">
 
         <rep-input placeholder="Channel name" required="true"></rep-input>
 
         <rep-input placeholder="Channel code" required="true" size="small"
         tooltip="Multiple channels can have the same name, but they cannot have the same code"></rep-input>
 
-    </div>
+    </form>
 
     <rep-actions [actions]="existingChannelActions"></rep-actions>
 

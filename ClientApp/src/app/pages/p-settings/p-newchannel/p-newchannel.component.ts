@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Channel } from 'src/interfaces/channel.interface';
 import { REPButton } from 'src/interfaces/repbutton.interface';
 import { MessagesService } from 'src/services/messages.service';
@@ -10,7 +11,8 @@ import { MessagesService } from 'src/services/messages.service';
 export class PNewChannelComponent implements OnInit {
 
   constructor(
-    private _msService: MessagesService
+    private _msService: MessagesService,
+    private fb: FormBuilder
   ) { }
 
   ngOnInit(): void {
@@ -21,11 +23,18 @@ export class PNewChannelComponent implements OnInit {
     picture: null,
   };
 
+  
+  public formCreation: FormGroup = this.fb.group({
+    channelName: ['', // Default value
+      [Validators.required, Validators.maxLength(30)]
+    ]
+  });
+
   public readonly newChannelActions: Array<REPButton> = [
     {
       name: "Create channel",
       icon: "save",
-      enabled: false,
+      enabled: () => this.formCreation.valid,
       background: "#46a35e",
       onClick: () => { this.save() }
     }
@@ -42,9 +51,9 @@ export class PNewChannelComponent implements OnInit {
   ];
 
   async save() {
-    const res = await this._msService.createChannel(this.channel).toPromise();
+    console.log(this.formCreation.valid);
+    // const res = await this._msService.createChannel(this.channel).toPromise();
 
-    console.log(res);
   }
 
   async onChange(event) {

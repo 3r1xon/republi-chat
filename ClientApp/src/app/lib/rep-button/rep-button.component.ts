@@ -30,7 +30,12 @@ export class REPButtonComponent {
   public color: string = "#FFFFFF";
 
   @Input()
-  public enabled: boolean = true;
+  public enabled: boolean | Function = true;
+
+  public get disabled() {
+    if (typeof this.enabled == 'boolean') return this.enabled;
+    else return this.enabled();
+  }
 
   @Output()
   public onClick: EventEmitter<boolean> = new EventEmitter();

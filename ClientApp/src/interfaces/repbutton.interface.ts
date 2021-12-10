@@ -4,7 +4,7 @@ export interface REPButton {
     color?: string;
     onClick?: Function;
     route?: string;
-    enabled?: boolean;
+    enabled?: boolean | (() => boolean);
     highlighted?: boolean;
     background?: string;
 }
