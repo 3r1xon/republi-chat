@@ -5,7 +5,7 @@
     align-items: center;
     flex-direction: column;
     justify-content: center;
-    background: #121212;
+    background: var(--DARK);
     color: #FFFFFF;
 
     #security {
@@ -22,7 +22,7 @@
         padding: 25px;
         flex-direction: column;
         justify-content: center;
-        background: rgb(0, 0, 0);
+        background: #000000;
 
         div {
             text-align: center;
@@ -35,6 +35,6 @@
 
 
     .danger {
-        color: #ff0000;
+        color: var(--DANGER);
     }
 }

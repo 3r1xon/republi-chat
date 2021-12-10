@@ -4,10 +4,10 @@
 #footer {
     width: 100%;
     height: 10vh;
-    background: rgb(18 18 18);
+    background: var(--DARK);
     display: flex;
     align-items: center;
-    font-family: 'Josefin Sans', sans-serif !important;
+    font-family: 'Josefin Sans', sans-serif;
     justify-content: center;
     color: #ffffff;
     position: absolute;

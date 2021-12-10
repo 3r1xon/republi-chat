@@ -1,12 +1,10 @@
 <div id="obscure" *ngIf="_utils.rqsBody?.visible"
-    (click)="disable()">
+    (click)="hideRequest()">
 
-    <dialog open (click)="$event.stopPropagation()">
+    <div id="dialog" stopPropagation>
 
         <div id="bar">
-
-            <mat-icon id="close">close</mat-icon>
-
+            <mat-icon id="close" (click)="hideRequest()">close</mat-icon>
         </div>
 
         <div id="title">
@@ -21,6 +19,6 @@
 
         <rep-actions [actions]="_utils.rqsBody.actions"></rep-actions>
 
-    </dialog>
+    </div>
 
 </div>

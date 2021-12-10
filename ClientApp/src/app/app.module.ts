@@ -36,6 +36,7 @@ import { AppComponent } from './app.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { GlobalErrorHandler } from './lib/error-handler';
+import { StopPropagationDirective } from './directives/stop-propagation.directive';
 
 
 
@@ -67,6 +68,7 @@ import { GlobalErrorHandler } from './lib/error-handler';
     PPrivacyComponent,
     PUnauthorizedComponent,
     PNewChannelComponent,
+    StopPropagationDirective,
   ],
   imports: [
     BrowserModule,

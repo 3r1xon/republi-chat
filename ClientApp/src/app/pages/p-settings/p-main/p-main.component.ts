@@ -20,26 +20,28 @@ export class PSettingsComponent implements OnInit {
   public menus: Array<REPButton> = [
     {
       name: "Profile",
-      color: "#FFFFFF",
       icon: "person",
       route: '/settings/profile'
     },
     {
       name: "Privacy",
-      color: "#FFFFFF",
       icon: "security",
       route: '/settings/privacy'
     },
     {
       name: "New channel",
-      color: "#FFFFFF",
       icon: "add",
       route: '/settings/newchannel'
     },
     {
       name: "Channel settings",
-      color: "#FFFFFF",
       icon: "admin_panel_settings",
+      route: '/settings/newchannel'
+    },
+    {
+      name: "Appearance",
+      color: "hotpink",
+      icon: "tune",
       route: '/settings/newchannel'
     },
     {

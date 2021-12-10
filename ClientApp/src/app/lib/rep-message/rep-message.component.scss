@@ -8,11 +8,11 @@
     transition: 150ms;
 
     &:hover {
-        background: rgb(67 67 67);
+        background: var(--GREY);
     }
 
     p {
-        color: rgb(255, 255, 255);
+        color: var(--WHITE);
         word-wrap: break-word;
     }
 

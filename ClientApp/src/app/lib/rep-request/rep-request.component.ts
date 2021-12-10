@@ -15,13 +15,11 @@ export class REPRequestComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  public enable() {
+  public showRequest() {
     this._utils.rqsBody.visible = true;
   }
 
-  public disable() {
+  public hideRequest() {
     this._utils.rqsBody.visible = false;
   }
-
-
 }

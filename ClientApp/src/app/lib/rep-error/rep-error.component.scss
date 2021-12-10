@@ -2,7 +2,7 @@
     width: 100%;
     height: 100%;
     display: flex;
-    background: #95959536;
+    background: var(--OBSCURE);
     justify-content: center;
     align-items: center;
     backdrop-filter: blur(1px);
@@ -15,17 +15,18 @@
         min-width: 500px;
         min-height: 200px;
         display: flex;
-        border: 1px solid #f98a89;
-        background: #fff5f5;
+        border: 1px solid var(--DANGER);
+        background: var(--LIGHT-DARK);
         position: absolute;
         border-radius: 5px;
+        color: var(--WHITE);
 
         #icon {
             width: 100px;
             min-width: 50px;
             height: 100%;
-            background: #f98a89;
-            color: #FFFFFF;
+            background: var(--DANGER);
+            color: var(--WHITE);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -50,7 +51,7 @@
                 #title {
                     width: 100%;
                     min-height: 50px;
-                    border-bottom: 1px solid #f98a89;
+                    border-bottom: 1px solid var(--DANGER);
                     display: flex;
                     align-items: center;
 
@@ -64,6 +65,7 @@
                     height: 100%;
                     display: flex;
                     text-align: initial;
+                    word-wrap: break-word;
 
                     p {
                         margin: 10px;
@@ -73,7 +75,7 @@
 
             rep-actions {
                 width: 100%;
-                margin: 0 15px 5px 0;
+                margin: 5px 15px 5px 0;
                 display: flex;
                 flex-direction: row-reverse;
             }

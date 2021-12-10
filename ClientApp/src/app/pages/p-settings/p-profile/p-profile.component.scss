@@ -1,6 +1,6 @@
 #profile {
     width: 100%;
-    color: #FFFFFF;
+    color: var(--WHITE);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -14,7 +14,7 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.165);
+        border-bottom: 1px solid var(--GREY);
 
         #profile-info {
             display: flex;
@@ -26,7 +26,7 @@
                 height: 75px;
                 border-radius: 50%;
                 margin: 15px;
-                border: 5px solid #111111;
+                border: 5px solid var(--DARK);
 
                 #picture {
                     width: 75px;
@@ -57,7 +57,7 @@
                 }
 
                 #info {
-                    color: #808080;
+                    color: var(--GREY);
                 }
 
                 #info:hover + rep-tooltip {
@@ -92,7 +92,7 @@
             height: 80%;
             margin: 25px;
             padding: 10px;
-            background: #111111;
+            background: var(--DARK);
             display: flex;
             align-items: center;
             flex-direction: column;
@@ -110,7 +110,7 @@
             display: flex;
             margin: 25px;
             align-items: center;
-            background: #111111;
+            background: var(--DARK);
             border-radius: 10px;
         }
 

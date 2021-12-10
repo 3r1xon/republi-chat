@@ -2,25 +2,25 @@
     width: 100%;
     height: 100%;
     display: flex;
-    background: #95959536;
+    align-items: center;
+    justify-content: center;
+    background: var(--OBSCURE);
     backdrop-filter: blur(1px);
     position: fixed;
     z-index: 9999;
     
-    dialog {
-        min-width: 500px;
+    #dialog {
+        width: 40%;
+        height: 40%;
+        min-width: 400px;
         min-height: 300px;
         border-radius: 5px;
         display: flex;
         flex-direction: column;
         align-items: center;
-        background: #1e1e1e;
-        color: #FFFFFF;
-        position: absolute; 
+        background: var(--DARK);
+        color: var(--WHITE);
         border: none;
-        left: 50%;
-        top: 50%;
-        transform: translate(-50%, -50%);
 
         #bar {
             width: 100%;
@@ -32,7 +32,34 @@
 
             #close {
                 color: #ff0000;
+                cursor: pointer;
             }
+        }
+
+        #title {
+            width: 100%;
+            text-align: center;
+
+            h1 {
+                margin: 10px;
+            }
+        }
+
+        #message {
+            width: 100%;
+            height: 100%;
+            word-wrap: break-word;
+
+            p {
+                margin: 10px;
+            }
+        }
+
+        rep-actions {
+            width: 100%;
+            margin: 10px;
+            display: flex;
+            flex-direction: row-reverse;
         }
     }
 }

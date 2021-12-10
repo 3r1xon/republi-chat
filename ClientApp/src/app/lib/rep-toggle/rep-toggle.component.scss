@@ -24,7 +24,7 @@
             border-radius: 34px;
             right: 0;
             bottom: 0;
-            background-color: #c62828;
+            background-color: var(--DANGER);
             -webkit-transition: .4s;
             transition: .4s;
     
@@ -36,7 +36,7 @@
                 width: 26px;
                 left: 4px;
                 bottom: 4px;
-                background-color: white;
+                background-color: var(--WHITE);
                 -webkit-transition: .4s;
                 transition: .4s;
             }

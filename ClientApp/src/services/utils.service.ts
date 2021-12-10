@@ -17,7 +17,10 @@ export class UtilsService {
 
   public rqsBody: Request;
 
-  public showRequest(title: string, message: string, onAccept: Function, actions?: Array<REPButton>) {
+  // Overload
+  public showRequest(title: string, message: string, onAccept: Function): void;
+
+  public showRequest(title: string, message: string, onAccept: Function, actions?: Array<REPButton>): void {
 
     if (actions) {
       this.rqsBody = {
@@ -35,21 +38,31 @@ export class UtilsService {
           {
             name: "Yes",
             onClick: onAccept,
-            background: "red"
+            background: "danger",
+            icon: "done"
           },
           {
             name: "No",
             onClick: () => {
               this.rqsBody.visible = false;
             },
-            background: "green"
+            background: "success",
+            icon: "not_interested"
           }
         ],
         visible: true
       };
     }
-    // this.rqsBody.onAccept = onAccept
 
+    this.rqsBody.actions.map((func) => {
+
+      const pre = func.onClick;
+
+      func.onClick = () => {
+        pre();
+        this.rqsBody.visible = false;
+      }
+    });
   }
 
   public bugReport: BugReport;

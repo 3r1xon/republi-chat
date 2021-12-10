@@ -39,9 +39,26 @@ $RepubliChat-theme: mat.define-light-theme((
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 
-html, body { height: 100%; }
+:root {
+  --DARK: #121212;
+  --LIGHT-DARK: #151415;
+  --OBSCURE: #95959536;
+  --GREY: #434343;
+  --WHITE: #FFFFFF;
+  --SUCCESS: #46a35e;
+  --WARNING: #F59E0B;
+  --DANGER: #c62828;
+}
 
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html, body { 
+  height: 100%; 
+}
+
+body { 
+  margin: 0; 
+  font-family: Roboto, "Helvetica Neue", sans-serif; 
+  color: var(--WHITE);
+}
 
 
 @keyframes fadeIn {
@@ -70,15 +87,15 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 }
 
 ::-webkit-scrollbar-track {
-  background: black;
+  background: var(--DARK);
 }
 
 ::-webkit-scrollbar-thumb {
   border-radius: 10px;
-  background: #9e9e9e;
+  background: var(--GREY);
 
   &:hover {
-    background: #707070;
+    background: var(--OBSCURE);
   }
 }
 
