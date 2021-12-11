@@ -12,8 +12,6 @@ class Auth {
             refresh: false
         };
 
-        console.log(user);
-
         const ACCESS_TOKEN = jwt.sign(user, process.env.SECRET_KEY, {
             expiresIn: "15m"
         });

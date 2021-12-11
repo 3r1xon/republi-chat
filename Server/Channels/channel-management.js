@@ -11,14 +11,34 @@ const socket         = require('../start');
 router.post('/createChannel', [Auth.authToken, upload.single("image")], async (req, res) => {
 
   try {
+
+    const channel = {
+      name: req.body.name,
+      picture: req.body.picture
+    };
+
+    const creationDate = fm.format(new Date(res.locals._requestDate));
     
-    await db.query(
+    let _channelID = await db.query(
     `
     INSERT INTO CHANNELS
-    (NAME, PICTURE)
+    (NAME, PICTURE, CREATION_DATE)
     VALUES
-    (?, ?)
-    `);
+    (?, ?, ?)
+    RETURNING ID_CHANNEL
+    `, [channel.name, channel.picture, creationDate]);
+
+    _channelID = _channelID[0].ID_CHANNEL;
+
+    const _userID = res.locals._id;
+
+    await db.query(
+    `
+    INSERT INTO CHANNELS_MEMBERS
+    (ID_USER, ID_CHANNEL, PERMISSION)
+    VALUES
+    (?, ?, ?)
+    `, [_userID, _channelID, 0]);
 
     res.status(201).send({ success: true });
   } catch (err) {

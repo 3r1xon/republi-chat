@@ -18,15 +18,19 @@ export class PNewChannelComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  public channel: Channel = {
-    name: '',
-    picture: null,
-  };
-
-  
   public formCreation: FormGroup = this.fb.group({
-    channelName: ['', // Default value
+    channelImage: [null],
+    channelName: ['',
       [Validators.required, Validators.maxLength(30)]
+    ]
+  });
+
+  public formAdd: FormGroup = this.fb.group({
+    channelName: ['',
+      [Validators.required, Validators.maxLength(30)]
+    ],
+    channelCode: ['',
+      [Validators.required, Validators.maxLength(4),  Validators.minLength(4)]
     ]
   });
 
@@ -35,8 +39,8 @@ export class PNewChannelComponent implements OnInit {
       name: "Create channel",
       icon: "save",
       enabled: () => this.formCreation.valid,
-      background: "#46a35e",
-      onClick: () => { this.save() }
+      background: "success",
+      onClick: () => { this.createChannel(); }
     }
   ];
 
@@ -44,27 +48,30 @@ export class PNewChannelComponent implements OnInit {
     {
       name: "Add channel",
       icon: "add",
-      enabled: false,
-      background: "#46a35e",
+      enabled: () => this.formAdd.valid,
+      background: "success",
       onClick: () => { }
     }
   ];
 
-  async save() {
-    console.log(this.formCreation.valid);
-    // const res = await this._msService.createChannel(this.channel).toPromise();
+  async createChannel() {
+
+    const channel: Channel = {
+      name: this.formCreation.value.channelName,
+      picture: null
+    };
+
+    const res = await this._msService.createChannel(channel).toPromise();
 
   }
 
   async onChange(event) {
 
-    this.channel.picture = <File>event[0];
+    // this.channel.picture = <File>event[0];
 
     // const file = <File>event[0];
 
     // const fd = new FormData();
     // fd.append("image", file, file.name);
   }
-
-
 }

@@ -13,6 +13,15 @@ export class REPRequestComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this._utils.rqsBody?.actions.map((func) => {
+
+      const pre = func.onClick;
+
+      func.onClick = () => {
+        pre();
+        this._utils.rqsBody.visible = false;
+      }
+    });
   }
 
   public showRequest() {

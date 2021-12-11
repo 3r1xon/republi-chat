@@ -1,9 +1,9 @@
-<div id="obscure" *ngIf="_utils.rqsBody?.visible"
+<div id="obscure"
     (click)="hideRequest()">
 
-    <div id="dialog" stopPropagation>
+    <div id="dialog" stopPropagation cdkDrag>
 
-        <div id="bar">
+        <div id="bar" cdkDragHandle>
             <mat-icon id="close" (click)="hideRequest()">close</mat-icon>
         </div>
 

@@ -24,14 +24,17 @@ export class MessagesService {
 
   public messages: Array<Message> = [];
 
+  public currentRoom;
+
+  // Get the current room messages
   public async getChannelMessages() {
     const res = await this.http.get<ServerResponse>(`${server.BASE_URL}/messages/getMessages`).toPromise();
 
     if (res.success) {
       this.messages = [];
 
-      res.data?.forEach((msg) => {
-        this.messages.push({
+      this.messages = res.data?.map((msg) => {
+        return {
           id: msg.id,
           name: msg.name,
           userMessage: msg.userMessage,
@@ -39,7 +42,7 @@ export class MessagesService {
           userImage: this._fileUpload.sanitizeIMG(msg.userImage),
           userColor: msg.userColor,
           auth: !!msg.auth
-        });
+        };
       });
       
       this._webSocket.listen("message").subscribe((message: string) => {
@@ -66,16 +69,17 @@ export class MessagesService {
 
   }
 
+  // Send message on the current room
   public async sendMessage(message: string) {
     const msg = {
       id: this._user.currentUser?.id,
-      userMessage: message,
-      date: new Date().getTime()
+      userMessage: message
     };
 
     await this.http.post<ServerResponse>(`${server.BASE_URL}/messages/sendMessage`, msg).toPromise();
   }
 
+  // Delete message on the current room
   public async deleteMessage(_id: number) {
     return await this.http.delete<ServerResponse>(`${server.BASE_URL}/messages/deleteMessage`, { 
       body: {
@@ -85,7 +89,7 @@ export class MessagesService {
   }
 
   public createChannel(channel: Channel) {
-    return this.http.post(`${server.BASE_URL}/channels/createChannel`, channel)
+    return this.http.post(`${server.BASE_URL}/channels/createChannel`, channel);
   }
 
 }

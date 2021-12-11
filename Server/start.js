@@ -24,6 +24,12 @@ app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser());
 
+// Get the exact time of the request, available for every request.
+app.use((req, res, next) => { 
+  res.locals._requestDate = parseInt(req.headers['requestdate']);
+  next(); 
+});
+
 
 app.use('/authentication', require('./Authentication/user-management'));
 app.use('/messages', require('./Messages/message-management'));

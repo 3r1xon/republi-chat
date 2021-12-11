@@ -37,7 +37,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { GlobalErrorHandler } from './lib/error-handler';
 import { StopPropagationDirective } from './directives/stop-propagation.directive';
-
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 
 @NgModule({
@@ -79,7 +79,8 @@ import { StopPropagationDirective } from './directives/stop-propagation.directiv
     HttpClientModule,
     MatRippleModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    DragDropModule
   ],
   providers: [
     { 

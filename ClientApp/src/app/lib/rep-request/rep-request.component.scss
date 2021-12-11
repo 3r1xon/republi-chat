@@ -29,6 +29,10 @@
             flex-direction: row-reverse;
             border-top-left-radius: 5px;
             border-top-right-radius: 5px;
+            border-bottom: 1px solid var(--GREY);
+            background: var(--LIGHT-DARK);
+            cursor: move;
+
 
             #close {
                 color: #ff0000;
@@ -39,6 +43,7 @@
         #title {
             width: 100%;
             text-align: center;
+            background: var(--LIGHT-DARK);
 
             h1 {
                 margin: 10px;
@@ -60,6 +65,7 @@
             margin: 10px;
             display: flex;
             flex-direction: row-reverse;
+            align-items: center;
         }
     }
 }

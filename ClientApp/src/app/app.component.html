@@ -1,4 +1,6 @@
 <rep-loading></rep-loading>
-<rep-request></rep-request>
-<rep-error></rep-error>
+
+<rep-request *ngIf="_utils.rqsBody?.visible"></rep-request>
+<rep-error *ngIf="_utils.bugReport?.visible"></rep-error>
+
 <router-outlet></router-outlet>

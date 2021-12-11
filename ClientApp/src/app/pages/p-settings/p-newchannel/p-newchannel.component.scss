@@ -7,8 +7,16 @@
     flex-direction: column;
 
     rep-separator {
-        width: 90%;
+        width: 100%;
         margin: 15px;
+    }
+
+    p, h1 {
+        align-self: flex-start;
+    }
+
+    h1 {
+        margin-bottom: 15px;
     }
 
 
@@ -16,8 +24,8 @@
         width: 75px;
         height: 75px;
         border-radius: 50%;
-        margin: 15px;
         border: 5px solid var(--DARK);
+        justify-self: center;
 
         #picture {
             width: 75px;
@@ -41,25 +49,28 @@
     }
 
     .channel-info {
-        width: 90%;
-        padding: 10px;
+        width: 100%;
         display: flex;
-        margin: 25px;
+        margin: 0 0 25px 0;
         align-items: center;
-        justify-content: center;
-        background: var(--DARK);
         border-radius: 10px;
     }
 
+    .column {
+        display: grid;
+        flex-direction: column;
+
+        rep-input {
+            justify-self: flex-start;
+        }
+    }
+
     rep-input {
-        margin: 15px;
+        margin: 15px 15px 0 0;
     }
 
     rep-actions {
-        width: 90%;
-        display: flex;
-        align-items: center;
-        flex-direction: row-reverse;
-        margin: 15px;
+        width: 100%;
+        margin: 15px 0 15px -20px;
     }
 }

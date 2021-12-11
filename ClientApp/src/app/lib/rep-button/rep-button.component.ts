@@ -30,7 +30,7 @@ export class REPButtonComponent {
   public color: string = "#FFFFFF";
 
   @Input()
-  public enabled: boolean | Function = true;
+  public enabled: boolean | (() => boolean) = true;
 
   public get disabled() {
     if (typeof this.enabled == 'boolean') return this.enabled;

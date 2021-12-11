@@ -14,6 +14,14 @@ export class REPErrorComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.errorActions.map((func) => {
+      const pre = func.onClick;
+
+      func.onClick = () => {
+        pre();
+        this._utils.bugReport.visible = false;
+      }
+    });
   }
 
   public readonly errorActions: Array<REPButton> = [
@@ -21,7 +29,9 @@ export class REPErrorComponent implements OnInit {
       name: "Send report",
       background: "warning",
       icon: "report_problem",
-      onClick: () => { }
+      onClick: () => {
+        console.log("Report unavailable");
+      }
     },
     {
       name: "Close",

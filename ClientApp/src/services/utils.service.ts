@@ -53,16 +53,6 @@ export class UtilsService {
         visible: true
       };
     }
-
-    this.rqsBody.actions.map((func) => {
-
-      const pre = func.onClick;
-
-      func.onClick = () => {
-        pre();
-        this.rqsBody.visible = false;
-      }
-    });
   }
 
   public bugReport: BugReport;

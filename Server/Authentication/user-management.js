@@ -31,11 +31,7 @@ router.post('/signUp', async (req, res) => {
       LIMIT 1
       `, [user.name]);
 
-      dbValue = dbValue[0].USER_CODE;
-
-      if (dbValue == undefined) {
-        dbValue = "000";
-      }
+      dbValue[0] ? dbValue = dbValue[0].USER_CODE : dbValue = "000";
 
       let USER_CODE = parseInt(dbValue, 10) + 1;
 
@@ -43,10 +39,15 @@ router.post('/signUp', async (req, res) => {
 
       while (USER_CODE.length < 4) USER_CODE = "0" + USER_CODE;
 
+      if (USER_CODE.length > 4) return res.status(409).send({
+        success: false,
+        message: `Too many users are using the name '${user.name}'. Try another name.`
+      });
+
       await db.query(
       `
       INSERT INTO USERS 
-      (USER_CODE, PASSWORD, NAME, EMAIL) 
+      (USER_CODE, PASSWORD, NAME, EMAIL)
       VALUES 
       (?, ?, ?, ?)
       `, [USER_CODE, user.password, user.name, user.email]);
@@ -55,7 +56,10 @@ router.post('/signUp', async (req, res) => {
     } catch (err) {
       console.log(err);
       
-      res.status(409).send({ success: false, message: `Email ${user.email} is already in use!` });
+      if (err.code == "ER_DUP_ENTRY")
+        res.status(409).send({ success: false, message: `Email ${user.email} is already in use!` });
+      else
+        res.status(500).send({ success: false, message: "Database error!" });
     }
   }
 });
