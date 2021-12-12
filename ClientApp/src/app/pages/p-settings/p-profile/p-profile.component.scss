@@ -5,7 +5,7 @@
     flex-direction: column;
     user-select: none;
 
-
+    
     #banner {
         width: 100%;
         min-height: 10vh;
@@ -49,6 +49,10 @@
 
             #banner-info {
                 height: 100%;
+
+                h2, p {
+                    margin-left: 10px;
+                }
 
                 rep-tooltip {
                     display: none;

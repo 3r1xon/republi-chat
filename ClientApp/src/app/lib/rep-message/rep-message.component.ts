@@ -65,7 +65,7 @@ export class REPMessageComponent implements OnInit {
 
   public active: boolean = false;
 
-  public userImage: string = "";
+  public pictureError: boolean = false;
 
   @Input()
   public uniqueID: number;
@@ -81,7 +81,10 @@ export class REPMessageComponent implements OnInit {
 
 
   dateFormatter() {
-    return format(this.message.date, 'MM/dd/yyyy HH:mm');
+    if (this.message.date)
+      return format(this.message.date, 'MM/dd/yyyy HH:mm');
+
+    return '';
   }
 
   setToggle($event) {

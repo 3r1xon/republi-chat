@@ -1,8 +1,8 @@
 export interface Account {
     id: number;
-    userCode: string;
-    profilePicture?: any;
-    userColor?: string;
+    code: string;
+    picture?: any;
+    color?: string;
     name: string;
     email: string;
 }

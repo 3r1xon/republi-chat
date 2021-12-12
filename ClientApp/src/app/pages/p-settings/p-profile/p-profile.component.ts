@@ -35,9 +35,9 @@ export class PProfileComponent implements OnInit {
 
   public exampleMsg: Message = {
     name: this.user.name,
-    userMessage: "Hey, how are you doing?",
-    userColor: this.user.userColor,
-    userImage: this.user.profilePicture,
+    message: "Hey, how are you doing?",
+    color: this.user.color,
+    picture: this.user.picture,
     date: new Date(),
     auth: false
   };
@@ -55,10 +55,10 @@ export class PProfileComponent implements OnInit {
           "Help me make the most of freedom and of pleasure, nothing ever lasts forever..."
         ];
 
-        let i = messages.findIndex(msg => msg == this.exampleMsg.userMessage);
+        let i = messages.findIndex(msg => msg == this.exampleMsg.message);
         i++;
         i == messages.length ? i = 0 : i = i;
-        this.exampleMsg.userMessage = messages[i];
+        this.exampleMsg.message = messages[i];
       }
     }
   ];
@@ -110,7 +110,7 @@ export class PProfileComponent implements OnInit {
       fd = new FormData();
       fd.append("image", this.file, this.file.name);
     } else {
-      this.user.profilePicture = null;
+      this.user.picture = null;
     }
 
     const res = await this.http.post<ServerResponse>(
@@ -128,7 +128,7 @@ export class PProfileComponent implements OnInit {
 
     this._utils.showRequest(
       "Are you sure you want to continue?",
-      "By doing so your account will be deleted along with all your messages and other data...",
+      `By doing so your account will be deleted along with all your messages and other data. This action is permanent since RepubliChat will NOT keep the remaining data. If you change your mind you will be able to create a new account with the same email.`,
       async () => {
         const res = await this._user.deleteProfile().toPromise();
     

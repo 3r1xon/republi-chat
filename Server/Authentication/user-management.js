@@ -1,6 +1,7 @@
 const express        = require('express');
 const router         = express.Router();
 const Auth           = require('./auth');
+const REPTools       = require('../Tools/rep-tools');
 const multer         = require('multer');
 const upload         = multer({});
 const db             = require('../Database/db');
@@ -21,28 +22,14 @@ router.post('/signUp', async (req, res) => {
 
     try {
 
-      let dbValue = await db.query(
-      `
-      SELECT
-      USER_CODE
-      FROM USERS
-      WHERE NAME = ?
-      ORDER BY ID_USER DESC
-      LIMIT 1
-      `, [user.name]);
+      const USER_CODE = await REPTools.generateCode(user.name, "USERS", "USER_CODE");
 
-      dbValue[0] ? dbValue = dbValue[0].USER_CODE : dbValue = "000";
-
-      let USER_CODE = parseInt(dbValue, 10) + 1;
-
-      USER_CODE += "";
-
-      while (USER_CODE.length < 4) USER_CODE = "0" + USER_CODE;
-
-      if (USER_CODE.length > 4) return res.status(409).send({
-        success: false,
-        message: `Too many users are using the name '${user.name}'. Try another name.`
-      });
+      if (!USER_CODE.success) {
+        return res.status(409).send({
+          success: false,
+          message: USER_CODE.message
+        });
+      }
 
       await db.query(
       `
@@ -50,7 +37,7 @@ router.post('/signUp', async (req, res) => {
       (USER_CODE, PASSWORD, NAME, EMAIL)
       VALUES 
       (?, ?, ?, ?)
-      `, [USER_CODE, user.password, user.name, user.email]);
+      `, [USER_CODE.data, user.password, user.name, user.email]);
 
       res.status(201).send({ success: true, message: 'User correctly signed up' });
     } catch (err) {
@@ -74,11 +61,11 @@ router.post('/authorize', Auth.authToken, async (req, res) => {
   `
   SELECT
   U.ID_USER as id,
-  U.USER_CODE as userCode,
+  U.USER_CODE as code,
   U.NAME as name,
-  U.COLOR as userColor,
+  U.COLOR as color,
   U.EMAIL as email,
-  TO_BASE64(U.PROFILE_PICTURE) as profilePicture
+  TO_BASE64(U.PROFILE_PICTURE) as picture
   FROM USERS U
   LEFT JOIN SESSIONS S ON S.ID_USER = U.ID_USER
   WHERE S.TOKEN = ?
@@ -109,11 +96,11 @@ router.post('/logIn', async (req, res) => {
     `
     SELECT
     U.ID_USER as id,
-    U.USER_CODE as userCode,
+    U.USER_CODE as code,
     U.NAME as name,
-    U.COLOR as userColor,
+    U.COLOR as color,
     U.EMAIL as email,
-    TO_BASE64(U.PROFILE_PICTURE) as profilePicture 
+    TO_BASE64(U.PROFILE_PICTURE) as picture 
     FROM USERS U
     WHERE EMAIL = ? AND PASSWORD = ?
     `, [user.email, user.password]);

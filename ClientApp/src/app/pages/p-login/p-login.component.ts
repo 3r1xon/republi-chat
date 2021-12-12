@@ -49,7 +49,7 @@ export class PLoginComponent implements OnInit {
     })
       .subscribe(async (response) => {
         this._user.currentUser = <Account>response.data.user;
-        this._user.currentUser.profilePicture = this._fileUpload.sanitizeIMG(this._user.currentUser.profilePicture);
+        this._user.currentUser.picture = this._fileUpload.sanitizeIMG(this._user.currentUser.picture);
         this._user.userAuth = true;
         await this.router.navigate(['mainpage']);
       }, 

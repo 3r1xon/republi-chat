@@ -21,7 +21,7 @@ export class REPButtonComponent {
   @Input()
   public set background(color: string) {
     if (color in this.defColors) this.backColor = this.defColors[color];
-    else this.backColor = color;
+    else if (color != undefined) this.backColor = color;
   };
 
   public backColor: string = "royalblue";

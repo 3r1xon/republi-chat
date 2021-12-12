@@ -1,6 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { MessagesService } from 'src/services/messages.service';
-import { UserService } from 'src/services/user.service';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Account } from 'src/interfaces/account.interface';
 
 @Component({
   selector: 'rep-textbox',
@@ -10,21 +9,41 @@ import { UserService } from 'src/services/user.service';
 export class REPTextBoxComponent implements OnInit {
 
   constructor(
-    private _msService: MessagesService,
-    public _user: UserService,
     ) { }
 
   ngOnInit(): void {
   }
+  
+  @Input()
+  public user: Account;
+
+  @Input() 
+  public enabled: boolean = true;
+
+  @Output()
+  public sendMessage = new EventEmitter<string>();
+
+  @Output()
+  public upload = new EventEmitter();
 
   public message: string = "";
 
-  public async sendMessage() {
+  public async send() {
+
+    if (!this.enabled) return;
 
     if (this.message == "") return;
 
-    await this._msService.sendMessage(this.message);
+    this.sendMessage.emit(this.message);
 
     this.message = "";
   }
+
+  public uploadIMG() {
+
+    if (!this.enabled) return;
+
+    this.upload.emit("Upload");
+  }
+
 }

@@ -14,39 +14,52 @@ export class PMainpageComponent implements OnInit {
     public _user: UserService,
     public _msService: MessagesService,
     private router: Router
-    ) { }
+  ) { }
 
-  ngOnInit(): void {
-    this._msService.getChannelMessages();
+  async ngOnInit(): Promise<void> {
+    await this._msService.getChannels();
+
+    this._msService.currentRoom = this._msService.channels[0]?._id;
+
+    await this._msService.getChannelMessages();
+
+    this.channels[0].sections = this._msService.channels;
   }
+
+  public currentTab: number = 0;
+
+  public options: Array<REPButton> = [
+    {
+      name: "Remove",
+      icon: "delete",
+      color: "danger",
+      onClick: () => {}
+    }
+  ];
 
   public channels: Array<{ 
     tabname: string, 
-    sections: Array<REPButton> 
+    sections: Array<any> 
   }> = [
     {
       tabname: "Channels",
-      sections: [
-        {
-          name: "Channel 1",
-          onClick: () => {
-
-          }
-        }
-      ]
+      sections: []
     },
     {
       tabname: "Friends",
-      sections: [
-        {
-          name: "Friend 1",
-          onClick: () => {
-
-          }
-        }
-      ]
+      sections: []
     }
-  ]
+  ];
+
+  async selectChannel(room: number) {
+    this._msService.currentRoom = room;
+
+    await this._msService.getChannelMessages();
+  }
+
+  async sendChannelMessage(message: string) {
+    await this._msService.sendMessage(message);
+  }
 
   async addNew() {
     await this.router.navigateByUrl('/settings/newchannel');

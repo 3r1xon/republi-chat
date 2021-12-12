@@ -19,12 +19,21 @@ export class MessagesService {
     private _fileUpload: FileUploadService,
     private _webSocket: WebSocketService,
     private http: HttpClient
-  ) { 
-  }
+  ) { }
 
   public messages: Array<Message> = [];
 
+  public channels: Array<Channel> = []
+
   public currentRoom;
+
+  public async getChannels() {
+    const res = await this.http.get<ServerResponse>(`${server.BASE_URL}/channels/getChannels`).toPromise();
+
+    if (res.success) {
+      this.channels = res.data;
+    }
+  }
 
   // Get the current room messages
   public async getChannelMessages() {
@@ -37,10 +46,10 @@ export class MessagesService {
         return {
           id: msg.id,
           name: msg.name,
-          userMessage: msg.userMessage,
+          message: msg.message,
           date: new Date(msg.date),
-          userImage: this._fileUpload.sanitizeIMG(msg.userImage),
-          userColor: msg.userColor,
+          picture: this._fileUpload.sanitizeIMG(msg.picture),
+          color: msg.color,
           auth: !!msg.auth
         };
       });
@@ -48,15 +57,15 @@ export class MessagesService {
       this._webSocket.listen("message").subscribe((message: string) => {
         const msg = JSON.parse(message);
 
-        const isUserMessage = msg.userCode == this._user.currentUser.userCode && msg.name == this._user.currentUser.name;
+        const isUserMessage = msg.code == this._user.currentUser.code && msg.name == this._user.currentUser.name;
 
         this.messages.push({
           id: msg.id,
           name: msg.name,
-          userMessage: msg.userMessage,
+          message: msg.message,
           date: new Date(msg.date),
-          userImage: this._fileUpload.sanitizeIMG(msg.userImage),
-          userColor: msg.userColor,
+          picture: this._fileUpload.sanitizeIMG(msg.picture),
+          color: msg.color,
           auth: isUserMessage
         });
       });
@@ -73,7 +82,7 @@ export class MessagesService {
   public async sendMessage(message: string) {
     const msg = {
       id: this._user.currentUser?.id,
-      userMessage: message
+      message: message
     };
 
     await this.http.post<ServerResponse>(`${server.BASE_URL}/messages/sendMessage`, msg).toPromise();
@@ -89,7 +98,7 @@ export class MessagesService {
   }
 
   public createChannel(channel: Channel) {
-    return this.http.post(`${server.BASE_URL}/channels/createChannel`, channel);
+    return this.http.post<ServerResponse>(`${server.BASE_URL}/channels/createChannel`, channel);
   }
 
 }

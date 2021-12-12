@@ -128,7 +128,7 @@ class Auth {
 
 
     // This middleware needs to be called ALWAYS after the authToken or it won't work
-    static authority = (TABLE_NAME) => {
+    static authority = (TABLE_NAME, COLUMN_NAME) => {
 
         return async (req, res, next) => {
 
@@ -150,13 +150,14 @@ class Auth {
 
                 let idValidate = await db.query(
                 `
-                SELECT ID_USER
+                SELECT 
+                ${COLUMN_NAME}
                 FROM ${TABLE_NAME}
                 WHERE ${pk} = ?
                 `, [PK_ID]);
 
                 idValidate = idValidate[0].ID_USER;
-                
+
                 if (idFromToken == idValidate) {
                     next();
                 } else {

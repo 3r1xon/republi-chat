@@ -10,7 +10,7 @@
   
   <div id="textbox">
 
-    <rep-textbox></rep-textbox>
+    <rep-textbox [enabled]="textboxEnabled" [user]="user" (sendMessage)="send($event)"></rep-textbox>
     
   </div>
 

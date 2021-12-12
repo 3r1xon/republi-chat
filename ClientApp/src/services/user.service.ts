@@ -40,7 +40,7 @@ export class UserService implements CanActivate {
     }).toPromise();
     if (response.success) {
       this.currentUser = <Account>response.data;
-      this.currentUser.profilePicture = this._fileUpload.sanitizeIMG(this.currentUser.profilePicture);
+      this.currentUser.picture = this._fileUpload.sanitizeIMG(this.currentUser.picture);
       this.userAuth = true;
       await this.router.navigate(['mainpage']);
     } else {

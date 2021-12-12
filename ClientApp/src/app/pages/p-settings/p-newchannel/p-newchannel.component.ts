@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { Channel } from 'src/interfaces/channel.interface';
 import { REPButton } from 'src/interfaces/repbutton.interface';
 import { MessagesService } from 'src/services/messages.service';
+import { UtilsService } from 'src/services/utils.service';
 
 @Component({
   templateUrl: './p-newchannel.component.html',
@@ -12,6 +14,8 @@ export class PNewChannelComponent implements OnInit {
 
   constructor(
     private _msService: MessagesService,
+    private _utils: UtilsService,
+    private router: Router,
     private fb: FormBuilder
   ) { }
 
@@ -62,6 +66,26 @@ export class PNewChannelComponent implements OnInit {
     };
 
     const res = await this._msService.createChannel(channel).toPromise();
+
+    if (res.success) {
+      this._utils.showRequest(
+        "Channel created successfully", 
+        `The channel '${channel.name}' has been created successfully, you can now find it at the main page!`, 
+        [
+          {
+            name: "Mainpage",
+            icon: "home",
+            onClick: () => {
+              this.router.navigate(['mainpage']);
+            },
+            background: "success"
+          },
+          {
+            name: "Close",
+            icon: "close",
+          }
+        ]);
+    }
 
   }
 

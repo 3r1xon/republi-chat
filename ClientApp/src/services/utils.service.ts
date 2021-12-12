@@ -17,12 +17,10 @@ export class UtilsService {
 
   public rqsBody: Request;
 
-  // Overload
-  public showRequest(title: string, message: string, onAccept: Function): void;
 
-  public showRequest(title: string, message: string, onAccept: Function, actions?: Array<REPButton>): void {
+  public showRequest(title: string, message: string, actions?: Function | Array<REPButton>): void {
 
-    if (actions) {
+    if (typeof actions == 'object') {
       this.rqsBody = {
         title: title,
         message: message,
@@ -30,14 +28,14 @@ export class UtilsService {
         visible: true
       };
     }
-    else {
+    else if (typeof actions == 'function') {
       this.rqsBody = {
         title: title,
         message: message,
         actions: [
           {
             name: "Yes",
-            onClick: onAccept,
+            onClick: actions,
             background: "danger",
             icon: "done"
           },
@@ -52,7 +50,7 @@ export class UtilsService {
         ],
         visible: true
       };
-    }
+    } else throw new Error("Typeof actions is not a Function or Array.");
   }
 
   public bugReport: BugReport;

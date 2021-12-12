@@ -16,13 +16,22 @@
         word-wrap: break-word;
     }
 
-    #user-image {
-        width: 45px;
-        height: 45px;
+    .user-image {
+        min-width: 45px;
+        min-height: 45px;
+        max-width: 45px;
+        max-height: 45px;
         margin: 5px;
         border-radius: 50%;
         cursor: pointer;
         align-self: flex-start;
+    }
+
+    .absent-image {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgb(random(255), random(255), random(255));
     }
 
     #message-info {
@@ -40,6 +49,8 @@
 
         #username {
             cursor: pointer;
+            white-space: nowrap;
+            text-overflow: ellipsis;
         }
 
         p {

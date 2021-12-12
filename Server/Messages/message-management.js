@@ -12,19 +12,24 @@ router.get('/getMessages', Auth.authToken, async (req, res) => {
 
     const _id = res.locals._id;
 
+    const _channelID = 0;
+
     let messages = await db.query(
     `
     SELECT
     M.ID_MESSAGE as id,
-    U.COLOR as userColor,
+    U.COLOR as color,
     U.NAME as name,
-    TO_BASE64(U.PROFILE_PICTURE) as userImage,
-    M.MESSAGE as userMessage,
+    TO_BASE64(U.PROFILE_PICTURE) as picture,
+    M.MESSAGE as message,
     M.DATE as date,
     IF(U.ID_USER = ?, TRUE, FALSE) AS auth
-    FROM MESSAGES M
-    LEFT JOIN USERS U ON U.ID_USER = M.ID_USER
-    `, [_id]);
+    FROM CHANNELS_MESSAGES M
+    LEFT JOIN CHANNELS_MEMBERS CM ON CM.ID_CHANNEL = M.ID_CHANNEL
+    LEFT JOIN CHANNELS C ON CM.ID_CHANNEL = M.ID_CHANNEL
+    LEFT JOIN USERS U ON U.ID_USER = CM.ID_USER
+    WHERE C.ID_CHANNEL = ?
+    `, [_id, _channelID]);
   
     res.status(200).send({ success: true, data: messages });
   } catch (err) {
@@ -38,24 +43,25 @@ router.get('/getMessages', Auth.authToken, async (req, res) => {
 
 
 
-router.post('/sendMessage', [Auth.authToken], async (req, res) => {
+router.post('/sendMessage', [Auth.authToken, Auth.authority("CHANNELS_MEMBERS")], async (req, res) => {
 
   const msg = {
     id_user: res.locals._id,
-    userMessage: req.body.userMessage,
+    message: req.body.message,
     date: fm.format(new Date(res.locals._requestDate), 'yyyy-MM-dd HH:mm')
   };
 
+  const _channelID = req.body._channelID;
 
   try {
     let _id = await db.query(
     `
-    INSERT INTO MESSAGES
-    (ID_USER, MESSAGE, DATE)
+    INSERT INTO CHANNELS_MESSAGES
+    (ID_CHANNEL, ID_MEMBER, MESSAGE, DATE)
     VALUES
     (?, ?, ?)
     RETURNING ID_MESSAGE
-    `, [msg.id_user, msg.userMessage, msg.date]);
+    `, [_channelID, msg.id_user, msg.message, msg.date]);
 
     _id = _id[0].ID_MESSAGE;
 
@@ -63,13 +69,13 @@ router.post('/sendMessage', [Auth.authToken], async (req, res) => {
     `
     SELECT 
     M.ID_MESSAGE as id,
-    U.USER_CODE as userCode,
-    U.COLOR as userColor,
+    U.USER_CODE as code,
+    U.COLOR as color,
     U.NAME as name,
-    TO_BASE64(U.PROFILE_PICTURE) as userImage,
-    M.MESSAGE as userMessage,
+    TO_BASE64(U.PROFILE_PICTURE) as picture,
+    M.MESSAGE as message,
     M.DATE as date
-    FROM MESSAGES M
+    FROM CHANNELS_MESSAGES M
     LEFT JOIN USERS U ON U.ID_USER = M.ID_USER
     WHERE M.ID_MESSAGE = ?
     ORDER BY M.ID_MESSAGE DESC
@@ -89,14 +95,14 @@ router.post('/sendMessage', [Auth.authToken], async (req, res) => {
 
 
 
-router.delete('/deleteMessage', [Auth.authToken, Auth.authority("MESSAGES")], async (req, res) => {
+router.delete('/deleteMessage', [Auth.authToken, Auth.authority("CHANNELS_MESSAGES")], async (req, res) => {
 
   try {
     const id_message = req.body._id;
 
     await db.query(
     `
-    DELETE FROM MESSAGES 
+    DELETE FROM CHANNELS_MESSAGES 
     WHERE ID_MESSAGE = ?
     `, [id_message]);
 

@@ -1,20 +1,22 @@
 <div id="text-box">
 
     <div id="profile">
-        <img id="user-image" [src]="_user.currentUser?.profilePicture" onerror="this.src = '/assets/user-image.png'">
-        <p [style.color]="_user.currentUser.userColor">{{_user.currentUser.name}}</p>
+        <img id="user-image" [src]="user.picture" onerror="this.src = '/assets/user-image.png'">
+        <p [style.color]="user.color">{{user.name}}</p>
     </div>
 
     <div id="control">
 
-        <button id="upload" (click)="sendMessage()">
+        <button id="upload" (click)="uploadIMG()" [style.cursor]="enabled ? 'pointer' : 'not-allowed' ">
             <mat-icon>upload</mat-icon>
         </button>
         
-        <textarea id="text" rows="20" cols="50" (keydown.enter)="sendMessage()"
+        <textarea 
+        id="text" rows="20" cols="50" (keydown.enter)="send()" [disabled]="!enabled"
+        [style.cursor]="enabled ? 'default' : 'not-allowed' "
         [(ngModel)]="message" placeholder="Write anything..."></textarea>
         
-        <button id="send" (click)="sendMessage()">
+        <button id="send" (click)="send()" [style.cursor]="enabled ? 'pointer' : 'not-allowed' ">
             <mat-icon>send</mat-icon>
         </button>
         

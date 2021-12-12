@@ -2,9 +2,16 @@
     width: 100%;
     height: 100vh;
     display: flex;
+    overflow-x: hidden;
 
     rep-sidemenu {
-        width: 300px;
+        min-width: 250px;
+        max-width: 250px;
+
+        rep-message {
+            width: 100%;
+            cursor: pointer;
+        }
     }
 
     rep-chat {
