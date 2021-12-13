@@ -9,7 +9,11 @@ const fm             = require('date-fns');
 const socket         = require('../start');
 
 
-router.post('/createChannel', [Auth.authToken, upload.single("image")], async (req, res) => {
+router.use(Auth.authToken);
+
+
+
+router.post('/createChannel', upload.single("image"), async (req, res) => {
 
   try {
 
@@ -72,7 +76,7 @@ router.post('/createChannel', [Auth.authToken, upload.single("image")], async (r
 
 
 
-router.get('/getChannels', Auth.authToken, async (req, res) => {
+router.get('/getChannels', async (req, res) => {
 
   try {
 

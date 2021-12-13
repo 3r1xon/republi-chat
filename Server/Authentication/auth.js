@@ -127,48 +127,39 @@ class Auth {
     }
 
 
+
     // This middleware needs to be called ALWAYS after the authToken or it won't work
-    static authority = (TABLE_NAME, COLUMN_NAME) => {
+    static isInChannel = (METHOD) => {
 
         return async (req, res, next) => {
 
-            // Primary key of the table that needs to be checked for authority
-            const PK_ID = req.body._id;
+            const ID_USER = res.locals._id;
+
+            const ID_CHANNEL = req.body.channelID;
 
             try {
 
-                const idFromToken = res.locals._id
-
-                let pk = await db.query(
+                let exist = await db.query(
                 `
-                SHOW KEYS 
-                FROM ${TABLE_NAME} 
-                WHERE Key_name = 'PRIMARY'
-                `);
+                SELECT 1
+                FROM CHANNELS_MEMBERS
+                WHERE ID_USER = ?
+                AND ID_CHANNEL = ?
+                `, [ID_USER, ID_CHANNEL]);
 
-                pk = pk[0].Column_name;
+                exist = exist[0];
 
-                let idValidate = await db.query(
-                `
-                SELECT 
-                ${COLUMN_NAME}
-                FROM ${TABLE_NAME}
-                WHERE ${pk} = ?
-                `, [PK_ID]);
-
-                idValidate = idValidate[0].ID_USER;
-
-                if (idFromToken == idValidate) {
+                if (exist) {
                     next();
                 } else {
                     res.status(401).send({ success: false, message: "User is not authorized to perform this operation!" });
                 }
-
-            } catch(err) {
+            } catch (err) {
                 console.log(err);
+
                 res.status(500).send({ success: false, message: "Database error!" });
             }
-        };
+        }
     }
 }
 

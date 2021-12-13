@@ -37,7 +37,7 @@ export class MessagesService {
 
   // Get the current room messages
   public async getChannelMessages() {
-    const res = await this.http.get<ServerResponse>(`${server.BASE_URL}/messages/getMessages`).toPromise();
+    const res = await this.http.get<ServerResponse>(`${server.BASE_URL}/messages/getChannelMessages/${this.currentRoom}`).toPromise();
 
     if (res.success) {
       this.messages = [];

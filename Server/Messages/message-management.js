@@ -6,7 +6,12 @@ const fm             = require('date-fns');
 const socket         = require('../start');
 
 
-router.get('/getMessages', Auth.authToken, async (req, res) => {
+
+router.use(Auth.authToken);
+
+
+
+router.get('/getChannelMessages/:id', Auth.isInChannel("GET"), async (req, res) => {
 
   try {
 
@@ -23,7 +28,7 @@ router.get('/getMessages', Auth.authToken, async (req, res) => {
     TO_BASE64(U.PROFILE_PICTURE) as picture,
     M.MESSAGE as message,
     M.DATE as date,
-    IF(U.ID_USER = ?, TRUE, FALSE) AS auth
+    IF(U.ID_USER = ?, TRUE, FALSE) as auth
     FROM CHANNELS_MESSAGES M
     LEFT JOIN CHANNELS_MEMBERS CM ON CM.ID_CHANNEL = M.ID_CHANNEL
     LEFT JOIN CHANNELS C ON CM.ID_CHANNEL = M.ID_CHANNEL
@@ -43,7 +48,7 @@ router.get('/getMessages', Auth.authToken, async (req, res) => {
 
 
 
-router.post('/sendMessage', [Auth.authToken, Auth.authority("CHANNELS_MEMBERS")], async (req, res) => {
+router.post('/sendMessage', Auth.isInChannel("POST"), async (req, res) => {
 
   const msg = {
     id_user: res.locals._id,
@@ -95,7 +100,7 @@ router.post('/sendMessage', [Auth.authToken, Auth.authority("CHANNELS_MEMBERS")]
 
 
 
-router.delete('/deleteMessage', [Auth.authToken, Auth.authority("CHANNELS_MESSAGES")], async (req, res) => {
+router.delete('/deleteMessage', Auth.isInChannel("DELETE"), async (req, res) => {
 
   try {
     const id_message = req.body._id;
