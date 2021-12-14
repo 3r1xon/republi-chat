@@ -11,7 +11,7 @@ router.use(Auth.authToken);
 
 
 
-router.get('/getChannelMessages/:id', Auth.isInChannel("GET"), async (req, res) => {
+router.get('/getChannelMessages/:id', async (req, res) => {
 
   try {
 
@@ -47,8 +47,8 @@ router.get('/getChannelMessages/:id', Auth.isInChannel("GET"), async (req, res) 
 });
 
 
-
-router.post('/sendMessage', Auth.isInChannel("POST"), async (req, res) => {
+/*
+router.post('/sendMessage', async (req, res) => {
 
   const msg = {
     id_user: res.locals._id,
@@ -97,10 +97,10 @@ router.post('/sendMessage', Auth.isInChannel("POST"), async (req, res) => {
     res.status(500).send({ success: false, message: `Database error!` });
   }
 });
+*/
 
-
-
-router.delete('/deleteMessage', Auth.isInChannel("DELETE"), async (req, res) => {
+/*
+router.delete('/deleteMessage', async (req, res) => {
 
   try {
     const id_message = req.body._id;
@@ -121,7 +121,7 @@ router.delete('/deleteMessage', Auth.isInChannel("DELETE"), async (req, res) => 
   }
 
 });
-
+*/
 
 
 module.exports = router;

@@ -124,43 +124,7 @@ class Auth {
         } else {
             res.status(401).send({ success: false, message: "Token not found!" });
         }
-    }
-
-
-
-    // This middleware needs to be called ALWAYS after the authToken or it won't work
-    static isInChannel = (METHOD) => {
-
-        return async (req, res, next) => {
-
-            const ID_USER = res.locals._id;
-
-            const ID_CHANNEL = req.body.channelID;
-
-            try {
-
-                let exist = await db.query(
-                `
-                SELECT 1
-                FROM CHANNELS_MEMBERS
-                WHERE ID_USER = ?
-                AND ID_CHANNEL = ?
-                `, [ID_USER, ID_CHANNEL]);
-
-                exist = exist[0];
-
-                if (exist) {
-                    next();
-                } else {
-                    res.status(401).send({ success: false, message: "User is not authorized to perform this operation!" });
-                }
-            } catch (err) {
-                console.log(err);
-
-                res.status(500).send({ success: false, message: "Database error!" });
-            }
-        }
-    }
+    };
 }
 
 module.exports = Auth;
