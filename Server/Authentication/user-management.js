@@ -20,34 +20,35 @@ router.post('/signUp', async (req, res) => {
     res.status(400).send({ success: false, message: 'Email or password invalid' });
   else {
 
-    try {
-
-      const USER_CODE = await REPTools.generateCode(user.name, "USERS", "USER_CODE");
-
-      if (!USER_CODE.success) {
+    await REPTools.generateCode(user.name, "USERS", "USER_CODE", async (err, code) => {
+      if (err) {
         return res.status(409).send({
           success: false,
-          message: USER_CODE.message
+          message: `Too many users are using the name "${user.name}". Try another name.`
         });
+      } else {
+        try {
+
+          await db.query(
+          `
+          INSERT INTO USERS 
+          (USER_CODE, PASSWORD, NAME, EMAIL)
+          VALUES 
+          (?, ?, ?, ?)
+          `, [code, user.password, user.name, user.email]);
+    
+          res.status(201).send({ success: true, message: 'User correctly signed up' });
+        } catch(error) {
+
+          console.log(error);
+          
+          if (error.code == "ER_DUP_ENTRY")
+            res.status(409).send({ success: false, message: `Email ${user.email} is already in use!` });
+          else
+            res.status(500).send({ success: false, message: "Database error!" });
+        }
       }
-
-      await db.query(
-      `
-      INSERT INTO USERS 
-      (USER_CODE, PASSWORD, NAME, EMAIL)
-      VALUES 
-      (?, ?, ?, ?)
-      `, [USER_CODE.data, user.password, user.name, user.email]);
-
-      res.status(201).send({ success: true, message: 'User correctly signed up' });
-    } catch (err) {
-      console.log(err);
-      
-      if (err.code == "ER_DUP_ENTRY")
-        res.status(409).send({ success: false, message: `Email ${user.email} is already in use!` });
-      else
-        res.status(500).send({ success: false, message: "Database error!" });
-    }
+    });
   }
 });
 
@@ -153,7 +154,7 @@ router.delete('/logout', Auth.authToken, async (req, res) => {
 });
 
 
-
+// TODO: Should be changed to PUT.
 router.post('/editProfile', [Auth.authToken, upload.single("image")], async (req, res) => {
 
   const file = req.file.buffer;

@@ -68,9 +68,15 @@ export class PNewChannelComponent implements OnInit {
     const res = await this._msService.createChannel(channel).toPromise();
 
     if (res.success) {
+
+      this.formCreation.setValue({ 
+        channelName: '',
+        channelImage: null
+      });
+
       this._utils.showRequest(
         "Channel created successfully", 
-        `The channel '${channel.name}' has been created successfully, you can now find it at the main page!`, 
+        `The channel "${channel.name}" has been created successfully, you can now find it at the main page!`, 
         [
           {
             name: "Mainpage",

@@ -79,6 +79,12 @@ export class REPMessageComponent implements OnInit {
   @Output()
   public onUserClick = new EventEmitter<string>();
 
+  @Output()
+  public onClick = new EventEmitter();
+
+  clickHandler() {
+    this.onClick.emit();
+  }
 
   dateFormatter() {
     if (this.message.date)

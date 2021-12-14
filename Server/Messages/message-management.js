@@ -4,6 +4,7 @@ const router         = express.Router();
 const db             = require('../Database/db');
 const fm             = require('date-fns');
 const socket         = require('../start');
+const User           = require('../Authentication/user');
 
 
 
@@ -13,37 +14,44 @@ router.use(Auth.authToken);
 
 router.get('/getChannelMessages/:id', async (req, res) => {
 
-  try {
+  const _id = res.locals._id;
 
-    const _id = res.locals._id;
+  const channelID = req.params.id;
 
-    const _channelID = 0;
+  const user = new User(_id);
 
-    let messages = await db.query(
-    `
-    SELECT
-    M.ID_MESSAGE as id,
-    U.COLOR as color,
-    U.NAME as name,
-    TO_BASE64(U.PROFILE_PICTURE) as picture,
-    M.MESSAGE as message,
-    M.DATE as date,
-    IF(U.ID_USER = ?, TRUE, FALSE) as auth
-    FROM CHANNELS_MESSAGES M
-    LEFT JOIN CHANNELS_MEMBERS CM ON CM.ID_CHANNEL = M.ID_CHANNEL
-    LEFT JOIN CHANNELS C ON CM.ID_CHANNEL = M.ID_CHANNEL
-    LEFT JOIN USERS U ON U.ID_USER = CM.ID_USER
-    WHERE C.ID_CHANNEL = ?
-    `, [_id, _channelID]);
+  user.setChannel(channelID, async (err, user) => {
+    if (err) {
+      res.status(401).send({ success: false, message: "User not in channel!" });
+    } else {
   
-    res.status(200).send({ success: true, data: messages });
-  } catch (err) {
+      try {
+        let messages = await db.query(
+        `
+        SELECT
+        M.ID_CHANNEL_MESSAGE as id,
+        U.COLOR as color,
+        U.NAME as name,
+        TO_BASE64(U.PROFILE_PICTURE) as picture,
+        M.MESSAGE as message,
+        M.DATE as date,
+        IF(U.ID_USER = ?, TRUE, FALSE) as auth
+        FROM CHANNELS_MESSAGES M
+        LEFT JOIN CHANNELS_MEMBERS CM ON CM.ID_CHANNEL = M.ID_CHANNEL
+        LEFT JOIN CHANNELS C ON CM.ID_CHANNEL = M.ID_CHANNEL
+        LEFT JOIN USERS U ON U.ID_USER = CM.ID_USER
+        WHERE C.ID_CHANNEL = ?
+        `, [_id, channelID]);
 
-    console.log(err);
+        res.status(200).send({ success: true, data: messages });
+      }
+      catch (error) {
+        console.log(error);
 
-    res.status(500).send({ success: false, message: "Database error!" });
-  }
-
+        res.status(500).send({ success: false, message: "Database error!" });
+      }
+    }
+  });
 });
 
 
@@ -91,8 +99,8 @@ router.post('/sendMessage', async (req, res) => {
     socket.emit("message", JSON.stringify(message));
 
     res.status(201).send({ success: true });
-  } catch (err) {
-    console.log(err);
+  } catch (error) {
+    console.log(error);
     
     res.status(500).send({ success: false, message: `Database error!` });
   }
@@ -114,8 +122,8 @@ router.delete('/deleteMessage', async (req, res) => {
     socket.emit("deleteMessage", `${id_message}`);
 
     res.status(200).send({ success: true });
-  } catch (err) {
-    console.log(err);
+  } catch (error) {
+    console.log(error);
 
     res.status(500).send({ success: false, message: "Database error!" });
   }

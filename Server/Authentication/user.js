@@ -7,10 +7,10 @@ class User {
     }
 
 
-    setChannel(channel, callback) {
+    async setChannel(channel, callback) {
         this.channelID = channel;
 
-        let channelMemberID = db.query(
+        let channelMemberID = await db.query(
         `
         SELECT ID_CHANNEL_MEMBER
         FROM CHANNELS_MEMBERS
@@ -18,10 +18,8 @@ class User {
         AND ID_USER = ?
         `, [this.channelID, this.userID]);
 
-        channelMemberID = channelMemberID[0].ID_CHANNEL_MEMBER;
-
-        if (channelMemberID) {
-            this.channelMemberID = channelMemberID;
+        if (channelMemberID[0]) {
+            this.channelMemberID = channelMemberID[0].ID_CHANNEL_MEMBER;
 
             callback(undefined, this);
 
@@ -32,7 +30,7 @@ class User {
     }
 
     // Verifies if the user has a permission based on the current channel.
-    hasPermission(permission, callback) {
+    async hasPermission(permission, callback) {
 
         if (this.channelID == undefined) throw new Error("Channel is not set. Did you call setChannel?");
 

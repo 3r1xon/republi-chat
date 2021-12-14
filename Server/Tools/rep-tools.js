@@ -13,7 +13,7 @@ class REPTools {
     //         In which table do you need to check
     //     COLUMN_NAME:
     //         The column that contains all the names
-    static async generateCode(NAME, TABLE_NAME, COLUMN_NAME) {
+    static async generateCode(NAME, TABLE_NAME, COLUMN_NAME, callback) {
 
         let pk = await db.query(
         `
@@ -42,14 +42,14 @@ class REPTools {
 
         while (USER_CODE.length < 4) USER_CODE = "0" + USER_CODE;
 
-        if (USER_CODE.length > 4) return {
-            success: false,
-            message: `Too many names '${NAME}' `
-        };
-        else return {
-            success: true,
-            data: USER_CODE
-        };
+        if (USER_CODE.length > 4)
+            callback(`Too many names '${NAME}'`);
+        else
+            callback(undefined, USER_CODE);
+    }
+
+    static getVariableName(variable) {
+        return Object.keys(variable)[0];
     }
 }
 

@@ -15,6 +15,8 @@ export class REPRequestComponent implements OnInit {
   ngOnInit(): void {
     this._utils.rqsBody?.actions.map((func) => {
 
+      func.onClick ??= () => { };
+
       const pre = func.onClick;
 
       func.onClick = () => {

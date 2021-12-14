@@ -19,11 +19,14 @@ export class PMainpageComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     await this._msService.getChannels();
 
+    this.channels[0].sections = this._msService.channels;
+
     this._msService.currentRoom = this._msService.channels[0]?._id;
 
-    await this._msService.getChannelMessages();
+    if (this._msService.currentRoom) {
+      await this._msService.getChannelMessages();
+    }
 
-    this.channels[0].sections = this._msService.channels;
   }
 
   public currentTab: number = 0;

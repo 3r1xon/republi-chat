@@ -10,16 +10,16 @@
         <button id="upload" (click)="uploadIMG()" [style.cursor]="enabled ? 'pointer' : 'not-allowed' ">
             <mat-icon>upload</mat-icon>
         </button>
-        
+
         <textarea 
         id="text" rows="20" cols="50" (keydown.enter)="send()" [disabled]="!enabled"
-        [style.cursor]="enabled ? 'default' : 'not-allowed' "
+        [style.cursor]="enabled ? 'text' : 'not-allowed' "
         [(ngModel)]="message" placeholder="Write anything..."></textarea>
-        
+
         <button id="send" (click)="send()" [style.cursor]="enabled ? 'pointer' : 'not-allowed' ">
             <mat-icon>send</mat-icon>
         </button>
-        
+
     </div>
 
     <div id="right">

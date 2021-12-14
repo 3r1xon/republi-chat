@@ -16,63 +16,65 @@ router.use(Auth.authToken);
 
 router.post('/createChannel', upload.single("image"), async (req, res) => {
 
-  try {
 
-    const channel = {
-      name: req.body.name,
-      picture: req.body.picture
-    };
+  const channel = {
+    name: req.body.name,
+    picture: req.body.picture
+  };
 
-    const creationDate = fm.format(new Date(res.locals._requestDate), 'yyyy-MM-dd HH:mm');
+  const creationDate = fm.format(new Date(res.locals._requestDate), 'yyyy-MM-dd HH:mm');
 
-    const CHANNEL_CODE = await REPTools.generateCode(channel.name, "CHANNELS", "CHANNEL_CODE");
-
-    if (!CHANNEL_CODE.success) {
-      return res.status(409).send({
+  await REPTools.generateCode(channel.name, "CHANNELS", "CHANNEL_CODE", async (err, code) => {
+    if (err) {
+      res.status(409).send({
         success: false,
-        message: CHANNEL_CODE.message
+        message: `Too many channels are using the name "${channel.name}". Try another name.`
       });
-    }
+    } else {
+      try {
 
-    let _channelID = await db.query(
-    `
-    INSERT INTO CHANNELS
-    (NAME, CHANNEL_CODE, PICTURE, CREATION_DATE)
-    VALUES
-    (?, ?, ?, ?)
-    RETURNING ID_CHANNEL
-    `, [channel.name, CHANNEL_CODE.data, channel.picture, creationDate]);
+        const _userID = res.locals._id;
 
-    _channelID = _channelID[0].ID_CHANNEL;
-
-    const _userID = res.locals._id;
-
-    let _channelMemberID = await db.query(
-    `
-    INSERT INTO CHANNELS_MEMBERS
-    (ID_USER, ID_CHANNEL)
-    VALUES
-    (?, ?)
-    RETURNING ID_CHANNEL_MEMBER
-    `, [_userID, _channelID]);
-
-    _channelMemberID = _channelMemberID[0].ID_CHANNEL_MEMBER;
-
-    await db.query(
-    `
-    INSERT INTO CHANNELS_PERMISSIONS
-    (ID_CHANNEL_MEMBER, CHANNEL_CREATOR)
-    VALUES
-    (?, ?)
-    `, [_channelMemberID, true]);
-
-    res.status(201).send({ success: true });
-  } catch (err) {
-    console.log(err);
+        let _channelID = await db.query(
+        `
+        INSERT INTO CHANNELS
+        (ID_USER, NAME, CHANNEL_CODE, PICTURE, CREATION_DATE)
+        VALUES
+        (?, ?, ?, ?, ?)
+        RETURNING ID_CHANNEL
+        `, [_userID, channel.name, code, channel.picture, creationDate]);
     
-    res.status(500).send({ success: false, message: `Database error!` });
-  }
+        _channelID = _channelID[0].ID_CHANNEL;
+    
+    
+        let _channelMemberID = await db.query(
+        `
+        INSERT INTO CHANNELS_MEMBERS
+        (ID_USER, ID_CHANNEL)
+        VALUES
+        (?, ?)
+        RETURNING ID_CHANNEL_MEMBER
+        `, [_userID, _channelID]);
+    
+        _channelMemberID = _channelMemberID[0].ID_CHANNEL_MEMBER;
+    
+        await db.query(
+        `
+        INSERT INTO CHANNELS_PERMISSIONS
+        (ID_CHANNEL_MEMBER)
+        VALUES
+        (?)
+        `, [_channelMemberID, true]);
+    
+        res.status(201).send({ success: true });
 
+      } catch(error) {
+        console.log(error);
+
+        res.status(500).send({ success: false, message: `Database error!` });
+      }
+    }
+  });
 });
 
 
@@ -94,13 +96,11 @@ router.get('/getChannels', async (req, res) => {
     WHERE CM.ID_USER = ?
     `, [_id]);
 
-    console.log(channels);
-
     res.status(201).send({ success: true, data: channels });
-    
-  } catch (err) {
-    console.log(err);
-    
+
+  } catch (error) {
+    console.log(error);
+
     res.status(500).send({ success: false, message: `Database error!` });
   }
 

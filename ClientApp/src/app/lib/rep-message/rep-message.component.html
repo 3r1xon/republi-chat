@@ -1,6 +1,6 @@
 <div id="message-box" [ngStyle]="{ 
         background: active ? 'rgb(67 67 67)' : '' 
-    }">
+    }" (click)="clickHandler()">
 
     <img *ngIf="!pictureError" class="user-image" [src]="message.picture" (error)="pictureError = true"
     (click)="onUserClick.emit('onUserClick')">
@@ -27,7 +27,7 @@
 
     </div>
 
-    <rep-window [subMenu]="options"
+    <rep-window stopPropagation [subMenu]="options"
     (open)="setToggle($event)"></rep-window>
 
 </div>

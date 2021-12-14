@@ -7,7 +7,7 @@
 
         <rep-message
         *ngFor="let section of channels[currentTab].sections; let i = index" 
-        (click)="selectChannel(section._id)" 
+        (onClick)="selectChannel(section._id)" 
         [message]="section" 
         [options]="options">
         </rep-message>
