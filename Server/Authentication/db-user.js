@@ -1,6 +1,6 @@
 const db = require('../Database/db');
 
-class User {
+class DBUser {
 
     constructor(userID) {
         this.userID = userID;
@@ -26,7 +26,7 @@ class User {
             return this;
         }
         else
-            callback("User is not a member of this channel");
+            callback(new Error("User is not a member of this channel"));
     }
 
     // Verifies if the user has a permission based on the current channel.
@@ -51,8 +51,8 @@ class User {
             return this;
         }
         else
-            callback("User does not have the required permission!");
+            callback(new Error("User does not have the required permission!"));
     }
 }
 
-module.exports = User;
+module.exports = DBUser;

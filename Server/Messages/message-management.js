@@ -4,7 +4,7 @@ const router         = express.Router();
 const db             = require('../Database/db');
 const fm             = require('date-fns');
 const socket         = require('../start');
-const User           = require('../Authentication/user');
+const DBUser         = require('../Authentication/db-user');
 
 
 
@@ -14,17 +14,15 @@ router.use(Auth.authToken);
 
 router.get('/getChannelMessages/:id', async (req, res) => {
 
-  const _id = res.locals._id;
+  const _id        = res.locals._id;
+  const _channelID = req.params.id;
+  const user       = new DBUser(_id);
 
-  const channelID = req.params.id;
-
-  const user = new User(_id);
-
-  user.setChannel(channelID, async (err, user) => {
+  user.setChannel(_channelID, async (err, user) => {
     if (err) {
       res.status(401).send({ success: false, message: "User not in channel!" });
     } else {
-  
+
       try {
         let messages = await db.query(
         `
@@ -41,7 +39,7 @@ router.get('/getChannelMessages/:id', async (req, res) => {
         LEFT JOIN CHANNELS C ON CM.ID_CHANNEL = M.ID_CHANNEL
         LEFT JOIN USERS U ON U.ID_USER = CM.ID_USER
         WHERE C.ID_CHANNEL = ?
-        `, [_id, channelID]);
+        `, [_id, _channelID]);
 
         res.status(200).send({ success: true, data: messages });
       }

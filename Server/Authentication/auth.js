@@ -90,7 +90,7 @@ class Auth {
                 if (decoded) {
                     next();
                 } else {
-
+                    console.log(err)
                     const { REFRESH_TOKEN } = req.cookies;
 
                     jwt.verify(REFRESH_TOKEN, process.env.SECRET_KEY, async (err, decoded) => {

@@ -1,0 +1,24 @@
+#rep-textarea {
+    width: 100%;
+    height: 100%;
+    display: flex;
+
+    textarea {
+        padding: 5px;
+        color: var(--WHITE);
+        background: var(--LIGHT-DARK);
+        border-radius: 5px;
+        outline: none;
+        resize: none;
+        border: none;
+        transition: 150ms;
+    
+        &:hover {
+            background: #1f1a24;
+        }
+    }
+}
+
+.grayed-out {
+    background: var(--GREY);
+}

@@ -11,10 +11,19 @@
             <mat-icon>upload</mat-icon>
         </button>
 
-        <textarea 
+        <rep-textarea
+        id="text" 
+        (keydown.enter)="send()" 
+        [enabled]="enabled"
+        [(text)]="message" 
+        placeholder="Write anything..."
+        >
+        </rep-textarea>
+
+        <!-- <textarea 
         id="text" rows="20" cols="50" (keydown.enter)="send()" [disabled]="!enabled"
         [style.cursor]="enabled ? 'text' : 'not-allowed' "
-        [(ngModel)]="message" placeholder="Write anything..."></textarea>
+        [(ngModel)]="message" placeholder="Write anything..."></textarea> -->
 
         <button id="send" (click)="send()" [style.cursor]="enabled ? 'pointer' : 'not-allowed' ">
             <mat-icon>send</mat-icon>

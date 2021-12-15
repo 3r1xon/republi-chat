@@ -67,21 +67,8 @@
         justify-content: center;
 
 
-        #text {
-            width: 50%;
+        rep-textarea {
             height: 75%;
-            padding: 5px;
-            color: var(--WHITE);
-            background: var(--LIGHT-DARK);
-            border-radius: 5px;
-            outline: none;
-            resize: none;
-            border: none;
-            transition: 150ms;
-
-            &:hover {
-                background: #1f1a24;
-            }
         }
     }
 

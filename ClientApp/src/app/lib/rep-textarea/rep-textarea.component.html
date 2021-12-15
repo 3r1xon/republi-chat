@@ -1,0 +1,16 @@
+<div id="rep-textarea" [ngClass]="{
+        'grayed-out': !enabled
+    }">
+
+    <textarea 
+    id="text" 
+    rows="20" 
+    cols="50" 
+    (keydown.enter)="submitHandler()" 
+    [disabled]="!enabled"
+    [style.cursor]="enabled ? 'text' : 'not-allowed' "
+    [(ngModel)]="text"
+    (ngModelChange)="onChange()"
+    [placeholder]="placeholder"></textarea>
+
+</div>
