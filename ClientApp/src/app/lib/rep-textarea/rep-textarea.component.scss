@@ -4,9 +4,9 @@
     display: flex;
 
     textarea {
+        width: 100%;
         padding: 5px;
         color: var(--WHITE);
-        background: var(--LIGHT-DARK);
         border-radius: 5px;
         outline: none;
         resize: none;

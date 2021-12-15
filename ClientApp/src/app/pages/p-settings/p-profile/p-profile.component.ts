@@ -93,7 +93,7 @@ export class PProfileComponent implements OnInit {
     // const fd = new FormData();
     // fd.append("image", file, file.name);
     
-    // const res = await this.http.post<ServerResponse>(
+    // const res = await this.http.put<ServerResponse>(
     // `${server.BASE_URL}/authentication/editProfile`, 
     // fd
     // ).toPromise();
@@ -113,7 +113,7 @@ export class PProfileComponent implements OnInit {
       this.user.picture = null;
     }
 
-    const res = await this.http.post<ServerResponse>(
+    const res = await this.http.put<ServerResponse>(
     `${server.BASE_URL}/authentication/editProfile`, {
       body: {
         fd,

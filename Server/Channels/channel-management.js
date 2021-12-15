@@ -16,7 +16,6 @@ router.use(Auth.authToken);
 
 router.post('/createChannel', upload.single("image"), async (req, res) => {
 
-
   const channel = {
     name: req.body.name,
     picture: req.body.picture
@@ -43,10 +42,9 @@ router.post('/createChannel', upload.single("image"), async (req, res) => {
         (?, ?, ?, ?, ?)
         RETURNING ID_CHANNEL
         `, [_userID, channel.name, code, channel.picture, creationDate]);
-    
+
         _channelID = _channelID[0].ID_CHANNEL;
-    
-    
+
         let _channelMemberID = await db.query(
         `
         INSERT INTO CHANNELS_MEMBERS
@@ -55,9 +53,9 @@ router.post('/createChannel', upload.single("image"), async (req, res) => {
         (?, ?)
         RETURNING ID_CHANNEL_MEMBER
         `, [_userID, _channelID]);
-    
+
         _channelMemberID = _channelMemberID[0].ID_CHANNEL_MEMBER;
-    
+
         await db.query(
         `
         INSERT INTO CHANNELS_PERMISSIONS
@@ -65,7 +63,7 @@ router.post('/createChannel', upload.single("image"), async (req, res) => {
         VALUES
         (?)
         `, [_channelMemberID, true]);
-    
+
         res.status(201).send({ success: true });
 
       } catch(error) {

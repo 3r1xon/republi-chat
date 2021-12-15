@@ -4,11 +4,12 @@
 
     <textarea 
     id="text" 
-    rows="20" 
-    cols="50" 
-    (keydown.enter)="submitHandler()" 
+    [rows]="rows" 
+    [cols]="cols" 
+    (keydown.enter)="submitHandler($event)" 
     [disabled]="!enabled"
-    [style.cursor]="enabled ? 'text' : 'not-allowed' "
+    [style.cursor]="enabled ? 'text' : 'not-allowed'"
+    [style.background]="background"
     [(ngModel)]="text"
     (ngModelChange)="onChange()"
     [placeholder]="placeholder"></textarea>

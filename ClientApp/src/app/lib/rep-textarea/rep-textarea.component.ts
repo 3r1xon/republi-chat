@@ -21,13 +21,23 @@ export class REPTextareaComponent implements OnInit {
   @Input()
   public placeholder: string = '';
 
+  @Input()
+  public rows: number = 20;
+
+  @Input()
+  public cols: number = 50;
+
+  @Input()
+  public background: string = "#95959536";
+
   @Output()
   public send = new EventEmitter();
 
   @Output()
   public textChange = new EventEmitter<string>();
 
-  submitHandler() {
+  submitHandler(event: any) {
+    event.preventDefault();
     this.send.emit(this.text);
   }
 

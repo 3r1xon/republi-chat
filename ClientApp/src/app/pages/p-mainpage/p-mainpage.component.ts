@@ -61,6 +61,7 @@ export class PMainpageComponent implements OnInit {
   }
 
   async sendChannelMessage(message: string) {
+    console.log(message)
     await this._msService.sendMessage(message);
   }
 
