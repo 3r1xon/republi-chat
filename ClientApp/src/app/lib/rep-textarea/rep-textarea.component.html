@@ -1,5 +1,6 @@
 <div id="rep-textarea" [ngClass]="{
-        'grayed-out': !enabled
+        'grayed-out': !enabled,
+        'enabled': enabled
     }">
 
     <textarea 
@@ -12,6 +13,6 @@
     [style.background]="background"
     [(ngModel)]="text"
     (ngModelChange)="onChange()"
-    [placeholder]="placeholder"></textarea>
+    [placeholder]="enabled ? placeholder : ''"></textarea>
 
 </div>

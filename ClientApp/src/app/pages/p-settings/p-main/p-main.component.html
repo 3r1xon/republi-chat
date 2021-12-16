@@ -2,11 +2,11 @@
 
     <nav id="menu">
 
-        <div *ngFor="let submenu of menus; let i = index" id="submenu" matRipple matRippleColor="#ffffff47"
+        <button *ngFor="let submenu of menus; let i = index" id="submenu" matRipple matRippleColor="#ffffff47"
             (click)="changeRoute(i)" [style.color]="submenu.color">
             <p>{{submenu.name}}</p>
             <mat-icon>{{submenu.icon}}</mat-icon>
-        </div>
+        </button>
 
     </nav>
 

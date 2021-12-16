@@ -43,8 +43,9 @@
     
     button {
         border: none;
-        width: 45px;
-        height: 45px;
+        min-width: 45px;
+        min-height: 45px;
+        resize: none;
         margin: 10px;
         background: var(--GREY);
         display: flex;
