@@ -56,7 +56,7 @@ router.post('/signUp', async (req, res) => {
 
 router.post('/authorize', Auth.authToken, async (req, res) => {
 
-  const ACCESS_TOKEN = res.getHeader("ACCESS_TOKEN") ?? req.headers['authorization'].split(' ')[1];
+  const _id = res.locals._id;
 
   let dbUser = await db.query(
   `
@@ -68,9 +68,8 @@ router.post('/authorize', Auth.authToken, async (req, res) => {
   U.EMAIL as email,
   TO_BASE64(U.PROFILE_PICTURE) as picture
   FROM USERS U
-  LEFT JOIN SESSIONS S ON S.ID_USER = U.ID_USER
-  WHERE S.TOKEN = ?
-  `, [ACCESS_TOKEN]);
+  WHERE U.ID_USER = ?
+  `, [_id]);
 
   dbUser = dbUser[0];
 
@@ -89,7 +88,6 @@ router.post('/logIn', async (req, res) => {
     email: req.body.email,
     password: req.body.password
   };
-
 
   try {
 

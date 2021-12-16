@@ -30,6 +30,7 @@ export class UserService implements CanActivate {
     return this.userAuth;
   }
 
+  
   public async authorize(): Promise<any> {
     const REFRESH_TOKEN = this.cookieService.get("REFRESH_TOKEN");
 
@@ -45,15 +46,14 @@ export class UserService implements CanActivate {
       await this.router.navigate(['mainpage']);
     } else {
       this.router.navigate(['login']);
-      localStorage.clear();
       this.cookieService.deleteAll();
     }
   }
 
+
   public async logOut(): Promise<any> {
     await this.http.delete(`${server.BASE_URL}/authentication/logout`).toPromise();
 
-    localStorage.clear();
     this.cookieService.deleteAll();
 
     this.userAuth = false;
@@ -62,8 +62,8 @@ export class UserService implements CanActivate {
     window.location.reload();
   }
 
+
   public async deAuth() {
-    localStorage.clear();
     this.cookieService.deleteAll();
 
     this.currentUser = null;
@@ -77,6 +77,4 @@ export class UserService implements CanActivate {
   public deleteProfile() {
     return this.http.delete<ServerResponse>(`${server.BASE_URL}/authentication/deleteProfile`);
   }
-
-
 }

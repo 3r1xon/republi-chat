@@ -37,19 +37,18 @@ class Auth {
                 `
                 UPDATE SESSIONS
                 SET
-                TOKEN = ?,
                 REFRESH_TOKEN = ?
                 WHERE ID_USER = ?
-                `, [ACCESS_TOKEN, REFRESH_TOKEN, user._id]);
+                `, [REFRESH_TOKEN, user._id]);
             } else {
 
                 await db.query(
                 `
                 INSERT INTO SESSIONS
-                (ID_USER, TOKEN, REFRESH_TOKEN)
+                (ID_USER, REFRESH_TOKEN)
                 VALUES
-                (?, ?, ?)
-                `, [user._id, ACCESS_TOKEN, REFRESH_TOKEN]);
+                (?, ?)
+                `, [user._id, REFRESH_TOKEN]);
             }
         } catch (err) {
             console.log(err);
@@ -67,20 +66,28 @@ class Auth {
 
         const ACCESS_TOKEN = req.headers['authorization'].split(' ')[1];
 
+        const { REFRESH_TOKEN } = req.cookies;
+
         if (ACCESS_TOKEN == null) return res.status(401).send({ 
             success: false, 
             message: "Authentication failed!"
         });
 
+        console.log(REFRESH_TOKEN);
+
         let session = await db.query(
         `
         SELECT
-        ID_USER
-        FROM SESSIONS
-        WHERE TOKEN = ?
-        `, [ACCESS_TOKEN]);
+        U.ID_USER,
+        U.EMAIL
+        FROM USERS U
+        LEFT JOIN SESSIONS S ON S.ID_USER = U.ID_USER
+        WHERE REFRESH_TOKEN = ?
+        `, [REFRESH_TOKEN]);
 
         session = session[0];
+
+        console.log(session);
 
         if (session) {
 
@@ -90,33 +97,15 @@ class Auth {
                 if (decoded) {
                     next();
                 } else {
-                    console.log(err)
-                    const { REFRESH_TOKEN } = req.cookies;
 
                     jwt.verify(REFRESH_TOKEN, process.env.SECRET_KEY, async (err, decoded) => {
                         if (decoded) {
 
-                            let dbRefreshToken = await db.query(
-                            `
-                            SELECT
-                            U.EMAIL,
-                            U.ID_USER
-                            FROM USERS U
-                            LEFT JOIN SESSIONS S ON S.ID_USER = U.ID_USER
-                            WHERE S.REFRESH_TOKEN = ?
-                            `, [REFRESH_TOKEN]);
-
-                            dbRefreshToken = dbRefreshToken[0];
-
-                            if (dbRefreshToken) {
-                                res.set(await this.generateToken({
-                                    _id: dbRefreshToken.ID_USER,
-                                    email: dbRefreshToken.EMAIL
-                                }));
-                                next();
-                            } else {
-                                return res.status(401).send({ success: false, message: "There has been an error with the token authentication" });
-                            }
+                            res.set(await this.generateToken({
+                                _id: session.ID_USER,
+                                email: session.EMAIL
+                            }));
+                            next();
                         } else res.status(401).send({ success: false, message: "Refresh token invalid!" });
                     });
                 }

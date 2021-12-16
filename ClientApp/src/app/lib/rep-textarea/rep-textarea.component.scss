@@ -2,7 +2,6 @@
     height: 100%;
     display: flex;
     border-radius: 5px;
-    margin: 2px;
 
     textarea {
         width: 100%;
@@ -13,10 +12,6 @@
         resize: none;
         border: none;
         transition: 150ms;
-
-        &:focus {
-            outline: 2px solid royalblue;
-        }
     }
 }
 

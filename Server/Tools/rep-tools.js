@@ -43,7 +43,7 @@ class REPTools {
         while (USER_CODE.length < 4) USER_CODE = "0" + USER_CODE;
 
         if (USER_CODE.length > 4)
-            callback(`Too many names '${NAME}'`);
+            callback(new Error(`Too many names '${NAME}'`));
         else
             callback(undefined, USER_CODE);
     }

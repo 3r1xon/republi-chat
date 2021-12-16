@@ -26,7 +26,7 @@ export class InterceptorService implements HttpInterceptor {
     private cookieService: CookieService,
     ) { }
 
-  private loadingBlackList: Array<string> = [
+  private readonly loadingBlackList: Array<string> = [
     `${server.BASE_URL}/messages/sendMessage`,
     `${server.BASE_URL}/messages/deleteMessage`
   ];
@@ -39,7 +39,7 @@ export class InterceptorService implements HttpInterceptor {
 
     const authReq = req.clone({
       headers: req.headers
-        .set('Authorization', `Bearer ${localStorage.getItem('ACCESS_TOKEN')}`)
+        .set('Authorization', `Bearer ${this.cookieService.get("ACCESS_TOKEN")}`)
         .set('RequestDate', `${new Date().getTime()}`),
       withCredentials: true
     });
@@ -51,7 +51,7 @@ export class InterceptorService implements HttpInterceptor {
         const REFRESH_TOKEN = res.headers.get("REFRESH_TOKEN");
 
         if (ACCESS_TOKEN && REFRESH_TOKEN) {
-          localStorage.setItem("ACCESS_TOKEN", ACCESS_TOKEN);
+          this.cookieService.set("ACCESS_TOKEN", ACCESS_TOKEN);
           this.cookieService.set("REFRESH_TOKEN", REFRESH_TOKEN);
         }
 
