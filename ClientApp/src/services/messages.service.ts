@@ -40,8 +40,6 @@ export class MessagesService {
     const res = await this.http.get<ServerResponse>(`${server.BASE_URL}/messages/getChannelMessages/${this.currentRoom}`).toPromise();
 
     if (res.success) {
-      this.messages = [];
-
       this.messages = res.data?.map((msg) => {
         return {
           id: msg.id,

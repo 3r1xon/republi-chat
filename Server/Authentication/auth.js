@@ -91,8 +91,8 @@ class Auth {
                         if (decoded) {
                             res.locals._id = decoded._id;
                             res.set(await this.generateToken({
-                                _id: session.ID_USER,
-                                email: session.EMAIL
+                                _id: decoded._id,
+                                email: decoded.email
                             }));
                             next();
                         } else res.status(401).send({ success: false, message: "Refresh token invalid!" });
