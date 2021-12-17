@@ -26,7 +26,7 @@ class DBUser {
             return this;
         }
         else
-            callback(new Error("User is not a member of this channel"));
+            callback(new Error("User is not a member of this channel!"));
     }
 
     // Verifies if the user has a permission based on the current channel.

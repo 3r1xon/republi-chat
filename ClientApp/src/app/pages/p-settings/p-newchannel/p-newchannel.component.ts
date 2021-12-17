@@ -54,7 +54,7 @@ export class PNewChannelComponent implements OnInit {
       icon: "add",
       enabled: () => this.formAdd.valid,
       background: "success",
-      onClick: () => { }
+      onClick: () => { this.addChannel(); }
     }
   ];
 
@@ -92,7 +92,52 @@ export class PNewChannelComponent implements OnInit {
           }
         ]);
     }
+  }
 
+  async addChannel() {
+
+    const channel: Channel = {
+      name: this.formAdd.value.channelName,
+      code: this.formAdd.value.channelCode
+    };
+
+    const res = await this._msService.addChannel(channel).toPromise();
+
+    if (res.success) {
+
+      this.formAdd.setValue({ 
+        channelName: '',
+        channelCode: ''
+      });
+
+      this._utils.showRequest(
+        "Channel found and added", 
+        `The channel "${channel.name}" has been successfully added, you can now find it at the main page!`, 
+        [
+          {
+            name: "Mainpage",
+            icon: "home",
+            onClick: () => {
+              this.router.navigate(['mainpage']);
+            },
+            background: "success"
+          },
+          {
+            name: "Close",
+            icon: "close",
+          }
+        ]);
+    } else {
+      this._utils.showRequest(
+        "Channel not found", 
+        `The channel "${channel.name}" was not found, are you sure the name and code is correct?`, 
+        [
+          {
+            name: "Close",
+            icon: "close",
+          }
+        ]);
+    }
   }
 
   async onChange(event) {

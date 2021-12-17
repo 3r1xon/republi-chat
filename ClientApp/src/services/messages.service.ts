@@ -67,6 +67,11 @@ export class MessagesService {
           auth: isUserMessage
         });
       });
+
+      // this._webSocket.socket.on("connection")
+      // this._webSocket.socket.join(1, () => {
+
+      // });
   
       this._webSocket.listen("deleteMessage").subscribe((_id: number) => {
         const index = this.messages.findIndex(msg => msg.id == _id);
@@ -79,7 +84,7 @@ export class MessagesService {
   // Send message on the current room
   public async sendMessage(message: string) {
     const msg = {
-      id: this._user.currentUser?.id,
+      id: this._user.currentUser.id,
       message: message
     };
 
@@ -97,6 +102,10 @@ export class MessagesService {
 
   public createChannel(channel: Channel) {
     return this.http.post<ServerResponse>(`${server.BASE_URL}/channels/createChannel`, channel);
+  }
+
+  public addChannel(channel: Channel) {
+    return this.http.post<ServerResponse>(`${server.BASE_URL}/channels/addChannel`, channel);
   }
 
 }

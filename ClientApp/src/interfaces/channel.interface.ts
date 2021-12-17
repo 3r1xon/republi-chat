@@ -1,5 +1,6 @@
 export interface Channel {
     _id?: number;
     name: string;
-    picture: any;
+    code?: string;
+    picture?: any;
 }
