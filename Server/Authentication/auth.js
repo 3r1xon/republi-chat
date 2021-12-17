@@ -18,7 +18,9 @@ class Auth {
 
         user.refresh = true;
 
-        const REFRESH_TOKEN = jwt.sign(user, process.env.SECRET_KEY);
+        const REFRESH_TOKEN = jwt.sign(user, process.env.SECRET_KEY, {
+            expiresIn: "1 week"
+        });
 
         try {
 
@@ -62,45 +64,32 @@ class Auth {
 
 
 
-    static authToken = async (req, res, next) => {
+    static authToken = (req, res, next) => {
 
         const ACCESS_TOKEN = req.headers['authorization'].split(' ')[1];
 
         const { REFRESH_TOKEN } = req.cookies;
 
-        if (ACCESS_TOKEN == null) return res.status(401).send({ 
-            success: false, 
-            message: "Authentication failed!"
-        });
+        jwt.verify(ACCESS_TOKEN, process.env.SECRET_KEY, async (err, decoded) => {
+            if (decoded) {
+                res.locals._id = decoded._id;
+                next();
+            } else {
 
-        console.log(REFRESH_TOKEN);
+                let registered = await db.query(
+                `
+                SELECT 1
+                FROM SESSIONS S
+                WHERE S.REFRESH_TOKEN = ?
+                `, [REFRESH_TOKEN]);
 
-        let session = await db.query(
-        `
-        SELECT
-        U.ID_USER,
-        U.EMAIL
-        FROM USERS U
-        LEFT JOIN SESSIONS S ON S.ID_USER = U.ID_USER
-        WHERE REFRESH_TOKEN = ?
-        `, [REFRESH_TOKEN]);
+                registered = registered[0];
 
-        session = session[0];
-
-        console.log(session);
-
-        if (session) {
-
-            res.locals._id = session.ID_USER;
-
-            jwt.verify(ACCESS_TOKEN, process.env.SECRET_KEY, (err, decoded) => {
-                if (decoded) {
-                    next();
-                } else {
+                if (registered) {
 
                     jwt.verify(REFRESH_TOKEN, process.env.SECRET_KEY, async (err, decoded) => {
                         if (decoded) {
-
+                            res.locals._id = decoded._id;
                             res.set(await this.generateToken({
                                 _id: session.ID_USER,
                                 email: session.EMAIL
@@ -108,11 +97,9 @@ class Auth {
                             next();
                         } else res.status(401).send({ success: false, message: "Refresh token invalid!" });
                     });
-                }
-            });
-        } else {
-            res.status(401).send({ success: false, message: "Token not found!" });
-        }
+                } else res.status(401).send({ success: false, message: "Token not registered!" });
+            }
+        });
     };
 }
 

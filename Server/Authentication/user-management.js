@@ -73,11 +73,9 @@ router.post('/authorize', Auth.authToken, async (req, res) => {
 
   dbUser = dbUser[0];
 
-  if (dbUser) {
-    res.status(200).send({ success: true, data: dbUser });
-  } else {
-    res.status(401).send({ success: false, message: "Token not registered in your user!"});
-  }
+  if (dbUser) return res.status(200).send({ success: true, data: dbUser });
+
+  res.status(401).send({ success: false, message: "There has been an error with the token authentication!"});
 });
 
 
