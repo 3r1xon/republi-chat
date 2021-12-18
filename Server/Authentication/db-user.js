@@ -10,7 +10,7 @@ class DBUser {
     async setChannel(channel, callback) {
         this.channelID = channel;
 
-        let channelMemberID = await db.query(
+        const channelMemberID = await db.query(
         `
         SELECT ID_CHANNEL_MEMBER
         FROM CHANNELS_MEMBERS

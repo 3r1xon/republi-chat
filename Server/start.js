@@ -26,7 +26,7 @@ app.use(cookieParser());
 
 // Get the exact time of the request, available for every request.
 app.use((req, res, next) => { 
-  res.locals._requestDate = parseInt(req.headers['requestdate']);
+  res.locals._requestDate = new Date(parseInt(req.headers['requestdate']));
   next(); 
 });
 

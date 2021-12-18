@@ -12,7 +12,7 @@ export class GlobalErrorHandler implements ErrorHandler {
 
   handleError(error: any) {
     if (error instanceof HttpErrorResponse) return;
-
+    console.error(error);
     this.zone.run(() => { 
       this._utils.showBugReport(error.rejection, error); 
     });

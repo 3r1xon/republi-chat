@@ -25,7 +25,9 @@ export class MessagesService {
 
   public channels: Array<Channel> = []
 
-  public currentRoom;
+  public currentRoom: number;
+
+  public msListener: any;
 
   public async getChannels() {
     const res = await this.http.get<ServerResponse>(`${server.BASE_URL}/channels/getChannels`).toPromise();
@@ -51,8 +53,10 @@ export class MessagesService {
           auth: !!msg.auth
         };
       });
-      
-      this._webSocket.listen("message").subscribe((message: string) => {
+
+      this.msListener?.unsubscribe();
+
+      this.msListener = this._webSocket.listen("message").subscribe((message: string) => {
         const msg = JSON.parse(message);
 
         const isUserMessage = msg.code == this._user.currentUser.code && msg.name == this._user.currentUser.name;
@@ -68,15 +72,11 @@ export class MessagesService {
         });
       });
 
-      // this._webSocket.socket.on("connection")
-      // this._webSocket.socket.join(1, () => {
-
-      // });
-  
       this._webSocket.listen("deleteMessage").subscribe((_id: number) => {
         const index = this.messages.findIndex(msg => msg.id == _id);
         this.messages.splice(index, 1);
       });
+      
     }
 
   }
@@ -84,10 +84,9 @@ export class MessagesService {
   // Send message on the current room
   public async sendMessage(message: string) {
     const msg = {
-      id: this._user.currentUser.id,
-      message: message
+      message: message,
+      _channelID: this.currentRoom
     };
-
     await this.http.post<ServerResponse>(`${server.BASE_URL}/messages/sendMessage`, msg).toPromise();
   }
 

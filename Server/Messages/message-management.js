@@ -24,7 +24,7 @@ router.get('/getChannelMessages/:id', async (req, res) => {
     } else {
 
       try {
-        let messages = await db.query(
+        const messages = await db.query(
         `
         SELECT
         M.ID_CHANNEL_MESSAGE as id,
@@ -35,7 +35,7 @@ router.get('/getChannelMessages/:id', async (req, res) => {
         M.DATE as date,
         IF(U.ID_USER = ?, TRUE, FALSE) as auth
         FROM CHANNELS_MESSAGES M
-        LEFT JOIN CHANNELS_MEMBERS CM ON CM.ID_CHANNEL = M.ID_CHANNEL
+        LEFT JOIN CHANNELS_MEMBERS CM ON CM.ID_CHANNEL_MEMBER = M.ID_CHANNEL_MEMBER
         LEFT JOIN CHANNELS C ON CM.ID_CHANNEL = M.ID_CHANNEL
         LEFT JOIN USERS U ON U.ID_USER = CM.ID_USER
         WHERE C.ID_CHANNEL = ?
@@ -53,59 +53,64 @@ router.get('/getChannelMessages/:id', async (req, res) => {
 });
 
 
-/*
+
+
 router.post('/sendMessage', async (req, res) => {
 
   const msg = {
     id_user: res.locals._id,
     message: req.body.message,
-    date: fm.format(new Date(res.locals._requestDate), 'yyyy-MM-dd HH:mm')
+    date: fm.format(res.locals._requestDate, 'yyyy-MM-dd HH:mm')
   };
+
+  const user = new DBUser(msg.id_user);
 
   const _channelID = req.body._channelID;
 
-  try {
-    let _id = await db.query(
-    `
-    INSERT INTO CHANNELS_MESSAGES
-    (ID_CHANNEL, ID_MEMBER, MESSAGE, DATE)
-    VALUES
-    (?, ?, ?)
-    RETURNING ID_MESSAGE
-    `, [_channelID, msg.id_user, msg.message, msg.date]);
+  user.setChannel(_channelID, async (err, user) => {
+    if (err) {
 
-    _id = _id[0].ID_MESSAGE;
+    } else {
 
-    let message = await db.query(
-    `
-    SELECT 
-    M.ID_MESSAGE as id,
-    U.USER_CODE as code,
-    U.COLOR as color,
-    U.NAME as name,
-    TO_BASE64(U.PROFILE_PICTURE) as picture,
-    M.MESSAGE as message,
-    M.DATE as date
-    FROM CHANNELS_MESSAGES M
-    LEFT JOIN USERS U ON U.ID_USER = M.ID_USER
-    WHERE M.ID_MESSAGE = ?
-    ORDER BY M.ID_MESSAGE DESC
-    `, [_id]);
-
-    message = message[0];
-
-    socket.emit("message", JSON.stringify(message));
-
-    res.status(201).send({ success: true });
-  } catch (error) {
-    console.log(error);
+      let _id = await db.query(
+      `
+      INSERT INTO CHANNELS_MESSAGES
+      (ID_CHANNEL, ID_CHANNEL_MEMBER, MESSAGE, DATE)
+      VALUES
+      (?, ?, ?, ?)
+      RETURNING ID_CHANNEL_MESSAGE
+      `, [user.channelID, user.channelMemberID, msg.message, msg.date]);
     
-    res.status(500).send({ success: false, message: `Database error!` });
-  }
-});
-*/
+      _id = _id[0].ID_CHANNEL_MESSAGE;
+    
+      let message = await db.query(
+      `
+      SELECT
+      M.ID_CHANNEL_MESSAGE as id,
+      U.USER_CODE as code,
+      U.COLOR as color,
+      U.NAME as name,
+      TO_BASE64(U.PROFILE_PICTURE) as picture,
+      M.MESSAGE as message,
+      M.DATE as date
+      FROM CHANNELS_MESSAGES M
+      LEFT JOIN CHANNELS_MEMBERS CM ON CM.ID_CHANNEL_MEMBER = M.ID_CHANNEL_MEMBER
+      LEFT JOIN USERS U ON U.ID_USER = CM.ID_USER
+      WHERE M.ID_CHANNEL_MESSAGE = ?
+      `, [_id]);
+    
+      message = message[0];
+    
+      socket.emit("message", JSON.stringify(message));
+    
+      res.status(201).send({ success: true });
+    }
+  })
 
-/*
+});
+
+
+
 router.delete('/deleteMessage', async (req, res) => {
 
   try {
@@ -114,7 +119,7 @@ router.delete('/deleteMessage', async (req, res) => {
     await db.query(
     `
     DELETE FROM CHANNELS_MESSAGES 
-    WHERE ID_MESSAGE = ?
+    WHERE ID_CHANNEL_MESSAGE = ?
     `, [id_message]);
 
     socket.emit("deleteMessage", `${id_message}`);
@@ -127,7 +132,6 @@ router.delete('/deleteMessage', async (req, res) => {
   }
 
 });
-*/
 
 
 module.exports = router;
