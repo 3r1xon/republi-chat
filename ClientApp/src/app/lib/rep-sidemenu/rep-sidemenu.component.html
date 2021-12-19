@@ -3,8 +3,8 @@
     <div id="tabs">
 
         <div id="tab" *ngFor="let tab of entries; let i = index;"
-            [style.borderRight]="i % 2 == 0 ? '1px solid #ffffff2a' : ''"
-            [style.borderLeft]="i % 2 == 1 ? '1px solid #ffffff2a' : ''"
+            [style.borderRight]="i + 1 != entries.length ? '1px solid #ffffff2a' : ''"
+            [style.borderLeft]="i != 0 ? '1px solid #ffffff2a' : ''"
             (click)="selectTab(i)">
             {{tab.tabname}}
         </div>

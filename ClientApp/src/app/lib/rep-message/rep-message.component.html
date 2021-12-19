@@ -1,33 +1,38 @@
 <div id="message-box" [ngStyle]="{ 
         background: active ? 'rgb(67 67 67)' : '' 
-    }" (click)="clickHandler()">
+    }">
 
-    <img *ngIf="!pictureError" class="user-image" [src]="message.picture" (error)="pictureError = true"
-    (click)="onUserClick.emit('onUserClick')">
-
-    <div class="user-image absent-image" *ngIf="pictureError">
-        <h1>{{message.name[0]}}</h1>
-    </div>
-
-    <div id="message-info">
-
-        <div>
-            <p  id="username"
+    <div id="cont" (click)="clickHandler()">
+        
+        <img *ngIf="!pictureError" class="user-image" [src]="message.picture" (error)="pictureError = true"
+        (click)="onUserClick.emit('onUserClick')">
+        
+        <div class="user-image absent-image" *ngIf="pictureError">
+            <h1>{{message.name[0]}}</h1>
+        </div>
+        
+        <div id="message-info">
+            
+            <div>
+                <p  id="username"
                 [style.color]="message.color" 
                 (click)="onUserClick.emit('onUserClick')"
                 >{{message.name}}</p>
-            <p id="time">{{dateFormatter()}}</p>
+                <p id="time">{{dateFormatter()}}</p>
+            </div>
+            
+            <div id="content">
+                <p>
+                    {{message.message}}
+                </p>
+            </div>
+            
         </div>
-
-        <div id="content">
-            <p>
-                {{message.message}}
-            </p>
-        </div>
-
+        
     </div>
 
-    <rep-window stopPropagation [subMenu]="options"
+    <rep-window
+    [subMenu]="options"
     (open)="setToggle($event)"></rep-window>
-
+        
 </div>

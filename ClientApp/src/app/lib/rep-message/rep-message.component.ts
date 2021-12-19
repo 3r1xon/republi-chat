@@ -5,7 +5,8 @@ import {
   OnInit, 
   EventEmitter, 
   HostListener,
-  ElementRef
+  ElementRef,
+  ViewChild
 } from '@angular/core';
 import { format } from 'date-fns';
 import { Message } from 'src/interfaces/message.interface';
@@ -93,14 +94,15 @@ export class REPMessageComponent implements OnInit {
     return '';
   }
 
-  setToggle($event) {
-    this.active = $event;
+  setToggle(event) {
+    this.active = event;
   }
 
   @HostListener('document:click', ['$event'])
   clickout(event: any) {
-    if (!this.eRef.nativeElement.contains(event.target))
+    if (!this.eRef.nativeElement.contains(event.target)) {
       this.active = false;
+    }
   }
 
 }

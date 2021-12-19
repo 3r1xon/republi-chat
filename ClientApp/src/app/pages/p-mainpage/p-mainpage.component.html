@@ -1,12 +1,13 @@
 <div id="mainpage">
 
     <rep-sidemenu
+    id="channels"
     [entries]="channels"
     (onNew)="addNew()" 
-    (onTab)="currentTab = $event">
+    (onTab)="channelsTab = $event">
 
         <rep-message
-        *ngFor="let section of channels[currentTab]?.sections; let i = index" 
+        *ngFor="let section of channels[channelsTab]?.sections; let i = index" 
         (onClick)="selectChannel(section._id)" 
         [message]="section" 
         [options]="options">
@@ -19,5 +20,14 @@
     [messages]="_msService.messages" 
     [user]="_user.currentUser"
     (sendMessage)="sendChannelMessage($event)"></rep-chat>
+
+
+    <rep-sidemenu
+    id="ch-info"
+    [entries]="serverInfo"
+    (onTab)="serverInfoTab = $event">
+
+
+    </rep-sidemenu>
 
 </div>

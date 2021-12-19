@@ -3,18 +3,24 @@
     height: auto;
     display: flex;
     animation: appear 500ms;
-    align-items: center;
     position: relative;
     transition: 150ms;
+
+    #cont {
+        width: 100%;
+        display: flex;
+        align-items: center;
+    }
+    
+    p {
+        color: var(--WHITE);
+        word-wrap: anywhere;
+    }
 
     &:hover {
         background: var(--GREY);
     }
 
-    p {
-        color: var(--WHITE);
-        word-wrap: break-word;
-    }
 
     .user-image {
         min-width: 45px;

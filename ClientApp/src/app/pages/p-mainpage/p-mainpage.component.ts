@@ -30,6 +30,21 @@ export class PMainpageComponent implements OnInit, OnDestroy {
       }
     ];
 
+    this.serverInfo = [
+      {
+        tabname: "Online",
+        sections: []
+      },
+      {
+        tabname: "Offline",
+        sections: []
+      },
+      {
+        tabname: "Pending",
+        sections: []
+      },
+    ];
+
     this.channels[0].sections = this._msService.channels;
 
     this._msService.currentRoom = this.channels[0].sections[0]._id;
@@ -43,8 +58,6 @@ export class PMainpageComponent implements OnInit, OnDestroy {
     this._msService.msListener.unsubscribe();
   }
 
-  public currentTab: number = 0;
-
   public options: Array<REPButton> = [
     {
       name: "Remove",
@@ -54,10 +67,20 @@ export class PMainpageComponent implements OnInit, OnDestroy {
     }
   ];
 
+  public channelsTab: number = 0;
+
   public channels: Array<{ 
     tabname: string, 
     sections: Array<any> 
   }> = [];
+
+  public serverInfoTab: number = 0;
+
+  public serverInfo: Array<{ 
+    tabname: string, 
+    sections: Array<any> 
+  }> = [];
+
 
   async selectChannel(room: number) {
     this._msService.currentRoom = room;

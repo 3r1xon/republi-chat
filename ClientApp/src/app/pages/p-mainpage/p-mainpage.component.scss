@@ -4,9 +4,11 @@
     display: flex;
     overflow-x: hidden;
 
-    rep-sidemenu {
+    #channels {
         min-width: 250px;
         max-width: 250px;
+        border-right: 1px solid var(--GREY);
+
 
         rep-message {
             width: 100%;
@@ -17,6 +19,12 @@
     rep-chat {
         width: 100%;
         height: 100%;
+    }
+
+    #ch-info {
+        min-width: 250px;
+        max-width: 250px;
+        border-left: 1px solid var(--GREY);
     }
 
 }

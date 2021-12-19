@@ -54,7 +54,6 @@ router.get('/getChannelMessages/:id', async (req, res) => {
 
 
 
-
 router.post('/sendMessage', async (req, res) => {
 
   const msg = {
