@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { io } from 'socket.io-client';
+import { io, Socket } from 'socket.io-client';
 import { server } from 'src/environments/server';
 import { Observable } from 'rxjs';
 
@@ -15,7 +15,7 @@ export class WebSocketService {
 
   public isConnected: boolean = false;
 
-  public socket;
+  public socket: Socket;
 
   public listen(eventName: string) {
     return new Observable((subscriber) => {
