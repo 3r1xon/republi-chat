@@ -15,6 +15,11 @@ export class REPButtonComponent {
     danger: "#c62828"
   };
 
+  public tooltipVisible: boolean = false;
+
+  @Input()
+  public tooltip: string;
+
   @Input()
   public icon: string = "open_in_new";
 
@@ -44,5 +49,10 @@ export class REPButtonComponent {
     if (!this.enabled) return;
 
     this.onClick.emit();
+  }
+
+  toggleTooltip() {
+    if (this.tooltip)
+      this.tooltipVisible = !this.tooltipVisible;
   }
 }

@@ -82,7 +82,7 @@ export class REPInputComponent implements OnInit, ControlValueAccessor {
   }
 
   @Input()
-  public tooltip: string = "";
+  public tooltip: string;
 
   @Input()
   public required: boolean = false;
@@ -117,10 +117,6 @@ export class REPInputComponent implements OnInit, ControlValueAccessor {
   getPlaceholder() {
     if (!this.placeholderAnimated) return '';
     return this.placeholder;
-  }
-
-  toggleTooltip() {
-    this.tooltipVisible = !this.tooltipVisible;
   }
 
   onChange: any = () => {

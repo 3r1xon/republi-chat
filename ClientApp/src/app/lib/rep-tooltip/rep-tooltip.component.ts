@@ -1,15 +1,41 @@
-import { Component, OnInit } from '@angular/core';
+import { 
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  ViewChild,
+} from '@angular/core';
 
 @Component({
   selector: 'rep-tooltip',
   templateUrl: './rep-tooltip.component.html',
-  styleUrls: ['./rep-tooltip.component.scss']
+  styleUrls: ['./rep-tooltip.component.scss'],
 })
-export class REPTooltipComponent implements OnInit {
+export class REPTooltipComponent implements AfterViewInit {
 
-  constructor() { }
+  constructor(private cd: ChangeDetectorRef) { }
 
-  ngOnInit(): void {
+  @ViewChild('tooltip')
+  private tooltip: ElementRef;
+
+  private DOMWidth = window.innerWidth;
+  private DOMHeight = window.innerHeight;
+
+  public marginLeft: string = "0px";
+  public marginRight: string = "0px";
+
+  ngAfterViewInit(): void {
+
+    const tooltipWidth = this.tooltip.nativeElement.offsetWidth;
+    const tooltipHeight = this.tooltip.nativeElement.offsetWidth;
+
+    const { x, y } = this.tooltip.nativeElement.getBoundingClientRect();
+
+    if (x + tooltipWidth > this.DOMWidth) {
+      this.marginLeft = `${x - this.DOMWidth - tooltipWidth}px`;
+    }
+
+    this.cd.detectChanges();
   }
 
 }

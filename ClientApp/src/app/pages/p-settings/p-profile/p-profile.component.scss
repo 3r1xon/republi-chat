@@ -54,16 +54,8 @@
                     margin-left: 10px;
                 }
 
-                rep-tooltip {
-                    display: none;
-                }
-
                 #info {
                     color: var(--GREY);
-                }
-
-                #info:hover + rep-tooltip {
-                    display: flex;
                 }
             }
         }

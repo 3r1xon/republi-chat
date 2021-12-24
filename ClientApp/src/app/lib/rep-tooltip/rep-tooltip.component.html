@@ -1,4 +1,6 @@
-<div id="rep-tooltip">
+<div id="rep-tooltip" #tooltip
+    [style.marginLeft]="marginLeft"
+    [style.marginRight]="marginRight">
     <p>
         <ng-content></ng-content>
     </p>
