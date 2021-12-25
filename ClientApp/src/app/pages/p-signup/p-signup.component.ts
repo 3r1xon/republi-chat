@@ -18,10 +18,33 @@ export class PSignupComponent implements OnInit {
     ) { }
 
   ngOnInit(): void {
-    this.particleNumber = Array(30).fill(0);
   }
 
   public particleNumber: Array<any> = [];
+
+  public emojis: Array<string> = [
+    "😀",
+    "🍕",
+    "🎳",
+    "👽",
+    "👀",
+    "😈",
+    "💀",
+    "🤡",
+    "🍉",
+    "👾",
+    "⚾",
+    "😍",
+    "🎩",
+    "👁️",
+    "☠️",
+    "🥝",
+    "🤖",
+    "🌴",
+    "🌮",
+    "🎃",
+    "🔥"
+  ];
 
   public alert: string = "";
 

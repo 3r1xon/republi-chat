@@ -4,6 +4,7 @@ import { UserService } from 'src/services/user.service';
 
 import { PLoginComponent } from './pages/p-login/p-login.component';
 import { PMainpageComponent } from './pages/p-mainpage/p-mainpage.component';
+import { PNotFoundComponent } from './pages/p-not-found/p-not-found.component';
 import { PSettingsComponent } from './pages/p-settings/p-main/p-main.component';
 import { PNewChannelComponent } from './pages/p-settings/p-newchannel/p-newchannel.component';
 import { PPrivacyComponent } from './pages/p-settings/p-privacy/p-privacy.component';
@@ -27,7 +28,9 @@ const routes: Routes = [
       { path: 'newchannel', component: PNewChannelComponent, pathMatch: 'full'}
     ],
     canActivate: [UserService] 
-  }
+  },
+  { path: '**', redirectTo: '404' },
+  { path: '404', component: PNotFoundComponent },
 ];
 
 @NgModule({

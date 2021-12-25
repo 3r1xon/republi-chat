@@ -23,12 +23,34 @@ export class PLoginComponent implements OnInit {
     ) { }
 
   ngOnInit(): void {
-    this.particles = Array(30).fill(0);
   }
 
-  public particles: Array<any> = []; 
-
   public alert: string = "";
+
+  public emojis: Array<string> = [
+    "😀",
+    "🍕",
+    "😃",
+    "🤡",
+    "😅",
+    "👽",
+    "😇",
+    "😈",
+    "😉",
+    "🍉",
+    "😋",
+    "😌",
+    "😍",
+    "🤬",
+    "😏",
+    "🤾",
+    "🥝",
+    "😒",
+    "🥕",
+    "🌮",
+    "🎃",
+    "🔥"
+  ];
 
   public form: FormGroup = this.fb.group({
     email: ['', // Default value

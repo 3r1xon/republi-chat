@@ -27,6 +27,7 @@ import { PProfileComponent } from './pages/p-settings/p-profile/p-profile.compon
 import { PPrivacyComponent } from './pages/p-settings/p-privacy/p-privacy.component';
 import { PUnauthorizedComponent } from './pages/p-unauthorized/p-unauthorized.component';
 import { PNewChannelComponent } from './pages/p-settings/p-newchannel/p-newchannel.component';
+import { PNotFoundComponent } from './pages/p-not-found/p-not-found.component';
 
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -72,6 +73,8 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
     PPrivacyComponent,
     PUnauthorizedComponent,
     PNewChannelComponent,
+    PNotFoundComponent,
+    
     StopPropagationDirective,
   ],
   imports: [

@@ -1,46 +1,50 @@
 <div id="signup">
 
-    <!-- <div id="particle-container">
-        <div class="particle" *ngFor="let particle of particleNumber"></div>
-    </div> -->
+    <div id="particle-container">
+        <span class="particle" *ngFor="let emoji of emojis">{{emoji}}</span>
+    </div>
 
-    <div id="rect"></div>
-
-    <form id="signup-form" (ngSubmit)="signUp()" [formGroup]="form">
-
-        <h1>Sign up</h1>
-
-        <rep-input 
+    <div id="form">
+        
+        <div id="rect"></div>
+        
+        <form id="signup-form" (ngSubmit)="signUp()" [formGroup]="form">
+            
+            <h1>Sign up</h1>
+            
+            <rep-input 
             formControlName="name" 
             maxLength="30" 
             tooltip="The name that will be visible to all other users" 
             placeholder="Name" required="true"></rep-input>
-
-        <rep-input 
+            
+            <rep-input 
             formControlName="email" 
             tooltip="It will be useful for login and account validation" 
             placeholder="Email" required="true"></rep-input>
-
-        <rep-input 
+            
+            <rep-input 
             formControlName="password" 
             maxLength="30" 
             type="password" 
             placeholder="Password" required="true"></rep-input>
-
-        <rep-input 
+            
+            <rep-input 
             formControlName="confirmPassword" 
             maxLength="30" 
             type="password" 
             placeholder="Confirm password" required="true"></rep-input>
-
-        <rep-button [enabled]="form.valid" icon="login">Sign Up</rep-button>
+            
+            <rep-button [enabled]="form.valid" icon="login">Sign Up</rep-button>
+            
+            <p>{{alert}}</p>
+            
+            <a routerLink="/login">Already registered? Log In</a>
+            
+        </form>
         
-        <p>{{alert}}</p>
-        
-        <a routerLink="/login">Already registered? Log In</a>
-        
-    </form>
+    </div>
 
     <rep-footer></rep-footer>
-
+        
 </div>
