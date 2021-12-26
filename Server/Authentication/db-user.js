@@ -21,12 +21,12 @@ class DBUser {
         if (channelMemberID[0]) {
             this.channelMemberID = channelMemberID[0].ID_CHANNEL_MEMBER;
 
-            callback(undefined, this);
+            callback(null, this);
 
             return this;
         }
         else
-            callback(new Error("User is not a member of this channel!"));
+            callback(new Error("User is not a member of this channel!"), null);
     }
 
     // Verifies if the user has a permission based on the current channel.
@@ -41,17 +41,17 @@ class DBUser {
         WHERE ID_CHANNEL_MEMBER = ?
         AND ID_CHANNEL = ?
         AND ${permission} = ?
-        `, [1, this.channelID, true]);
+        `, [this.channelMemberID, this.channelID, true]);
 
         auth = auth[0];
 
         if (auth) {
-            callback(undefined, this);
+            callback(null, this);
 
             return this;
         }
         else
-            callback(new Error("User does not have the required permission!"));
+            callback(new Error("User does not have the required permission!"), null);
     }
 }
 

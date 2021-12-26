@@ -38,8 +38,10 @@ export class MessagesService {
   }
 
   // Get the current room messages
-  public async getChannelMessages() {
-    const res = await this.http.get<ServerResponse>(`${server.BASE_URL}/messages/getChannelMessages/${this.currentRoom}`).toPromise();
+  public async getChannelMessages(room: number) {
+    const res = await this.http.get<ServerResponse>(`${server.BASE_URL}/messages/getChannelMessages/${room}`).toPromise();
+
+    this.currentRoom = room;
 
     if (res.success) {
       this.messages = res.data?.map((msg) => {
@@ -55,6 +57,8 @@ export class MessagesService {
       });
 
       this.msListener?.unsubscribe();
+
+      this._webSocket.emit("joinChannel", this.currentRoom);
 
       this.msListener = this._webSocket.listen("message").subscribe((message: string) => {
         const msg = JSON.parse(message);
@@ -87,7 +91,7 @@ export class MessagesService {
       message: message,
       _channelID: this.currentRoom
     };
-    await this.http.post<ServerResponse>(`${server.BASE_URL}/messages/sendMessage`, msg).toPromise();
+    // await this.http.post<ServerResponse>(`${server.BASE_URL}/messages/sendMessage`, msg).toPromise();
   }
 
   // Delete message on the current room

@@ -47,15 +47,15 @@ export class PMainpageComponent implements OnInit, OnDestroy {
 
     this.channels[0].sections = this._msService.channels;
 
-    this._msService.currentRoom = this.channels[0].sections[0]._id;
+    const room = this.channels[0].sections[0]._id;
 
-    if (this._msService.currentRoom) {
-      await this._msService.getChannelMessages();
+    if (room) {
+      await this._msService.getChannelMessages(room);
     }
   }
 
   ngOnDestroy(): void {
-    this._msService.msListener.unsubscribe();
+    this._msService.msListener?.unsubscribe();
   }
 
   public options: Array<REPButton> = [
@@ -83,9 +83,7 @@ export class PMainpageComponent implements OnInit, OnDestroy {
 
 
   async selectChannel(room: number) {
-    this._msService.currentRoom = room;
-
-    await this._msService.getChannelMessages();
+    await this._msService.getChannelMessages(room);
   }
 
   async sendChannelMessage(message: string) {

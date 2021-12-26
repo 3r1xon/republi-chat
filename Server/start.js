@@ -43,6 +43,6 @@ app.get('/', (req, res) => {
 
 
 
-io.on('connection', (socket) => {
-  console.log('Connection established with new user');
-});
+// io.on('connection', (socket) => {
+//   console.log('Connection established with new user');
+// });

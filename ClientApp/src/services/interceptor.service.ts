@@ -13,6 +13,7 @@ import { tap } from 'rxjs/operators';
 import { CookieService } from 'ngx-cookie-service';
 import { UserService } from './user.service';
 import { server } from 'src/environments/server';
+import { WebSocketService } from './websocket.service';
 
 
 @Injectable({
@@ -23,6 +24,7 @@ export class InterceptorService implements HttpInterceptor {
   constructor(
     private _utils: UtilsService,
     private _user: UserService,
+    private _webSocket: WebSocketService,
     private cookieService: CookieService,
     ) { }
 
@@ -51,8 +53,11 @@ export class InterceptorService implements HttpInterceptor {
         const REFRESH_TOKEN = res.headers.get("REFRESH_TOKEN");
 
         if (ACCESS_TOKEN && REFRESH_TOKEN) {
+          this._webSocket.setAuth(ACCESS_TOKEN, REFRESH_TOKEN);
+
           this.cookieService.set("ACCESS_TOKEN", ACCESS_TOKEN);
           this.cookieService.set("REFRESH_TOKEN", REFRESH_TOKEN);
+
         }
 
         this._utils.loading = false;

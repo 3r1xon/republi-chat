@@ -42,9 +42,7 @@ export class REPInputComponent implements OnInit, ControlValueAccessor {
   constructor() { }
 
   ngOnInit() {
-    if (this.text != '') {
-      this.placeholderAnimated = true;
-    }
+    this.placeholderAnimated = this.text != '';
     this.prevValue = this.text;
   }
 
@@ -132,6 +130,7 @@ export class REPInputComponent implements OnInit, ControlValueAccessor {
   registerOnTouched(fn: any): void {
     if (this.text != this.prevValue) {
       this.onTouch = fn;
+      this.placeholderAnimated = true;
     }
   }
 

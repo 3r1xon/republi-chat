@@ -26,7 +26,15 @@ export class WebSocketService {
   }
 
   public emit(eventName: string, data: any) {
+    console.log(this.socket)
     this.socket.emit(eventName, data);
+  }
+
+  public setAuth(ACCESS_TOKEN: string, REFRESH_TOKEN: string) {
+    this.socket.auth = {
+      ACCESS_TOKEN: ACCESS_TOKEN,
+      REFRESH_TOKEN: REFRESH_TOKEN
+    };
   }
 
 }

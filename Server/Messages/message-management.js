@@ -3,7 +3,7 @@ const Auth           = require('../Authentication/auth');
 const router         = express.Router();
 const db             = require('../Database/db');
 const fm             = require('date-fns');
-const socket         = require('../start');
+const io         = require('../start');
 const DBUser         = require('../Authentication/db-user');
 
 
@@ -54,59 +54,71 @@ router.get('/getChannelMessages/:id', async (req, res) => {
 
 
 
-router.post('/sendMessage', async (req, res) => {
+io.on("connection", (socket) => {
+  console.log('Connection established with new user');
 
-  const msg = {
-    id_user: res.locals._id,
-    message: req.body.message,
-    date: fm.format(res.locals._requestDate, 'yyyy-MM-dd HH:mm')
-  };
+  socket.on("joinChannel", (channelID) => {
+    console.log("joined", channelID);
+    console.log(socket.handshake.auth)
 
-  const user = new DBUser(msg.id_user);
-
-  const _channelID = req.body._channelID;
-
-  user.setChannel(_channelID, async (err, user) => {
-    if (err) {
-
-    } else {
-
-      let _id = await db.query(
-      `
-      INSERT INTO CHANNELS_MESSAGES
-      (ID_CHANNEL, ID_CHANNEL_MEMBER, MESSAGE, DATE)
-      VALUES
-      (?, ?, ?, ?)
-      RETURNING ID_CHANNEL_MESSAGE
-      `, [user.channelID, user.channelMemberID, msg.message, msg.date]);
-    
-      _id = _id[0].ID_CHANNEL_MESSAGE;
-    
-      let message = await db.query(
-      `
-      SELECT
-      M.ID_CHANNEL_MESSAGE as id,
-      U.USER_CODE as code,
-      U.COLOR as color,
-      U.NAME as name,
-      TO_BASE64(U.PROFILE_PICTURE) as picture,
-      M.MESSAGE as message,
-      M.DATE as date
-      FROM CHANNELS_MESSAGES M
-      LEFT JOIN CHANNELS_MEMBERS CM ON CM.ID_CHANNEL_MEMBER = M.ID_CHANNEL_MEMBER
-      LEFT JOIN USERS U ON U.ID_USER = CM.ID_USER
-      WHERE M.ID_CHANNEL_MESSAGE = ?
-      `, [_id]);
-    
-      message = message[0];
-    
-      socket.emit("message", JSON.stringify(message));
-    
-      res.status(201).send({ success: true });
-    }
-  })
-
+  });
 });
+
+
+
+// router.post('/sendMessage', async (req, res) => {
+
+//   const msg = {
+//     id_user: res.locals._id,
+//     message: req.body.message,
+//     date: fm.format(res.locals._requestDate, 'yyyy-MM-dd HH:mm')
+//   };
+
+//   const user = new DBUser(msg.id_user);
+
+//   const _channelID = req.body._channelID;
+
+//   user.setChannel(_channelID, async (err, user) => {
+//     if (err) {
+
+//     } else {
+
+//       let _id = await db.query(
+//       `
+//       INSERT INTO CHANNELS_MESSAGES
+//       (ID_CHANNEL, ID_CHANNEL_MEMBER, MESSAGE, DATE)
+//       VALUES
+//       (?, ?, ?, ?)
+//       RETURNING ID_CHANNEL_MESSAGE
+//       `, [user.channelID, user.channelMemberID, msg.message, msg.date]);
+    
+//       _id = _id[0].ID_CHANNEL_MESSAGE;
+    
+//       let message = await db.query(
+//       `
+//       SELECT
+//       M.ID_CHANNEL_MESSAGE as id,
+//       U.USER_CODE as code,
+//       U.COLOR as color,
+//       U.NAME as name,
+//       TO_BASE64(U.PROFILE_PICTURE) as picture,
+//       M.MESSAGE as message,
+//       M.DATE as date
+//       FROM CHANNELS_MESSAGES M
+//       LEFT JOIN CHANNELS_MEMBERS CM ON CM.ID_CHANNEL_MEMBER = M.ID_CHANNEL_MEMBER
+//       LEFT JOIN USERS U ON U.ID_USER = CM.ID_USER
+//       WHERE M.ID_CHANNEL_MESSAGE = ?
+//       `, [_id]);
+    
+//       message = message[0];
+    
+//       io.emit("message", JSON.stringify(message));
+    
+//       res.status(201).send({ success: true });
+//     }
+//   })
+
+// });
 
 
 
@@ -121,7 +133,7 @@ router.delete('/deleteMessage', async (req, res) => {
     WHERE ID_CHANNEL_MESSAGE = ?
     `, [id_message]);
 
-    socket.emit("deleteMessage", `${id_message}`);
+    io.emit("deleteMessage", `${id_message}`);
 
     res.status(200).send({ success: true });
   } catch (error) {
