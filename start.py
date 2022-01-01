@@ -1,9 +1,43 @@
 import os
 import threading
 import time
+import sys
+import ctypes
+import shutil
+
+
+client_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "ClientApp")
+
+server_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "Server")
 
 class Start:
     def __init__(self):
+        for param in sys.argv:
+
+            param = param.lower()
+
+            if param == "-d":
+
+                print("Removing ClientApp node modules...")
+                shutil.rmtree(client_path + "\\node_modules")
+                print("ClientApp node modules removed.")
+
+                print("Removing Server node modules...")
+                shutil.rmtree(server_path + "\\node_modules")
+                print("Server node modules removed.")
+                return
+
+            if param == "-i":
+                print("Installing node modules...")
+                os.chdir(client_path)
+                self.checkNodeModules()
+
+                os.chdir(server_path)
+                self.checkNodeModules()
+                return
+
+
+
         TD_C = threading.Thread(target=self.startClient, args=())
         TD_C.start()
 
@@ -23,9 +57,7 @@ class Start:
 
 
     def startClient(self):
-        root_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "ClientApp")
-
-        os.chdir(root_path)
+        os.chdir(client_path)
 
         self.checkNodeModules()
 
@@ -34,9 +66,7 @@ class Start:
 
 
     def startServer(self):
-        root_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "Server")
-
-        os.chdir(root_path)
+        os.chdir(server_path)
 
         self.checkNodeModules()
 
@@ -47,6 +77,5 @@ class Start:
     def startMariaDB(self):
         pass
 
-
-
-Start()
+if __name__ == "__main__":
+    Start()
