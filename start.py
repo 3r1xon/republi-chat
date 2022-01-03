@@ -2,7 +2,6 @@ import os
 import threading
 import time
 import sys
-import ctypes
 import shutil
 
 
