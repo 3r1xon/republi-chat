@@ -22,11 +22,8 @@
     }
 
     #right {
-        width: 200px;
-        height: 100%;
-        display: flex;
-        flex-direction: row-reverse;
-        align-items: flex-end;
+        align-self: flex-end;
+        background: transparent;
 
         #settings {
             color: var(--WHITE);
@@ -34,7 +31,7 @@
             margin: 10px;
             transition: 500ms;
 
-            &:hover {
+            &:hover, &:focus {
                 transform: rotate(90deg);
             }
         }

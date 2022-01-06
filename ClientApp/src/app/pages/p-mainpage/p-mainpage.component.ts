@@ -47,7 +47,7 @@ export class PMainpageComponent implements OnInit, OnDestroy {
 
     this.channels[0].sections = this._msService.channels;
 
-    const room = this.channels[0].sections[0]._id;
+    const room = this.channels[0]?.sections[0]?._id;
 
     if (room) {
       await this._msService.getChannelMessages(room);

@@ -42,7 +42,7 @@ app.get('/', (req, res) => {
 });
 
 
-
-// io.on('connection', (socket) => {
-//   console.log('Connection established with new user');
-// });
+io.use((socket, next) => {
+  // console.log(socket.handshake);
+  next();
+});

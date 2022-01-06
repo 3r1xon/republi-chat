@@ -13,6 +13,10 @@
         [options]="options">
         </rep-message>
 
+        <p *ngIf="channels[channelsTab]?.sections.length == 0"> 
+            <small>{{channels[channelsTab]?.tabname}} is empty</small>
+        </p>
+
     </rep-sidemenu>
 
     <rep-chat

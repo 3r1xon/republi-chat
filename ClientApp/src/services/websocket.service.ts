@@ -26,7 +26,6 @@ export class WebSocketService {
   }
 
   public emit(eventName: string, data: any) {
-    console.log(this.socket)
     this.socket.emit(eventName, data);
   }
 

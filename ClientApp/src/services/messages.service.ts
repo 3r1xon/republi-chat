@@ -58,7 +58,10 @@ export class MessagesService {
 
       this.msListener?.unsubscribe();
 
-      this._webSocket.emit("joinChannel", this.currentRoom);
+      this._webSocket.emit("joinChannel", {
+        room: this.currentRoom,
+        userID: this._user.currentUser.id
+      });
 
       this.msListener = this._webSocket.listen("message").subscribe((message: string) => {
         const msg = JSON.parse(message);
@@ -80,17 +83,18 @@ export class MessagesService {
         const index = this.messages.findIndex(msg => msg.id == _id);
         this.messages.splice(index, 1);
       });
-      
+
     }
 
   }
 
   // Send message on the current room
   public async sendMessage(message: string) {
-    const msg = {
-      message: message,
-      _channelID: this.currentRoom
-    };
+    // const msg = {
+    //   message: message,
+    //   _channelID: this.currentRoom
+    // };
+    this._webSocket.emit("message", message);
     // await this.http.post<ServerResponse>(`${server.BASE_URL}/messages/sendMessage`, msg).toPromise();
   }
 

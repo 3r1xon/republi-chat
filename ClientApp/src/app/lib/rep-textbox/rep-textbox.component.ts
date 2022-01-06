@@ -1,4 +1,12 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  HostListener,
+  Input,
+  OnInit,
+  Output
+} from '@angular/core';
+import { Router } from '@angular/router';
 import { Account } from 'src/interfaces/account.interface';
 
 @Component({
@@ -9,6 +17,7 @@ import { Account } from 'src/interfaces/account.interface';
 export class REPTextBoxComponent implements OnInit {
 
   constructor(
+    private router: Router
     ) { }
 
   ngOnInit(): void {
@@ -46,4 +55,10 @@ export class REPTextBoxComponent implements OnInit {
     this.upload.emit("Upload");
   }
 
+  @HostListener('document:keydown.escape', ['$event'])
+  onEscape(event: KeyboardEvent) {
+    const key = event.key;
+    if (key == "Escape")
+      this.router.navigate(['settings']);
+  }
 }

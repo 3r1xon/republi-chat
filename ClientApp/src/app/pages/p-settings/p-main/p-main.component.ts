@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { REPButton } from 'src/interfaces/repbutton.interface';
 import { UserService } from 'src/services/user.service';
@@ -45,6 +45,11 @@ export class PSettingsComponent implements OnInit {
       route: '/settings/newchannel'
     },
     {
+      name: "Hot Keys",
+      icon: "keyboard",
+      route: '/settings/newchannel'
+    },
+    {
       name: "Log out",
       color: "#ff0000",
       icon: "logout",
@@ -63,6 +68,13 @@ export class PSettingsComponent implements OnInit {
       this.menus[index].onClick();
   
     this.currentRoute = this.menus[index].name;
+  }
+  
+  @HostListener('document:keydown.escape', ['$event'])
+  onEscape(event: KeyboardEvent) {
+    const key = event.key;
+    if (key == "Escape")
+      this.router.navigate(['mainpage']);
   }
 
 }

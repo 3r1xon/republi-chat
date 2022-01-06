@@ -55,11 +55,53 @@ router.get('/getChannelMessages/:id', async (req, res) => {
 
 
 io.on("connection", (socket) => {
-  console.log('Connection established with new user');
 
-  socket.on("joinChannel", (channelID) => {
-    console.log("joined", channelID);
-    console.log(socket.handshake.auth)
+  socket.on("joinChannel", (obj) => {
+
+    const { userID, room } = obj;
+
+    const user = new DBUser(userID);
+
+    user.setChannel(room, async (err, user) => {
+      if (err) {
+        console.log("Not authorized");
+      } else {
+
+        socket.on("message", async (msg) => {
+
+          let _id = await db.query(
+          `
+          INSERT INTO CHANNELS_MESSAGES
+          (ID_CHANNEL, ID_CHANNEL_MEMBER, MESSAGE, DATE)
+          VALUES
+          (?, ?, ?, ?)
+          RETURNING ID_CHANNEL_MESSAGE
+          `, [user.channelID, user.channelMemberID, msg, new Date()]);
+
+          _id = _id[0].ID_CHANNEL_MESSAGE;
+    
+          let message = await db.query(
+          `
+          SELECT
+          M.ID_CHANNEL_MESSAGE as id,
+          U.USER_CODE as code,
+          U.COLOR as color,
+          U.NAME as name,
+          TO_BASE64(U.PROFILE_PICTURE) as picture,
+          M.MESSAGE as message,
+          M.DATE as date
+          FROM CHANNELS_MESSAGES M
+          LEFT JOIN CHANNELS_MEMBERS CM ON CM.ID_CHANNEL_MEMBER = M.ID_CHANNEL_MEMBER
+          LEFT JOIN USERS U ON U.ID_USER = CM.ID_USER
+          WHERE M.ID_CHANNEL_MESSAGE = ?
+          `, [_id]);
+        
+          message = message[0];
+        
+          socket.emit("message", JSON.stringify(message));
+        });
+      }
+    });
 
   });
 });

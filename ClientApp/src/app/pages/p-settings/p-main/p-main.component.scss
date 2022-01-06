@@ -64,8 +64,10 @@
                     width: 40px;
                     height: 40px;
                     margin: 10px;
+                    color: var(--WHITE);
                     border-radius: 50%;
                     display: flex;
+                    background: transparent;
                     position: absolute;
                     right: 0;
                     align-items: center;
@@ -74,7 +76,7 @@
                     cursor: pointer;
                     transition: 100ms;
             
-                    &:hover {
+                    &:hover, &:focus {
                         background: lighten($color: #1e1e1e, $amount: 15);
                     }
                 }

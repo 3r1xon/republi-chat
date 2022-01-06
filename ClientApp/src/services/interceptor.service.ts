@@ -36,7 +36,7 @@ export class InterceptorService implements HttpInterceptor {
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 
     const route = this.loadingBlackList.find(route => route == req.url);
-    
+
     this._utils.loading = route != req.url;
 
     const authReq = req.clone({
