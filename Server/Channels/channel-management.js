@@ -134,6 +134,7 @@ router.get('/getChannels', async (req, res) => {
     SELECT
     C.ID_CHANNEL as _id,
     C.NAME as name,
+    C.CHANNEL_CODE as message,
     C.PICTURE as picture
     FROM CHANNELS_MEMBERS CM
     LEFT JOIN CHANNELS C ON C.ID_CHANNEL = CM.ID_CHANNEL

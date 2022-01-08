@@ -6,7 +6,6 @@ import {
   EventEmitter, 
   HostListener,
   ElementRef,
-  ViewChild
 } from '@angular/core';
 import { format } from 'date-fns';
 import { Message } from 'src/interfaces/message.interface';

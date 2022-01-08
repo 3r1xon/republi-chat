@@ -19,15 +19,17 @@ export class MessagesService {
     private _fileUpload: FileUploadService,
     private _webSocket: WebSocketService,
     private http: HttpClient
-  ) { }
+  ) { 
+
+  }
 
   public messages: Array<Message> = [];
 
-  public channels: Array<Channel> = []
+  public channels: Array<Channel> = [];
 
   public currentRoom: number;
 
-  public msListener: any;
+  public msSubscriptions: Array<any> = [];
 
   public async getChannels() {
     const res = await this.http.get<ServerResponse>(`${server.BASE_URL}/channels/getChannels`).toPromise();
@@ -37,8 +39,8 @@ export class MessagesService {
     }
   }
 
-  // Get the current room messages
-  public async getChannelMessages(room: number) {
+  // Get the current room messages and initializes all sockets
+  public async joinChannel(room: number) {
     const res = await this.http.get<ServerResponse>(`${server.BASE_URL}/messages/getChannelMessages/${room}`).toPromise();
 
     this.currentRoom = room;
@@ -56,14 +58,14 @@ export class MessagesService {
         };
       });
 
-      this.msListener?.unsubscribe();
+      this.destroyMsSubscriptions();
 
       this._webSocket.emit("joinChannel", {
         room: this.currentRoom,
         userID: this._user.currentUser.id
       });
 
-      this.msListener = this._webSocket.listen("message").subscribe((message: string) => {
+      this.msSubscriptions.push(this._webSocket.listen("message").subscribe((message: string) => {
         const msg = JSON.parse(message);
 
         const isUserMessage = msg.code == this._user.currentUser.code && msg.name == this._user.currentUser.name;
@@ -77,12 +79,12 @@ export class MessagesService {
           color: msg.color,
           auth: isUserMessage
         });
-      });
+      }));
 
-      this._webSocket.listen("deleteMessage").subscribe((_id: number) => {
+      this.msSubscriptions.push(this._webSocket.listen("deleteMessage").subscribe((_id: number) => {
         const index = this.messages.findIndex(msg => msg.id == _id);
         this.messages.splice(index, 1);
-      });
+      }));
 
     }
 
@@ -90,21 +92,12 @@ export class MessagesService {
 
   // Send message on the current room
   public async sendMessage(message: string) {
-    // const msg = {
-    //   message: message,
-    //   _channelID: this.currentRoom
-    // };
     this._webSocket.emit("message", message);
-    // await this.http.post<ServerResponse>(`${server.BASE_URL}/messages/sendMessage`, msg).toPromise();
   }
 
   // Delete message on the current room
   public async deleteMessage(_id: number) {
-    return await this.http.delete<ServerResponse>(`${server.BASE_URL}/messages/deleteMessage`, { 
-      body: {
-        _id: _id
-      }
-    }).toPromise();
+    this._webSocket.emit("deleteMessage", _id);
   }
 
   public createChannel(channel: Channel) {
@@ -113,6 +106,12 @@ export class MessagesService {
 
   public addChannel(channel: Channel) {
     return this.http.post<ServerResponse>(`${server.BASE_URL}/channels/addChannel`, channel);
+  }
+
+  public destroyMsSubscriptions() {
+    this.msSubscriptions.map((subscription) => {
+      subscription.unsubscribe();
+    });
   }
 
 }

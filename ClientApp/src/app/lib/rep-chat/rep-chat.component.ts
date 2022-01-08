@@ -1,14 +1,12 @@
 import { 
-  AfterViewInit, 
   Component, 
   Input, 
   OnInit, 
-  ViewChildren, 
   ViewChild, 
   ElementRef, 
-  QueryList, 
   Output, 
-  EventEmitter 
+  EventEmitter, 
+  AfterViewChecked
 } from '@angular/core';
 import { Account } from 'src/interfaces/account.interface';
 import { Message } from 'src/interfaces/message.interface';
@@ -18,15 +16,13 @@ import { Message } from 'src/interfaces/message.interface';
   templateUrl: './rep-chat.component.html',
   styleUrls: ['./rep-chat.component.scss']
 })
-export class REPChatComponent implements OnInit, AfterViewInit {
+export class REPChatComponent implements AfterViewChecked {
 
   constructor() { }
 
-  ngOnInit(): void {
-    this._messages?.changes.subscribe(this.scrollToBottom);
-  }
-
-  @ViewChildren('messages') _messages: QueryList<any>;
+  ngAfterViewChecked() {        
+    this.scrollToBottom();        
+  } 
 
   @ViewChild('content') content: ElementRef;
 
@@ -45,14 +41,8 @@ export class REPChatComponent implements OnInit, AfterViewInit {
   send(event) {
     this.sendMessage.emit(event);
   }
-
-  ngAfterViewInit() {
-
-  }
   
   scrollToBottom = () => {
-    try {
-      this.content.nativeElement.scrollTop = this.content.nativeElement.scrollHeight;
-    } catch (err) {}
+    this.content.nativeElement.scrollTop = this.content.nativeElement.scrollHeight;
   }
 }

@@ -25,6 +25,14 @@ export class WebSocketService {
     });
   }
 
+  public listenOnce(eventName: string) {
+    return new Observable((subscriber) => {
+      this.socket.once(eventName, (data) => {
+        subscriber.next(data);
+      });
+    });
+  }
+
   public emit(eventName: string, data: any) {
     this.socket.emit(eventName, data);
   }
