@@ -5,6 +5,7 @@ import { UserService } from 'src/services/user.service';
 import { PLoginComponent } from './pages/p-login/p-login.component';
 import { PMainpageComponent } from './pages/p-mainpage/p-mainpage.component';
 import { PNotFoundComponent } from './pages/p-not-found/p-not-found.component';
+import { PChannelSettingsComponent } from './pages/p-settings/p-channel-settings/p-channel-settings.component';
 import { PSettingsComponent } from './pages/p-settings/p-main/p-main.component';
 import { PNewChannelComponent } from './pages/p-settings/p-newchannel/p-newchannel.component';
 import { PPrivacyComponent } from './pages/p-settings/p-privacy/p-privacy.component';
@@ -25,7 +26,8 @@ const routes: Routes = [
       { path: '', redirectTo: 'profile', pathMatch: 'full' },
       { path: 'profile', component: PProfileComponent, pathMatch: 'full' },
       { path: 'privacy', component: PPrivacyComponent, pathMatch: 'full' },
-      { path: 'newchannel', component: PNewChannelComponent, pathMatch: 'full'}
+      { path: 'newchannel', component: PNewChannelComponent, pathMatch: 'full'},
+      { path: 'channelsettings', component: PChannelSettingsComponent, pathMatch: 'full' }
     ],
     canActivate: [UserService] 
   },

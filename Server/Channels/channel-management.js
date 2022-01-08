@@ -101,14 +101,25 @@ router.post('/addChannel', async (req, res) => {
 
     user.setChannel(_channelID, async (err, user) => {
       if (err) {
-
-        await db.query(
+        // It means the user is not in the desired channel so it can be added
+        let member = await db.query(
         `
         INSERT INTO CHANNELS_MEMBERS
         (ID_USER, ID_CHANNEL)
         VALUES
         (?, ?)
+        RETURNING ID_CHANNEL_MEMBER
         `, [_userID, _channelID]);
+
+        member = member[0].ID_CHANNEL_MEMBER
+
+        await db.query(
+        `
+        INSERT INTO CHANNELS_PERMISSIONS
+        (ID_CHANNEL_MEMBER)
+        VALUES
+        (?)
+        `, [member]);
 
         res.status(201).send({ success: true });
 

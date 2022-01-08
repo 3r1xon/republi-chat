@@ -57,107 +57,116 @@ router.get('/getChannelMessages/:id', async (req, res) => {
 
 io.on("connection", (socket) => {
 
+  let room;
+
+  let user;
+
   socket.on("joinChannel", (obj) => {
 
-    const { userID, room } = obj;
-    console.log(`joined in ${room}`);
-    const user = new DBUser(userID);
+    const { userID } = obj;
 
-    user.setChannel(room, async (err, user) => {
+    const joinedRoom = obj.room;
+
+    user = new DBUser(userID);
+
+    socket.leave(room);
+
+    socket.join(joinedRoom);
+
+    user.setChannel(joinedRoom, async (err, user) => {
       if (err) {
         socket.disconnect();
       } else {
+        room = joinedRoom;
+      }
+    });
+  });
 
-        socket.join(room);
-
-        socket.on("message", (msg) => {
-          
-          user.hasPermission(permissions.sendMessages, async (err, user) => {
-            if (err) {
-              socket.disconnect();
-            } else {
-
-              try {
+  socket.on("message", (msg) => {
     
-                let _id = await db.query(
-                `
-                INSERT INTO CHANNELS_MESSAGES
-                (ID_CHANNEL, ID_CHANNEL_MEMBER, MESSAGE, DATE)
-                VALUES
-                (?, ?, ?, ?)
-                RETURNING ID_CHANNEL_MESSAGE
-                `, [user.channelID, user.channelMemberID, msg, new Date()]);
-      
-                _id = _id[0].ID_CHANNEL_MESSAGE;
-          
-                let message = await db.query(
-                `
-                SELECT
-                M.ID_CHANNEL_MESSAGE as id,
-                U.USER_CODE as code,
-                U.COLOR as color,
-                U.NAME as name,
-                TO_BASE64(U.PROFILE_PICTURE) as picture,
-                M.MESSAGE as message,
-                M.DATE as date
-                FROM CHANNELS_MESSAGES M
-                LEFT JOIN CHANNELS_MEMBERS CM ON CM.ID_CHANNEL_MEMBER = M.ID_CHANNEL_MEMBER
-                LEFT JOIN USERS U ON U.ID_USER = CM.ID_USER
-                WHERE M.ID_CHANNEL_MESSAGE = ?
-                `, [_id]);
-              
-                message = message[0];
-                console.log(room);
-                socket.to(room).emit("message", JSON.stringify(message));
-              } catch (error) {
-                console.log(error);
-              }
-            }
-          });
+    user.hasPermission(permissions.sendMessages, async (err, user) => {
+      if (err) {
+        console.log(err);
+        socket.disconnect();
+      } else {
 
-        });
+        try {
 
+          let _id = await db.query(
+          `
+          INSERT INTO CHANNELS_MESSAGES
+          (ID_CHANNEL, ID_CHANNEL_MEMBER, MESSAGE, DATE)
+          VALUES
+          (?, ?, ?, ?)
+          RETURNING ID_CHANNEL_MESSAGE
+          `, [user.channelID, user.channelMemberID, msg, new Date()]);
 
-        socket.on("deleteMessage", (msgID) => {
+          _id = _id[0].ID_CHANNEL_MESSAGE;
+    
+          let message = await db.query(
+          `
+          SELECT
+          M.ID_CHANNEL_MESSAGE as id,
+          U.USER_CODE as code,
+          U.COLOR as color,
+          U.NAME as name,
+          TO_BASE64(U.PROFILE_PICTURE) as picture,
+          M.MESSAGE as message,
+          M.DATE as date
+          FROM CHANNELS_MESSAGES M
+          LEFT JOIN CHANNELS_MEMBERS CM ON CM.ID_CHANNEL_MEMBER = M.ID_CHANNEL_MEMBER
+          LEFT JOIN USERS U ON U.ID_USER = CM.ID_USER
+          WHERE M.ID_CHANNEL_MESSAGE = ?
+          `, [_id]);
+        
+          message = message[0];
 
-          // Checks if the message being delete belongs to the user
-          user.msgBelong(msgID, (err, user) => {
-
-            const delMsg = async () => {
-              try {
-                await db.query(
-                `
-                DELETE FROM CHANNELS_MESSAGES 
-                WHERE ID_CHANNEL_MESSAGE = ?
-                `, [msgID]);
-            
-                io.to(room).emit("deleteMessage", `${msgID}`);
-            
-              } catch (error) {
-                console.log(error);
-              }
-            }
-
-            if (err) {
-              // If the message does not belong to the user then the latter
-              // must be authorized to delete other people messages
-              user.hasPermission(permissions.deleteMessage, async (err, user) => {
-                if (err) {
-                  socket.disconnect();
-                } else {
-                  delMsg();
-                }
-              });
-            } else {
-              delMsg();
-            }
-          });
-
-        });
+          io.to(room).emit("message", JSON.stringify(message));
+        } catch (error) {
+          console.log(error);
+        }
       }
     });
 
   });
+
+  socket.on("deleteMessage", (msgID) => {
+
+    // Checks if the message being delete belongs to the user
+    user.msgBelong(msgID, (err, user) => {
+
+      const delMsg = async () => {
+        try {
+          await db.query(
+          `
+          DELETE FROM CHANNELS_MESSAGES 
+          WHERE ID_CHANNEL_MESSAGE = ?
+          `, [msgID]);
+      
+          io.to(room).emit("deleteMessage", `${msgID}`);
+      
+        } catch (error) {
+          console.log(error);
+        }
+      }
+
+      if (err) {
+        // If the message does not belong to the user then the latter
+        // must be authorized to delete other people messages
+        user.hasPermission(permissions.deleteMessage, async (err, user) => {
+          if (err) {
+            socket.disconnect();
+          } else {
+            delMsg();
+          }
+        });
+      } else {
+        delMsg();
+      }
+    });
+
+  });
+
 });
 
 
@@ -165,6 +174,7 @@ io.on("connection", (socket) => {
 io.on('disconnect', (socket) => {
   console.log('Got disconnect!');
 });
+
 
 
 module.exports = router;

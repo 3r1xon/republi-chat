@@ -36,7 +36,7 @@ export class PSettingsComponent implements OnInit {
     {
       name: "Channel settings",
       icon: "admin_panel_settings",
-      route: '/settings/newchannel'
+      route: '/settings/channelsettings'
     },
     {
       name: "Appearance",

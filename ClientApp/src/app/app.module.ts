@@ -28,6 +28,7 @@ import { PPrivacyComponent } from './pages/p-settings/p-privacy/p-privacy.compon
 import { PUnauthorizedComponent } from './pages/p-unauthorized/p-unauthorized.component';
 import { PNewChannelComponent } from './pages/p-settings/p-newchannel/p-newchannel.component';
 import { PNotFoundComponent } from './pages/p-not-found/p-not-found.component';
+import { PChannelSettingsComponent } from './pages/p-settings/p-channel-settings/p-channel-settings.component';
 
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -64,6 +65,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
     REPErrorComponent,
     REPTextareaComponent,
     REPInfoComponent,
+    PChannelSettingsComponent,
 
     PSignupComponent,
     PLoginComponent,

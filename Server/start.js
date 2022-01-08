@@ -12,7 +12,7 @@ const corsOptions = {
   exposedHeaders: ['ACCESS_TOKEN', 'REFRESH_TOKEN'],
 };
 
-const io             = require('socket.io')(server, {
+const io = require('socket.io')(server, {
   cors: corsOptions
 });
 
