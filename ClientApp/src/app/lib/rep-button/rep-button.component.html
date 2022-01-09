@@ -6,10 +6,10 @@
             'opacity': disabled ? '1' : '0.5',
             'cursor': disabled ? 'pointer' : 'default'
         }">
-            <p [style.color]="color">
+            <p [style.color]="fontColor">
                 <ng-content></ng-content>
             </p>
-        <mat-icon [style.color]="color" *ngIf="icon">{{icon}}</mat-icon>
+        <mat-icon [style.color]="fontColor" *ngIf="icon">{{icon}}</mat-icon>
     </div>
     <rep-tooltip *ngIf="tooltipVisible">{{tooltip}}</rep-tooltip>
 </button>

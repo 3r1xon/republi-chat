@@ -33,7 +33,7 @@ export class REPMessageComponent implements OnInit {
         {
           name: "Delete",
           icon: "delete",
-          color: "#c62828",
+          color: "danger",
           onClick: async () => {
             await this._msService.deleteMessage(this.message.id);
           }

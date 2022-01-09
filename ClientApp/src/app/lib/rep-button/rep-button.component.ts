@@ -25,14 +25,17 @@ export class REPButtonComponent {
 
   @Input()
   public set background(color: string) {
-    if (color in this.defColors) this.backColor = this.defColors[color];
-    else if (color != undefined) this.backColor = color;
+    this.defColors[color] ? this.backColor = this.defColors[color] : this.backColor = color;
   };
 
   public backColor: string = "royalblue";
 
   @Input()
-  public color: string = "#FFFFFF";
+  public set color(color: string) {
+    this.defColors[color] ? this.fontColor = this.defColors[color] : this.fontColor = color;
+  }
+
+  public fontColor: string = "#FFFFFF";
 
   @Input()
   public enabled: boolean | (() => boolean) = true;

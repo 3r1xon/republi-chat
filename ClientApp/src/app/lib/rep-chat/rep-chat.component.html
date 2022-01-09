@@ -2,7 +2,7 @@
 
   <div id="messages" #content>
 
-    <rep-message id="msg" *ngFor="let message of messages; let i = index;"
+    <rep-message *ngFor="let message of messages; let i = index;"
     [message]="message"
     [uniqueID]="i"></rep-message>
     

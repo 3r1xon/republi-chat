@@ -11,7 +11,7 @@
         align-items: center;
         border-bottom: 1px solid var(--GREY);
 
-        #tab {
+        .tab {
             width: 100%;
             height: 100%;
             border: none;
@@ -36,25 +36,6 @@
         align-items: center;
         flex-direction: column;
         overflow-y: auto;
-
-        #section {
-            width: 100%;
-            height: 35px;
-            background: var(--GREY);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            cursor: pointer;
-
-            #sectionName {
-                margin-left: 10px;
-                color: var(--WHITE);
-            }
-
-            rep-window {
-                margin-right: 5px;
-            }
-        }
     }
 
     #new {

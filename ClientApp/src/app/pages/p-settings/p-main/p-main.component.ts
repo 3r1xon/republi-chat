@@ -53,8 +53,8 @@ export class PSettingsComponent implements OnInit {
       name: "Log out",
       color: "#ff0000",
       icon: "logout",
-      onClick: async () => { 
-        await this._user.logOut();
+      onClick: () => { 
+        this._user.logOut();
       }
     },
   ];
