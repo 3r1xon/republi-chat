@@ -6,13 +6,13 @@ const multer         = require('multer');
 const upload         = multer({});
 const db             = require('../Database/db');
 const nanoid         = require('nanoid');
-
+const crypto         = require('crypto');
 
 router.post('/signUp', async (req, res) => {
   
   const user = {
     email: req.body.email,
-    password: req.body.password,
+    password: crypto.createHash('sha256').update(req.body.password).digest('hex'),
     name: req.body.name,
   };
 
@@ -84,7 +84,7 @@ router.post('/logIn', async (req, res) => {
 
   const user = {
     email: req.body.email,
-    password: req.body.password
+    password: crypto.createHash('sha256').update(req.body.password).digest('hex'),
   };
 
   try {
@@ -150,8 +150,8 @@ router.delete('/logout', Auth.authToken, async (req, res) => {
 });
 
 
-// TODO: Should be changed to PUT.
-router.post('/editProfile', [Auth.authToken, upload.single("image")], async (req, res) => {
+
+router.put('/editProfile', [Auth.authToken, upload.single("image")], async (req, res) => {
 
   const file = req.file.buffer;
 
