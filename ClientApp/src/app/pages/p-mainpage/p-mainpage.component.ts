@@ -60,7 +60,7 @@ export class PMainpageComponent implements OnInit, OnDestroy {
 
   public options: Array<REPButton> = [
     {
-      name: "Remove",
+      name: "Leave",
       icon: "delete",
       color: "danger",
       onClick: () => {}

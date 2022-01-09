@@ -29,6 +29,8 @@
         max-height: 45px;
         margin: 5px;
         border-radius: 50%;
+        user-select: none;
+        -webkit-user-drag: none;
         cursor: pointer;
         align-self: flex-start;
     }

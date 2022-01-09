@@ -31,6 +31,9 @@
     [entries]="serverInfo"
     (onTab)="serverInfoTab = $event">
 
+        <p *ngIf="serverInfo[serverInfoTab]?.sections.length == 0"> 
+            <small>Empty.</small>
+        </p>
 
     </rep-sidemenu>
 
