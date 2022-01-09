@@ -18,9 +18,6 @@ export class REPTooltipComponent implements AfterViewInit {
   @ViewChild('tooltip')
   private tooltip: ElementRef;
 
-  private DOMWidth = window.innerWidth;
-  private DOMHeight = window.innerHeight;
-
   public marginLeft: string = "0px";
   public marginRight: string = "0px";
 
@@ -31,8 +28,8 @@ export class REPTooltipComponent implements AfterViewInit {
 
     const { x, y } = this.tooltip.nativeElement.getBoundingClientRect();
 
-    if (x + tooltipWidth > this.DOMWidth) {
-      this.marginLeft = `${x - this.DOMWidth - tooltipWidth}px`;
+    if (x + tooltipWidth > window.innerWidth) {
+      this.marginLeft = `${x - window.innerWidth - tooltipWidth}px`;
     }
 
     this.cd.detectChanges();
