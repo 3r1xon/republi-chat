@@ -83,7 +83,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("message", (msg) => {
-    
+
     user.hasPermission(permissions.sendMessages, async (err, user) => {
       if (err) {
         console.log(err);
@@ -118,7 +118,7 @@ io.on("connection", (socket) => {
           LEFT JOIN USERS U ON U.ID_USER = CM.ID_USER
           WHERE M.ID_CHANNEL_MESSAGE = ?
           `, [_id]);
-        
+
           message = message[0];
 
           io.to(room).emit("message", JSON.stringify(message));
@@ -142,9 +142,9 @@ io.on("connection", (socket) => {
           DELETE FROM CHANNELS_MESSAGES 
           WHERE ID_CHANNEL_MESSAGE = ?
           `, [msgID]);
-      
+
           io.to(room).emit("deleteMessage", `${msgID}`);
-      
+
         } catch (error) {
           console.log(error);
         }

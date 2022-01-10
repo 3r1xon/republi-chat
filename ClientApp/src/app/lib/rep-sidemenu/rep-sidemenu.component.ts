@@ -23,6 +23,9 @@ export class REPSidemenuComponent implements OnInit {
   @Output()
   public onTab = new EventEmitter();
 
+  @Input()
+  public add: boolean = true;
+
   selectTab(index: number) {
     this.onTab.emit(index);
   }

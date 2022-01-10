@@ -29,6 +29,7 @@
     <rep-sidemenu
     id="ch-info"
     [entries]="serverInfo"
+    [add]="false"
     (onTab)="serverInfoTab = $event">
 
         <p *ngIf="serverInfo[serverInfoTab]?.sections.length == 0"> 

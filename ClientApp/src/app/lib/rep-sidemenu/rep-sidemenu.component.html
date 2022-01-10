@@ -18,7 +18,7 @@
 
     </div>
 
-    <div id="new" (click)="onNew.emit('onNew')">
+    <div id="new" (click)="onNew.emit('onNew')" *ngIf="add">
 
         <mat-icon>add</mat-icon>
 

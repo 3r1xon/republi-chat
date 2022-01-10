@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { server } from 'src/environments/server';
 import { Account } from 'src/interfaces/account.interface';
@@ -14,7 +14,7 @@ import { UtilsService } from 'src/services/utils.service';
   templateUrl: './p-profile.component.html',
   styleUrls: ['./p-profile.component.scss']
 })
-export class PProfileComponent implements OnInit {
+export class PProfileComponent {
 
   constructor(
     public _user: UserService,
@@ -22,9 +22,7 @@ export class PProfileComponent implements OnInit {
     private _utils: UtilsService,
     private http: HttpClient,
     private router: Router
-  ) { }
-
-  ngOnInit(): void {
+  ) { 
   }
 
   public user: Account = { ...this._user.currentUser };
