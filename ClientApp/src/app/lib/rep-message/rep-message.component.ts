@@ -1,16 +1,16 @@
 import { 
-  Component, 
-  Input, 
-  Output, 
-  OnInit, 
-  EventEmitter, 
+  Component,
+  Input,
+  Output,
+  OnInit,
+  EventEmitter,
   HostListener,
   ElementRef,
 } from '@angular/core';
-import { format } from 'date-fns';
 import { Message } from 'src/interfaces/message.interface';
 import { REPButton } from 'src/interfaces/repbutton.interface';
 import { MessagesService } from 'src/services/messages.service';
+import { UtilsService } from 'src/services/utils.service';
 
 @Component({
   selector: 'rep-message',
@@ -21,6 +21,7 @@ export class REPMessageComponent implements OnInit {
 
   constructor(
     public _msService: MessagesService,
+    private _utils: UtilsService,
     private eRef: ElementRef
     ) { }
 
@@ -34,8 +35,14 @@ export class REPMessageComponent implements OnInit {
           name: "Delete",
           icon: "delete",
           color: "danger",
-          onClick: async () => {
-            await this._msService.deleteMessage(this.message.id);
+          onClick: () => {
+            this._utils.showRequest(
+              "Delete message",
+              "Are you sure you want to delete this message?",
+              () => {
+                this._msService.deleteMessage(this.message.id);
+              }
+            );
           }
         },
         {
@@ -76,6 +83,9 @@ export class REPMessageComponent implements OnInit {
   @Input()
   public message: Message;
 
+  @Input()
+  public dateFormat: string = "dd/MM/yyyy HH:mm";
+
   @Output()
   public onUserClick = new EventEmitter<string>();
 
@@ -84,13 +94,6 @@ export class REPMessageComponent implements OnInit {
 
   clickHandler() {
     this.onClick.emit();
-  }
-
-  dateFormatter() {
-    if (this.message.date)
-      return format(this.message.date, 'MM/dd/yyyy HH:mm');
-
-    return '';
   }
 
   setToggle(event) {

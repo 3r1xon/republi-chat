@@ -18,7 +18,7 @@
                 [style.color]="message.color" 
                 (click)="onUserClick.emit('onUserClick')"
                 >{{message.name}}</p>
-                <p id="time">{{dateFormatter()}}</p>
+                <p id="time">{{message.date | date: dateFormat}}</p>
             </div>
             
             <div id="content">
