@@ -7,7 +7,7 @@ const cookieParser   = require('cookie-parser');
 const server         = app.listen(port, () => { console.log(`Server listening at http://localhost:${port}`); });
 
 const corsOptions = {
-  origin: "https://republi-chat-omau3koba-3r1xon.vercel.app",
+  origin: "http://localhost:4200",
   credentials: true,
   exposedHeaders: ['ACCESS_TOKEN', 'REFRESH_TOKEN', 'SESSION_ID'],
 };
