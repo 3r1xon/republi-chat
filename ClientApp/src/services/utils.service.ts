@@ -2,13 +2,15 @@ import { Injectable } from '@angular/core';
 import { Request } from 'src/interfaces/request.interface';
 import { REPButton } from 'src/interfaces/repbutton.interface';
 import { BugReport } from 'src/interfaces/bugreport.interface';
+import { Platform } from '@angular/cdk/platform';
+import { UAParser } from 'ua-parser-js';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UtilsService {
 
-  constructor() { }
+  constructor(private platform: Platform) { }
 
   // Every HTTP Request, except black listed ones, will set 
   // this variable to true till a response has been received
@@ -63,5 +65,12 @@ export class UtilsService {
       visible: true
     };
 
+  }
+
+  public detectBrowser(): UAParser {
+    const parser = new UAParser();
+    const result = parser.getResult();
+
+    return result.browser;
   }
 }

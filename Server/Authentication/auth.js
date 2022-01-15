@@ -12,6 +12,10 @@ class Auth {
             refresh: false
         };
 
+        const SESSION_ID = user.SESSION_ID;
+
+        delete user.SESSION_ID;
+
         const ACCESS_TOKEN = jwt.sign(user, process.env.SECRET_KEY, {
             expiresIn: "15m"
         });
@@ -33,7 +37,7 @@ class Auth {
 
             userExist = userExist[0];
 
-            if (userExist) {
+            if (userExist && !SESSION_ID) {
 
                 await db.query(
                 `
@@ -44,13 +48,23 @@ class Auth {
                 `, [REFRESH_TOKEN, user._id]);
             } else {
 
+                let values = "(ID_USER, REFRESH_TOKEN, BROWSER_NAME, BROWSER_VERSION)";
+                const arr = [user._id, REFRESH_TOKEN, user.browser.name, user.browser.version];
+                let param = "(?, ?, ?, ?)";
+
+                if (SESSION_ID) {
+                    values = "(ID_USER, REFRESH_TOKEN, BROWSER_NAME, BROWSER_VERSION, SESSION_ID)";
+                    param =  "(?, ?, ?, ?, ?)";
+                    arr.push(SESSION_ID);
+                }
+
                 await db.query(
                 `
                 INSERT INTO SESSIONS
-                (ID_USER, REFRESH_TOKEN)
+                ${values}
                 VALUES
-                (?, ?)
-                `, [user._id, REFRESH_TOKEN]);
+                ${param}
+                `, arr);
             }
         } catch (err) {
             console.log(err);
@@ -68,7 +82,11 @@ class Auth {
 
         const ACCESS_TOKEN = req.headers['authorization'].split(' ')[1];
 
-        const { REFRESH_TOKEN } = req.cookies;
+        const { REFRESH_TOKEN, SESSION_ID } = req.cookies;
+
+        res.locals.SESSION_ID = SESSION_ID;
+
+        console.log(res.locals.SESSION_ID);
 
         jwt.verify(ACCESS_TOKEN, process.env.SECRET_KEY, async (err, decoded) => {
             if (decoded) {
@@ -81,7 +99,8 @@ class Auth {
                 SELECT 1
                 FROM SESSIONS S
                 WHERE S.REFRESH_TOKEN = ?
-                `, [REFRESH_TOKEN]);
+                AND S.SESSION_ID = ?
+                `, [REFRESH_TOKEN, SESSION_ID]);
 
                 registered = registered[0];
 
@@ -92,7 +111,8 @@ class Auth {
                             res.locals._id = decoded._id;
                             res.set(await this.generateToken({
                                 _id: decoded._id,
-                                email: decoded.email
+                                email: decoded.email,
+                                browser: decoded.browser
                             }));
                             next();
                         } else res.status(401).send({ success: false, message: "Refresh token invalid!" });

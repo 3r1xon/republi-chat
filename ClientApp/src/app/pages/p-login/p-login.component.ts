@@ -7,6 +7,7 @@ import { Account } from 'src/interfaces/account.interface';
 import { ServerResponse } from 'src/interfaces/response.interface';
 import { FileUploadService } from 'src/services/file-upload.service';
 import { UserService } from 'src/services/user.service';
+import { UtilsService } from 'src/services/utils.service';
 
 @Component({
   templateUrl: './p-login.component.html',
@@ -16,6 +17,7 @@ export class PLoginComponent implements OnInit {
 
   constructor(
     private _user: UserService,
+    private _utils: UtilsService,
     private _fileUpload: FileUploadService,
     private router: Router,
     private http: HttpClient,
@@ -65,9 +67,12 @@ export class PLoginComponent implements OnInit {
 
     if (!this.form.valid) return;
 
+    const browser = this._utils.detectBrowser();
+
     this.http.post<ServerResponse>(`${server.BASE_URL}/authentication/logIn`, {
       email: this.form.value.email,
-      password: this.form.value.password
+      password: this.form.value.password,
+      BROWSER: browser
     })
       .subscribe(async (response) => {
         this._user.currentUser = <Account>response.data.user;

@@ -9,7 +9,7 @@ const server         = app.listen(port, () => { console.log(`Server listening at
 const corsOptions = {
   origin: "http://localhost:4200",
   credentials: true,
-  exposedHeaders: ['ACCESS_TOKEN', 'REFRESH_TOKEN'],
+  exposedHeaders: ['ACCESS_TOKEN', 'REFRESH_TOKEN', 'SESSION_ID'],
 };
 
 const io = require('socket.io')(server, {

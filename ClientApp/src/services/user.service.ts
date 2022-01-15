@@ -7,6 +7,7 @@ import { Account } from 'src/interfaces/account.interface';
 import { HttpClient } from '@angular/common/http';
 import { CookieService } from 'ngx-cookie-service';
 import { FileUploadService } from './file-upload.service';
+import { UtilsService } from './utils.service';
 
 @Injectable({
   providedIn: 'root'
@@ -17,6 +18,7 @@ export class UserService implements CanActivate {
     private http: HttpClient,
     private router: Router,
     private _fileUpload: FileUploadService,
+    private _utils: UtilsService,
     private cookieService: CookieService) {}
 
   public currentUser?: Account;
@@ -35,9 +37,12 @@ export class UserService implements CanActivate {
     const REFRESH_TOKEN = this.cookieService.get("REFRESH_TOKEN");
 
     if (!REFRESH_TOKEN) return;
+
+    const browser = this._utils.detectBrowser();
     
     const response = await this.http.post<ServerResponse>(`${server.BASE_URL}/authentication/authorize`, {
-      REFRESH_TOKEN: REFRESH_TOKEN
+      REFRESH_TOKEN: REFRESH_TOKEN,
+      BROWSER: browser
     }).toPromise();
     if (response.success) {
       this.currentUser = <Account>response.data;
@@ -52,7 +57,7 @@ export class UserService implements CanActivate {
 
 
   public async logOut(): Promise<any> {
-    await this.http.delete(`${server.BASE_URL}/authentication/logout`).toPromise();
+    this.http.delete(`${server.BASE_URL}/authentication/logout`).toPromise();
 
     this.cookieService.deleteAll();
 

@@ -89,7 +89,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
     MatRippleModule,
     FormsModule,
     ReactiveFormsModule,
-    DragDropModule
+    DragDropModule,
   ],
   providers: [
     { 

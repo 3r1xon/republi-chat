@@ -87,6 +87,8 @@ router.post('/logIn', async (req, res) => {
     password: crypto.createHash('sha256').update(req.body.password).digest('hex'),
   };
 
+  const { BROWSER } = req.body;
+
   try {
 
     let dbUser = await db.query(
@@ -105,10 +107,12 @@ router.post('/logIn', async (req, res) => {
     dbUser = dbUser[0];
 
     if (dbUser) {
-
+      // Session ID created only at login time
       res.set(await Auth.generateToken({
         _id: dbUser.id,
-        email: dbUser.email 
+        email: dbUser.email,
+        browser: BROWSER,
+        SESSION_ID: nanoid.nanoid()
       }));
 
       res.status(200).send({ success: true, data: {
@@ -129,8 +133,9 @@ router.post('/logIn', async (req, res) => {
 
 router.delete('/logout', Auth.authToken, async (req, res) => {
 
-  const userID = res.locals._id;
-
+  const userID     = res.locals._id;
+  const SESSION_ID = res.locals.SESSION_ID;
+  
   try {
 
     await db.query(
@@ -138,7 +143,8 @@ router.delete('/logout', Auth.authToken, async (req, res) => {
     DELETE
     FROM SESSIONS
     WHERE ID_USER = ?
-    `, [userID]);
+    AND SESSION_ID = ?
+    `, [userID, SESSION_ID]);
 
     res.status(200).send({ success: true });
 
