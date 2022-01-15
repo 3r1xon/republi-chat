@@ -41,7 +41,7 @@ router.post('/signUp', async (req, res) => {
         } catch(error) {
 
           console.log(error);
-          
+
           if (error.code == "ER_DUP_ENTRY")
             res.status(409).send({ success: false, message: `Email ${user.email} is already in use!` });
           else
@@ -215,6 +215,35 @@ router.delete('/deleteProfile', Auth.authToken, async (req, res) => {
   }
 });
 
+
+
+router.get('/getDevices', Auth.authToken, async (req, res) => {
+
+  const userID = res.locals._id;
+
+  try {
+
+    const devices = await db.query(
+    `
+    SELECT 
+    ID_SESSION,
+    BROWSER_NAME as browserName,
+    BROWSER_VERSION as browserVersion
+    FROM SESSIONS
+    WHERE ID_USER = ?
+    `, [userID]);
+
+    res.status(201).send({
+      success: true,
+      data: devices
+    });
+
+  } catch(err) {
+    console.log(err);
+
+    res.status(500).send({ success: false, message: "Database error!" });
+  }
+});
 
 
 module.exports = router;

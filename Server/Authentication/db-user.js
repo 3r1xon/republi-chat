@@ -38,13 +38,10 @@ class DBUser {
         `
         SELECT CP.${permission}
         FROM CHANNELS_PERMISSIONS CP
-        LEFT JOIN CHANNELS_MEMBERS CM ON CM.ID_CHANNEL_MEMBER = CP.ID_CHANNEL_MEMBER
-        LEFT JOIN CHANNELS C ON C.ID_CHANNEL = CM.ID_CHANNEL
         WHERE CP.ID_CHANNEL_MEMBER = ?
-        AND C.ID_CHANNEL = ?
         AND CP.${permission} = ?
-        `, [this.channelMemberID, this.channelID, true]);
-        
+        `, [this.channelMemberID, true]);
+
         try {
             auth = !!auth[0][permission];
 
