@@ -56,10 +56,10 @@ export class PLoginComponent implements OnInit {
   ];
 
   public form: FormGroup = this.fb.group({
-    email: ['erixonconsoli@hotmail.it', // Default value
+    email: ['', // Default value
       [Validators.required, Validators.maxLength(30), Validators.email]
     ],
-    password: ['123', // Default value
+    password: ['', // Default value
       [Validators.required, Validators.maxLength(30)]
     ]
   });
