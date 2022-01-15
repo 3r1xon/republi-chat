@@ -1,8 +1,20 @@
 const jwt          = require('jsonwebtoken');
 const db           = require('../Database/db');
 const fm           = require('date-fns');
+const NodeGeocoder = require('node-geocoder');
 
 
+
+const options = {
+    provider: 'google',
+    apiKey: '',
+    formatter: null 
+};
+const geocoder = NodeGeocoder(options);
+
+
+
+  
 class Auth {
 
     static generateToken = async (user) => {
@@ -49,7 +61,8 @@ class Auth {
                 AND SESSION_ID = ?
                 `, [REFRESH_TOKEN, user._id, user.SESSION_ID]);
             } else {
-
+                const res = await geocoder.geocode('29 champs elysée paris');
+                console.log(res);
                 await db.query(
                 `
                 INSERT INTO SESSIONS
