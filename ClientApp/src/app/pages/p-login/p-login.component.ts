@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { first } from 'rxjs/operators';
 import { server } from 'src/environments/server';
 import { Account } from 'src/interfaces/account.interface';
 import { ServerResponse } from 'src/interfaces/response.interface';
@@ -69,19 +70,28 @@ export class PLoginComponent implements OnInit {
 
     const browser = this._utils.detectBrowser();
 
-    this.http.post<ServerResponse>(`${server.BASE_URL}/authentication/logIn`, {
-      email: this.form.value.email,
-      password: this.form.value.password,
-      BROWSER: browser
-    })
-      .subscribe(async (response) => {
-        this._user.currentUser = <Account>response.data.user;
-        this._user.currentUser.picture = this._fileUpload.sanitizeIMG(this._user.currentUser.picture);
-        this._user.userAuth = true;
-        await this.router.navigate(['mainpage']);
-      }, 
-      (response) => {
-        this.alert = response.error.message;
-      });
+    navigator.geolocation.getCurrentPosition((position) => {
+      browser.longitude = position.coords.longitude;
+      browser.latitude = position.coords.latitude;
+
+      this.http.post<ServerResponse>(`${server.BASE_URL}/authentication/logIn`, {
+        email: this.form.value.email,
+        password: this.form.value.password,
+        BROWSER: browser
+      })
+        .pipe(first())
+        .subscribe(async (response) => {
+          this._user.currentUser = <Account>response.data.user;
+          this._user.currentUser.picture = this._fileUpload.sanitizeIMG(this._user.currentUser.picture);
+          this._user.userAuth = true;
+          await this.router.navigate(['mainpage']);
+        }, 
+        (response) => {
+          this.alert = response.error.message;
+        });
+    }, () => {
+        this.alert = "Position is mandatory! Try again.";
+    });
+
   }
 }

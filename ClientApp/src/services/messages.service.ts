@@ -7,6 +7,7 @@ import { ServerResponse } from 'src/interfaces/response.interface';
 import { FileUploadService } from './file-upload.service';
 import { WebSocketService } from './websocket.service';
 import { Channel } from 'src/interfaces/channel.interface';
+import { Subscription } from 'rxjs';
 
 
 @Injectable({
@@ -29,7 +30,7 @@ export class MessagesService {
 
   public currentRoom: number;
 
-  public msSubscriptions: Array<any> = [];
+  public msSubscriptions: Array<Subscription> = [];
 
   public async getChannels() {
     const res = await this.http.get<ServerResponse>(`${server.BASE_URL}/channels/getChannels`).toPromise();

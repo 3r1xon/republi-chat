@@ -7,6 +7,9 @@ const upload         = multer({});
 const db             = require('../Database/db');
 const nanoid         = require('nanoid');
 const crypto         = require('crypto');
+const io             = require('../start');
+
+
 
 router.post('/signUp', async (req, res) => {
   
@@ -226,16 +229,60 @@ router.get('/getDevices', Auth.authToken, async (req, res) => {
     const devices = await db.query(
     `
     SELECT 
-    ID_SESSION,
+    ID_SESSION as id_session,
     BROWSER_NAME as browserName,
-    BROWSER_VERSION as browserVersion
+    BROWSER_VERSION as browserVersion,
+    SESSION_ID
     FROM SESSIONS
     WHERE ID_USER = ?
     `, [userID]);
 
+    devices.map((device) => {
+      if (device.SESSION_ID == res.locals.SESSION_ID) {
+        device.current = true;
+      } else {
+        device.current = false;
+      }
+      delete device.SESSION_ID;
+    });
+
     res.status(201).send({
       success: true,
       data: devices
+    });
+
+  } catch(err) {
+    console.log(err);
+
+    res.status(500).send({ success: false, message: "Database error!" });
+  }
+});
+
+
+
+router.delete('/disconnectDevice/:id', Auth.authToken, async (req, res) => {
+
+  try {
+    
+    const _id    = req.params.id;
+    const userID = res.locals._id;
+
+    let session = await db.query(
+    `
+    DELETE
+    FROM SESSIONS
+    WHERE 
+    ID_SESSION = ?
+    AND ID_USER = ?
+    RETURNING SESSION_ID
+    `, [_id, userID]);
+    
+    session = session[0];
+
+    io.emit(session.SESSION_ID, "forceKick");
+
+    res.status(201).send({ 
+      success: true,
     });
 
   } catch(err) {

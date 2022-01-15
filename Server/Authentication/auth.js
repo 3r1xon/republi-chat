@@ -17,7 +17,7 @@ class Auth {
         delete user.browser;
 
         const ACCESS_TOKEN = jwt.sign(user, process.env.SECRET_KEY, {
-            expiresIn: "1s"
+            expiresIn: "15m"
         });
 
         user.refresh = true;
@@ -64,7 +64,8 @@ class Auth {
 
         return {
             ACCESS_TOKEN: ACCESS_TOKEN,
-            REFRESH_TOKEN: REFRESH_TOKEN
+            REFRESH_TOKEN: REFRESH_TOKEN,
+            SESSION_ID: user.SESSION_ID
         };
     };
 
@@ -75,8 +76,6 @@ class Auth {
         const ACCESS_TOKEN = req.headers['authorization'].split(' ')[1];
 
         const { REFRESH_TOKEN, SESSION_ID } = req.cookies;
-
-        console.log(req.cookies);
 
         jwt.verify(ACCESS_TOKEN, process.env.SECRET_KEY, async (err, decoded) => {
             if (decoded) {

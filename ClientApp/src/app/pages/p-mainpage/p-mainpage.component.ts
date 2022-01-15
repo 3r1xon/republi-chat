@@ -1,8 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { CookieService } from 'ngx-cookie-service';
+import { Subscription } from 'rxjs';
 import { REPButton } from 'src/interfaces/repbutton.interface';
 import { MessagesService } from 'src/services/messages.service';
 import { UserService } from 'src/services/user.service';
+import { WebSocketService } from 'src/services/websocket.service';
 
 @Component({
   templateUrl: './p-mainpage.component.html',
@@ -13,8 +16,12 @@ export class PMainpageComponent implements OnInit, OnDestroy {
   constructor(
     public _user: UserService,
     public _msService: MessagesService,
+    private _webSocket: WebSocketService,
+    private cookieService: CookieService,
     private router: Router
   ) { }
+
+  private sessionSubscription: Subscription;
 
   async ngOnInit(): Promise<void> {
     await this._msService.getChannels();
@@ -52,6 +59,13 @@ export class PMainpageComponent implements OnInit, OnDestroy {
     if (room) {
       await this._msService.joinChannel(room);
     }
+
+    this.sessionSubscription?.unsubscribe();
+    this.sessionSubscription = this._webSocket.listen(this.cookieService.get("SESSION_ID"))
+      .subscribe((status) => {
+        if (status == "forceKick")
+          this._user.deAuth();
+      });
   }
 
   ngOnDestroy(): void {

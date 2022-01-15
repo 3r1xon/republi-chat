@@ -1,0 +1,14 @@
+<div id="privacy">
+
+    <h1>Active sessions</h1>
+
+    <div *ngFor="let device of devices; let i = index" class="devices">
+        <div>
+            <h2>{{device.browserName}}</h2>
+            <p><small>{{device.browserVersion}}</small></p>
+        </div>
+        <rep-button *ngIf="!device.current" (onClick)="disconnectDevice(i)" background="danger" icon="eject">Disconnect</rep-button>
+        <p *ngIf="device.current">(Current session)</p>
+    </div>
+
+</div>

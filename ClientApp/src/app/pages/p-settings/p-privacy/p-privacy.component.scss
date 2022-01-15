@@ -1,0 +1,17 @@
+#privacy {
+    width: 100%;
+    height: 100%;
+    
+    h1 {
+        text-align: center;
+    }
+
+    .devices {
+        width: 100%;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin: 15px 0 15px 0;
+    }
+}

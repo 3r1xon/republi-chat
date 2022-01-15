@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { Observable } from 'rxjs';
 import { ServerResponse } from 'src/interfaces/response.interface';
@@ -8,6 +8,7 @@ import { HttpClient } from '@angular/common/http';
 import { CookieService } from 'ngx-cookie-service';
 import { FileUploadService } from './file-upload.service';
 import { UtilsService } from './utils.service';
+import { DOCUMENT } from '@angular/common';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +20,9 @@ export class UserService implements CanActivate {
     private router: Router,
     private _fileUpload: FileUploadService,
     private _utils: UtilsService,
-    private cookieService: CookieService) {}
+    private cookieService: CookieService,
+    @Inject(DOCUMENT) private document: Document
+  ) {}
 
   public currentUser?: Account;
 
@@ -50,8 +53,7 @@ export class UserService implements CanActivate {
       this.userAuth = true;
       await this.router.navigate(['mainpage']);
     } else {
-      this.router.navigate(['login']);
-      this.cookieService.deleteAll();
+      this.deAuth();
     }
   }
 
@@ -64,22 +66,28 @@ export class UserService implements CanActivate {
     this.userAuth = false;
 
     await this.router.navigate(['login']);
-    window.location.reload();
+    this.document.defaultView.location.reload();
   }
 
 
   public async deAuth() {
+    this.http.delete(`${server.BASE_URL}/authentication/logout`).toPromise();
+  
     this.cookieService.deleteAll();
 
-    this.currentUser = null;
-
     await this.router.navigate(['unauthorized']);
-
-    this.userAuth = false;
   }
 
 
   public deleteProfile() {
     return this.http.delete<ServerResponse>(`${server.BASE_URL}/authentication/deleteProfile`);
+  }
+
+  public getDevices() {
+    return this.http.get<ServerResponse>(`${server.BASE_URL}/authentication/getDevices`);
+  }
+
+  public disconnectDevice(deviceID: number) {
+    return this.http.delete<ServerResponse>(`${server.BASE_URL}/authentication/disconnectDevice/${deviceID}`);
   }
 }

@@ -49,9 +49,9 @@ export class InterceptorService implements HttpInterceptor {
     return next.handle(authReq).pipe(tap((res: any) => {
 
       if (res instanceof HttpResponse) {
-        const ACCESS_TOKEN = res.headers.get("ACCESS_TOKEN");
+        const ACCESS_TOKEN  = res.headers.get("ACCESS_TOKEN");
         const REFRESH_TOKEN = res.headers.get("REFRESH_TOKEN");
-        const SESSION_ID = res.headers.get("SESSION_ID");
+        const SESSION_ID    = res.headers.get("SESSION_ID");
 
         if (ACCESS_TOKEN && REFRESH_TOKEN && SESSION_ID) {
           this._webSocket.setAuth(ACCESS_TOKEN, REFRESH_TOKEN);

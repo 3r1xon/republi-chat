@@ -1,4 +1,4 @@
-create or replace table republichat.users
+create table republichat.users
 (
     ID_USER         bigint auto_increment
         primary key,
@@ -13,7 +13,7 @@ create or replace table republichat.users
         unique (EMAIL)
 );
 
-create or replace table republichat.channels
+create table republichat.channels
 (
     ID_CHANNEL    bigint auto_increment
         primary key,
@@ -27,7 +27,7 @@ create or replace table republichat.channels
             on update cascade on delete cascade
 );
 
-create or replace table republichat.channels_members
+create table republichat.channels_members
 (
     ID_CHANNEL_MEMBER bigint auto_increment
         primary key,
@@ -38,7 +38,7 @@ create or replace table republichat.channels_members
             on update cascade on delete cascade
 );
 
-create or replace table republichat.channels_messages
+create table republichat.channels_messages
 (
     ID_CHANNEL_MESSAGE bigint auto_increment
         primary key,
@@ -54,7 +54,7 @@ create or replace table republichat.channels_messages
             on update cascade on delete cascade
 );
 
-create or replace table republichat.channels_permissions
+create table republichat.channels_permissions
 (
     ID_CHANNEL_PERMISSION bigint auto_increment
         primary key,
@@ -68,17 +68,20 @@ create or replace table republichat.channels_permissions
             on update cascade on delete cascade
 );
 
-create or replace table republichat.sessions
+create table republichat.sessions
 (
     ID_SESSION      bigint auto_increment
         primary key,
     ID_USER         bigint       not null,
-    SESSION_ID      varchar(30)  null,
+    SESSION_ID      varchar(30)  not null,
     REFRESH_TOKEN   varchar(300) not null,
     BROWSER_NAME    varchar(30)  null,
     BROWSER_VERSION varchar(30)  null,
+    LOCATION        varchar(30)  null,
     constraint SESSIONS_REFRESH_TOKEN_uindex
         unique (REFRESH_TOKEN),
+    constraint sessions_SESSION_ID_uindex
+        unique (SESSION_ID),
     constraint FK_USERS_1
         foreign key (ID_USER) references republichat.users (ID_USER)
             on update cascade on delete cascade

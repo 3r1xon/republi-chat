@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { UserService } from 'src/services/user.service';
 
 @Component({
   templateUrl: './p-privacy.component.html',
@@ -6,9 +7,23 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PPrivacyComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    private _user: UserService
+  ) { }
 
-  ngOnInit(): void {
+  async ngOnInit() {
+    const res = await this._user.getDevices().toPromise();
+    this.devices = res.data;
+  }
+
+  public devices = [];
+
+  async disconnectDevice(index: number) {
+    const deviceID = this.devices[index].id_session;
+    const res = await this._user.disconnectDevice(deviceID).toPromise();
+    if (res.success) {
+      this.devices.splice(index, 1);
+    }
   }
 
 }
