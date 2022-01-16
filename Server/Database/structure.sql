@@ -1,4 +1,4 @@
-create table republichat.users
+create or replace table republichat.users
 (
     ID_USER         bigint auto_increment
         primary key,
@@ -13,7 +13,7 @@ create table republichat.users
         unique (EMAIL)
 );
 
-create table republichat.channels
+create or replace table republichat.channels
 (
     ID_CHANNEL    bigint auto_increment
         primary key,
@@ -27,18 +27,19 @@ create table republichat.channels
             on update cascade on delete cascade
 );
 
-create table republichat.channels_members
+create or replace table republichat.channels_members
 (
     ID_CHANNEL_MEMBER bigint auto_increment
         primary key,
     ID_CHANNEL        bigint not null,
     ID_USER           bigint not null,
+    STATUS            int    null,
     constraint CHANNELS_MEMBERS_CHANNELS_ID_CHANNEL_fk
         foreign key (ID_CHANNEL) references republichat.channels (ID_CHANNEL)
             on update cascade on delete cascade
 );
 
-create table republichat.channels_messages
+create or replace table republichat.channels_messages
 (
     ID_CHANNEL_MESSAGE bigint auto_increment
         primary key,
@@ -54,7 +55,7 @@ create table republichat.channels_messages
             on update cascade on delete cascade
 );
 
-create table republichat.channels_permissions
+create or replace table republichat.channels_permissions
 (
     ID_CHANNEL_PERMISSION bigint auto_increment
         primary key,
@@ -68,7 +69,7 @@ create table republichat.channels_permissions
             on update cascade on delete cascade
 );
 
-create table republichat.sessions
+create or replace table republichat.sessions
 (
     ID_SESSION      bigint auto_increment
         primary key,
@@ -77,7 +78,9 @@ create table republichat.sessions
     REFRESH_TOKEN   varchar(300) not null,
     BROWSER_NAME    varchar(30)  null,
     BROWSER_VERSION varchar(30)  null,
-    LOCATION        varchar(30)  null,
+    LATITUDE        varchar(30)  null,
+    LONGITUDE       varchar(30)  null,
+    DATE            datetime     null,
     constraint SESSIONS_REFRESH_TOKEN_uindex
         unique (REFRESH_TOKEN),
     constraint sessions_SESSION_ID_uindex
