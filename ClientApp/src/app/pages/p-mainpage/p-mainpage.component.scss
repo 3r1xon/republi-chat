@@ -2,7 +2,20 @@
     width: 100%;
     height: 100vh;
     display: flex;
-    overflow-x: hidden;
+    flex-direction: column;
+
+    rep-status-bar {
+        width: 100%;
+        height: 50px;
+        border-bottom: 1px solid var(--GREY);
+    }
+
+    #main {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        overflow-x: hidden;
+    }
 
     #channels {
         min-width: 250px;

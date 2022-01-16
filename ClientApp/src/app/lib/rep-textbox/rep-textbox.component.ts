@@ -1,30 +1,19 @@
 import {
   Component,
   EventEmitter,
-  HostListener,
   Input,
-  OnInit,
   Output
 } from '@angular/core';
-import { Router } from '@angular/router';
-import { Account } from 'src/interfaces/account.interface';
 
 @Component({
   selector: 'rep-textbox',
   templateUrl: './rep-textbox.component.html',
-  styleUrls: ['./rep-textbox.component.scss', './rep-textbox.component.media.scss']
+  styleUrls: ['./rep-textbox.component.scss']
 })
-export class REPTextBoxComponent implements OnInit {
+export class REPTextBoxComponent {
 
   constructor(
-    private router: Router
-    ) { }
-
-  ngOnInit(): void {
-  }
-  
-  @Input()
-  public user: Account;
+  ) { }
 
   @Input() 
   public enabled: boolean = true;
@@ -53,12 +42,5 @@ export class REPTextBoxComponent implements OnInit {
     if (!this.enabled) return;
 
     this.upload.emit("Upload");
-  }
-
-  @HostListener('document:keydown.escape', ['$event'])
-  onEscape(event: KeyboardEvent) {
-    const key = event.key;
-    if (key == "Escape")
-      this.router.navigate(['settings']);
   }
 }

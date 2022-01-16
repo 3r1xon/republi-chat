@@ -1,33 +1,20 @@
 <div id="text-box">
 
-    <div id="profile">
-        <img id="user-image" [src]="user.picture" onerror="this.src = '/assets/user-image.png'">
-        <p [style.color]="user.color">{{user.name}}</p>
-    </div>
+    <button id="upload" (click)="uploadIMG()" [style.cursor]="enabled ? 'pointer' : 'not-allowed' ">
+        <mat-icon>upload</mat-icon>
+    </button>
 
-    <div id="control">
+    <rep-textarea
+    id="text" 
+    (send)="send()" 
+    [enabled]="enabled"
+    [(text)]="message" 
+    placeholder="Write anything..."
+    >
+    </rep-textarea>
 
-        <button id="upload" (click)="uploadIMG()" [style.cursor]="enabled ? 'pointer' : 'not-allowed' ">
-            <mat-icon>upload</mat-icon>
-        </button>
-
-        <rep-textarea
-        id="text" 
-        (send)="send()" 
-        [enabled]="enabled"
-        [(text)]="message" 
-        placeholder="Write anything..."
-        >
-        </rep-textarea>
-
-        <button id="send" (click)="send()" [style.cursor]="enabled ? 'pointer' : 'not-allowed' ">
-            <mat-icon>send</mat-icon>
-        </button>
-
-    </div>
-
-    <button id="right" routerLink="/settings/">
-        <mat-icon id="settings">settings</mat-icon>
+    <button id="send" (click)="send()" [style.cursor]="enabled ? 'pointer' : 'not-allowed' ">
+        <mat-icon>send</mat-icon>
     </button>
 
 </div>

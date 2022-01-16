@@ -1,14 +1,12 @@
 import { 
   Component, 
   Input, 
-  OnInit, 
   ViewChild, 
   ElementRef, 
   Output, 
   EventEmitter, 
   AfterViewChecked
 } from '@angular/core';
-import { Account } from 'src/interfaces/account.interface';
 import { Message } from 'src/interfaces/message.interface';
 
 @Component({
@@ -31,9 +29,6 @@ export class REPChatComponent implements AfterViewChecked {
 
   @Input()
   public messages: Array<Message>;
-
-  @Input()
-  public user: Account;
 
   @Output()
   public sendMessage = new EventEmitter();

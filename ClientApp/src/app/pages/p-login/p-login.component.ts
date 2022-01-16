@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { first } from 'rxjs/operators';
@@ -14,7 +14,7 @@ import { UtilsService } from 'src/services/utils.service';
   templateUrl: './p-login.component.html',
   styleUrls: ['./p-login.component.scss']
 })
-export class PLoginComponent implements OnInit {
+export class PLoginComponent {
 
   constructor(
     private _user: UserService,
@@ -23,10 +23,7 @@ export class PLoginComponent implements OnInit {
     private router: Router,
     private http: HttpClient,
     private fb: FormBuilder
-    ) { }
-
-  ngOnInit(): void {
-  }
+  ) { }
 
   public alert: string = "";
 
@@ -90,7 +87,7 @@ export class PLoginComponent implements OnInit {
           this.alert = response.error.message;
         });
     }, () => {
-        this.alert = "Position is mandatory! Try again.";
+        this.alert = "Position is mandatory! Click 'Allow' and try again.";
     });
 
   }

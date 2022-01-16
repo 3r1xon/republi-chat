@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { server } from 'src/environments/server';
@@ -9,16 +9,13 @@ import { ServerResponse } from 'src/interfaces/response.interface';
   templateUrl: './p-signup.component.html',
   styleUrls: ['./p-signup.component.scss']
 })
-export class PSignupComponent implements OnInit {
+export class PSignupComponent {
 
   constructor(
     private http: HttpClient,
     private router: Router,
     private fb: FormBuilder
-    ) { }
-
-  ngOnInit(): void {
-  }
+  ) { }
 
   public particleNumber: Array<any> = [];
 

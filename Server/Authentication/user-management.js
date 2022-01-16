@@ -232,6 +232,7 @@ router.get('/getDevices', Auth.authToken, async (req, res) => {
     ID_SESSION as id_session,
     BROWSER_NAME as browserName,
     BROWSER_VERSION as browserVersion,
+    DATE as date,
     SESSION_ID
     FROM SESSIONS
     WHERE ID_USER = ?

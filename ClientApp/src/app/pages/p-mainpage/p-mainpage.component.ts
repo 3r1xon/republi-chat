@@ -5,6 +5,7 @@ import { Subscription } from 'rxjs';
 import { REPButton } from 'src/interfaces/repbutton.interface';
 import { MessagesService } from 'src/services/messages.service';
 import { UserService } from 'src/services/user.service';
+import { UtilsService } from 'src/services/utils.service';
 import { WebSocketService } from 'src/services/websocket.service';
 
 @Component({
@@ -16,6 +17,7 @@ export class PMainpageComponent implements OnInit, OnDestroy {
   constructor(
     public _user: UserService,
     public _msService: MessagesService,
+    public _utils: UtilsService,
     private _webSocket: WebSocketService,
     private cookieService: CookieService,
     private router: Router

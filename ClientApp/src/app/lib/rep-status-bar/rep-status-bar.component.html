@@ -1,0 +1,13 @@
+<div id="rep-status-bar">
+
+    <div id="profile">
+        <img id="user-image" [src]="user.picture" onerror="this.src = '/assets/user-image.png'">
+        <p [style.color]="user.color">{{user.name}}</p>
+    </div>
+
+    <div id="right">
+        <mat-icon (click)="toggleServerGroup()">group</mat-icon>
+        <mat-icon id="settings" routerLink="/settings/">settings</mat-icon>
+    </div>
+        
+</div>

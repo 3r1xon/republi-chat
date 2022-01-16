@@ -19,6 +19,7 @@ export class UtilsService {
 
   public rqsBody: Request;
 
+  public showServerGroup: boolean = true;
 
   public showRequest(title: string, message: string, actions?: Function | Array<REPButton>): void {
 
