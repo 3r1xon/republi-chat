@@ -1,9 +1,11 @@
+@import 'src/app/styles/mixins';
+
+
 #text-box {
     height: 100%;
     min-height: 75px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    @include flexCenter(row);
+
     
     
     button {
@@ -12,10 +14,8 @@
         min-height: 45px;
         resize: none;
         background: var(--GREY);
-        display: flex;
+        @include flexCenter(row);
         margin: 10px;
-        align-items: center;
-        justify-content: center;
         border-radius: 50%;
         transition: 200ms;
 

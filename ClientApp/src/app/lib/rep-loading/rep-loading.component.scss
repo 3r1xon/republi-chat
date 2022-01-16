@@ -1,12 +1,12 @@
+@import 'src/app/styles/mixins';
+
 #loading {
   width: 100%;
   height: 100vh;
   background: var(--OBSCURE);
   position: fixed;
   z-index: 9999;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  @include flexCenter(row);
   animation: fadeIn 200ms;
 
   #loader {

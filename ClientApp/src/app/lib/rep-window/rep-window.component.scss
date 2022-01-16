@@ -1,10 +1,11 @@
+@import 'src/app/styles/mixins';
+
+
 #more {
     width: 30px;
     height: 30px;
     border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    @include flexCenter(row);
     transition: 100ms;
     cursor: pointer;
     color: var(--WHITE);
@@ -18,10 +19,7 @@
 #submenu {
     position: fixed;
     background: var(--LIGHT-DARK);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
+    @include flexCenter(column);
     user-select: none;
     z-index: 1;
     border-radius: 5px;

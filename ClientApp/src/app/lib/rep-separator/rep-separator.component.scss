@@ -1,3 +1,6 @@
+@import 'src/app/styles/mixins';
+
+
 #rep-separator {
     height: 1px;
     display: flex;
@@ -6,9 +9,7 @@
     #content {
         white-space: nowrap;
         width: auto;
-        display: flex;
-        justify-content: center;
-        align-items: center;
+        @include flexCenter(row);
         margin: 15px;
         opacity: 0.5;
     }

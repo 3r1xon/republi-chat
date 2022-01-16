@@ -1,3 +1,6 @@
+@import 'src/app/styles/mixins';
+
+
 #rep-tooltip {
     min-width: 100px;
     max-width: 200px;
@@ -10,9 +13,6 @@
     background: var(--GREY);
     z-index: 1;
     position: absolute;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
+    @include flexCenter(column);
     text-align: center;
 }

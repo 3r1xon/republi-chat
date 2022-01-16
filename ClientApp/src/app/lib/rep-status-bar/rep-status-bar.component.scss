@@ -16,16 +16,25 @@
     }
 
     #right {
+        display: flex;
+        align-items: center;
         margin-right: 15px;
+
+        #connection {
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            margin: 10px;
+        }
 
         mat-icon {
             cursor: pointer;
             color: var(--WHITE);
+            margin-right: 15px;
         }
 
         #settings {
             transition: 500ms;
-            margin: 15px;
 
             &:hover, &:focus {
                 transform: rotate(90deg);
@@ -33,4 +42,12 @@
         }
     }
     
+}
+
+.connected {
+    background: var(--SUCCESS);
+}
+
+.disconnected {
+    background: var(--DANGER);
 }

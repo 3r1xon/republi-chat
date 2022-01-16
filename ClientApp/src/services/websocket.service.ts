@@ -10,10 +10,17 @@ export class WebSocketService {
 
   constructor(
   ) { 
-    this.socket = io(server.WEB_SOCKET);
-  }
+    this.socket = io(server.WEB_SOCKET, {
+      reconnection: true,
+      reconnectionDelay: 5000,
+      reconnectionDelayMax: 10000,
+      reconnectionAttempts: 20
+    });
 
-  public isConnected: boolean = false;
+    this.listen("disconnect").subscribe(() => {
+      console.log("disconnect!");
+    });
+  }
 
   public socket: Socket;
 

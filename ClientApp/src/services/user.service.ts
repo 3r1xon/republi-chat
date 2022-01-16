@@ -65,6 +65,7 @@ export class UserService implements CanActivate {
 
     this.userAuth = false;
 
+    alert("logOut INVOKED!");
     await this.router.navigate(['login']);
     this.document.defaultView.location.reload();
   }
@@ -76,6 +77,7 @@ export class UserService implements CanActivate {
     this.cookieService.deleteAll();
 
     await this.router.navigate(['unauthorized']);
+    alert("deAuth INVOKED!");
   }
 
 

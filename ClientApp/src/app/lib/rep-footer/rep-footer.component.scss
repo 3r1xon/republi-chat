@@ -1,14 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300&display=swap');
+@import 'src/app/styles/mixins';
 
 
 #footer {
     width: 100%;
     height: 10vh;
     background: var(--DARK);
-    display: flex;
-    align-items: center;
+    @include flexCenter(row);
     font-family: 'Josefin Sans', sans-serif;
-    justify-content: center;
     color: #ffffff;
     position: absolute;
     bottom: 0;

@@ -1,3 +1,5 @@
+@import 'src/app/styles/mixins';
+
 #message-box {
     min-height: 55px;
     height: auto;
@@ -36,10 +38,8 @@
     }
 
     .absent-image {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: rgb(random(255), random(255), random(255));
+        @include flexCenter(row);
+        background: var(--GREY);
     }
 
     #message-info {

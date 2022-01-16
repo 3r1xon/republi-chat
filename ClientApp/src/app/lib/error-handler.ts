@@ -1,4 +1,4 @@
-import { HttpErrorResponse } from "@angular/common/http";
+import { HttpErrorResponse, HttpResponse } from "@angular/common/http";
 import { ErrorHandler, Injectable, NgZone } from "@angular/core";
 import { UtilsService } from "src/services/utils.service";
 
@@ -11,8 +11,10 @@ export class GlobalErrorHandler implements ErrorHandler {
     ) {}
 
   handleError(error: any) {
-    if (error instanceof HttpErrorResponse) return;
+    if (error instanceof HttpErrorResponse || error instanceof HttpResponse) return;
+
     console.error(error);
+
     this.zone.run(() => { 
       this._utils.showBugReport(error.rejection, error); 
     });

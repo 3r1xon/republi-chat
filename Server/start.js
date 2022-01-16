@@ -15,8 +15,8 @@ const corsOptions = {
 const io = require('socket.io')(server, {
   cors: corsOptions
 });
-
 module.exports = io;
+
 
 
 dotenv.config();
@@ -24,11 +24,14 @@ app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser());
 
+
+
 // Get the exact time of the request, available for every request.
 app.use((req, res, next) => { 
   res.locals._requestDate = new Date(parseInt(req.headers['requestdate']));
   next(); 
 });
+
 
 
 app.use('/authentication', require('./Authentication/user-management'));
@@ -40,6 +43,7 @@ app.use('/channels', require('./Channels/channel-management'));
 app.get('/', (req, res) => {
   res.send('Server is working!');
 });
+
 
 
 io.use((socket, next) => {

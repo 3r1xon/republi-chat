@@ -6,6 +6,7 @@ import {
 import { Router } from '@angular/router';
 import { Account } from 'src/interfaces/account.interface';
 import { UtilsService } from 'src/services/utils.service';
+import { WebSocketService } from 'src/services/websocket.service';
 
 @Component({
   selector: 'rep-status-bar',
@@ -16,6 +17,7 @@ export class REPStatusBarComponent {
 
   constructor(
     private _utils: UtilsService,
+    public _webSocket: WebSocketService,
     private router: Router,
   ) { }
 

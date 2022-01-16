@@ -6,6 +6,11 @@
     </div>
 
     <div id="right">
+        <span id="connection" [ngClass]="{
+            'connected': _webSocket.socket.connected,
+            'disconnected': !_webSocket.socket.connected
+        }">
+        </span>
         <mat-icon (click)="toggleServerGroup()">group</mat-icon>
         <mat-icon id="settings" routerLink="/settings/">settings</mat-icon>
     </div>

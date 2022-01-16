@@ -73,9 +73,9 @@ io.on("connection", (socket) => {
 
     socket.join(joinedRoom);
 
-    user.setChannel(joinedRoom, async (err, user) => {
+    user?.setChannel(joinedRoom, async (err, user) => {
       if (err) {
-        socket.disconnect();
+        console.log(err);
       } else {
         room = joinedRoom;
       }
@@ -84,10 +84,10 @@ io.on("connection", (socket) => {
 
   socket.on("message", (msg) => {
 
-    user.hasPermission(permissions.sendMessages, async (err, user) => {
+    user?.hasPermission(permissions.sendMessages, async (err, user) => {
       if (err) {
-        console.log(err);
         socket.disconnect();
+        console.log(err);
       } else {
 
         try {
@@ -133,7 +133,7 @@ io.on("connection", (socket) => {
   socket.on("deleteMessage", (msgID) => {
 
     // Checks if the message being delete belongs to the user
-    user.msgBelong(msgID, (err, user) => {
+    user?.msgBelong(msgID, (err, user) => {
 
       const delMsg = async () => {
         try {
@@ -153,9 +153,9 @@ io.on("connection", (socket) => {
       if (err) {
         // If the message does not belong to the user then the latter
         // must be authorized to delete other people messages
-        user.hasPermission(permissions.deleteMessage, async (err, user) => {
+        user?.hasPermission(permissions.deleteMessage, async (err, user) => {
           if (err) {
-            socket.disconnect();
+            console.log(err);
           } else {
             delMsg();
           }
@@ -167,12 +167,6 @@ io.on("connection", (socket) => {
 
   });
 
-});
-
-
-
-io.on('disconnect', (socket) => {
-  console.log('Got disconnect!');
 });
 
 
