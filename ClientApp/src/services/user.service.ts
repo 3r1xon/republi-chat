@@ -9,6 +9,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { FileUploadService } from './file-upload.service';
 import { UtilsService } from './utils.service';
 import { DOCUMENT } from '@angular/common';
+import { first } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -65,21 +66,22 @@ export class UserService implements CanActivate {
   }
 
 
-  public async logOut(force?: boolean): Promise<any> {
+  public logOut(force?: boolean): any {
     this.userAuth = false;
     
-    const sub = this.http.delete(`${server.BASE_URL}/authentication/logout`).subscribe();
-
-    sub.unsubscribe();
+    this.http.delete(`${server.BASE_URL}/authentication/logout`)
+      .pipe(first())
+      .subscribe();
 
     this.cookieService.deleteAll();
 
     if (force)
-      await this.router.navigate(['unauthorized']);
+      this.router.navigate(['unauthorized']);
     else {
-      await this.router.navigate(['login']);
+      this.router.navigate(['login']);
       this.document.defaultView.location.reload();
     }
+
   }
 
   public deleteProfile() {

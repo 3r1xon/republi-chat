@@ -30,7 +30,7 @@ class Auth {
 
             let userExist = await db.query(
             `
-            SELECT 1 
+            SELECT 1
             FROM SESSIONS
             WHERE ID_USER = ?
             AND SESSION_ID = ?
@@ -56,13 +56,13 @@ class Auth {
                 VALUES
                 (?, ?, ?, ?, ?, ?, ?, ?)
                 `, [
-                    user._id, 
-                    REFRESH_TOKEN, 
-                    browser.name, 
-                    browser.version, 
-                    browser.latitude, 
-                    browser.longitude, 
-                    new Date(), 
+                    user._id,
+                    REFRESH_TOKEN,
+                    browser.name,
+                    browser.version,
+                    browser.latitude,
+                    browser.longitude,
+                    new Date(),
                     user.SESSION_ID
                 ]);
             }
@@ -110,9 +110,9 @@ class Auth {
                         `
                         SELECT 1
                         FROM SESSIONS S
-                        WHERE S.REFRESH_TOKEN = ?
-                        AND S.SESSION_ID = ?
-                        `, [REFRESH_TOKEN, SESSION_ID]);
+                        WHERE S.SESSION_ID = ?
+                        AND S.REFRESH_TOKEN = ?
+                        `, [SESSION_ID, REFRESH_TOKEN]);
 
                         registered = registered[0];
 

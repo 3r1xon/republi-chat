@@ -18,7 +18,7 @@ const routes: Routes = [
   { path: 'signup', component: PSignupComponent, pathMatch: 'full' },
   { path: 'login', component: PLoginComponent, pathMatch: 'full' },
   { path: 'mainpage', component: PMainpageComponent, pathMatch: 'full', canActivate: [UserService] },
-  { path: 'unauthorized', component: PUnauthorizedComponent, pathMatch: 'full', canActivate: [UserService] },
+  { path: 'unauthorized', component: PUnauthorizedComponent, pathMatch: 'full' },
   { 
     path: 'settings',
     component: PSettingsComponent,
