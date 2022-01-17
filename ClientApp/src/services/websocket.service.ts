@@ -20,7 +20,7 @@ export class WebSocketService {
       transports: ['websocket'],
       upgrade: false,
       query: {
-        ACCESS_TOKEN: this.cookieService.get("ACCESS_TOKEN")
+        ACCESS_TOKEN: "Test"
       }
     });
 
