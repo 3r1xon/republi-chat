@@ -70,7 +70,7 @@ router.post('/createChannel', upload.single("image"), async (req, res) => {
       } catch(error) {
         console.log(error);
 
-        res.status(500).send({ success: false, message: `Database error!` });
+        res.status(500).send({ success: false, message: `Internal server error!` });
       }
     }
   });
@@ -83,53 +83,60 @@ router.post('/addChannel', async (req, res) => {
   const { name, code } = req.body;
   const _userID        = res.locals._id;
 
-  let channel = await db.query(
-  `
-  SELECT 
-  ID_CHANNEL
-  FROM CHANNELS
-  WHERE NAME = ? AND CHANNEL_CODE = ?
-  `, [name, code]);
+  try {
 
-  channel = channel[0];
+    let channel = await db.query(
+    `
+    SELECT 
+    ID_CHANNEL
+    FROM CHANNELS
+    WHERE NAME = ? AND CHANNEL_CODE = ?
+    `, [name, code]);
+  
+    channel = channel[0];
+  
+    if (channel) {
+  
+      const _channelID = channel.ID_CHANNEL;
+  
+      const user = new DBUser(_userID);
+  
+      user.setChannel(_channelID, async (err, user) => {
+        if (err) {
+          // It means the user is not in the desired channel so it can be added
+          let member = await db.query(
+          `
+          INSERT INTO CHANNELS_MEMBERS
+          (ID_USER, ID_CHANNEL)
+          VALUES
+          (?, ?)
+          RETURNING ID_CHANNEL_MEMBER
+          `, [_userID, _channelID]);
+  
+          member = member[0].ID_CHANNEL_MEMBER
+  
+          await db.query(
+          `
+          INSERT INTO CHANNELS_PERMISSIONS
+          (ID_CHANNEL_MEMBER)
+          VALUES
+          (?)
+          `, [member]);
+  
+          res.status(201).send({ success: true });
+  
+        } else {
+  
+          res.status(409).send({ success: false, message: "User already in channel!" });
+        }
+      });
+    } else
+    res.status(404).send({ success: false, message: "Inputed channel does not exist!" });
+  } catch(err) {
+    console.log(err);
+    res.status(500).send({ success: false, message: "Internal server error!" });
+  }
 
-  if (channel) {
-
-    const _channelID = channel.ID_CHANNEL;
-
-    const user = new DBUser(_userID);
-
-    user.setChannel(_channelID, async (err, user) => {
-      if (err) {
-        // It means the user is not in the desired channel so it can be added
-        let member = await db.query(
-        `
-        INSERT INTO CHANNELS_MEMBERS
-        (ID_USER, ID_CHANNEL)
-        VALUES
-        (?, ?)
-        RETURNING ID_CHANNEL_MEMBER
-        `, [_userID, _channelID]);
-
-        member = member[0].ID_CHANNEL_MEMBER
-
-        await db.query(
-        `
-        INSERT INTO CHANNELS_PERMISSIONS
-        (ID_CHANNEL_MEMBER)
-        VALUES
-        (?)
-        `, [member]);
-
-        res.status(201).send({ success: true });
-
-      } else {
-
-        res.status(409).send({ success: false, message: "User already in channel!" });
-      }
-    });
-  } else
-  res.status(404).send({ success: false, message: "Inputed channel does not exist!" });
 });
 
 
@@ -156,8 +163,7 @@ router.get('/getChannels', async (req, res) => {
 
   } catch (error) {
     console.log(error);
-
-    res.status(500).send({ success: false, message: `Database error!` });
+    res.status(500).send({ success: false, message: `Internal server error!!` });
   }
 
 });

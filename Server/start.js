@@ -3,6 +3,7 @@ const cors           = require('cors');
 const app            = express();
 const port           = 3000;
 const dotenv         = require('dotenv'); 
+const jwt            = require('jsonwebtoken');
 const cookieParser   = require('cookie-parser');
 const server         = app.listen(port, () => { console.log(`Server listening at http://localhost:${port}`); });
 
@@ -47,6 +48,16 @@ app.get('/', (req, res) => {
 
 
 io.use((socket, next) => {
-  // console.log(socket.handshake.auth);
   next();
+  // const { ACCESS_TOKEN } = socket.handshake.query;
+  // console.log(ACCESS_TOKEN);
+  // jwt.verify(ACCESS_TOKEN, process.env.SECRET_KEY, async (err, decoded) => {
+  //   if (decoded) {
+  //     console.log("DECODED");
+  //     next();
+  //   } else {
+  //     console.error("FAILED");
+  //     next();
+  //   }
+  // });
 });

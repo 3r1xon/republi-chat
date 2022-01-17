@@ -54,7 +54,7 @@ export class InterceptorService implements HttpInterceptor {
         const SESSION_ID    = res.headers.get("SESSION_ID");
 
         if (ACCESS_TOKEN && REFRESH_TOKEN && SESSION_ID) {
-          this._webSocket.setAuth(ACCESS_TOKEN, REFRESH_TOKEN);
+          this._webSocket.setAuth(ACCESS_TOKEN);
 
           this.cookieService.set("ACCESS_TOKEN", ACCESS_TOKEN);
           this.cookieService.set("REFRESH_TOKEN", REFRESH_TOKEN);

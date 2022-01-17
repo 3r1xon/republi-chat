@@ -39,7 +39,7 @@ router.post('/signUp', async (req, res) => {
           VALUES 
           (?, ?, ?, ?)
           `, [code, user.password, user.name, user.email]);
-    
+
           res.status(201).send({ success: true, message: 'User correctly signed up' });
         } catch(error) {
 
@@ -48,7 +48,7 @@ router.post('/signUp', async (req, res) => {
           if (error.code == "ER_DUP_ENTRY")
             res.status(409).send({ success: false, message: `Email ${user.email} is already in use!` });
           else
-            res.status(500).send({ success: false, message: "Database error!" });
+            res.status(500).send({ success: false, message: "Internal server error!" });
         }
       }
     });
@@ -59,26 +59,32 @@ router.post('/signUp', async (req, res) => {
 
 router.post('/authorize', Auth.authToken, async (req, res) => {
 
-  const _id = res.locals._id;
+  try {
 
-  let dbUser = await db.query(
-  `
-  SELECT
-  U.ID_USER as id,
-  U.USER_CODE as code,
-  U.NAME as name,
-  U.COLOR as color,
-  U.EMAIL as email,
-  TO_BASE64(U.PROFILE_PICTURE) as picture
-  FROM USERS U
-  WHERE U.ID_USER = ?
-  `, [_id]);
+    const _id = res.locals._id;
 
-  dbUser = dbUser[0];
+    let dbUser = await db.query(
+    `
+    SELECT
+    U.ID_USER as id,
+    U.USER_CODE as code,
+    U.NAME as name,
+    U.COLOR as color,
+    U.EMAIL as email,
+    TO_BASE64(U.PROFILE_PICTURE) as picture
+    FROM USERS U
+    WHERE U.ID_USER = ?
+    `, [_id]);
 
-  if (dbUser) return res.status(200).send({ success: true, data: dbUser });
+    dbUser = dbUser[0];
 
-  res.status(401).send({ success: false, message: "There has been an error with the token authentication!"});
+    if (dbUser) return res.status(200).send({ success: true, data: dbUser });
+
+    res.status(401).send({ success: false, message: "There has been an error with the token authentication!"});
+  } catch(err) {
+    console.log(err);
+    res.status(500).send({ success: false, message: "Internal server error!" });
+  }
 });
 
 
@@ -128,7 +134,7 @@ router.post('/logIn', async (req, res) => {
   }
   catch (err) {
     console.log(err);
-    res.status(500).send({ success: false, message: "Database error!" });
+    res.status(500).send({ success: false, message: "Internal server error!" });
   }
 });
 
@@ -153,7 +159,7 @@ router.delete('/logout', Auth.authToken, async (req, res) => {
 
   } catch(err) {
     console.log(err);
-    res.status(500).send({ success: false, message: "Database error!" });
+    res.status(500).send({ success: false, message: "Internal server error!" });
   }
   
 });
@@ -187,7 +193,7 @@ router.put('/editProfile', [Auth.authToken, upload.single("image")], async (req,
   } catch(err) {
     console.log(err);
 
-    res.status(500).send({ success: false, message: "Database error!" });
+    res.status(500).send({ success: false, message: "Internal server error!" });
   }
 });
 
@@ -214,7 +220,7 @@ router.delete('/deleteProfile', Auth.authToken, async (req, res) => {
   } catch(err) {
     console.log(err);
 
-    res.status(500).send({ success: false, message: "Database error!" });
+    res.status(500).send({ success: false, message: "Internal server error!" });
   }
 });
 
@@ -255,7 +261,7 @@ router.get('/getDevices', Auth.authToken, async (req, res) => {
   } catch(err) {
     console.log(err);
 
-    res.status(500).send({ success: false, message: "Database error!" });
+    res.status(500).send({ success: false, message: "Internal server error!" });
   }
 });
 
@@ -289,7 +295,7 @@ router.delete('/disconnectDevice/:id', Auth.authToken, async (req, res) => {
   } catch(err) {
     console.log(err);
 
-    res.status(500).send({ success: false, message: "Database error!" });
+    res.status(500).send({ success: false, message: "Internal server error!" });
   }
 });
 

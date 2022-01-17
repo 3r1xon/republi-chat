@@ -60,12 +60,12 @@ export class UserService implements CanActivate {
 
   public async logOut(): Promise<any> {
     this.http.delete(`${server.BASE_URL}/authentication/logout`).toPromise();
+    alert("logOut INVOKED!");
 
     this.cookieService.deleteAll();
 
     this.userAuth = false;
 
-    alert("logOut INVOKED!");
     await this.router.navigate(['login']);
     this.document.defaultView.location.reload();
   }
@@ -73,11 +73,11 @@ export class UserService implements CanActivate {
 
   public async deAuth() {
     this.http.delete(`${server.BASE_URL}/authentication/logout`).toPromise();
+    alert("deAuth INVOKED!");
   
     this.cookieService.deleteAll();
 
     await this.router.navigate(['unauthorized']);
-    alert("deAuth INVOKED!");
   }
 
 

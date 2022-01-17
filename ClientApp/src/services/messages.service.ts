@@ -113,6 +113,7 @@ export class MessagesService {
     this.msSubscriptions.map((subscription) => {
       subscription.unsubscribe();
     });
+    this.msSubscriptions = [];
   }
 
 }

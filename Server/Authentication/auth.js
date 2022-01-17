@@ -1,6 +1,5 @@
 const jwt          = require('jsonwebtoken');
 const db           = require('../Database/db');
-const fm           = require('date-fns');
 
 
 
@@ -80,46 +79,69 @@ class Auth {
 
 
 
-    static authToken = (req, res, next) => {
+    static authToken = async (req, res, next) => {
 
         const ACCESS_TOKEN = req.headers['authorization'].split(' ')[1];
 
         const { REFRESH_TOKEN, SESSION_ID } = req.cookies;
 
-        jwt.verify(ACCESS_TOKEN, process.env.SECRET_KEY, async (err, decoded) => {
-            if (decoded) {
-                res.locals._id = decoded._id;
-                res.locals.SESSION_ID = decoded.SESSION_ID;
-                next();
-            } else {
-                let registered = await db.query(
-                `
-                SELECT 1
-                FROM SESSIONS S
-                WHERE S.REFRESH_TOKEN = ?
-                AND S.SESSION_ID = ?
-                `, [REFRESH_TOKEN, SESSION_ID]);
+        console.log(req.cookies);
 
-                registered = registered[0];
+        try {
 
-                if (registered) {
+            let exists = await db.query(
+            `
+            SELECT 1
+            FROM SESSIONS S
+            WHERE S.SESSION_ID = ?
+            `, [SESSION_ID]);
 
-                    jwt.verify(REFRESH_TOKEN, process.env.SECRET_KEY, async (err, decoded) => {
-                        if (decoded) {
-                            res.locals._id = decoded._id;
-                            res.locals.SESSION_ID = decoded.SESSION_ID;
-                            res.set(await this.generateToken({
-                                _id: decoded._id,
-                                email: decoded.email,
-                                SESSION_ID: decoded.SESSION_ID
-                            }));
-                            next();
-                        } else res.status(401).send({ success: false, message: "Refresh token invalid!" });
-                    });
-                } else res.status(401).send({ success: false, message: "Token not registered!" });
-            }
-        });
+            exists = exists[0];
+
+            let exists = true
+
+            if (exists) {
+
+                jwt.verify(ACCESS_TOKEN, process.env.SECRET_KEY, async (err, decoded) => {
+                    if (decoded) {
+                        res.locals._id = decoded._id;
+                        res.locals.SESSION_ID = decoded.SESSION_ID;
+                        next();
+                    } else {
+                        let registered = await db.query(
+                        `
+                        SELECT 1
+                        FROM SESSIONS S
+                        WHERE S.REFRESH_TOKEN = ?
+                        AND S.SESSION_ID = ?
+                        `, [REFRESH_TOKEN, SESSION_ID]);
+
+                        registered = registered[0];
+
+                        if (registered) {
+
+                            jwt.verify(REFRESH_TOKEN, process.env.SECRET_KEY, async (err, decoded) => {
+                                if (decoded) {
+                                    res.locals._id = decoded._id;
+                                    res.locals.SESSION_ID = decoded.SESSION_ID;
+                                    res.set(await this.generateToken({
+                                        _id: decoded._id,
+                                        email: decoded.email,
+                                        SESSION_ID: decoded.SESSION_ID
+                                    }));
+                                    next();
+                                } else res.status(401).send({ success: false, message: "Refresh token invalid!" });
+                            });
+                        } else res.status(401).send({ success: false, message: "Token not registered!" });
+                    }
+                });
+            } else res.status(401).send({ success: false, message: "Session expired or invalid token!" });
+        } catch(err) {
+            console.log(err);
+            res.status(500).send({ success: false, message: "Internal server error!" });
+        }
     };
+
 }
 
 module.exports = Auth;

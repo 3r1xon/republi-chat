@@ -47,7 +47,7 @@ router.get('/getChannelMessages/:id', async (req, res) => {
       catch (error) {
         console.log(error);
 
-        res.status(500).send({ success: false, message: "Database error!" });
+        res.status(500).send({ success: false, message: "Internal server error!" });
       }
     }
   });
