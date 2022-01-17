@@ -65,33 +65,42 @@ export class PNewChannelComponent implements OnInit {
       picture: null
     };
 
-    const res = await this._msService.createChannel(channel).toPromise();
+    const sub = this._msService.createChannel(channel)
+      .subscribe(
+        (res) => {
 
-    if (res.success) {
-
-      this.formCreation.setValue({ 
-        channelName: '',
-        channelImage: null
-      });
-
-      this._utils.showRequest(
-        "Channel created successfully", 
-        `The channel "${channel.name}" has been created successfully, you can now find it at the main page!`, 
-        [
-          {
-            name: "Mainpage",
-            icon: "home",
-            onClick: () => {
-              this.router.navigate(['mainpage']);
-            },
-            background: "success"
-          },
-          {
-            name: "Close",
-            icon: "close",
+          if (res.success) {
+      
+            this.formCreation.setValue({ 
+              channelName: '',
+              channelImage: null
+            });
+      
+            this._utils.showRequest(
+              "Channel created successfully", 
+              `The channel "${channel.name}" has been created successfully, you can now find it at the main page!`, 
+              [
+                {
+                  name: "Mainpage",
+                  icon: "home",
+                  onClick: () => {
+                    this.router.navigate(['mainpage']);
+                  },
+                  background: "success"
+                },
+                {
+                  name: "Close",
+                  icon: "close",
+                }
+              ]);
           }
-        ]);
-    }
+        },
+        () => { }, 
+        () => {
+          sub.unsubscribe();
+        }
+    );
+
   }
 
   async addChannel() {
@@ -101,43 +110,52 @@ export class PNewChannelComponent implements OnInit {
       code: this.formAdd.value.channelCode
     };
 
-    const res = await this._msService.addChannel(channel).toPromise();
+    const sub = this._msService.addChannel(channel)
+      .subscribe(
+        (res) => {
 
-    if (res.success) {
-
-      this.formAdd.setValue({ 
-        channelName: '',
-        channelCode: ''
-      });
-
-      this._utils.showRequest(
-        "Channel found and added", 
-        `The channel "${channel.name}" has been successfully added, you can now find it at the main page!`, 
-        [
-          {
-            name: "Mainpage",
-            icon: "home",
-            onClick: () => {
-              this.router.navigate(['mainpage']);
-            },
-            background: "success"
-          },
-          {
-            name: "Close",
-            icon: "close",
+          if (res.success) {
+      
+            this.formAdd.setValue({ 
+              channelName: '',
+              channelCode: ''
+            });
+      
+            this._utils.showRequest(
+              "Channel found and added", 
+              `The channel "${channel.name}" has been successfully added, you can now find it at the main page!`, 
+              [
+                {
+                  name: "Mainpage",
+                  icon: "home",
+                  onClick: () => {
+                    this.router.navigate(['mainpage']);
+                  },
+                  background: "success"
+                },
+                {
+                  name: "Close",
+                  icon: "close",
+                }
+              ]);
+          } else {
+            this._utils.showRequest(
+              "Channel not found", 
+              `The channel "${channel.name}" was not found, are you sure the name and code is correct?`, 
+              [
+                {
+                  name: "Close",
+                  icon: "close",
+                }
+              ]);
           }
-        ]);
-    } else {
-      this._utils.showRequest(
-        "Channel not found", 
-        `The channel "${channel.name}" was not found, are you sure the name and code is correct?`, 
-        [
-          {
-            name: "Close",
-            icon: "close",
-          }
-        ]);
-    }
+        },
+        () => { },
+        () => {
+          sub.unsubscribe();
+        }
+      );
+
   }
 
   async onChange(event) {

@@ -43,43 +43,44 @@ export class UserService implements CanActivate {
 
     const browser = this._utils.detectBrowser();
     
-    const response = await this.http.post<ServerResponse>(`${server.BASE_URL}/authentication/authorize`, {
+    const sub = this.http.post<ServerResponse>(`${server.BASE_URL}/authentication/authorize`, {
       REFRESH_TOKEN: REFRESH_TOKEN,
       BROWSER: browser
-    }).toPromise();
-    if (response.success) {
-      this.currentUser = <Account>response.data;
-      this.currentUser.picture = this._fileUpload.sanitizeIMG(this.currentUser.picture);
-      this.userAuth = true;
-      await this.router.navigate(['mainpage']);
-    } else {
-      this.deAuth();
+    })
+      .subscribe(async (res) => {
+        if (res.success) {
+          this.currentUser = <Account>res.data;
+          this.currentUser.picture = this._fileUpload.sanitizeIMG(this.currentUser.picture);
+          this.userAuth = true;
+          await this.router.navigate(['mainpage']);
+        }
+      }, 
+      (err) => {
+        this.logOut();
+      },
+      () => {
+        sub.unsubscribe();
+      }
+    );
+  }
+
+
+  public async logOut(force?: boolean): Promise<any> {
+    this.userAuth = false;
+    
+    const sub = this.http.delete(`${server.BASE_URL}/authentication/logout`).subscribe();
+
+    sub.unsubscribe();
+
+    this.cookieService.deleteAll();
+
+    if (force)
+      await this.router.navigate(['unauthorized']);
+    else {
+      await this.router.navigate(['login']);
+      this.document.defaultView.location.reload();
     }
   }
-
-
-  public async logOut(): Promise<any> {
-    this.http.delete(`${server.BASE_URL}/authentication/logout`).toPromise();
-    alert("logOut INVOKED!");
-
-    this.cookieService.deleteAll();
-
-    this.userAuth = false;
-
-    await this.router.navigate(['login']);
-    this.document.defaultView.location.reload();
-  }
-
-
-  public async deAuth() {
-    this.http.delete(`${server.BASE_URL}/authentication/logout`).toPromise();
-    alert("deAuth INVOKED!");
-  
-    this.cookieService.deleteAll();
-
-    await this.router.navigate(['unauthorized']);
-  }
-
 
   public deleteProfile() {
     return this.http.delete<ServerResponse>(`${server.BASE_URL}/authentication/deleteProfile`);

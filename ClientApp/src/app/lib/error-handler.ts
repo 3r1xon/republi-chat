@@ -11,7 +11,11 @@ export class GlobalErrorHandler implements ErrorHandler {
     ) {}
 
   handleError(error: any) {
-    if (error instanceof HttpErrorResponse || error instanceof HttpResponse) return;
+    if (
+      error instanceof HttpErrorResponse || 
+      error instanceof HttpResponse ||
+      error.rejection?.name == "HttpErrorResponse"
+    ) return;
 
     console.error(error);
 

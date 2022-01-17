@@ -84,7 +84,9 @@ class Auth {
         const ACCESS_TOKEN = req.headers['authorization'].split(' ')[1];
 
         const { REFRESH_TOKEN, SESSION_ID } = req.cookies;
+
         console.log("authToken");
+
         try {
 
             let exists = await db.query(
@@ -95,8 +97,6 @@ class Auth {
             `, [SESSION_ID]);
 
             exists = exists[0];
-
-            exists = true
 
             if (exists) {
 

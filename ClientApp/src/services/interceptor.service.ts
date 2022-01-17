@@ -66,8 +66,9 @@ export class InterceptorService implements HttpInterceptor {
     }, (err: HttpErrorResponse) => {
       this._utils.loading = false;
 
-      if (err.status == 401) { 
-        this._user.deAuth();
+      // Loop warning, AND operator is mandatory!
+      if (err.status == 401 && this._user.userAuth) { 
+        this._user.logOut(true);
       }
     }));
   }

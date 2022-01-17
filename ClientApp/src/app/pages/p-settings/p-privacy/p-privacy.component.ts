@@ -11,19 +11,35 @@ export class PPrivacyComponent implements OnInit {
     private _user: UserService
   ) { }
 
-  async ngOnInit() {
-    const res = await this._user.getDevices().toPromise();
-    this.devices = res.data;
+  ngOnInit() {
+    const sub = this._user.getDevices()
+      .subscribe(
+        (res) => {
+          this.devices = res.data;
+        },
+        () => { },
+        () => {
+          sub.unsubscribe();
+        }
+      );
   }
 
   public devices = [];
 
-  async disconnectDevice(index: number) {
+  disconnectDevice(index: number) {
     const deviceID = this.devices[index].id_session;
-    const res = await this._user.disconnectDevice(deviceID).toPromise();
-    if (res.success) {
-      this.devices.splice(index, 1);
-    }
+    const sub = this._user.disconnectDevice(deviceID)
+      .subscribe(
+        (res) => {
+          if (res.success) {
+            this.devices.splice(index, 1);
+          }
+        }, 
+        () => { },
+        () => {
+          sub.unsubscribe();
+        }
+      );
   }
 
 }

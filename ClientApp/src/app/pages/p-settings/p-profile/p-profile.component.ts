@@ -9,6 +9,7 @@ import { REPButton } from 'src/interfaces/repbutton.interface';
 import { FileUploadService } from 'src/services/file-upload.service';
 import { UserService } from 'src/services/user.service';
 import { UtilsService } from 'src/services/utils.service';
+import { first } from 'rxjs/operators';
 
 @Component({
   templateUrl: './p-profile.component.html',
@@ -101,7 +102,7 @@ export class PProfileComponent {
     // }
   }
 
-  async save() {
+  save() {
 
     let fd;
     if (this.file) {
@@ -111,27 +112,31 @@ export class PProfileComponent {
       this.user.picture = null;
     }
 
-    const res = await this.http.put<ServerResponse>(
+    this.http.put<ServerResponse>(
     `${server.BASE_URL}/authentication/editProfile`, {
       body: {
         fd,
         user: this.user
       }
-    }
-    ).toPromise();
-
+    })
+      .pipe(first())
+      .subscribe();
   }
 
-  async deleteProfile() {
+  deleteProfile() {
 
     this._utils.showRequest(
       "Are you sure you want to continue?",
       `By doing so your account will be deleted along with all your messages and other data. This action is permanent since RepubliChat will NOT keep the remaining data. If you change your mind you will be able to create a new account with the same email.`,
-      async () => {
-        const res = await this._user.deleteProfile().toPromise();
-    
-        if (res.success) 
-          this.router.navigate(['login']);
+      () => {
+        this._user.deleteProfile()
+          .pipe(first())
+          .subscribe(
+            (res) => {
+              if (res.success) 
+                this.router.navigate(['login']);
+            }
+          );
 
       });
   }
