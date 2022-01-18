@@ -35,6 +35,10 @@ export class MessagesService {
 
   public msSubscriptions: Array<Subscription> = [];
 
+  /**
+   * Get the current user channels.
+   *
+   */
   public getChannels() {
     this.http.get<ServerResponse>(`${server.BASE_URL}/channels/getChannels`)
       .pipe(first())
@@ -49,7 +53,12 @@ export class MessagesService {
 
   }
 
-  // Get the current room messages and initializes all sockets
+  /**
+   * Get the current room messages and initializes all sockets.
+   *
+   * @param room The channel ID you want to join into.
+   *
+   */
   public joinChannel(room: number) {
     this.http.get<ServerResponse>(`${server.BASE_URL}/messages/getChannelMessages/${room}`)
       .pipe(first())
@@ -69,19 +78,19 @@ export class MessagesService {
                 auth: !!msg.auth
               };
             });
-      
+
             this.destroyMsSubscriptions();
-      
+
             this._webSocket.emit("joinChannel", {
               room: this.currentRoom,
               userID: this._user.currentUser.id
             });
-      
+
             this.msSubscriptions.push(this._webSocket.listen("message").subscribe((message: string) => {
               const msg = JSON.parse(message);
       
               const isUserMessage = msg.code == this._user.currentUser.code && msg.name == this._user.currentUser.name;
-      
+
               this.messages.push({
                 id: msg.id,
                 name: msg.name,
@@ -92,7 +101,7 @@ export class MessagesService {
                 auth: isUserMessage
               });
             }));
-      
+
             this.msSubscriptions.push(this._webSocket.listen("deleteMessage").subscribe((_id: number) => {
               const index = this.messages.findIndex(msg => msg.id == _id);
               this.messages.splice(index, 1);
@@ -102,24 +111,52 @@ export class MessagesService {
       );
   }
 
-  // Send message on the current room
+  /**
+   * Sends a message in the current room.
+   *
+   * @param message The string that contains the message.
+   */
   public sendMessage(message: string) {
     this._webSocket.emit("message", message);
   }
 
-  // Delete message on the current room
+  /**
+   * Delete message on the current room.
+   *
+   * @param _id The message ID you want to remove.
+   */
   public deleteMessage(_id: number) {
     this._webSocket.emit("deleteMessage", _id);
   }
 
+  /**
+   * API that create a channel.
+   *
+   * @param channel The channel object you want to create.
+   * 
+   * @returns An HTTP request
+   *
+   */
   public createChannel(channel: Channel) {
     return this.http.post<ServerResponse>(`${server.BASE_URL}/channels/createChannel`, channel);
   }
 
+  /**
+   * API that add a channel to the cannels list.
+   *
+   * @param channel The channel object you want to add.
+   * 
+   * @returns An HTTP request
+   *
+   */
   public addChannel(channel: Channel) {
     return this.http.post<ServerResponse>(`${server.BASE_URL}/channels/addChannel`, channel);
   }
 
+  /**
+   * Destroys the joined channel subscriptions.
+   *
+   */
   public destroyMsSubscriptions() {
     this.msSubscriptions.map((subscription) => {
       subscription.unsubscribe();

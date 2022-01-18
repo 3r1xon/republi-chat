@@ -119,7 +119,6 @@ router.post('/logIn', async (req, res) => {
       // Session ID created only at login time
       res.set(await Auth.generateToken({
         _id: dbUser.id,
-        email: dbUser.email,
         browser: BROWSER,
         SESSION_ID: nanoid.nanoid()
       }));

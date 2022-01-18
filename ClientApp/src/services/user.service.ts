@@ -36,7 +36,10 @@ export class UserService implements CanActivate {
     return this.userAuth;
   }
 
-  
+  /**
+   * Check if the user has the authorization, gets call when the user refresh the page.
+   *
+   */
   public async authorize(): Promise<any> {
     const REFRESH_TOKEN = this.cookieService.get("REFRESH_TOKEN");
 
@@ -65,8 +68,13 @@ export class UserService implements CanActivate {
     );
   }
 
-
-  public logOut(force?: boolean): any {
+  /**
+   * LogOut the user redirecting him to another page.
+   *
+   * @param force If the user authorization has been lost, when true redirect is set to 'unauthorized'.
+   *
+   */
+  public async logOut(force?: boolean) {
     this.userAuth = false;
     
     this.http.delete(`${server.BASE_URL}/authentication/logout`)
@@ -78,20 +86,40 @@ export class UserService implements CanActivate {
     if (force)
       this.router.navigate(['unauthorized']);
     else {
-      this.router.navigate(['login']);
+      await this.router.navigate(['login']);
       this.document.defaultView.location.reload();
     }
 
   }
 
+  /**
+   * API for deleting the user profile.
+   *
+   * @returns An HTTP request
+   *
+   */
   public deleteProfile() {
     return this.http.delete<ServerResponse>(`${server.BASE_URL}/authentication/deleteProfile`);
   }
 
+  /**
+   * API that gets a list of all user connected devices.
+   *
+   * @returns An HTTP request
+   *
+   */
   public getDevices() {
     return this.http.get<ServerResponse>(`${server.BASE_URL}/authentication/getDevices`);
   }
-
+  
+  /**
+   * API that gets a list of all user connected devices.
+   *
+   * @param deviceID The device ID that needs to be disconnected
+   * 
+   * @returns An HTTP request
+   *
+   */
   public disconnectDevice(deviceID: number) {
     return this.http.delete<ServerResponse>(`${server.BASE_URL}/authentication/disconnectDevice/${deviceID}`);
   }

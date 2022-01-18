@@ -21,6 +21,16 @@ export class UtilsService {
 
   public showServerGroup: boolean = true;
 
+  /**
+   * Shows a pop-up with a request.
+   *
+   * @param title The title in the header of the request.
+   *
+   * @param message The message you want to show to the user
+   * 
+   * @param actions The list of buttons that appears in the bottom of the request
+   * 
+   */
   public showRequest(title: string, message: string, actions?: Function | Array<REPButton>): void {
 
     if (typeof actions == 'object') {
@@ -58,6 +68,14 @@ export class UtilsService {
 
   public bugReport: BugReport;
 
+  /**
+   * Shows a pop-up with a unhandled error.
+   *
+   * @param title The name of the error.
+   *
+   * @param callstack The error callstack.
+   * 
+   */
   public showBugReport(title: string, callstack: string) {
 
     this.bugReport = {
@@ -68,6 +86,12 @@ export class UtilsService {
 
   }
 
+  /**
+   * Detect the current browser.
+   *
+   * @returns An object with all the browser informations.
+   * 
+   */
   public detectBrowser(): UAParser {
     const parser = new UAParser();
     const result = parser.getResult();

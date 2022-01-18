@@ -8,6 +8,13 @@ export class FileUploadService {
 
   constructor(private sanitizer: DomSanitizer) { }
 
+  /**
+   * Sanitize the current image, making it usable.
+   *
+   * @param base64 The image in base64 string.
+   *
+   * @returns A safe base64.
+   */
   public sanitizeIMG(base64: string) {
 
     if (base64 == null) return;
