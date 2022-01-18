@@ -1,7 +1,7 @@
 <div id="master">
 
     <div id="flat-input" [ngStyle]="{
-        'border': placeholderAnimated ? '2px solid ' + color : (required && empty ? '1px solid ' + borderColor : '1px solid gray'),
+        'border': placeholderAnimated || text != '' ? '2px solid ' + color : (required && empty ? '1px solid ' + borderColor : '1px solid gray'),
         'padding': placeholderAnimated ? '0px ' : '1px',
         'background': disabled ? '#3c3c3ceb' : 'transparent'
     }" [ngClass]="{
@@ -15,7 +15,7 @@
             [placeholder]="getPlaceholder()"
             [disabled]="disabled"
             [type]="type"
-            [(ngModel)]="txt"
+            [(ngModel)]="text"
             (focus)="onFocus()"
             (focusout)="onFocusOut()"
             (ngModelChange)="onChange($event)"
@@ -27,8 +27,8 @@
     </div>
 
     <label id="placeholder" [ngStyle]="{
-        'color': placeholderAnimated ? color : borderColor
-    }" [@placeholderAnimated] = "placeholderAnimated ? 'moved' : 'static'">{{placeholder}}</label>
+        'color': placeholderAnimated || text != '' ? color : borderColor
+    }" [@placeholderAnimated] = "placeholderAnimated || text != '' ? 'moved' : 'static'">{{placeholder}}</label>
     </div>
 
     <label id="required" *ngIf="empty" [style.color]="borderColor">This field is required *</label>

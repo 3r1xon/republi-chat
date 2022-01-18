@@ -64,11 +64,6 @@ export class REPInputComponent implements OnInit, ControlValueAccessor {
   @Input()
   public text: string = '';
 
-  public set txt(text: string) {
-    this.text = text;
-    this.placeholderAnimated = true;
-  }
-
   @Input()
   public size: string = 'big' || 'medium' || 'small';
 

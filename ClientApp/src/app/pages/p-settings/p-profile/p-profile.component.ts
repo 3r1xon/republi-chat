@@ -23,7 +23,7 @@ export class PProfileComponent {
     private _utils: UtilsService,
     private http: HttpClient,
     private router: Router
-  ) { 
+  ) {
   }
 
   public user: Account = { ...this._user.currentUser };

@@ -36,10 +36,12 @@ export class PMainpageComponent implements OnInit, OnDestroy {
         this.channels = [
           {
             tabname: "Channels",
+            icon: "list",
             sections: this._msService.channels
           },
           {
             tabname: "Friends",
+            icon: "people",
             sections: []
           }
         ];
@@ -47,14 +49,17 @@ export class PMainpageComponent implements OnInit, OnDestroy {
         this.serverInfo = [
           {
             tabname: "Online",
+            icon: "public",
             sections: []
           },
           {
             tabname: "Offline",
+            icon: "no_accounts",
             sections: []
           },
           {
             tabname: "Pending",
+            icon: "pending",
             sections: []
           },
         ];
@@ -92,14 +97,16 @@ export class PMainpageComponent implements OnInit, OnDestroy {
   public channelsTab: number = 0;
 
   public channels: Array<{ 
-    tabname: string, 
+    tabname: string,
+    icon?: string,
     sections: Array<any> 
   }> = [];
 
   public serverInfoTab: number = 0;
 
   public serverInfo: Array<{ 
-    tabname: string, 
+    tabname: string,
+    icon?: string,
     sections: Array<any> 
   }> = [];
 

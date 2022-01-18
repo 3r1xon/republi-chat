@@ -15,6 +15,7 @@ export class REPSidemenuComponent implements OnInit {
   @Input()
   public entries: Array<{ 
     tabname: string, 
+    icon: string
   }>;
 
   @Output()
@@ -26,8 +27,11 @@ export class REPSidemenuComponent implements OnInit {
   @Input()
   public add: boolean = true;
 
+  public currentIndex: number = 0;
+
   selectTab(index: number) {
     this.onTab.emit(index);
+    this.currentIndex = index;
   }
 
 }

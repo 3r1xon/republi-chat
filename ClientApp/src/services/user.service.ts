@@ -115,7 +115,7 @@ export class UserService implements CanActivate {
   /**
    * API that gets a list of all user connected devices.
    *
-   * @param deviceID The device ID that needs to be disconnected
+   * @param deviceID The device ID that needs to be disconnected.
    * 
    * @returns An HTTP request
    *

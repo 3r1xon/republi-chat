@@ -5,13 +5,21 @@
     justify-content: space-between;
     background: var(--DARK);
 
+
     #profile {
         height: 100%;
         display: flex;
+        align-items: center;
 
         #user-image {
+            width: 35px;
+            height: 35px;
             border-radius: 50%;
             margin: 5px;
+        } 
+
+        p {
+            align-self: flex-start;
         }
     }
 

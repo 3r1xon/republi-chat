@@ -38,10 +38,14 @@ $RepubliChat-theme: mat.define-light-theme((
   padding: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
-
+// --DARK: #202124;
+// --LIGHT-DARK: #1a1c1d;
+// OLD
+// --DARK: #121212;
+// --LIGHT-DARK: #151415;
 :root {
-  --DARK: #121212;
-  --LIGHT-DARK: #151415;
+  --DARK: #202124;
+  --LIGHT-DARK: #1a1c1d;
   --OBSCURE: #95959536;
   --OBSCURE_SECONDARY: #ffffff98;
   --GREY: #434343;
@@ -52,7 +56,7 @@ $RepubliChat-theme: mat.define-light-theme((
 }
 
 html, body { 
-  height: 100%; 
+  height: 100%;
 }
 
 body { 
@@ -85,10 +89,6 @@ body {
 ::-webkit-scrollbar {
   width: 5px;
   height: 5px;
-}
-
-::-webkit-scrollbar-track {
-  background: var(--DARK);
 }
 
 ::-webkit-scrollbar-thumb {
