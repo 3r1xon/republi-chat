@@ -117,14 +117,15 @@ router.post('/logIn', async (req, res) => {
 
     if (dbUser) {
       // Session ID created only at login time
+      const SESSION_ID = nanoid.nanoid();
+
       res.set(await Auth.generateToken({
         _id: dbUser.id,
-        browser: BROWSER,
-        SESSION_ID: nanoid.nanoid()
-      }));
+      }, SESSION_ID, BROWSER));
 
       res.status(200).send({ success: true, data: {
-        user: dbUser
+        user: dbUser,
+        SESSION_ID: SESSION_ID
       }});
 
     } else {

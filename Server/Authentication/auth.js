@@ -5,19 +5,15 @@ const db           = require('../Database/db');
 
 class Auth {
 
-    static generateToken = async (user) => {
+    static generateToken = async (user, SESSION_ID, browser) => {
 
         user = {
             ...user,
             refresh: false
         };
 
-        const browser = user.browser;
-
-        delete user.browser;
-
         const ACCESS_TOKEN = jwt.sign(user, process.env.SECRET_KEY, {
-            expiresIn: "1s"
+            expiresIn: "15m"
         });
 
         user.refresh = true;
@@ -34,7 +30,7 @@ class Auth {
             FROM SESSIONS
             WHERE ID_USER = ?
             AND SESSION_ID = ?
-            `, [user._id, user.SESSION_ID]);
+            `, [user._id, SESSION_ID]);
 
             userExist = userExist[0];
 
@@ -48,7 +44,7 @@ class Auth {
                 REFRESH_TOKEN = ?
                 WHERE ID_USER = ?
                 AND SESSION_ID = ?
-                `, [ACCESS_TOKEN, REFRESH_TOKEN, user._id, user.SESSION_ID]);
+                `, [ACCESS_TOKEN, REFRESH_TOKEN, user._id, SESSION_ID]);
             } else {
                 await db.query(
                 `
@@ -65,7 +61,7 @@ class Auth {
                     browser.latitude,
                     browser.longitude,
                     new Date(),
-                    user.SESSION_ID
+                    SESSION_ID
                 ]);
             }
         } catch (err) {
@@ -74,8 +70,7 @@ class Auth {
 
         return {
             ACCESS_TOKEN: ACCESS_TOKEN,
-            REFRESH_TOKEN: REFRESH_TOKEN,
-            SESSION_ID: user.SESSION_ID
+            REFRESH_TOKEN: REFRESH_TOKEN
         };
     };
 
@@ -126,8 +121,7 @@ class Auth {
                             if (decoded) {
                                 res.set(await this.generateToken({
                                     _id: decoded._id,
-                                    SESSION_ID: decoded.SESSION_ID
-                                }));
+                                }, SESSION_ID));
                                 next();
                             } else res.status(401).send({ success: false, message: "Invalid token!" });
                         });

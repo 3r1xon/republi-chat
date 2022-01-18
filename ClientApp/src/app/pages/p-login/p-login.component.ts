@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { CookieService } from 'ngx-cookie-service';
 import { first } from 'rxjs/operators';
 import { server } from 'src/environments/server';
 import { Account } from 'src/interfaces/account.interface';
@@ -20,6 +21,7 @@ export class PLoginComponent {
     private _user: UserService,
     private _utils: UtilsService,
     private _fileUpload: FileUploadService,
+    private cookieService: CookieService,
     private router: Router,
     private http: HttpClient,
     private fb: FormBuilder
@@ -81,6 +83,7 @@ export class PLoginComponent {
           this._user.currentUser = <Account>response.data.user;
           this._user.currentUser.picture = this._fileUpload.sanitizeIMG(this._user.currentUser.picture);
           this._user.userAuth = true;
+          this.cookieService.set("SESSION_ID", response.data.SESSION_ID);
           await this.router.navigate(['mainpage']);
         }, 
         (response) => {
