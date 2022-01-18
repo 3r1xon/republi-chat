@@ -4,12 +4,12 @@
 
     <div id="cont" (click)="clickHandler()">
         
-        <img *ngIf="!pictureError" class="user-image" [src]="message.picture" (error)="pictureError = true"
-        (click)="onUserClick.emit('onUserClick')">
-        
-        <div class="user-image absent-image" *ngIf="pictureError">
-            <h1>{{message.name[0]}}</h1>
-        </div>
+        <rep-profile-pic
+        [src]="message.picture"
+        [letter]="message.name[0]" 
+        (click)="onUserClick.emit('onUserClick')"
+        >
+        </rep-profile-pic>
         
         <div id="message-info">
             

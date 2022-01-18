@@ -19,6 +19,7 @@ import { REPErrorComponent } from './lib/rep-error/rep-error.component';
 import { REPTextareaComponent } from './lib/rep-textarea/rep-textarea.component';
 import { REPInfoComponent } from './lib/rep-info/rep-info.component';
 import { REPStatusBarComponent } from './lib/rep-status-bar/rep-status-bar.component';
+import { REPProfilePicComponent } from './lib/rep-profile-pic/rep-profile-pic.component';
 
 import { PSignupComponent } from './pages/p-signup/p-signup.component';
 import { PLoginComponent } from './pages/p-login/p-login.component';
@@ -67,6 +68,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
     REPTextareaComponent,
     REPInfoComponent,
     REPStatusBarComponent,
+    REPProfilePicComponent,
     
     PChannelSettingsComponent,
     PSignupComponent,

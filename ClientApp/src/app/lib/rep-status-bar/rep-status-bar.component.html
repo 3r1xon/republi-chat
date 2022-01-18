@@ -1,7 +1,11 @@
 <div id="rep-status-bar">
 
     <div id="profile">
-        <img id="user-image" [src]="user.picture" onerror="this.src = '/assets/user-image.png'">
+        <rep-profile-pic
+        [src]="user.picture"
+        [letter]="user.name[0]" 
+        >
+        </rep-profile-pic>
         <p [style.color]="user.color">{{user.name}}</p>
     </div>
 

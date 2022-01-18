@@ -1,5 +1,5 @@
 @import 'src/app/styles/mixins';
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@700&display=swap');
+@import 'src/app/styles/fonts';
 
 #rep-sidemenu {
     display: flex;
@@ -26,7 +26,6 @@
             transition: 150ms;
             border-top-left-radius: 10px;
             border-top-right-radius: 10px;
-            font-family: 'Roboto', sans-serif;
             font-weight: 500;
 
 

@@ -1,0 +1,22 @@
+@import 'src/app/styles/mixins';
+
+
+#rep-profile-pic {
+    display: flex;
+
+    .user-image {
+        min-width: 45px;
+        min-height: 45px;
+        margin: 5px;
+        border-radius: 50%;
+        user-select: none;
+        -webkit-user-drag: none;
+        cursor: pointer;
+        align-self: flex-start;
+    }
+    
+    .absent-image {
+        @include flexCenter(row);
+        background: royalblue;
+    }
+}

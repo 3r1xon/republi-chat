@@ -1,3 +1,5 @@
+@import 'src/app/styles/fonts';
+
 #rep-status-bar {
     height: 100%;
     display: flex;
@@ -11,14 +13,8 @@
         display: flex;
         align-items: center;
 
-        #user-image {
-            width: 35px;
-            height: 35px;
-            border-radius: 50%;
-            margin: 5px;
-        } 
-
         p {
+            margin-top: 5px;
             align-self: flex-start;
         }
     }

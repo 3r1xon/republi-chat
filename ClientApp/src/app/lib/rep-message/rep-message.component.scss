@@ -13,7 +13,7 @@
         display: flex;
         align-items: center;
     }
-    
+
     p {
         color: var(--WHITE);
         word-wrap: anywhere;
@@ -21,25 +21,6 @@
 
     &:hover {
         background: var(--GREY);
-    }
-
-
-    .user-image {
-        min-width: 45px;
-        min-height: 45px;
-        max-width: 45px;
-        max-height: 45px;
-        margin: 5px;
-        border-radius: 50%;
-        user-select: none;
-        -webkit-user-drag: none;
-        cursor: pointer;
-        align-self: flex-start;
-    }
-
-    .absent-image {
-        @include flexCenter(row);
-        background: royalblue;
     }
 
     #message-info {
