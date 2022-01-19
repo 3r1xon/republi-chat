@@ -6,7 +6,7 @@
     height: 100%;
     display: flex;
     @include flexCenter(column);
-    background: var(--DARK);
+    background: var(--VERY-DARK);
     color: #FFFFFF;
 
     #security {

@@ -73,19 +73,13 @@ create or replace table republichat.sessions
 (
     ID_SESSION      bigint auto_increment
         primary key,
-    ID_USER         bigint       not null,
-    SESSION_ID      varchar(30)  not null,
-    ACCESS_TOKEN    varchar(300) not null,
-    REFRESH_TOKEN   varchar(300) not null,
-    BROWSER_NAME    varchar(30)  null,
-    BROWSER_VERSION varchar(30)  null,
-    LATITUDE        varchar(30)  null,
-    LONGITUDE       varchar(30)  null,
-    DATE            datetime     null,
-    constraint SESSIONS_REFRESH_TOKEN_uindex
-        unique (REFRESH_TOKEN),
-    constraint sessions_ACCESS_TOKEN_uindex
-        unique (ACCESS_TOKEN),
+    ID_USER         bigint      not null,
+    SESSION_ID      varchar(30) not null,
+    BROWSER_NAME    varchar(30) null,
+    BROWSER_VERSION varchar(30) null,
+    LATITUDE        varchar(30) null,
+    LONGITUDE       varchar(30) null,
+    DATE            datetime    null,
     constraint sessions_SESSION_ID_uindex
         unique (SESSION_ID),
     constraint FK_USERS_1

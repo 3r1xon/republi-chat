@@ -5,7 +5,6 @@ const REPTools       = require('../Tools/rep-tools');
 const multer         = require('multer');
 const upload         = multer({});
 const db             = require('../Database/db');
-const nanoid         = require('nanoid');
 const crypto         = require('crypto');
 const io             = require('../start');
 
@@ -116,16 +115,11 @@ router.post('/logIn', async (req, res) => {
     dbUser = dbUser[0];
 
     if (dbUser) {
+
       // Session ID created only at login time
-      const SESSION_ID = nanoid.nanoid();
-
-      res.set(await Auth.generateToken({
-        _id: dbUser.id,
-      }, SESSION_ID, BROWSER));
-
       res.status(200).send({ success: true, data: {
         user: dbUser,
-        SESSION_ID: SESSION_ID
+        SESSION_ID: await Auth.generateToken(dbUser.id, BROWSER)
       }});
 
     } else {

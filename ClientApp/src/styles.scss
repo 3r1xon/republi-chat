@@ -39,14 +39,11 @@ $RepubliChat-theme: mat.define-light-theme((
   padding: 0;
   font-family: roboto;
 }
-// --DARK: #202124;
-// --LIGHT-DARK: #1a1c1d;
-// OLD
-// --DARK: #121212;
-// --LIGHT-DARK: #151415;
+
 :root {
-  --DARK: #202124;
-  --LIGHT-DARK: #1a1c1d;
+  --DARK: #1a1c1d;
+  --VERY-DARK: #121212;
+  --LIGHT-DARK: #202124;
   --OBSCURE: #95959536;
   --OBSCURE_SECONDARY: #ffffff98;
   --GREY: #434343;

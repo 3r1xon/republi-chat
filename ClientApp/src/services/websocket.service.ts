@@ -20,7 +20,7 @@ export class WebSocketService {
       transports: ['websocket'],
       upgrade: false,
       query: {
-        ACCESS_TOKEN: "Test"
+        SESSION_ID: "Test"
       }
     });
 
@@ -49,12 +49,6 @@ export class WebSocketService {
 
   public emit(eventName: string, data: any) {
     this.socket.emit(eventName, data);
-  }
-
-  public setAuth(ACCESS_TOKEN: string) {
-    this.socket.auth = {
-      ACCESS_TOKEN: ACCESS_TOKEN
-    };
   }
 
 }

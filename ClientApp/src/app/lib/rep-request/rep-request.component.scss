@@ -17,7 +17,7 @@
         min-height: 300px;
         border-radius: 5px;
         @include flexCenter(column);
-        background: var(--DARK);
+        background: var(--LIGHT-DARK);
         color: var(--WHITE);
         border: none;
 

@@ -15,5 +15,11 @@ export class REPProfilePicComponent {
   @Input()
   public src: string = "";
 
+  @Input()
+  public width: string = "45px";
+
+  @Input()
+  public height: string = "45px";
+
   public pictureError: boolean = false;
 }

@@ -24,8 +24,6 @@ export class InterceptorService implements HttpInterceptor {
   constructor(
     private _utils: UtilsService,
     private _user: UserService,
-    private _webSocket: WebSocketService,
-    private cookieService: CookieService,
     ) { }
 
   private readonly loadingBlackList: Array<string> = [
@@ -41,7 +39,6 @@ export class InterceptorService implements HttpInterceptor {
 
     const authReq = req.clone({
       headers: req.headers
-        .set('Authorization', `Bearer ${this.cookieService.get("ACCESS_TOKEN")}`)
         .set('RequestDate', `${new Date().getTime()}`),
       withCredentials: true
     });
@@ -49,15 +46,6 @@ export class InterceptorService implements HttpInterceptor {
     return next.handle(authReq).pipe(tap((res: any) => {
 
       if (res instanceof HttpResponse) {
-        const ACCESS_TOKEN  = res.headers.get("ACCESS_TOKEN");
-        const REFRESH_TOKEN = res.headers.get("REFRESH_TOKEN");
-
-        if (ACCESS_TOKEN && REFRESH_TOKEN) {
-          this._webSocket.setAuth(ACCESS_TOKEN);
-
-          this.cookieService.set("ACCESS_TOKEN", ACCESS_TOKEN);
-          this.cookieService.set("REFRESH_TOKEN", REFRESH_TOKEN);
-        }
 
         this._utils.loading = false;
       }

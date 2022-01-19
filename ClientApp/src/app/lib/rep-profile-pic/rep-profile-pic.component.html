@@ -1,7 +1,10 @@
 <div id="rep-profile-pic">
     <img *ngIf="!pictureError" class="user-image" [src]="src" (error)="pictureError = true">
-    
-    <div class="user-image absent-image" *ngIf="pictureError">
+
+    <div class="user-image absent-image" *ngIf="pictureError"
+    [style.minWidth]="width"
+    [style.minHeight]="height"
+    >
         <h1>{{letter[0]}}</h1>
     </div>
 </div>

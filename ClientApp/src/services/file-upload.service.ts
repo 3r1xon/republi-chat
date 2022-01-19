@@ -25,7 +25,8 @@ export class FileUploadService {
       "R": "gif",
       "U": "webp"
     };
-    
+    // TODO:
+    //    This code is vulnerable to XSS
     return this.sanitizer.bypassSecurityTrustResourceUrl(`data:image/${extensions[base64[0]]};base64,` + base64);
   }
 
