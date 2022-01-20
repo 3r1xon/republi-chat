@@ -95,6 +95,8 @@ router.post('/logIn', async (req, res) => {
     password: crypto.createHash('sha256').update(req.body.password).digest('hex'),
   };
 
+  console.log(req.session.id);
+
   const { BROWSER } = req.body;
 
   try {
@@ -116,10 +118,28 @@ router.post('/logIn', async (req, res) => {
 
     if (dbUser) {
 
+      const SESSION_ID = req.session.id;
+
+      await db.query(
+      `
+      INSERT INTO SESSIONS
+      (ID_USER, BROWSER_NAME, BROWSER_VERSION, LATITUDE, LONGITUDE, DATE, SESSION_ID)
+      VALUES
+      (?, ?, ?, ?, ?, ?, ?)
+      `, [
+        dbUser.id,
+        BROWSER.name,
+        BROWSER.version,
+        BROWSER.latitude,
+        BROWSER.longitude,
+        new Date(),
+        SESSION_ID
+      ]);
+
       // Session ID created only at login time
       res.status(200).send({ success: true, data: {
         user: dbUser,
-        SESSION_ID: await Auth.generateToken(dbUser.id, BROWSER)
+        SESSION_ID: SESSION_ID
       }});
 
     } else {

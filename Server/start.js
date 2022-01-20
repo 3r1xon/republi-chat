@@ -4,6 +4,7 @@ const app            = express();
 const port           = 3000;
 const dotenv         = require('dotenv'); 
 const cookieParser   = require('cookie-parser');
+const session        = require('express-session');
 const server         = app.listen(port, () => { console.log(`Server listening at http://localhost:${port}`); });
 
 const corsOptions = {
@@ -23,8 +24,14 @@ dotenv.config();
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser());
-
-
+app.use(session({
+  secret: process.env.SECRET_KEY,
+  resave: false,
+  saveUninitialized: true,
+  cookie: { 
+    secure: true 
+  }
+}));
 
 // Get the exact time of the request, available for every request.
 app.use((req, res, next) => { 

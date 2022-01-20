@@ -1,55 +1,15 @@
-const nanoid       = require('nanoid');
 const db           = require('../Database/db');
 
 
 
 class Auth {
   /**
-   * Generates a SESSION ID inserting it in the database.
-   *
-   * @param userID The ID of the user that needs a SESSION ID.
-   *
-   * @param browser Browser informations
-   * 
-   * @returns A SESSION ID
-   * 
-   */
-    static generateToken = async (userID, browser) => {
-
-        const SESSION_ID = nanoid.nanoid();
-
-        try {
-
-            await db.query(
-            `
-            INSERT INTO SESSIONS
-            (ID_USER, BROWSER_NAME, BROWSER_VERSION, LATITUDE, LONGITUDE, DATE, SESSION_ID)
-            VALUES
-            (?, ?, ?, ?, ?, ?, ?)
-            `, [
-                userID,
-                browser.name,
-                browser.version,
-                browser.latitude,
-                browser.longitude,
-                new Date(),
-                SESSION_ID
-            ]);
-        } catch (err) {
-            console.log(err);
-        }
-
-        return SESSION_ID;
-    };
-
-
-  /**
    * Middlware that authenticate the user in the HTTP Request.
    * 
    */
     static authToken = async (req, res, next) => {
 
-        const { SESSION_ID } = req.cookies;
+        const SESSION_ID = req.cookies["connect.sid"];
 
         try {
 

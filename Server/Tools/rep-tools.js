@@ -1,18 +1,18 @@
 const db = require('../Database/db');
 
 class REPTools {
-
-    // Summary:
-    //     Generates an unique code based on the name.
-    //     There can't be more than 9999 people with the same name.
-    //
-    // Parameters:
-    //     NAME:
-    //         The name that needs to be checked for the code, example: username
-    //     TABLE_NAME:
-    //         In which table do you need to check
-    //     COLUMN_NAME:
-    //         The column that contains all the names
+    /**
+     * Generates an unique code based on the name.
+     * There can't be more than 9999 people with the same name
+     * 
+     * @param NAME The name that needs to be checked for the code, example: username.
+     *
+     * @param TABLE_NAME In which table do you need to check
+     * 
+     * @param COLUMN_NAME The column that contains all the names
+     * 
+     * @param callback An error or success callback
+     */
     static async generateCode(NAME, TABLE_NAME, COLUMN_NAME, callback) {
 
         let pk = await db.query(
