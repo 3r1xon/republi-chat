@@ -9,7 +9,7 @@ class Auth {
    */
     static authToken = async (req, res, next) => {
 
-        const SESSION_ID = req.cookies["connect.sid"];
+        const SESSION_ID = req.cookies["SESSION_ID"];
 
         try {
 
@@ -20,6 +20,8 @@ class Auth {
             FROM SESSIONS S
             WHERE S.SESSION_ID  = ?
             `, [SESSION_ID]);
+
+            console.log (req.session)
 
             dbUser = dbUser[0];
 

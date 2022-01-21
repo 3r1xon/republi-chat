@@ -41,14 +41,10 @@ export class UserService implements CanActivate {
    *
    */
   public async authorize(): Promise<any> {
-    const REFRESH_TOKEN = this.cookieService.get("REFRESH_TOKEN");
-
-    if (!REFRESH_TOKEN) return;
 
     const browser = this._utils.detectBrowser();
-    
+
     const sub = this.http.post<ServerResponse>(`${server.BASE_URL}/authentication/authorize`, {
-      REFRESH_TOKEN: REFRESH_TOKEN,
       BROWSER: browser
     })
       .subscribe(async (res) => {
@@ -60,7 +56,6 @@ export class UserService implements CanActivate {
         }
       }, 
       (err) => {
-        this.logOut();
       },
       () => {
         sub.unsubscribe();
@@ -111,7 +106,7 @@ export class UserService implements CanActivate {
   public getDevices() {
     return this.http.get<ServerResponse>(`${server.BASE_URL}/authentication/getDevices`);
   }
-  
+
   /**
    * API that gets a list of all user connected devices.
    *

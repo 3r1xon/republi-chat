@@ -25,11 +25,14 @@ app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser());
 app.use(session({
+  name: "SESSION_ID",
   secret: process.env.SECRET_KEY,
   resave: false,
-  saveUninitialized: true,
+  saveUninitialized: false,
   cookie: { 
-    secure: true 
+    secure: true,
+    httpOnly: true,
+    sameSite: "none"
   }
 }));
 

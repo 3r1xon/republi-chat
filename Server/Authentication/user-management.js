@@ -136,10 +136,11 @@ router.post('/logIn', async (req, res) => {
         SESSION_ID
       ]);
 
+      res.cookie("SESSION_ID", SESSION_ID, { maxAge: 31536000, httpOnly: true });
+
       // Session ID created only at login time
       res.status(200).send({ success: true, data: {
-        user: dbUser,
-        SESSION_ID: SESSION_ID
+        user: dbUser
       }});
 
     } else {
@@ -158,7 +159,9 @@ router.delete('/logout', Auth.authToken, async (req, res) => {
 
   const userID     = res.locals._id;
   const SESSION_ID = res.locals.SESSION_ID;
-  
+
+  res.clearCookie("SESSION_ID");
+
   try {
 
     await db.query(
@@ -218,6 +221,8 @@ router.delete('/deleteProfile', Auth.authToken, async (req, res) => {
   try {
     
     const _id = res.locals._id;
+
+    res.clearCookie("SESSION_ID");
 
     await db.query(
     `

@@ -83,7 +83,6 @@ export class PLoginComponent {
           this._user.currentUser = <Account>response.data.user;
           this._user.currentUser.picture = this._fileUpload.sanitizeIMG(this._user.currentUser.picture);
           this._user.userAuth = true;
-          this.cookieService.set("connect.sid", response.data.SESSION_ID);
           await this.router.navigate(['mainpage']);
         }, 
         (response) => {
