@@ -1,14 +1,13 @@
-import { 
+import {
   Component,
   Input,
   Output,
   EventEmitter,
   HostListener,
-  ElementRef,
+  ElementRef
 } from '@angular/core';
 import { Message } from 'src/interfaces/message.interface';
 import { REPButton } from 'src/interfaces/repbutton.interface';
-import { MessagesService } from 'src/services/messages.service';
 
 @Component({
   selector: 'rep-message',
@@ -18,16 +17,13 @@ import { MessagesService } from 'src/services/messages.service';
 export class REPMessageComponent {
 
   constructor(
-    public _msService: MessagesService,
     private eRef: ElementRef
-  ) { }
+  ) {
+  }
 
   public active: boolean = false;
 
   public pictureError: boolean = false;
-
-  @Input()
-  public uniqueID: number;
 
   @Input()
   public options: Array<REPButton>;

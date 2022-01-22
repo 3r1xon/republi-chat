@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { io, Socket } from 'socket.io-client';
 import { server } from 'src/environments/server';
 import { Observable } from 'rxjs';
-import { CookieService } from 'ngx-cookie-service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +9,6 @@ import { CookieService } from 'ngx-cookie-service';
 export class WebSocketService {
 
   constructor(
-    private cookieService: CookieService
   ) { 
     this.socket = io(server.WEB_SOCKET, {
       reconnection: true,

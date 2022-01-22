@@ -7,8 +7,8 @@ const multer         = require('multer');
 const upload         = multer({});
 const fm             = require('date-fns');
 const socket         = require('../start');
-const DBUser = require('../Authentication/db-user');
-
+const clc            = require('cli-color');
+const DBUser         = require('../Authentication/db-user');
 
 
 router.use(Auth.authToken);
@@ -68,7 +68,7 @@ router.post('/createChannel', upload.single("image"), async (req, res) => {
         res.status(201).send({ success: true });
 
       } catch(error) {
-        console.log(error);
+        console.log(clc.red(error));
 
         res.status(500).send({ success: false, message: `Internal server error!` });
       }
@@ -133,7 +133,7 @@ router.post('/addChannel', async (req, res) => {
     } else
     res.status(404).send({ success: false, message: "Inputed channel does not exist!" });
   } catch(err) {
-    console.log(err);
+    console.log(clc.red(error));
     res.status(500).send({ success: false, message: "Internal server error!" });
   }
 
@@ -162,7 +162,7 @@ router.get('/getChannels', async (req, res) => {
     res.status(200).send({ success: true, data: channels });
 
   } catch (error) {
-    console.log(error);
+    console.log(clc.red(error));
     res.status(500).send({ success: false, message: `Internal server error!!` });
   }
 

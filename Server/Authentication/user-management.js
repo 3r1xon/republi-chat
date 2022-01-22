@@ -136,7 +136,9 @@ router.post('/logIn', async (req, res) => {
         SESSION_ID
       ]);
 
-      res.cookie("SESSION_ID", SESSION_ID, { maxAge: 31536000, httpOnly: true });
+      const oneYear = new Date(new Date().setFullYear(new Date().getFullYear() + 1));
+
+      res.cookie("SESSION_ID", SESSION_ID, { expires: oneYear, httpOnly: true });
 
       // Session ID created only at login time
       res.status(200).send({ success: true, data: {

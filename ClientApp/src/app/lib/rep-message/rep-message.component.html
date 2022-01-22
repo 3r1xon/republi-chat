@@ -3,36 +3,33 @@
     }">
 
     <div id="cont" (click)="clickHandler()">
-        
+
         <rep-profile-pic
         [src]="message.picture"
-        [letter]="message.name[0]" 
-        (click)="onUserClick.emit('onUserClick')"
-        >
+        [letter]="message.name[0]"
+        (click)="onUserClick.emit('onUserClick')">
         </rep-profile-pic>
-        
+
         <div id="message-info">
-            
+
             <div>
                 <p id="username"
                 [style.color]="message.color" 
-                (click)="onUserClick.emit('onUserClick')"
-                >{{message.name}}</p>
+                (click)="onUserClick.emit('onUserClick')">
+                {{message.name}}</p>
                 <p id="time">{{message.date | date: dateFormat}}</p>
             </div>
-            
+
             <div id="content">
-                <p>
-                    {{message.message}}
-                </p>
+                <p>{{message.message}}</p>
             </div>
-            
+
         </div>
-        
+
     </div>
 
-    <rep-window
+    <rep-window *ngIf="options"
     [subMenu]="options"
     (open)="setToggle($event)"></rep-window>
-        
+
 </div>

@@ -9,8 +9,8 @@ import { WebSocketService } from './websocket.service';
 import { Channel } from 'src/interfaces/channel.interface';
 import { Subject, Subscription } from 'rxjs';
 import { first } from 'rxjs/operators';
-import { REPButton } from 'src/interfaces/repbutton.interface';
 import { UtilsService } from './utils.service';
+import { ChannelPermissions } from 'src/interfaces/channelPermissions.interface';
 
 
 @Injectable({
@@ -22,47 +22,18 @@ export class MessagesService {
     private _user: UserService,
     private _fileUpload: FileUploadService,
     private _webSocket: WebSocketService,
-    private _utils: UtilsService,
     private http: HttpClient
   ) { 
 
   }
 
   public messages: Array<Message> = [];
-  
-  public msOptions: Array<REPButton> = [
-    {
-      name: "Delete",
-      icon: "delete",
-      color: "danger",
-      onClick: () => {
-        this._utils.showRequest(
-          "Delete message",
-          "Are you sure you want to delete this message?",
-          () => {
-          }
-        );
-      }
-    },
-    {
-      name: "Edit",
-      icon: "edit",
-      onClick: () => {
-      }
-    },
-    {
-      name: "Report",
-      icon: "flag",
-      onClick: () => {
-      }
-    },
-  ];;
 
   public channels: Array<Channel> = [];
 
   public channels$: Subject<any> = new Subject<any>();
 
-  public chPermissions;
+  public chPermissions: ChannelPermissions;
 
   public currentRoom: number;
 
@@ -93,62 +64,97 @@ export class MessagesService {
    *
    */
   public joinChannel(room: number) {
-    this.http.get<ServerResponse>(`${server.BASE_URL}/messages/getChannelMessages/${room}`)
-      .pipe(first())
-      .subscribe(
-        (res) => {
-          this.currentRoom = room;
-      
-          if (res.success) {
-            this.messages = res.data.messages?.map((msg) => {
-              return {
-                id: msg.id,
-                name: msg.name,
-                message: msg.message,
-                date: new Date(msg.date),
-                picture: this._fileUpload.sanitizeIMG(msg.picture),
-                color: msg.color,
-                auth: !!msg.auth
-              };
-            });
 
-            this.chPermissions = res.data.chPermissions;
+    if (this.currentRoom == room) return;
 
-            if (this.chPermissions.deleteMessage)
-              this.msOptions.push({
-                name: "delete"
-              });
+    this.getChPermissions(room)
+    .pipe(first())
+    .subscribe(
+      (channel) => {
 
-            this.destroyMsSubscriptions();
+        this.getChMessages(room, 50)
+          .pipe(first())
+          .subscribe(
+            (res) => {
 
-            this._webSocket.emit("joinChannel", {
-              room: this.currentRoom,
-              userID: this._user.currentUser.id
-            });
+              if (res.success) {
 
-            this.msSubscriptions.push(this._webSocket.listen("message").subscribe((message: string) => {
-              const msg = JSON.parse(message);
-      
-              const isUserMessage = msg.code == this._user.currentUser.code && msg.name == this._user.currentUser.name;
+                this.currentRoom = room;
 
-              this.messages.push({
-                id: msg.id,
-                name: msg.name,
-                message: msg.message,
-                date: new Date(msg.date),
-                picture: this._fileUpload.sanitizeIMG(msg.picture),
-                color: msg.color,
-                auth: isUserMessage
-              });
-            }));
+                this.chPermissions = <ChannelPermissions>channel.data;
 
-            this.msSubscriptions.push(this._webSocket.listen("deleteMessage").subscribe((_id: number) => {
-              const index = this.messages.findIndex(msg => msg.id == _id);
-              this.messages.splice(index, 1);
-            }));
-          }
-        }
-      );
+                if (this.chPermissions.deleteMessage) {
+
+                }
+
+                this.destroyMsSubscriptions();
+
+                this.messages = res.data?.map((msg) => {
+                  return {
+                    id: msg.id,
+                    name: msg.name,
+                    message: msg.message,
+                    date: new Date(msg.date),
+                    picture: this._fileUpload.sanitizeIMG(msg.picture),
+                    color: msg.color,
+                    auth: !!msg.auth
+                  };
+                });
+
+                this._webSocket.emit("joinChannel", {
+                  room: this.currentRoom,
+                  userID: this._user.currentUser.id
+                });
+
+                this.msSubscriptions
+                  .push(
+                    this._webSocket.listen("message")
+                      .subscribe((message: string) => {
+                        const msg = JSON.parse(message);
+
+                        const isUserMessage = msg.code == this._user.currentUser.code && msg.name == this._user.currentUser.name;
+
+                        this.messages.push({
+                          id: msg.id,
+                          name: msg.name,
+                          message: msg.message,
+                          date: new Date(msg.date),
+                          picture: this._fileUpload.sanitizeIMG(msg.picture),
+                          color: msg.color,
+                          auth: isUserMessage
+                        });
+                      })
+                );
+
+                this.msSubscriptions
+                  .push(
+                    this._webSocket.listen("deleteMessage")
+                      .subscribe((_id: number) => {
+                        const index = this.messages.findIndex(msg => msg.id == _id);
+                        this.messages.splice(index, 1);
+                      })
+                );
+
+                this.msSubscriptions
+                  .push(
+                    this._webSocket.listen("chChanges")
+                      .subscribe((change) => {
+
+                      })
+                  );
+              }
+            }
+          );
+      }
+    );
+  }
+
+  public getChMessages(room: number, limit: number) {
+    return this.http.get<ServerResponse>(`${server.BASE_URL}/messages/getChannelMessages/${room}/${limit}`);
+  }
+
+  public getChPermissions(room: number) {
+    return this.http.get<ServerResponse>(`${server.BASE_URL}/messages/getChannelPermissions/${room}`);
   }
 
   /**

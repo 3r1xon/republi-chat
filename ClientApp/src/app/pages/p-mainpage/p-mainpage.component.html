@@ -3,43 +3,41 @@
     <rep-status-bar [user]="_user.currentUser"></rep-status-bar>
 
     <div id="main">
-        
+
         <rep-sidemenu
         id="channels"
         [entries]="channels"
         (onNew)="addNew()" 
         (onTab)="channelsTab = $event">
-    
+
             <rep-message
             *ngFor="let section of channels[channelsTab]?.sections; let i = index" 
             (onClick)="selectChannel(section._id)" 
             [message]="section" 
             [options]="options">
             </rep-message>
-    
+
             <p *ngIf="channels[channelsTab]?.sections.length == 0"> 
                 <small>{{channels[channelsTab]?.tabname}} is empty</small>
             </p>
-    
+
         </rep-sidemenu>
-    
+
         <rep-chat
-        [textboxEnabled]="_msService.currentRoom"
         [messages]="_msService.messages"
-        [msOptions]="_msService.msOptions"
         [textboxEnabled]="_msService.chPermissions?.sendMessages"
         (sendMessage)="sendChannelMessage($event)"></rep-chat>
-    
+
         <rep-sidemenu *ngIf="_utils.showServerGroup"
         id="ch-info"
         [entries]="serverInfo"
         [add]="false"
         (onTab)="serverInfoTab = $event">
-    
+
             <p *ngIf="serverInfo[serverInfoTab]?.sections.length == 0"> 
                 <small>Empty.</small>
             </p>
-    
+
         </rep-sidemenu>
 
     </div>

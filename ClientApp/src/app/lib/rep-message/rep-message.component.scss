@@ -12,6 +12,10 @@
         width: 100%;
         display: flex;
         align-items: center;
+
+        rep-profile-pic {
+            align-self: flex-start;
+        }
     }
 
     p {

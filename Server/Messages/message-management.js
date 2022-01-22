@@ -6,14 +6,14 @@ const fm             = require('date-fns');
 const io             = require('../start');
 const DBUser         = require('../Authentication/db-user');
 const permissions    = require('../Authentication/permissions');
-
+const clc            = require('cli-color');
 
 
 router.use(Auth.authToken);
 
 
 
-router.get('/getChannelMessages/:id', async (req, res) => {
+router.get('/getChannelMessages/:id/:limit', async (req, res) => {
 
   const _id        = res.locals._id;
   const _channelID = req.params.id;
@@ -25,6 +25,9 @@ router.get('/getChannelMessages/:id', async (req, res) => {
     } else {
 
       try {
+
+        const limit = req.params.limit;
+
         const messages = await db.query(
         `
         SELECT
@@ -40,7 +43,34 @@ router.get('/getChannelMessages/:id', async (req, res) => {
         LEFT JOIN CHANNELS C ON C.ID_CHANNEL = M.ID_CHANNEL
         LEFT JOIN USERS U ON U.ID_USER = CM.ID_USER
         WHERE C.ID_CHANNEL = ?
-        `, [_id, _channelID]);
+        LIMIT ${limit}
+        `, [_id, _channelID, limit]);
+
+        res.status(200).send({ success: true, data: messages });
+      }
+      catch (error) {
+        console.log(clc.red(error));
+
+        res.status(500).send({ success: false, message: "Internal server error!" });
+      }
+    }
+  });
+});
+
+
+
+router.get("/getChannelPermissions/:id", async (req, res) => {
+
+  const _id        = res.locals._id;
+  const _channelID = req.params.id;
+  const user       = new DBUser(_id);
+
+  user.setChannel(_channelID, async (err, user) => {
+    if (err) {
+      res.status(401).send({ success: false, message: "User not in channel!" });
+    } else {
+
+      try {
 
         let permissions = await db.query(
         `
@@ -60,10 +90,10 @@ router.get('/getChannelMessages/:id', async (req, res) => {
             permissions[k] = !!permissions[k];
         });
 
-        res.status(200).send({ success: true, data: { messages: messages, chPermissions: permissions } });
+        res.status(200).send({ success: true, data: permissions });
       }
       catch (error) {
-        console.log(error);
+        console.log(clc.red(error));
 
         res.status(500).send({ success: false, message: "Internal server error!" });
       }
@@ -93,7 +123,7 @@ io.on("connection", (socket) => {
 
     user?.setChannel(joinedRoom, async (err, user) => {
       if (err) {
-        console.log(err);
+        console.log(clc.yellow(err));
       } else {
         room = joinedRoom;
       }
@@ -104,8 +134,7 @@ io.on("connection", (socket) => {
 
     user?.hasPermission(permissions.sendMessages, async (err, user) => {
       if (err) {
-        socket.disconnect();
-        console.log(err);
+        console.log(clc.yellow(err));
       } else {
 
         try {
@@ -164,7 +193,7 @@ io.on("connection", (socket) => {
           io.to(room).emit("deleteMessage", `${msgID}`);
 
         } catch (error) {
-          console.log(error);
+          console.log(clc.red(error));
         }
       }
 
@@ -173,7 +202,7 @@ io.on("connection", (socket) => {
         // must be authorized to delete other people messages
         user?.hasPermission(permissions.deleteMessage, async (err, user) => {
           if (err) {
-            console.log(err);
+            console.log(clc.red(err));
           } else {
             delMsg();
           }

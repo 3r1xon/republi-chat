@@ -65,9 +65,9 @@ export class PMainpageComponent implements OnInit, OnDestroy {
         ];
 
         this.channels[0].sections = this._msService.channels;
-    
+
         const room = this.channels[0]?.sections[0]?._id;
-    
+
         if (room) {
           this._msService.joinChannel(room);
         }
@@ -84,6 +84,21 @@ export class PMainpageComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this._msService.destroyMsSubscriptions();
   }
+
+  // public msgOptions: Array<REPButton> = [
+  //   {
+  //     name: "Edit",
+  //     icon: "edit",
+  //     onClick: () => {
+  //     }
+  //   },
+  //   {
+  //     name: "Report",
+  //     icon: "flag",
+  //     onClick: () => {
+  //     }
+  //   }
+  // ]
 
   public options: Array<REPButton> = [
     {
