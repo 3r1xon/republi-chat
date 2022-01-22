@@ -42,7 +42,25 @@ router.get('/getChannelMessages/:id', async (req, res) => {
         WHERE C.ID_CHANNEL = ?
         `, [_id, _channelID]);
 
-        res.status(200).send({ success: true, data: messages });
+        let permissions = await db.query(
+        `
+        SELECT
+        DELETE_MESSAGE as deleteMessage,
+        KICK_MEMBERS as kickMembers,
+        BAN_MEMBERS as banMembers,
+        SEND_MESSAGES as sendMessages
+        FROM CHANNELS_PERMISSIONS
+        WHERE ID_CHANNEL_MEMBER = ?
+        `, [user.channelMemberID]);
+
+        permissions = permissions[0];
+
+        Object.keys(permissions)
+          .forEach((k) => {
+            permissions[k] = !!permissions[k];
+        });
+
+        res.status(200).send({ success: true, data: { messages: messages, chPermissions: permissions } });
       }
       catch (error) {
         console.log(error);

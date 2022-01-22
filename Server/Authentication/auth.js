@@ -21,8 +21,6 @@ class Auth {
             WHERE S.SESSION_ID  = ?
             `, [SESSION_ID]);
 
-            console.log (req.session)
-
             dbUser = dbUser[0];
 
             if (dbUser) {

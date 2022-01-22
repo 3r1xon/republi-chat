@@ -1,10 +1,12 @@
 <div id="obscure"
     (click)="hideRequest()">
 
-    <div id="dialog" stopPropagation cdkDrag>
+    <div id="dialog" stopPropagation cdkDrag cdkDragBoundary="#obscure">
 
         <div id="bar" cdkDragHandle>
-            <mat-icon id="close" (click)="hideRequest()">close</mat-icon>
+            <button id="back" (click)="hideRequest()"> 
+                <mat-icon>close</mat-icon>
+            </button>
         </div>
 
         <div id="title">

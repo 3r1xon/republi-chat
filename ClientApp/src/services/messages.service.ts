@@ -9,6 +9,8 @@ import { WebSocketService } from './websocket.service';
 import { Channel } from 'src/interfaces/channel.interface';
 import { Subject, Subscription } from 'rxjs';
 import { first } from 'rxjs/operators';
+import { REPButton } from 'src/interfaces/repbutton.interface';
+import { UtilsService } from './utils.service';
 
 
 @Injectable({
@@ -20,16 +22,47 @@ export class MessagesService {
     private _user: UserService,
     private _fileUpload: FileUploadService,
     private _webSocket: WebSocketService,
+    private _utils: UtilsService,
     private http: HttpClient
   ) { 
 
   }
 
   public messages: Array<Message> = [];
+  
+  public msOptions: Array<REPButton> = [
+    {
+      name: "Delete",
+      icon: "delete",
+      color: "danger",
+      onClick: () => {
+        this._utils.showRequest(
+          "Delete message",
+          "Are you sure you want to delete this message?",
+          () => {
+          }
+        );
+      }
+    },
+    {
+      name: "Edit",
+      icon: "edit",
+      onClick: () => {
+      }
+    },
+    {
+      name: "Report",
+      icon: "flag",
+      onClick: () => {
+      }
+    },
+  ];;
 
   public channels: Array<Channel> = [];
 
   public channels$: Subject<any> = new Subject<any>();
+
+  public chPermissions;
 
   public currentRoom: number;
 
@@ -67,7 +100,7 @@ export class MessagesService {
           this.currentRoom = room;
       
           if (res.success) {
-            this.messages = res.data?.map((msg) => {
+            this.messages = res.data.messages?.map((msg) => {
               return {
                 id: msg.id,
                 name: msg.name,
@@ -78,6 +111,13 @@ export class MessagesService {
                 auth: !!msg.auth
               };
             });
+
+            this.chPermissions = res.data.chPermissions;
+
+            if (this.chPermissions.deleteMessage)
+              this.msOptions.push({
+                name: "delete"
+              });
 
             this.destroyMsSubscriptions();
 

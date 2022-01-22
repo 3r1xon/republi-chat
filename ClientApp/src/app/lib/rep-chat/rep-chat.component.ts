@@ -8,6 +8,7 @@ import {
   AfterViewChecked
 } from '@angular/core';
 import { Message } from 'src/interfaces/message.interface';
+import { REPButton } from 'src/interfaces/repbutton.interface';
 
 @Component({
   selector: 'rep-chat',
@@ -29,6 +30,9 @@ export class REPChatComponent implements AfterViewChecked {
 
   @Input()
   public messages: Array<Message>;
+
+  @Input()
+  public msOptions: Array<REPButton>;
 
   @Output()
   public sendMessage = new EventEmitter();

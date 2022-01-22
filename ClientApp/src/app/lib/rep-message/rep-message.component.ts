@@ -2,7 +2,6 @@ import {
   Component,
   Input,
   Output,
-  OnInit,
   EventEmitter,
   HostListener,
   ElementRef,
@@ -10,65 +9,18 @@ import {
 import { Message } from 'src/interfaces/message.interface';
 import { REPButton } from 'src/interfaces/repbutton.interface';
 import { MessagesService } from 'src/services/messages.service';
-import { UtilsService } from 'src/services/utils.service';
 
 @Component({
   selector: 'rep-message',
   templateUrl: './rep-message.component.html',
   styleUrls: ['./rep-message.component.scss']
 })
-export class REPMessageComponent implements OnInit {
+export class REPMessageComponent {
 
   constructor(
     public _msService: MessagesService,
-    private _utils: UtilsService,
     private eRef: ElementRef
-    ) { }
-
-  ngOnInit(): void {
-    
-    if (this.options) return;
-
-    if (this.message.auth) {
-      this.options = [
-        {
-          name: "Delete",
-          icon: "delete",
-          color: "danger",
-          onClick: () => {
-            this._utils.showRequest(
-              "Delete message",
-              "Are you sure you want to delete this message?",
-              () => {
-                this._msService.deleteMessage(this.message.id);
-              }
-            );
-          }
-        },
-        {
-          name: "Edit",
-          icon: "edit",
-          onClick: () => {
-          }
-        },
-        {
-          name: "Report",
-          icon: "flag",
-          onClick: () => {
-          }
-        },
-      ];
-    } else {
-      this.options = [
-        {
-          name: "Report",
-          icon: "flag",
-          onClick: () => {
-          }
-        },
-      ];
-    }
-  }
+  ) { }
 
   public active: boolean = false;
 

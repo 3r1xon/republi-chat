@@ -4,6 +4,7 @@
 
     <rep-message *ngFor="let message of messages; let i = index;"
     [message]="message"
+    [options]="msOptions"
     [uniqueID]="i"></rep-message>
     
   </div>
@@ -11,7 +12,7 @@
   <div id="textbox">
 
     <rep-textbox [enabled]="textboxEnabled" (sendMessage)="send($event)"></rep-textbox>
-    
+
   </div>
 
 </div>
