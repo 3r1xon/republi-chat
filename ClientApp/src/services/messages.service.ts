@@ -9,7 +9,6 @@ import { WebSocketService } from './websocket.service';
 import { Channel } from 'src/interfaces/channel.interface';
 import { Subject, Subscription } from 'rxjs';
 import { first } from 'rxjs/operators';
-import { UtilsService } from './utils.service';
 import { ChannelPermissions } from 'src/interfaces/channelPermissions.interface';
 
 
@@ -82,10 +81,6 @@ export class MessagesService {
                 this.currentRoom = room;
 
                 this.chPermissions = <ChannelPermissions>channel.data;
-
-                if (this.chPermissions.deleteMessage) {
-
-                }
 
                 this.destroyMsSubscriptions();
 

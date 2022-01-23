@@ -45,7 +45,7 @@ export class PMainpageComponent implements OnInit, OnDestroy {
             sections: []
           }
         ];
-    
+
         this.serverInfo = [
           {
             tabname: "Online",
@@ -85,27 +85,99 @@ export class PMainpageComponent implements OnInit, OnDestroy {
     this._msService.destroyMsSubscriptions();
   }
 
-  // public msgOptions: Array<REPButton> = [
-  //   {
-  //     name: "Edit",
-  //     icon: "edit",
-  //     onClick: () => {
-  //     }
-  //   },
-  //   {
-  //     name: "Report",
-  //     icon: "flag",
-  //     onClick: () => {
-  //     }
-  //   }
-  // ]
+  public readonly msgOptions: Array<REPButton> = [
+    {
+      name: "Edit",
+      icon: "edit",
+      visible: (msgIndex: number) => {
+        if (this._msService.messages[msgIndex].auth) {
+          return true;
+        }
 
-  public options: Array<REPButton> = [
+        return false;
+      },
+      enabled: () => true,
+      onClick: (msgIndex: number) => {
+        console.log("EDIT");
+      }
+    },
+    {
+      name: "Report",
+      icon: "flag",
+      enabled: () => true,
+      visible: (msgIndex: number) => {
+        if (this._msService.messages[msgIndex].auth) {
+          return false;
+        }
+
+        return true;
+      },
+      onClick: (msgIndex: number) => {
+        console.log("REPORT");
+      }
+    },
+    {
+      name: "Delete",
+      icon: "delete",
+      color: "danger",
+      enabled: () => true,
+      visible: (msgIndex: number) => {
+        if (this._msService.messages[msgIndex].auth) {
+          return true;
+        }
+
+        return this._msService.chPermissions.deleteMessage
+      },
+      onClick: (msgIndex: number) => {
+        this._utils.showRequest("Delete message", "Are you sure you want to delete this message?", () => {
+          this._msService.deleteMessage(this._msService.messages[msgIndex].id);
+        });
+      }
+    },
+    {
+      name: "Kick",
+      icon: "remove_circle_outline",
+      color: "warning",
+      enabled: () => true,
+      visible: (msgIndex: number) => {
+        if (this._msService.messages[msgIndex].auth) {
+          return false;
+        }
+
+        return this._msService.chPermissions.kickMembers 
+      },
+      onClick: (msgIndex: number) => {
+        console.log(msgIndex);
+      }
+    },
+    {
+      name: "Ban",
+      icon: "delete_forever",
+      color: "danger",
+      enabled: () => true,
+      visible: (msgIndex: number) => {
+        if (this._msService.messages[msgIndex].auth) {
+          return false;
+        }
+
+        return this._msService.chPermissions.banMembers
+      },
+      onClick: (msgIndex: number) => {
+        console.log("BAN");
+      }
+    }
+  ];
+
+  public readonly options: Array<REPButton> = [
     {
       name: "Leave",
       icon: "delete",
       color: "danger",
-      onClick: () => {}
+      enabled: () => true,
+      visible: () => true,
+      onClick: () => {
+
+      }
     }
   ];
 

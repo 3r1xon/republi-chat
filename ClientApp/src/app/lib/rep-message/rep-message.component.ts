@@ -34,6 +34,9 @@ export class REPMessageComponent {
   @Input()
   public dateFormat: string = "dd/MM/yyyy HH:mm";
 
+  @Input()
+  public uniqueID: number;
+
   @Output()
   public onUserClick = new EventEmitter<string>();
 

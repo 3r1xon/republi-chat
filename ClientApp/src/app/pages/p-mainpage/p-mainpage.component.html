@@ -26,6 +26,7 @@
         <rep-chat
         [messages]="_msService.messages"
         [textboxEnabled]="_msService.chPermissions?.sendMessages"
+        [msOptions]="msgOptions"
         (sendMessage)="sendChannelMessage($event)"></rep-chat>
 
         <rep-sidemenu *ngIf="_utils.showServerGroup"

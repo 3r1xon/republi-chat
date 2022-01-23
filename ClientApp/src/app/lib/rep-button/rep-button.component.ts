@@ -39,19 +39,38 @@ export class REPButtonComponent {
 
   public fontColor: string = "#FFFFFF";
 
-  @Input()
-  public enabled: boolean | (() => boolean) = true;
+  private _enabled: boolean | (() => boolean) = true;
+  private _visible: boolean | (() => boolean) = true;
 
-  public get disabled() {
-    if (typeof this.enabled == 'boolean') return this.enabled;
-    else return this.enabled();
+  @Input()
+  public set enabled(boolean) {
+    if (boolean != undefined) {
+      this._enabled = boolean;
+    }
+  };
+
+  public get enabled() {
+    if (typeof this._enabled == 'boolean') return this._enabled;
+    else return this._enabled();
+  }
+
+  @Input()
+  public set visible(boolean) {
+    if (boolean != undefined) {
+      this._visible = boolean;
+    }
+  }
+
+  public get visible() {
+    if (typeof this._visible == 'boolean') return this._visible;
+    else return this._visible();
   }
 
   @Output()
   public onClick: EventEmitter<boolean> = new EventEmitter();
 
   checkClick() {
-    if (!this.enabled) return;
+    if (!this._enabled) return;
 
     this.onClick.emit();
   }

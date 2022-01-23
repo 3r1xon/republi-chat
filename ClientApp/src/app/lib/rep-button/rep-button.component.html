@@ -1,10 +1,10 @@
-<button id="master" [disabled]="!disabled" #trigger
+<button *ngIf="visible" id="master" [disabled]="!enabled" #trigger
     (click)="checkClick()" 
     (mouseover)="toggleTooltip()" (mouseout)="toggleTooltip()">
     <div id="flat-button" matRipple [matRippleTrigger]="trigger" [ngStyle]="{
             'background': backColor,
-            'opacity': disabled ? '1' : '0.5',
-            'cursor': disabled ? 'pointer' : 'default'
+            'opacity': enabled ? '1' : '0.5',
+            'cursor': enabled ? 'pointer' : 'default'
         }">
             <p [style.color]="fontColor">
                 <ng-content></ng-content>

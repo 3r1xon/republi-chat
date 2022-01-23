@@ -24,11 +24,14 @@ export class REPWindowComponent {
 
   @Input()
   public subMenu: Array<REPButton>;
-  
+
   public state: boolean = false;
 
   @Output()
   public open = new EventEmitter();
+
+  @Input()
+  public uniqueID: number;
 
   @ViewChild('submenu')
   private submenu: ElementRef;

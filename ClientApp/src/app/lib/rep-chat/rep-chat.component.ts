@@ -37,20 +37,8 @@ export class REPChatComponent implements AfterViewInit {
   @Input()
   public messages: Array<Message>;
 
-  public msOptions: Array<REPButton> = [
-    {
-      name: "Edit",
-      icon: "edit",
-      onClick: () => {
-      }
-    },
-    {
-      name: "Report",
-      icon: "flag",
-      onClick: () => {
-      }
-    }
-  ];
+  @Input()
+  public msOptions: Array<REPButton>;
 
   @Output()
   public sendMessage = new EventEmitter();

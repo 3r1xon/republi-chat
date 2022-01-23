@@ -50,10 +50,14 @@ export class UtilsService {
             name: "Yes",
             onClick: actions,
             background: "danger",
-            icon: "done"
+            icon: "done",
+            visible: () => true,
+            enabled: () => true,
           },
           {
             name: "No",
+            visible: () => true,
+            enabled: () => true,
             onClick: () => {
               this.rqsBody.visible = false;
             },

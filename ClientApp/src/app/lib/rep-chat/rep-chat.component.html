@@ -5,6 +5,7 @@
     <rep-message #msg *ngFor="let message of messages; let i = index;"
     [message]="message"
     [options]="msOptions"
+    [uniqueID]="i"
     ></rep-message>
 
   </div>

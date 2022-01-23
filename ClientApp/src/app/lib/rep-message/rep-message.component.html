@@ -1,5 +1,5 @@
 <div id="message-box" [ngStyle]="{ 
-        background: active ? 'rgb(67 67 67)' : '' 
+        background: active ? 'rgb(67 67 67)' : ''
     }">
 
     <div id="cont" (click)="clickHandler()">
@@ -30,6 +30,7 @@
 
     <rep-window *ngIf="options"
     [subMenu]="options"
+    [uniqueID]="uniqueID"
     (open)="setToggle($event)"></rep-window>
 
 </div>

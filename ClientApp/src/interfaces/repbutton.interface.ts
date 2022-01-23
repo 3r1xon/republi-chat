@@ -5,7 +5,8 @@ export interface REPButton {
     onClick?: Function;
     route?: string;
     hotkey?: string;
-    enabled?: boolean | (() => boolean);
+    enabled: Function;
+    visible: Function;
     highlighted?: boolean;
     background?: string;
 }
