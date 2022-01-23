@@ -55,7 +55,7 @@ export class UserService implements CanActivate {
           await this.router.navigate(['mainpage']);
         }
       }, 
-      (err) => { },
+      () => { },
       () => {
         sub.unsubscribe();
       }

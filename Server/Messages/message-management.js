@@ -119,12 +119,11 @@ io.on("connection", (socket) => {
 
     socket.leave(room);
 
-    socket.join(joinedRoom);
-
-    user?.setChannel(joinedRoom, async (err, user) => {
+    user.setChannel(joinedRoom, async (err) => {
       if (err) {
         console.log(clc.yellow(err));
       } else {
+        socket.join(joinedRoom);
         room = joinedRoom;
       }
     });
@@ -132,7 +131,7 @@ io.on("connection", (socket) => {
 
   socket.on("message", (msg) => {
 
-    user?.hasPermission(permissions.sendMessages, async (err, user) => {
+    user.hasPermission(permissions.sendMessages, async (err) => {
       if (err) {
         console.log(clc.yellow(err));
       } else {
@@ -149,7 +148,7 @@ io.on("connection", (socket) => {
           `, [user.channelID, user.channelMemberID, msg, new Date()]);
 
           _id = _id[0].ID_CHANNEL_MESSAGE;
-    
+
           let message = await db.query(
           `
           SELECT
@@ -180,7 +179,7 @@ io.on("connection", (socket) => {
   socket.on("deleteMessage", (msgID) => {
 
     // Checks if the message being delete belongs to the user
-    user?.msgBelong(msgID, (err, user) => {
+    user.msgBelong(msgID, (noAuth) => {
 
       const delMsg = async () => {
         try {
@@ -197,10 +196,10 @@ io.on("connection", (socket) => {
         }
       }
 
-      if (err) {
+      if (noAuth) {
         // If the message does not belong to the user then the latter
         // must be authorized to delete other people messages
-        user?.hasPermission(permissions.deleteMessage, async (err, user) => {
+        user.hasPermission(permissions.deleteMessage, async (err, user) => {
           if (err) {
             console.log(clc.red(err));
           } else {
@@ -211,6 +210,14 @@ io.on("connection", (socket) => {
         delMsg();
       }
     });
+
+  });
+
+  socket.on("ban", (userID) => {
+
+  });
+
+  socket.on("kick", (userID) => {
 
   });
 

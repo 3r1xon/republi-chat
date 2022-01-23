@@ -89,13 +89,7 @@ export class PMainpageComponent implements OnInit, OnDestroy {
     {
       name: "Edit",
       icon: "edit",
-      visible: (msgIndex: number) => {
-        if (this._msService.messages[msgIndex].auth) {
-          return true;
-        }
-
-        return false;
-      },
+      visible: (msgIndex: number) => this._msService.messages[msgIndex].auth,
       enabled: () => true,
       onClick: (msgIndex: number) => {
         console.log("EDIT");
@@ -105,13 +99,7 @@ export class PMainpageComponent implements OnInit, OnDestroy {
       name: "Report",
       icon: "flag",
       enabled: () => true,
-      visible: (msgIndex: number) => {
-        if (this._msService.messages[msgIndex].auth) {
-          return false;
-        }
-
-        return true;
-      },
+      visible: (msgIndex: number) => !this._msService.messages[msgIndex].auth,
       onClick: (msgIndex: number) => {
         console.log("REPORT");
       }
@@ -126,7 +114,7 @@ export class PMainpageComponent implements OnInit, OnDestroy {
           return true;
         }
 
-        return this._msService.chPermissions.deleteMessage
+        return this._msService.chPermissions.deleteMessage;
       },
       onClick: (msgIndex: number) => {
         this._utils.showRequest("Delete message", "Are you sure you want to delete this message?", () => {
@@ -144,10 +132,14 @@ export class PMainpageComponent implements OnInit, OnDestroy {
           return false;
         }
 
-        return this._msService.chPermissions.kickMembers 
+        return this._msService.chPermissions.kickMembers;
       },
       onClick: (msgIndex: number) => {
-        console.log(msgIndex);
+        const msg = this._msService.messages[msgIndex];
+
+        this._utils.showRequest(`Kick ${msg.name}`, `Are you sure you want to kick out ${msg.name}? He will be able to rejoin later...`, () => {
+
+        });
       }
     },
     {
@@ -160,10 +152,14 @@ export class PMainpageComponent implements OnInit, OnDestroy {
           return false;
         }
 
-        return this._msService.chPermissions.banMembers
+        return this._msService.chPermissions.banMembers;
       },
       onClick: (msgIndex: number) => {
-        console.log("BAN");
+        const msg = this._msService.messages[msgIndex];
+
+        this._utils.showRequest(`Ban ${msg.name}`, `Are you sure you want to ban ${msg.name}? He will NOT be able to rejoin later till his ban is revoked!`, () => {
+
+        });
       }
     }
   ];

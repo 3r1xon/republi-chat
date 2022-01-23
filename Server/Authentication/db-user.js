@@ -19,12 +19,12 @@ class DBUser {
             WHERE ID_CHANNEL = ?
             AND ID_USER = ?
             `, [this.channelID, this.userID]);
-    
+
             if (channelMemberID[0]) {
                 this.channelMemberID = channelMemberID[0].ID_CHANNEL_MEMBER;
-    
+
                 callback(null, this);
-    
+
                 return this;
             }
             else
@@ -48,12 +48,12 @@ class DBUser {
             WHERE CP.ID_CHANNEL_MEMBER = ?
             AND CP.${permission} = ?
             `, [this.channelMemberID, true]);
-    
+
             try {
                 auth = !!auth[0][permission];
-    
+
                 callback(null, this);
-    
+
                 return this;
             } catch {
                 callback(new Error("User does not have the required permission!"), null)
@@ -73,9 +73,9 @@ class DBUser {
             FROM CHANNELS_MESSAGES
             WHERE ID_CHANNEL_MESSAGE = ?
             `, [id]);
-    
+
             chMbr = chMbr[0];
-    
+
             if (chMbr.ID_CHANNEL_MEMBER == this.channelMemberID) {
                 callback(null, this);
             } else {

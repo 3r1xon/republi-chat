@@ -1,8 +1,8 @@
+import { DOCUMENT } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { CookieService } from 'ngx-cookie-service';
 import { first } from 'rxjs/operators';
 import { server } from 'src/environments/server';
 import { Account } from 'src/interfaces/account.interface';
@@ -21,10 +21,10 @@ export class PLoginComponent {
     private _user: UserService,
     private _utils: UtilsService,
     private _fileUpload: FileUploadService,
-    private cookieService: CookieService,
     private router: Router,
     private http: HttpClient,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    @Inject(DOCUMENT) private document: Document
   ) { }
 
   public alert: string = "";
@@ -69,7 +69,7 @@ export class PLoginComponent {
 
     const browser = this._utils.detectBrowser();
 
-    navigator.geolocation.getCurrentPosition((position) => {
+    this.document.defaultView.navigator.geolocation.getCurrentPosition((position) => {
       browser.longitude = position.coords.longitude;
       browser.latitude = position.coords.latitude;
 
