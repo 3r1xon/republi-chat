@@ -78,12 +78,12 @@ export class PSettingsComponent implements OnInit {
   async changeRoute(index: number) {
     if (this.menus[index].route)
       await this.router.navigateByUrl(this.menus[index].route)
-    else 
+    else
       this.menus[index].onClick();
-  
+
     this.currentRoute = this.menus[index].name;
   }
-  
+
   @HostListener('document:keydown.escape', ['$event'])
   onEscape(event: KeyboardEvent) {
     const key = event.key;

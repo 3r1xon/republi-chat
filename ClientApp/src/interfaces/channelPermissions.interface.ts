@@ -1,6 +1,7 @@
 export interface ChannelPermissions {
-    deleteMessage: boolean,
-    kickMembers: boolean,
-    banMembers: boolean,
-    sendMessages: boolean
+    id: number;
+    deleteMessage: boolean;
+    kickMembers: boolean;
+    banMembers: boolean;
+    sendMessages: boolean;
 }

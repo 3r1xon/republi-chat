@@ -74,7 +74,7 @@ create or replace table republichat.sessions
     ID_SESSION      bigint auto_increment
         primary key,
     ID_USER         bigint      not null,
-    SESSION_ID      varchar(30) not null,
+    SESSION_ID      varchar(50) not null,
     BROWSER_NAME    varchar(30) null,
     BROWSER_VERSION varchar(30) null,
     LATITUDE        varchar(30) null,

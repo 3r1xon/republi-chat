@@ -34,6 +34,7 @@ router.get('/getChannelMessages/:id/:limit', async (req, res) => {
         M.ID_CHANNEL_MESSAGE as id,
         U.COLOR as color,
         U.NAME as name,
+        CM.ID_CHANNEL_MEMBER as author,
         TO_BASE64(U.PROFILE_PICTURE) as picture,
         M.MESSAGE as message,
         M.DATE as date,
@@ -75,6 +76,7 @@ router.get("/getChannelPermissions/:id", async (req, res) => {
         let permissions = await db.query(
         `
         SELECT
+        ID_CHANNEL_MEMBER as id,
         DELETE_MESSAGE as deleteMessage,
         KICK_MEMBERS as kickMembers,
         BAN_MEMBERS as banMembers,
@@ -85,10 +87,14 @@ router.get("/getChannelPermissions/:id", async (req, res) => {
 
         permissions = permissions[0];
 
+        const _id = permissions.id;
+
         Object.keys(permissions)
           .forEach((k) => {
             permissions[k] = !!permissions[k];
-        });
+          });
+
+        permissions.id = _id;
 
         res.status(200).send({ success: true, data: permissions });
       }
@@ -119,7 +125,7 @@ io.on("connection", (socket) => {
 
     socket.leave(room);
 
-    user.setChannel(joinedRoom, async (err) => {
+    user?.setChannel(joinedRoom, async (err) => {
       if (err) {
         console.log(clc.yellow(err));
       } else {
@@ -131,7 +137,7 @@ io.on("connection", (socket) => {
 
   socket.on("message", (msg) => {
 
-    user.hasPermission(permissions.sendMessages, async (err) => {
+    user?.hasPermission(permissions.sendMessages, async (err) => {
       if (err) {
         console.log(clc.yellow(err));
       } else {
@@ -156,6 +162,7 @@ io.on("connection", (socket) => {
           U.USER_CODE as code,
           U.COLOR as color,
           U.NAME as name,
+          CM.ID_CHANNEL_MEMBER as author,
           TO_BASE64(U.PROFILE_PICTURE) as picture,
           M.MESSAGE as message,
           M.DATE as date
@@ -179,7 +186,7 @@ io.on("connection", (socket) => {
   socket.on("deleteMessage", (msgID) => {
 
     // Checks if the message being delete belongs to the user
-    user.msgBelong(msgID, (noAuth) => {
+    user?.msgBelong(msgID, (noAuth) => {
 
       const delMsg = async () => {
         try {
@@ -199,7 +206,7 @@ io.on("connection", (socket) => {
       if (noAuth) {
         // If the message does not belong to the user then the latter
         // must be authorized to delete other people messages
-        user.hasPermission(permissions.deleteMessage, async (err, user) => {
+        user?.hasPermission(permissions.deleteMessage, async (err, user) => {
           if (err) {
             console.log(clc.red(err));
           } else {
@@ -210,14 +217,6 @@ io.on("connection", (socket) => {
         delMsg();
       }
     });
-
-  });
-
-  socket.on("ban", (userID) => {
-
-  });
-
-  socket.on("kick", (userID) => {
 
   });
 

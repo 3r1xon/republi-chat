@@ -57,5 +57,6 @@ app.get('/', (req, res) => {
 
 
 io.use((socket, next) => {
+  // console.log(socket);
   next();
 });

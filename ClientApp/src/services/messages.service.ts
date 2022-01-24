@@ -64,8 +64,6 @@ export class MessagesService {
    */
   public joinChannel(room: number) {
 
-    if (this.currentRoom == room) return;
-
     this.getChPermissions(room)
     .pipe(first())
     .subscribe(
@@ -88,6 +86,7 @@ export class MessagesService {
                   return {
                     id: msg.id,
                     name: msg.name,
+                    author: msg.author,
                     message: msg.message,
                     date: new Date(msg.date),
                     picture: this._fileUpload.sanitizeIMG(msg.picture),
@@ -107,16 +106,15 @@ export class MessagesService {
                       .subscribe((message: string) => {
                         const msg = JSON.parse(message);
 
-                        const isUserMessage = msg.code == this._user.currentUser.code && msg.name == this._user.currentUser.name;
-
                         this.messages.push({
                           id: msg.id,
                           name: msg.name,
+                          author: msg.author,
                           message: msg.message,
                           date: new Date(msg.date),
                           picture: this._fileUpload.sanitizeIMG(msg.picture),
                           color: msg.color,
-                          auth: isUserMessage
+                          auth: this.chPermissions.id === msg.author
                         });
                       })
                 );
@@ -137,6 +135,29 @@ export class MessagesService {
 
                       })
                   );
+
+                this.msSubscriptions
+                .push(
+                  this._webSocket.listen("connect")
+                    .subscribe(() => {
+                      console.log("%cConnected", "color: green;");
+                      const room = this.currentRoom;
+
+                      if (this.currentRoom) {
+                        this.currentRoom = undefined;
+
+                        this.joinChannel(room);
+                      }
+                    })
+                );
+
+                this.msSubscriptions
+                .push(
+                  this._webSocket.listen("disconnect")
+                    .subscribe(() => {
+                      console.log("%cDisconnected!", "color: red;");
+                    })
+                );
               }
             }
           );
@@ -168,6 +189,34 @@ export class MessagesService {
    */
   public deleteMessage(_id: number) {
     this._webSocket.emit("deleteMessage", _id);
+  }
+
+  /**
+   * Ban a user in the current channel on a channel.
+   *
+   * @param room The ID of the channel.
+   * 
+   * @param _id The ID of the user you want to ban.
+   */
+  public banUser(room: number, _id: number) {
+    this._webSocket.emit("ban", {
+      room: room,
+      _id: _id
+    });
+  }
+
+  /**
+   * Ban a user in the current channel on a channel.
+   *
+   * @param room The ID of the channel.
+   * 
+   * @param _id The ID of the user you want to kick.
+   */
+   public kickUser(room: number, _id: number) {
+    this._webSocket.emit("kick", {
+      room: room,
+      _id: _id
+    });
   }
 
   /**

@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import { Subscription } from 'rxjs';
@@ -13,7 +13,7 @@ import { WebSocketService } from 'src/services/websocket.service';
   templateUrl: './p-mainpage.component.html',
   styleUrls: ['./p-mainpage.component.scss']
 })
-export class PMainpageComponent implements OnInit, OnDestroy {
+export class PMainpageComponent implements OnInit {
 
   constructor(
     public _user: UserService,
@@ -33,40 +33,11 @@ export class PMainpageComponent implements OnInit, OnDestroy {
       .pipe(first())
       .subscribe(() => {
 
-        this.channels = [
-          {
-            tabname: "Channels",
-            icon: "list",
-            sections: this._msService.channels
-          },
-          {
-            tabname: "Friends",
-            icon: "people",
-            sections: []
-          }
-        ];
+        const channelsRef = this.channels.find(tab => tab.tabname == "Channels");
 
-        this.serverInfo = [
-          {
-            tabname: "Online",
-            icon: "public",
-            sections: []
-          },
-          {
-            tabname: "Offline",
-            icon: "no_accounts",
-            sections: []
-          },
-          {
-            tabname: "Pending",
-            icon: "pending",
-            sections: []
-          },
-        ];
+        channelsRef.sections = this._msService.channels;
 
-        this.channels[0].sections = this._msService.channels;
-
-        const room = this.channels[0]?.sections[0]?._id;
+        const room = channelsRef.sections[0]?._id;
 
         if (room) {
           this._msService.joinChannel(room);
@@ -81,9 +52,6 @@ export class PMainpageComponent implements OnInit, OnDestroy {
       });
   }
 
-  ngOnDestroy(): void {
-    this._msService.destroyMsSubscriptions();
-  }
 
   public readonly msgOptions: Array<REPButton> = [
     {
@@ -157,9 +125,13 @@ export class PMainpageComponent implements OnInit, OnDestroy {
       onClick: (msgIndex: number) => {
         const msg = this._msService.messages[msgIndex];
 
-        this._utils.showRequest(`Ban ${msg.name}`, `Are you sure you want to ban ${msg.name}? He will NOT be able to rejoin later till his ban is revoked!`, () => {
-
-        });
+        this._utils.showRequest(
+          `Ban ${msg.name}`, 
+          `Are you sure you want to ban ${msg.name}? He will NOT be able to rejoin later till his ban is revoked!`, 
+          () => {
+            this._msService.banUser(this._msService.currentRoom, msg.author);
+          }
+        );
       }
     }
   ];
@@ -183,7 +155,18 @@ export class PMainpageComponent implements OnInit, OnDestroy {
     tabname: string,
     icon?: string,
     sections: Array<any> 
-  }> = [];
+  }> = [
+    {
+      tabname: "Channels",
+      icon: "list",
+      sections: this._msService.channels
+    },
+    {
+      tabname: "Friends",
+      icon: "people",
+      sections: []
+    }
+  ];
 
   public serverInfoTab: number = 0;
 
@@ -191,7 +174,23 @@ export class PMainpageComponent implements OnInit, OnDestroy {
     tabname: string,
     icon?: string,
     sections: Array<any> 
-  }> = [];
+  }> = [
+    {
+      tabname: "Online",
+      icon: "public",
+      sections: []
+    },
+    {
+      tabname: "Offline",
+      icon: "no_accounts",
+      sections: []
+    },
+    {
+      tabname: "Pending",
+      icon: "pending",
+      sections: []
+    },
+  ];
 
 
   selectChannel(room: number) {

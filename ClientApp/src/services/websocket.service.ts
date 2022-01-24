@@ -21,10 +21,6 @@ export class WebSocketService {
         SESSION_ID: "Test"
       }
     });
-
-    this.listen("disconnect").subscribe(() => {
-      console.log("disconnect!");
-    });
   }
 
   public socket: Socket;

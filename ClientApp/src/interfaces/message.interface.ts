@@ -1,7 +1,7 @@
 export interface Message {
     id?: number;
     name: string;
-    code?: string;
+    author?: number;
     message: string;
     color: string;
     picture: any;
