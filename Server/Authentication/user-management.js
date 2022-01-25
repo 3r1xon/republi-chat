@@ -4,7 +4,7 @@ const Auth           = require('./auth');
 const REPTools       = require('../Tools/rep-tools');
 const multer         = require('multer');
 const upload         = multer({});
-const db             = require('../Database/db');
+const REPQuery       = require('../Database/rep-query');
 const crypto         = require('crypto');
 const io             = require('../start');
 const model          = require('nanoid');
@@ -31,7 +31,7 @@ router.post('/signUp', async (req, res) => {
       } else {
         try {
 
-          await db.query(
+          await REPQuery.exec(
           `
           INSERT INTO USERS 
           (USER_CODE, PASSWORD, NAME, EMAIL)
@@ -62,7 +62,7 @@ router.post('/authorize', Auth.HTTPAuthToken, async (req, res) => {
 
     const _id = res.locals._id;
 
-    let dbUser = await db.query(
+    const dbUser = await REPQuery.one(
     `
     SELECT
     U.ID_USER as id,
@@ -74,8 +74,6 @@ router.post('/authorize', Auth.HTTPAuthToken, async (req, res) => {
     FROM USERS U
     WHERE U.ID_USER = ?
     `, [_id]);
-
-    dbUser = dbUser[0];
 
     if (dbUser) return res.status(200).send({ success: true, data: dbUser });
 
@@ -99,7 +97,7 @@ router.post('/logIn', async (req, res) => {
 
   try {
 
-    let dbUser = await db.query(
+    const dbUser = await REPQuery.one(
     `
     SELECT
     U.ID_USER as id,
@@ -112,13 +110,12 @@ router.post('/logIn', async (req, res) => {
     WHERE EMAIL = ? AND PASSWORD = ?
     `, [user.email, user.password]);
 
-    dbUser = dbUser[0];
 
     if (dbUser) {
 
       const sid = model.nanoid(process.env.SID_SIZE);
 
-      await db.query(
+      await REPQuery.exec(
       `
       INSERT INTO SESSIONS
       (ID_USER, BROWSER_NAME, BROWSER_VERSION, LATITUDE, LONGITUDE, DATE, SID)
@@ -159,9 +156,7 @@ router.delete('/logout', Auth.HTTPAuthToken, async (req, res) => {
   const sid        = res.locals.sid;
 
   try {
-    console.log(userID)
-    console.log(sid)
-    await db.query(
+    await REPQuery.exec(
     `
     DELETE
     FROM SESSIONS
@@ -191,7 +186,7 @@ router.put('/editProfile', [Auth.HTTPAuthToken, upload.single("image")], async (
 
   try {
 
-    await db.query(
+    await REPQuery.exec(
     `
     UPDATE
     USERS
@@ -222,7 +217,7 @@ router.delete('/deleteProfile', Auth.HTTPAuthToken, async (req, res) => {
 
     res.clearCookie("sid");
 
-    await db.query(
+    await REPQuery.exec(
     `
     DELETE
     FROM USERS
@@ -249,7 +244,7 @@ router.get('/getDevices', Auth.HTTPAuthToken, async (req, res) => {
 
   try {
 
-    const devices = await db.query(
+    const devices = await REPQuery.load(
     `
     SELECT 
     ID_SESSION as id_session,
@@ -291,7 +286,7 @@ router.delete('/disconnectDevice/:id', Auth.HTTPAuthToken, async (req, res) => {
     const _id    = req.params.id;
     const userID = res.locals._id;
 
-    let session = await db.query(
+    const session = await REPQuery.one(
     `
     DELETE
     FROM SESSIONS
@@ -300,8 +295,6 @@ router.delete('/disconnectDevice/:id', Auth.HTTPAuthToken, async (req, res) => {
     AND ID_USER = ?
     RETURNING SID
     `, [_id, userID]);
-
-    session = session[0];
 
     io.emit(session.SID, "forceKick");
 

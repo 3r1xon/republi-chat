@@ -58,16 +58,34 @@ export class UtilsService {
             name: "No",
             visible: () => true,
             enabled: () => true,
+            background: "success",
+            icon: "not_interested",
             onClick: () => {
               this.rqsBody.visible = false;
-            },
-            background: "success",
-            icon: "not_interested"
+            }
           }
         ],
         visible: true
       };
-    } else throw new Error("Typeof actions is not a Function or Array.");
+    } else {
+      this.rqsBody = {
+        title: title,
+        message: message,
+        actions: [
+          {
+            name: "Close",
+            visible: () => true,
+            enabled: () => true,
+            background: "success",
+            icon: "not_interested",
+            onClick: () => {
+              this.rqsBody.visible = false;
+            }
+          }
+        ],
+        visible: true
+      };
+    };
   }
 
   public bugReport: BugReport;

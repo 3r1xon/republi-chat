@@ -1,6 +1,5 @@
-const db           = require('../Database/db');
+const REPQuery     = require('../Database/rep-query');
 const clc          = require('cli-color');
-
 
 
 class Auth {
@@ -16,15 +15,13 @@ class Auth {
 
             try {
 
-                let dbUser = await db.query(
+                const dbUser = await REPQuery.one(
                 `
                 SELECT
                 S.ID_USER
                 FROM SESSIONS S
                 WHERE S.SID = ?
                 `, [sid]);
-
-                dbUser = dbUser[0];
 
                 if (dbUser) {
                     res.locals._id = dbUser.ID_USER;
@@ -53,24 +50,32 @@ class Auth {
 
             const sid = socket.request.headers.cookie.split("sid=")[1];
 
-            let dbUser = await db.query(
+            const dbUser = await REPQuery.one(
             `
             SELECT
-            S.ID_USER
+            S.ID_USER,
+            S.ID_SESSION
             FROM SESSIONS S
             WHERE S.SID = ?
             `, [sid]);
 
-            dbUser = dbUser[0];
-
             if (dbUser) {
-              socket.auth = {
-                _id: dbUser.ID_USER,
-                sid: sid
-              };
-              next();
-            } else { 
-              socket.disconnect();
+                await REPQuery.exec(
+                `
+                UPDATE 
+                SESSIONS 
+                SET 
+                SOCKET_ID = ?
+                WHERE ID_SESSION = ?
+                `, [socket.id, dbUser.ID_SESSION]);
+
+                socket.auth = {
+                    _id: dbUser.ID_USER,
+                    sid: sid
+                };
+                next();
+            } else {
+                socket.disconnect();
             };
         } catch(err) {
             console.log(clc.red(err));

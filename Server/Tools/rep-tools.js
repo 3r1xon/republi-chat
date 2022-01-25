@@ -1,4 +1,4 @@
-const db = require('../Database/db');
+const REPQuery = require('../Database/rep-query');
 
 class REPTools {
     /**
@@ -15,26 +15,24 @@ class REPTools {
      */
     static async generateCode(NAME, TABLE_NAME, COLUMN_NAME, callback) {
 
-        let pk = await db.query(
+        const pk = await REPQuery.one(
         `
         SHOW KEYS 
         FROM ${TABLE_NAME} 
         WHERE Key_name = 'PRIMARY'
         `);
 
-        pk = pk[0].Column_name;
-
-        let dbValue = await db.query(
+        let dbValue = await REPQuery.one(
         `
         SELECT
         ${COLUMN_NAME}
         FROM ${TABLE_NAME}
         WHERE NAME = ?
-        ORDER BY ${pk} DESC
+        ORDER BY ${pk.Column_name} DESC
         LIMIT 1
         `, [NAME]);
 
-        dbValue[0] ? dbValue = dbValue[0][COLUMN_NAME] : dbValue = "000";
+        dbValue ? dbValue = dbValue[COLUMN_NAME] : dbValue = "000";
 
         let USER_CODE = parseInt(dbValue, 10) + 1;
 

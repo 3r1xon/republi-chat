@@ -3,6 +3,7 @@ import { io, Socket } from 'socket.io-client';
 import { server } from 'src/environments/server';
 import { Observable } from 'rxjs';
 import { UtilsService } from './utils.service';
+import { UserService } from './user.service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +11,8 @@ import { UtilsService } from './utils.service';
 export class WebSocketService {
 
   constructor(
-    private _utils: UtilsService
+    private _utils: UtilsService,
+    private _user: UserService
   ) {
     this.socket = io(server.WEB_SOCKET, {
       reconnection: true,
@@ -28,7 +30,8 @@ export class WebSocketService {
 
     this.listen("disconnect")
       .subscribe(() => {
-        this._utils.loading = true;
+        if (this._user.userAuth)
+          this._utils.loading = true;
       });
   }
 

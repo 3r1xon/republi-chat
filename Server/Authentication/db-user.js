@@ -1,4 +1,5 @@
-const db = require('../Database/db');
+const REPQuery = require('../Database/rep-query');
+
 
 class DBUser {
 
@@ -12,16 +13,18 @@ class DBUser {
 
         try {
 
-            const channelMemberID = await db.query(
+            const channelMemberID = await REPQuery.one(
             `
             SELECT ID_CHANNEL_MEMBER
             FROM CHANNELS_MEMBERS
             WHERE ID_CHANNEL = ?
             AND ID_USER = ?
-            `, [this.channelID, this.userID]);
+            AND BANNED = ?
+            AND KICKED = ?
+            `, [this.channelID, this.userID, false, false]);
 
-            if (channelMemberID[0]) {
-                this.channelMemberID = channelMemberID[0].ID_CHANNEL_MEMBER;
+            if (channelMemberID) {
+                this.channelMemberID = channelMemberID.ID_CHANNEL_MEMBER;
 
                 callback(null, this);
 
@@ -41,23 +44,23 @@ class DBUser {
 
         try {
 
-            let auth = await db.query(
+            const auth = await REPQuery.one(
             `
             SELECT CP.${permission}
             FROM CHANNELS_PERMISSIONS CP
+            LEFT JOIN CHANNELS_MEMBERS CM ON CM.ID_CHANNEL_MEMBER = CP.ID_CHANNEL_MEMBER
             WHERE CP.ID_CHANNEL_MEMBER = ?
-            AND CP.${permission} = ?
-            `, [this.channelMemberID, true]);
+            AND CM.BANNED = ?
+            AND CM.KICKED = ?
+            `, [this.channelMemberID, false, false]);
 
-            try {
-                auth = !!auth[0][permission];
-
+            if (!!auth[permission]) {
                 callback(null, this);
-
                 return this;
-            } catch {
-                callback(new Error("User does not have the required permission!"), null)
             }
+
+            callback(new Error("User does not have the required permission!"), null)
+
         } catch(err) {
             callback(err, null);
         }
@@ -67,14 +70,12 @@ class DBUser {
 
         try {
 
-            let chMbr = await db.query(
+            const chMbr = await REPQuery.one(
             `
             SELECT ID_CHANNEL_MEMBER
             FROM CHANNELS_MESSAGES
             WHERE ID_CHANNEL_MESSAGE = ?
             `, [id]);
-
-            chMbr = chMbr[0];
 
             if (chMbr.ID_CHANNEL_MEMBER == this.channelMemberID) {
                 callback(null, this);

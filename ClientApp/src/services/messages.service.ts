@@ -10,6 +10,7 @@ import { Channel } from 'src/interfaces/channel.interface';
 import { Subject, Subscription } from 'rxjs';
 import { first } from 'rxjs/operators';
 import { ChannelPermissions } from 'src/interfaces/channelPermissions.interface';
+import { UtilsService } from './utils.service';
 
 
 @Injectable({
@@ -21,6 +22,7 @@ export class MessagesService {
     private _user: UserService,
     private _fileUpload: FileUploadService,
     private _webSocket: WebSocketService,
+    private _utils: UtilsService,
     private http: HttpClient
   ) { 
 
@@ -36,7 +38,9 @@ export class MessagesService {
 
   public currentRoom: number;
 
-  public msSubscriptions: Array<Subscription> = [];
+  private msSubscriptions: Array<Subscription> = [];
+
+  private chSubscriptions: Array<Subscription> = [];
 
   /**
    * Get the current user channels.
@@ -49,6 +53,24 @@ export class MessagesService {
         (res) => {
           if (res.success) {
             this.channels = res.data;
+
+            this.destroyChSubscriptions();
+
+            this.chSubscriptions
+            .push(
+              this._webSocket.listen("ban")
+                .subscribe((banID) => {
+                  if (banID == this.chPermissions.id) {
+                    this.messages = [];
+                    // this.channels.find(channel => channel.)
+                    this._utils.showRequest(
+                      "Banned",
+                      "You have been banned!"
+                    );
+                  }
+                })
+            );
+
             this.channels$.next();
           }
         } 
@@ -128,13 +150,6 @@ export class MessagesService {
                       })
                 );
 
-                this.msSubscriptions
-                  .push(
-                    this._webSocket.listen("chChanges")
-                      .subscribe((change) => {
-
-                      })
-                  );
 
                 this.msSubscriptions
                 .push(
@@ -169,6 +184,10 @@ export class MessagesService {
 
   public getChPermissions(room: number) {
     return this.http.get<ServerResponse>(`${server.BASE_URL}/messages/getChannelPermissions/${room}`);
+  }
+
+  public leaveChannel(room: number) {
+    
   }
 
   /**
@@ -250,6 +269,17 @@ export class MessagesService {
       subscription.unsubscribe();
     });
     this.msSubscriptions = [];
+  }
+
+  /**
+   * Destroys the channel subscriptions.
+   *
+   */
+  public destroyChSubscriptions() {
+    this.chSubscriptions.map((subscription) => {
+      subscription.unsubscribe();
+    });
+    this.chSubscriptions = [];
   }
 
 }

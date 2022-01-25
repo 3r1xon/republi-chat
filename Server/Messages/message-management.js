@@ -1,7 +1,7 @@
 const express        = require('express');
 const Auth           = require('../Authentication/auth');
 const router         = express.Router();
-const db             = require('../Database/db');
+const REPQuery       = require('../Database/rep-query');
 const fm             = require('date-fns');
 const io             = require('../start');
 const DBUser         = require('../Authentication/db-user');
@@ -28,7 +28,7 @@ router.get('/getChannelMessages/:id/:limit', async (req, res) => {
 
         const limit = req.params.limit;
 
-        const messages = await db.query(
+        const messages = await REPQuery.load(
         `
         SELECT
         M.ID_CHANNEL_MESSAGE as id,
@@ -73,7 +73,7 @@ router.get("/getChannelPermissions/:id", async (req, res) => {
 
       try {
 
-        let permissions = await db.query(
+        const permissions = await REPQuery.one(
         `
         SELECT
         ID_CHANNEL_MEMBER as id,
@@ -84,8 +84,6 @@ router.get("/getChannelPermissions/:id", async (req, res) => {
         FROM CHANNELS_PERMISSIONS
         WHERE ID_CHANNEL_MEMBER = ?
         `, [user.channelMemberID]);
-
-        permissions = permissions[0];
 
         const _id = permissions.id;
 
@@ -142,7 +140,7 @@ io.on("connection", (socket) => {
 
         try {
 
-          let _id = await db.query(
+          const chMsg = await REPQuery.one(
           `
           INSERT INTO CHANNELS_MESSAGES
           (ID_CHANNEL, ID_CHANNEL_MEMBER, MESSAGE, DATE)
@@ -151,9 +149,7 @@ io.on("connection", (socket) => {
           RETURNING ID_CHANNEL_MESSAGE
           `, [user.channelID, user.channelMemberID, msg, new Date()]);
 
-          _id = _id[0].ID_CHANNEL_MESSAGE;
-
-          let message = await db.query(
+          const message = await REPQuery.one(
           `
           SELECT
           M.ID_CHANNEL_MESSAGE as id,
@@ -168,9 +164,7 @@ io.on("connection", (socket) => {
           LEFT JOIN CHANNELS_MEMBERS CM ON CM.ID_CHANNEL_MEMBER = M.ID_CHANNEL_MEMBER
           LEFT JOIN USERS U ON U.ID_USER = CM.ID_USER
           WHERE M.ID_CHANNEL_MESSAGE = ?
-          `, [_id]);
-
-          message = message[0];
+          `, [chMsg.ID_CHANNEL_MESSAGE]);
 
           io.to(room).emit("message", JSON.stringify(message));
         } catch (error) {
@@ -188,7 +182,7 @@ io.on("connection", (socket) => {
 
       const delMsg = async () => {
         try {
-          await db.query(
+          await REPQuery.exec(
           `
           DELETE FROM CHANNELS_MESSAGES 
           WHERE ID_CHANNEL_MESSAGE = ?

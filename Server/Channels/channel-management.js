@@ -2,14 +2,14 @@ const express        = require('express');
 const Auth           = require('../Authentication/auth');
 const REPTools       = require('../Tools/rep-tools');
 const router         = express.Router();
-const db             = require('../Database/db');
+const REPQuery       = require('../Database/rep-query');
 const multer         = require('multer');
 const upload         = multer({});
 const fm             = require('date-fns');
 const io             = require('../start');
 const clc            = require('cli-color');
 const DBUser         = require('../Authentication/db-user');
-
+const permissions    = require('../Authentication/permissions');
 
 
 router.use(Auth.HTTPAuthToken);
@@ -36,7 +36,7 @@ router.post('/createChannel', upload.single("image"), async (req, res) => {
 
         const _userID = res.locals._id;
 
-        let _channelID = await db.query(
+        const dbChannel = await REPQuery.one(
         `
         INSERT INTO CHANNELS
         (ID_USER, NAME, CHANNEL_CODE, PICTURE, CREATION_DATE)
@@ -45,26 +45,22 @@ router.post('/createChannel', upload.single("image"), async (req, res) => {
         RETURNING ID_CHANNEL
         `, [_userID, channel.name, code, channel.picture, creationDate]);
 
-        _channelID = _channelID[0].ID_CHANNEL;
-
-        let _channelMemberID = await db.query(
+        const chMember = await REPQuery.one(
         `
         INSERT INTO CHANNELS_MEMBERS
         (ID_USER, ID_CHANNEL)
         VALUES
         (?, ?)
         RETURNING ID_CHANNEL_MEMBER
-        `, [_userID, _channelID]);
+        `, [_userID, dbChannel.ID_CHANNEL]);
 
-        _channelMemberID = _channelMemberID[0].ID_CHANNEL_MEMBER;
-
-        await db.query(
+        await REPQuery.exec(
         `
         INSERT INTO CHANNELS_PERMISSIONS
         (ID_CHANNEL_MEMBER)
         VALUES
         (?)
-        `, [_channelMemberID]);
+        `, [chMember.ID_CHANNEL_MEMBER]);
 
         res.status(201).send({ success: true });
 
@@ -86,26 +82,24 @@ router.post('/addChannel', async (req, res) => {
 
   try {
 
-    let channel = await db.query(
+    const channel = await REPQuery.one(
     `
     SELECT 
     ID_CHANNEL
     FROM CHANNELS
     WHERE NAME = ? AND CHANNEL_CODE = ?
     `, [name, code]);
-  
-    channel = channel[0];
-  
+
     if (channel) {
-  
+
       const _channelID = channel.ID_CHANNEL;
-  
+
       const user = new DBUser(_userID);
-  
+
       user.setChannel(_channelID, async (err, user) => {
         if (err) {
           // It means the user is not in the desired channel so it can be added
-          let member = await db.query(
+          const member = await REPQuery.one(
           `
           INSERT INTO CHANNELS_MEMBERS
           (ID_USER, ID_CHANNEL)
@@ -113,21 +107,19 @@ router.post('/addChannel', async (req, res) => {
           (?, ?)
           RETURNING ID_CHANNEL_MEMBER
           `, [_userID, _channelID]);
-  
-          member = member[0].ID_CHANNEL_MEMBER
-  
-          await db.query(
+
+          await REPQuery.exec(
           `
           INSERT INTO CHANNELS_PERMISSIONS
           (ID_CHANNEL_MEMBER)
           VALUES
           (?)
           `, [member]);
-  
+
           res.status(201).send({ success: true });
-  
+
         } else {
-  
+
           res.status(409).send({ success: false, message: "User already in channel!" });
         }
       });
@@ -148,17 +140,19 @@ router.get('/getChannels', async (req, res) => {
 
     const _id = res.locals._id;
 
-    const channels = await db.query(
+    const channels = await REPQuery.load(
     `
     SELECT
     C.ID_CHANNEL as _id,
     C.NAME as name,
     C.CHANNEL_CODE as message,
     C.PICTURE as picture
-    FROM CHANNELS_MEMBERS CM
-    LEFT JOIN CHANNELS C ON C.ID_CHANNEL = CM.ID_CHANNEL
+    FROM CHANNELS C
+    LEFT JOIN CHANNELS_MEMBERS CM ON CM.ID_CHANNEL = C.ID_CHANNEL
     WHERE CM.ID_USER = ?
-    `, [_id]);
+    AND CM.BANNED = ?
+    AND CM.KICKED = ?
+    `, [_id, false, false]);
 
     res.status(200).send({ success: true, data: channels });
 
@@ -178,18 +172,59 @@ io.on("connection", (socket) => {
   const user = new DBUser(userID);
 
   socket.on("ban", (chInfo) => {
-    user?.hasPermission(permissions.banMembers, async (err) => {
+    const rqRoom = chInfo.room;
+    const _memberID = chInfo._id;
+
+    user.setChannel(rqRoom, (err) => {
       if (err) {
         console.log(clc.red(err));
       } else {
-        const rqRoom = chInfo.room;
-        const _id = chInfo._id;
 
-        if (user.channelMemberID != _id) {
-          console.log("banned!")
-        }
+        user.hasPermission(permissions.banMembers, async (err) => {
+          if (err) {
+            console.log(clc.red(err));
+          } else {
+
+            if (user.channelMemberID != _memberID) {
+              try {
+                const user = await REPQuery.one(
+                `
+                UPDATE 
+                CHANNELS_MEMBERS
+                SET
+                BANNED = ?
+                WHERE ID_CHANNEL_MEMBER = ?
+                AND ID_CHANNEL = ?
+                `, [true, _memberID, rqRoom]);
+
+                userID = userID[0].ID_USER;
+
+                const socketIDs = await REPQuery.load(
+                `
+                SELECT
+                SOCKET_ID
+                FROM SESSIONS
+                WHERE ID_USER = ?
+                `, [userID]);
+
+                console.log(socketIDs);
+
+                io.to(rqRoom).emit("ban", _memberID);
+
+                socketIDs?.map((id) => {
+                  io.to(id).emit("ban", _memberID);
+                  io.to(id).leave(rqRoom);
+                });
+
+              } catch(error) {
+                console.log(clc.red(error));
+              }
+            }
+          }
+        });
       }
     });
+
   });
 
 
