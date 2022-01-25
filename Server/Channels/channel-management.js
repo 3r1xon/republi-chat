@@ -57,10 +57,10 @@ router.post('/createChannel', upload.single("image"), async (req, res) => {
         await REPQuery.exec(
         `
         INSERT INTO CHANNELS_PERMISSIONS
-        (ID_CHANNEL_MEMBER)
+        (ID_CHANNEL_MEMBER, DELETE_MESSAGE, KICK_MEMBERS, BAN_MEMBERS, SEND_MESSAGES)
         VALUES
-        (?)
-        `, [chMember.ID_CHANNEL_MEMBER]);
+        (?, ?, ?, ?, ?)
+        `, [chMember.ID_CHANNEL_MEMBER, true, true, true, true]);
 
         res.status(201).send({ success: true });
 
@@ -114,7 +114,7 @@ router.post('/addChannel', async (req, res) => {
           (ID_CHANNEL_MEMBER)
           VALUES
           (?)
-          `, [member]);
+          `, [member.ID_CHANNEL_MEMBER]);
 
           res.status(201).send({ success: true });
 
@@ -187,17 +187,23 @@ io.on("connection", (socket) => {
 
             if (user.channelMemberID != _memberID) {
               try {
+                // await REPQuery.exec(
+                // `
+                // UPDATE 
+                // CHANNELS_MEMBERS
+                // SET
+                // BANNED = ?
+                // WHERE ID_CHANNEL_MEMBER = ?
+                // AND ID_CHANNEL = ?
+                // `, [true, _memberID, rqRoom]);
+
                 const user = await REPQuery.one(
                 `
-                UPDATE 
-                CHANNELS_MEMBERS
-                SET
-                BANNED = ?
+                SELECT
+                ID_USER
+                FROM CHANNELS_MEMBERS
                 WHERE ID_CHANNEL_MEMBER = ?
-                AND ID_CHANNEL = ?
-                `, [true, _memberID, rqRoom]);
-
-                userID = userID[0].ID_USER;
+                `, [_memberID]);
 
                 const socketIDs = await REPQuery.load(
                 `
@@ -205,15 +211,16 @@ io.on("connection", (socket) => {
                 SOCKET_ID
                 FROM SESSIONS
                 WHERE ID_USER = ?
-                `, [userID]);
-
-                console.log(socketIDs);
+                `, [user.ID_USER]);
 
                 io.to(rqRoom).emit("ban", _memberID);
 
                 socketIDs?.map((id) => {
-                  io.to(id).emit("ban", _memberID);
-                  io.to(id).leave(rqRoom);
+                  console.log(id.SOCKET_ID);
+                  console.log(io.sockets.adapter.rooms[id.SOCKET_ID]);
+                  // const wsUser = io.sockets.clients(id.SOCKET_ID);
+                  // // io.to(id).emit("ban", _memberID);
+                  // wsUser.leave(rqRoom);
                 });
 
               } catch(error) {
