@@ -30,7 +30,7 @@ export class REPErrorComponent implements OnInit {
       background: "warning",
       icon: "report_problem",
       enabled: () => true,
-      visible: () => true,
+      visible: () => this._utils.bugReport.send,
       onClick: () => {
         console.log("Report unavailable");
       }

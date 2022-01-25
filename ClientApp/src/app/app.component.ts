@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { CookieService } from 'ngx-cookie-service';
 import { UserService } from 'src/services/user.service';
 import { UtilsService } from 'src/services/utils.service';
 
@@ -12,10 +13,12 @@ export class AppComponent implements OnInit {
 
   constructor(
     private _user: UserService,
+    private cookieService: CookieService,
     public _utils: UtilsService
     ) { }
 
   async ngOnInit() {
-    await this._user.authorize();
+    if (this.cookieService.get("sid"))
+      await this._user.authorize();
   }
 }

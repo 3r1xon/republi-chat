@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { io, Socket } from 'socket.io-client';
 import { server } from 'src/environments/server';
 import { Observable } from 'rxjs';
+import { UtilsService } from './utils.service';
 
 @Injectable({
   providedIn: 'root'
@@ -9,18 +10,26 @@ import { Observable } from 'rxjs';
 export class WebSocketService {
 
   constructor(
-  ) { 
+    private _utils: UtilsService
+  ) {
     this.socket = io(server.WEB_SOCKET, {
       reconnection: true,
-      reconnectionDelay: 5000,
-      reconnectionDelayMax: 10000,
+      reconnectionDelay: 2500,
+      reconnectionDelayMax: 5000,
       reconnectionAttempts: 20,
       transports: ['websocket'],
-      upgrade: false,
-      query: {
-        SESSION_ID: "Test"
-      }
+      upgrade: false
     });
+
+    this.listen("connect")
+      .subscribe(() => {
+        this._utils.loading = false;
+      });
+
+    this.listen("disconnect")
+      .subscribe(() => {
+        this._utils.loading = true;
+      });
   }
 
   public socket: Socket;

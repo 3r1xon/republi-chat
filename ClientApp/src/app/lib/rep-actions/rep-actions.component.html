@@ -3,6 +3,7 @@
     <rep-button *ngFor="let button of actions"
         [enabled]="button.enabled == undefined ? true : button.enabled"
         [background]="button.background"
+        [visible]="button.visible()"
         [icon]="button.icon"
         (onClick)="button.onClick()">
         {{button.name}}

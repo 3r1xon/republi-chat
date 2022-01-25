@@ -79,13 +79,16 @@ export class UtilsService {
    *
    * @param callstack The error callstack.
    * 
+   * @param send If the send report button must be shown.
+   * 
    */
-  public showBugReport(title: string, callstack: string) {
+  public showBugReport(title: string, callstack: string, send = true) {
 
     this.bugReport = {
       title: title,
       callstack: callstack,
-      visible: true
+      visible: true,
+      send: send,
     };
 
   }

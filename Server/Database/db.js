@@ -1,8 +1,10 @@
 const mariadb = require('mariadb');
+const dotenv  = require('dotenv'); 
+dotenv.config();
 
 module.exports = mariadb.createPool({
-    host: '127.0.0.1',
-    user: 'root',
-    password: 'root',
-    database: 'republichat'
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DATABASE
 });

@@ -7,7 +7,7 @@ const upload         = multer({});
 const db             = require('../Database/db');
 const crypto         = require('crypto');
 const io             = require('../start');
-
+const model          = require('nanoid');
 
 
 router.post('/signUp', async (req, res) => {
@@ -56,7 +56,7 @@ router.post('/signUp', async (req, res) => {
 
 
 
-router.post('/authorize', Auth.authToken, async (req, res) => {
+router.post('/authorize', Auth.HTTPAuthToken, async (req, res) => {
 
   try {
 
@@ -95,8 +95,6 @@ router.post('/logIn', async (req, res) => {
     password: crypto.createHash('sha256').update(req.body.password).digest('hex'),
   };
 
-  console.log(req.session.id);
-
   const { BROWSER } = req.body;
 
   try {
@@ -118,12 +116,12 @@ router.post('/logIn', async (req, res) => {
 
     if (dbUser) {
 
-      const SESSION_ID = req.session.id;
+      const sid = model.nanoid(process.env.SID_SIZE);
 
       await db.query(
       `
       INSERT INTO SESSIONS
-      (ID_USER, BROWSER_NAME, BROWSER_VERSION, LATITUDE, LONGITUDE, DATE, SESSION_ID)
+      (ID_USER, BROWSER_NAME, BROWSER_VERSION, LATITUDE, LONGITUDE, DATE, SID)
       VALUES
       (?, ?, ?, ?, ?, ?, ?)
       `, [
@@ -133,12 +131,10 @@ router.post('/logIn', async (req, res) => {
         BROWSER.latitude,
         BROWSER.longitude,
         new Date(),
-        SESSION_ID
+        sid
       ]);
 
-      const oneYear = new Date(new Date().setFullYear(new Date().getFullYear() + 1));
-
-      res.cookie("SESSION_ID", SESSION_ID, { expires: oneYear, httpOnly: true });
+      res.cookie("sid", sid);
 
       // Session ID created only at login time
       res.status(200).send({ success: true, data: {
@@ -157,23 +153,23 @@ router.post('/logIn', async (req, res) => {
 
 
 
-router.delete('/logout', Auth.authToken, async (req, res) => {
+router.delete('/logout', Auth.HTTPAuthToken, async (req, res) => {
 
   const userID     = res.locals._id;
-  const SESSION_ID = res.locals.SESSION_ID;
-
-  res.clearCookie("SESSION_ID");
+  const sid        = res.locals.sid;
 
   try {
-
+    console.log(userID)
+    console.log(sid)
     await db.query(
     `
     DELETE
     FROM SESSIONS
     WHERE ID_USER = ?
-    AND SESSION_ID = ?
-    `, [userID, SESSION_ID]);
+    AND SID = ?
+    `, [userID, sid]);
 
+    res.clearCookie("sid");
     res.status(200).send({ success: true });
 
   } catch(err) {
@@ -185,7 +181,7 @@ router.delete('/logout', Auth.authToken, async (req, res) => {
 
 
 
-router.put('/editProfile', [Auth.authToken, upload.single("image")], async (req, res) => {
+router.put('/editProfile', [Auth.HTTPAuthToken, upload.single("image")], async (req, res) => {
 
   const file = req.file.buffer;
 
@@ -218,13 +214,13 @@ router.put('/editProfile', [Auth.authToken, upload.single("image")], async (req,
 
 
 
-router.delete('/deleteProfile', Auth.authToken, async (req, res) => {
+router.delete('/deleteProfile', Auth.HTTPAuthToken, async (req, res) => {
 
   try {
     
     const _id = res.locals._id;
 
-    res.clearCookie("SESSION_ID");
+    res.clearCookie("sid");
 
     await db.query(
     `
@@ -247,7 +243,7 @@ router.delete('/deleteProfile', Auth.authToken, async (req, res) => {
 
 
 
-router.get('/getDevices', Auth.authToken, async (req, res) => {
+router.get('/getDevices', Auth.HTTPAuthToken, async (req, res) => {
 
   const userID = res.locals._id;
 
@@ -260,18 +256,18 @@ router.get('/getDevices', Auth.authToken, async (req, res) => {
     BROWSER_NAME as browserName,
     BROWSER_VERSION as browserVersion,
     DATE as date,
-    SESSION_ID
+    SID as sid
     FROM SESSIONS
     WHERE ID_USER = ?
     `, [userID]);
 
     devices.map((device) => {
-      if (device.SESSION_ID == res.locals.SESSION_ID) {
+      if (device.sid == res.locals.sid) {
         device.current = true;
       } else {
         device.current = false;
       }
-      delete device.SESSION_ID;
+      delete device.sid;
     });
 
     res.status(201).send({
@@ -288,7 +284,7 @@ router.get('/getDevices', Auth.authToken, async (req, res) => {
 
 
 
-router.delete('/disconnectDevice/:id', Auth.authToken, async (req, res) => {
+router.delete('/disconnectDevice/:id', Auth.HTTPAuthToken, async (req, res) => {
 
   try {
     
@@ -302,12 +298,12 @@ router.delete('/disconnectDevice/:id', Auth.authToken, async (req, res) => {
     WHERE 
     ID_SESSION = ?
     AND ID_USER = ?
-    RETURNING SESSION_ID
+    RETURNING SID
     `, [_id, userID]);
-    
+
     session = session[0];
 
-    io.emit(session.SESSION_ID, "forceKick");
+    io.emit(session.SID, "forceKick");
 
     res.status(201).send({ 
       success: true,

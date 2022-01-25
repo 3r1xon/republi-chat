@@ -7,13 +7,12 @@
 
     <div id="form">
 
-        
         <div id="rect"></div>
-        
+
         <form id="login-form" (ngSubmit)="logIn()" [formGroup]="form">
-            
+
             <h1>Log in</h1>
-            
+
             <rep-input
             formControlName="email" 
             placeholder="Email"
@@ -34,9 +33,9 @@
             <p>{{alert}}</p>
 
             <a routerLink="/signup">Not registered? Sign up</a>
-            
+
         </form>
-        
+
     </div>
 
     <rep-footer></rep-footer>

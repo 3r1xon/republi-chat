@@ -9,7 +9,7 @@ const permissions    = require('../Authentication/permissions');
 const clc            = require('cli-color');
 
 
-router.use(Auth.authToken);
+router.use(Auth.HTTPAuthToken);
 
 
 
@@ -111,17 +111,15 @@ router.get("/getChannelPermissions/:id", async (req, res) => {
 
 io.on("connection", (socket) => {
 
-  let room;
+  const userID = socket.auth._id;
 
-  let user;
+  const user = new DBUser(userID);
+
+  let room;
 
   socket.on("joinChannel", (obj) => {
 
-    const { userID } = obj;
-
     const joinedRoom = obj.room;
-
-    user = new DBUser(userID);
 
     socket.leave(room);
 

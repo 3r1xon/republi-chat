@@ -45,7 +45,7 @@ export class PMainpageComponent implements OnInit {
     });
 
     this.sessionSubscription?.unsubscribe();
-    this.sessionSubscription = this._webSocket.listen(this.cookieService.get("SESSION_ID"))
+    this.sessionSubscription = this._webSocket.listen(this.cookieService.get("sid"))
       .subscribe((status) => {
         if (status == "forceKick")
           this._user.logOut(true);

@@ -8,11 +8,11 @@ class Auth {
    * Middlware that authenticate the user in the HTTP Request.
    * 
    */
-    static authToken = async (req, res, next) => {
+    static HTTPAuthToken = async (req, res, next) => {
 
-        const SESSION_ID = req.cookies["SESSION_ID"];
+        const sid = req.cookies["sid"];
 
-        if (SESSION_ID) {
+        if (sid) {
 
             try {
 
@@ -21,22 +21,61 @@ class Auth {
                 SELECT
                 S.ID_USER
                 FROM SESSIONS S
-                WHERE S.SESSION_ID  = ?
-                `, [SESSION_ID]);
+                WHERE S.SID = ?
+                `, [sid]);
 
                 dbUser = dbUser[0];
 
                 if (dbUser) {
                     res.locals._id = dbUser.ID_USER;
-                    res.locals.SESSION_ID = SESSION_ID;
+                    res.locals.sid = sid;
                     next();
-                } else res.status(401).send({ success: false, message: "Session expired or invalid token!" });
+                } else { 
+                    res.clearCookie("sid");
+                    res.status(401).send({ success: false, message: "Session expired or invalid token!" })
+                };
             } catch(err) {
-                console.log(clc.red(error));
+                console.log(clc.red(err));
+
                 res.status(500).send({ success: false, message: "Internal server error!" });
             }
-        } else res.status(401).send({ success: false, message: "No token provided!" });
+        } else {
+            res.clearCookie("sid");
+            res.status(401).send({ success: false, message: "No token provided!" })
+        };
     };
+
+
+
+    static WSAuthToken = async (socket, next) => {
+
+        try {
+
+            const sid = socket.request.headers.cookie.split("sid=")[1];
+
+            let dbUser = await db.query(
+            `
+            SELECT
+            S.ID_USER
+            FROM SESSIONS S
+            WHERE S.SID = ?
+            `, [sid]);
+
+            dbUser = dbUser[0];
+
+            if (dbUser) {
+              socket.auth = {
+                _id: dbUser.ID_USER,
+                sid: sid
+              };
+              next();
+            } else { 
+              socket.disconnect();
+            };
+        } catch(err) {
+            console.log(clc.red(err));
+        }
+    }
 
 }
 

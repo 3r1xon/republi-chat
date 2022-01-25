@@ -4,37 +4,27 @@ const app            = express();
 const port           = 3000;
 const dotenv         = require('dotenv'); 
 const cookieParser   = require('cookie-parser');
-const session        = require('express-session');
+const Auth           = require('./Authentication/auth');
 const server         = app.listen(port, () => { console.log(`Server listening at http://localhost:${port}`); });
 
 const corsOptions = {
-  origin: "http://localhost:4200",
+  origin: process.env.CORS_ORIGIN,
   credentials: true,
-  exposedHeaders: ['SESSION_ID'],
+  exposedHeaders: ['sid'],
 };
 
 const io = require('socket.io')(server, {
   cors: corsOptions
 });
+io.use(Auth.WSAuthToken);
 module.exports = io;
-
 
 
 dotenv.config();
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser());
-app.use(session({
-  name: "SESSION_ID",
-  secret: process.env.SECRET_KEY,
-  resave: false,
-  saveUninitialized: false,
-  cookie: { 
-    secure: true,
-    httpOnly: true,
-    sameSite: "none"
-  }
-}));
+
 
 // Get the exact time of the request, available for every request.
 app.use((req, res, next) => { 
@@ -55,8 +45,3 @@ app.get('/', (req, res) => {
 });
 
 
-
-io.use((socket, next) => {
-  // console.log(socket);
-  next();
-});

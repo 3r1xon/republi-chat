@@ -11,7 +11,8 @@ const clc            = require('cli-color');
 const DBUser         = require('../Authentication/db-user');
 
 
-router.use(Auth.authToken);
+
+router.use(Auth.HTTPAuthToken);
 
 
 
@@ -172,22 +173,24 @@ router.get('/getChannels', async (req, res) => {
 
 io.on("connection", (socket) => { 
 
-  let user;
+  const userID = socket.auth._id;
 
-  // socket.on("ban", (chInfo) => {
-  //   user?.hasPermission(permissions.banMembers, async (err) => {
-  //     if (err) {
-  //       console.log(clc.red(err));
-  //     } else {
-  //       const rqRoom = chInfo.room;
-  //       const _id = chInfo._id;
+  const user = new DBUser(userID);
 
-  //       if (user.channelMemberID != _id) {
-  //         console.log("banned!")
-  //       }
-  //     }
-  //   });
-  // });
+  socket.on("ban", (chInfo) => {
+    user?.hasPermission(permissions.banMembers, async (err) => {
+      if (err) {
+        console.log(clc.red(err));
+      } else {
+        const rqRoom = chInfo.room;
+        const _id = chInfo._id;
+
+        if (user.channelMemberID != _id) {
+          console.log("banned!")
+        }
+      }
+    });
+  });
 
 
 

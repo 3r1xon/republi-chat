@@ -140,7 +140,6 @@ export class MessagesService {
                 .push(
                   this._webSocket.listen("connect")
                     .subscribe(() => {
-                      console.log("%cConnected", "color: green;");
                       const room = this.currentRoom;
 
                       if (this.currentRoom) {
@@ -155,7 +154,6 @@ export class MessagesService {
                 .push(
                   this._webSocket.listen("disconnect")
                     .subscribe(() => {
-                      console.log("%cDisconnected!", "color: red;");
                     })
                 );
               }
