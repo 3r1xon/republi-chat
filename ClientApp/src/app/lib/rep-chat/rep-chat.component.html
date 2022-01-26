@@ -12,7 +12,7 @@
 
   <div id="textbox">
 
-    <rep-textbox [enabled]="textboxEnabled" (sendMessage)="send($event)"></rep-textbox>
+    <rep-textbox [msgMaxLength]="msgMaxLength" [enabled]="textboxEnabled" (sendMessage)="send($event)"></rep-textbox>
 
   </div>
 

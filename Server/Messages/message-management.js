@@ -9,6 +9,7 @@ const permissions    = require('../Authentication/permissions');
 const clc            = require('cli-color');
 
 
+
 router.use(Auth.HTTPAuthToken);
 
 
@@ -25,8 +26,8 @@ router.get('/getChannelMessages/:id/:limit', async (req, res) => {
     } else {
 
       try {
-
-        const limit = req.params.limit;
+        // Ensures limit is a number
+        const limit = parseInt(req.params.limit);
 
         const messages = await REPQuery.load(
         `
@@ -117,98 +118,29 @@ io.on("connection", (socket) => {
 
   socket.on("joinChannel", (obj) => {
 
-    const joinedRoom = obj.room;
+    const rqRoom = obj.room;
 
     socket.leave(room);
 
-    user?.setChannel(joinedRoom, async (err) => {
+    user.setChannel(rqRoom, async (err) => {
       if (err) {
         console.log(clc.yellow(err));
       } else {
-        socket.join(joinedRoom);
-        room = joinedRoom;
+        socket.join(rqRoom);
+        room = rqRoom;
       }
     });
   });
 
   socket.on("message", (msg) => {
 
-    user?.hasPermission(permissions.sendMessages, async (err) => {
-      if (err) {
-        console.log(clc.yellow(err));
-      } else {
-
-        try {
-
-          const chMsg = await REPQuery.one(
-          `
-          INSERT INTO CHANNELS_MESSAGES
-          (ID_CHANNEL, ID_CHANNEL_MEMBER, MESSAGE, DATE)
-          VALUES
-          (?, ?, ?, ?)
-          RETURNING ID_CHANNEL_MESSAGE
-          `, [user.channelID, user.channelMemberID, msg, new Date()]);
-
-          const message = await REPQuery.one(
-          `
-          SELECT
-          M.ID_CHANNEL_MESSAGE as id,
-          U.USER_CODE as code,
-          U.COLOR as color,
-          U.NAME as name,
-          CM.ID_CHANNEL_MEMBER as author,
-          TO_BASE64(U.PROFILE_PICTURE) as picture,
-          M.MESSAGE as message,
-          M.DATE as date
-          FROM CHANNELS_MESSAGES M
-          LEFT JOIN CHANNELS_MEMBERS CM ON CM.ID_CHANNEL_MEMBER = M.ID_CHANNEL_MEMBER
-          LEFT JOIN USERS U ON U.ID_USER = CM.ID_USER
-          WHERE M.ID_CHANNEL_MESSAGE = ?
-          `, [chMsg.ID_CHANNEL_MESSAGE]);
-
-          io.to(room).emit("message", JSON.stringify(message));
-        } catch (error) {
-          console.log(error);
-        }
-      }
-    });
+    user.sendMessage(msg);
 
   });
 
   socket.on("deleteMessage", (msgID) => {
 
-    // Checks if the message being delete belongs to the user
-    user?.msgBelong(msgID, (noAuth) => {
-
-      const delMsg = async () => {
-        try {
-          await REPQuery.exec(
-          `
-          DELETE FROM CHANNELS_MESSAGES 
-          WHERE ID_CHANNEL_MESSAGE = ?
-          `, [msgID]);
-
-          io.to(room).emit("deleteMessage", `${msgID}`);
-
-        } catch (error) {
-          console.log(clc.red(error));
-        }
-      }
-
-      if (noAuth) {
-        // If the message does not belong to the user then the latter
-        // must be authorized to delete other people messages
-        user?.hasPermission(permissions.deleteMessage, async (err, user) => {
-          if (err) {
-            console.log(clc.red(err));
-          } else {
-            delMsg();
-          }
-        });
-      } else {
-        delMsg();
-      }
-    });
+    user.deleteMessage(msgID);
 
   });
 

@@ -1,14 +1,16 @@
-<div id="text-box">
+<form id="text-box" [formGroup]="form">
 
     <button id="upload" (click)="uploadIMG()" [style.cursor]="enabled ? 'pointer' : 'not-allowed' ">
         <mat-icon>upload</mat-icon>
     </button>
 
     <rep-textarea
-    id="text" 
-    (send)="send()" 
+    formControlName="text"
+    id="text"
+    (send)="send()"
     [enabled]="enabled"
-    [(text)]="message" 
+    [maxLength]="msgMaxLength"
+    [(text)]="message"
     placeholder="Write anything..."
     >
     </rep-textarea>
@@ -17,4 +19,4 @@
         <mat-icon>send</mat-icon>
     </button>
 
-</div>
+</form>

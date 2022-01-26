@@ -40,6 +40,9 @@ export class REPChatComponent implements AfterViewInit {
   @Input()
   public msOptions: Array<REPButton>;
 
+  @Input()
+  public msgMaxLength: number = 2000;
+
   @Output()
   public sendMessage = new EventEmitter();
 

@@ -1,16 +1,28 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, forwardRef, OnInit } from '@angular/core';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 @Component({
   selector: 'rep-textarea',
   templateUrl: './rep-textarea.component.html',
-  styleUrls: ['./rep-textarea.component.scss']
+  styleUrls: ['./rep-textarea.component.scss'],
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      multi: true,
+      useExisting: forwardRef(() => REPTextareaComponent)
+    }
+  ],
 })
-export class REPTextareaComponent implements OnInit {
+export class REPTextareaComponent implements OnInit, ControlValueAccessor {
 
-  constructor() { }
+  constructor(
+  ) { }
 
   ngOnInit(): void {
+    this.prevValue = this.text;
   }
+
+  private prevValue: string;
 
   @Input()
   public enabled: boolean = true;
@@ -30,6 +42,9 @@ export class REPTextareaComponent implements OnInit {
   @Input()
   public background: string = "#95959536";
 
+  @Input()
+  public maxLength: number = 2000;
+
   @Output()
   public send = new EventEmitter();
 
@@ -41,8 +56,24 @@ export class REPTextareaComponent implements OnInit {
     this.send.emit(this.text);
   }
 
-  onChange() {
+  onChange: any = () => {
     this.textChange.emit(this.text);
+  }
+
+  onTouch: any = () => {};
+
+  registerOnChange(fn: any): void {
+    this.onChange = fn;
+  }
+
+  registerOnTouched(fn: any): void {
+    if (this.text != this.prevValue) {
+      this.onTouch = fn;
+    }
+  }
+
+  writeValue(text: string) {
+    this.text = text;
   }
 
 }

@@ -3,16 +3,17 @@
         'enabled': enabled
     }">
 
-    <textarea 
-    id="text" 
-    [rows]="rows" 
-    [cols]="cols" 
-    (keydown.enter)="submitHandler($event)" 
+    <textarea
+    id="text"
+    [rows]="rows"
+    [cols]="cols"
+    [maxLength]="maxLength"
+    (keydown.enter)="submitHandler($event)"
+    [(ngModel)]="text"
+    (ngModelChange)="onChange($event)"
     [disabled]="!enabled"
     [style.cursor]="enabled ? 'text' : 'not-allowed'"
     [style.background]="background"
-    [(ngModel)]="text"
-    (ngModelChange)="onChange()"
     [placeholder]="enabled ? placeholder : ''"></textarea>
 
 </div>

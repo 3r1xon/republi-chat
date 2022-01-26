@@ -36,9 +36,9 @@ export class REPWindowComponent {
   @ViewChild('submenu')
   private submenu: ElementRef;
 
-  public offsetX;
+  public offsetX: number;
 
-  public offsetY;
+  public offsetY: number;
 
   openSubMenu(event) {
 

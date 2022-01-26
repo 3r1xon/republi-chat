@@ -8,23 +8,20 @@ const REPQuery       = require('../Database/rep-query');
 const crypto         = require('crypto');
 const io             = require('../start');
 const model          = require('nanoid');
-const Ajv            = require('ajv');
-const user_schema    = require('../Tools/schemas');
-const ajv            = new Ajv();
-
-const validate_user  = ajv.compile(user_schema);
-
+const userSchema     = require('../Tools/schemas');
 
 
 router.post('/signUp', async (req, res) => {
 
   const user = {
+    name: req.body.name,
     email: req.body.email,
     password: req.body.password,
-    name: req.body.name,
   };
-  console.log(validate_user(user))
-  if (!validate_user(user))
+
+  const { error } = userSchema.validate(user);
+
+  if (error)
     res.status(400).send({ success: false, message: 'Invalid fields!' });
   else {
 

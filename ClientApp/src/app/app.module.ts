@@ -69,7 +69,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
     REPInfoComponent,
     REPStatusBarComponent,
     REPProfilePicComponent,
-    
+
     PChannelSettingsComponent,
     PSignupComponent,
     PLoginComponent,
@@ -80,7 +80,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
     PUnauthorizedComponent,
     PNewChannelComponent,
     PNotFoundComponent,
-    
+
     StopPropagationDirective,
   ],
   imports: [

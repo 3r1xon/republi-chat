@@ -31,10 +31,10 @@ create or replace table republichat.channels_members
 (
     ID_CHANNEL_MEMBER bigint auto_increment
         primary key,
-    ID_CHANNEL        bigint     not null,
-    ID_USER           bigint     not null,
-    BANNED            tinyint(1) null,
-    `LEFT`            tinyint(1) null,
+    ID_CHANNEL        bigint               not null,
+    ID_USER           bigint               not null,
+    BANNED            tinyint(1) default 0 null,
+    KICKED            tinyint(1) default 0 null,
     constraint CHANNELS_MEMBERS_CHANNELS_ID_CHANNEL_fk
         foreign key (ID_CHANNEL) references republichat.channels (ID_CHANNEL)
             on update cascade on delete cascade
@@ -76,6 +76,7 @@ create or replace table republichat.sessions
         primary key,
     ID_USER         bigint      not null,
     SID             varchar(50) not null,
+    SOCKET_ID       varchar(30) null,
     BROWSER_NAME    varchar(30) null,
     BROWSER_VERSION varchar(30) null,
     LATITUDE        varchar(30) null,
@@ -83,6 +84,8 @@ create or replace table republichat.sessions
     DATE            datetime    null,
     constraint sessions_SESSION_ID_uindex
         unique (SID),
+    constraint sessions_SOCKET_ID_uindex
+        unique (SOCKET_ID),
     constraint FK_USERS_1
         foreign key (ID_USER) references republichat.users (ID_USER)
             on update cascade on delete cascade

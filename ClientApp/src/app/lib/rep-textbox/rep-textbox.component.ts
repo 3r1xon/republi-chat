@@ -4,6 +4,7 @@ import {
   Input,
   Output
 } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'rep-textbox',
@@ -13,6 +14,7 @@ import {
 export class REPTextBoxComponent {
 
   constructor(
+    private fb: FormBuilder
   ) { }
 
   @Input() 
@@ -24,17 +26,29 @@ export class REPTextBoxComponent {
   @Output()
   public upload = new EventEmitter();
 
+  @Input() 
+  public msgMaxLength: number;
+
   public message: string = "";
+
+  public form: FormGroup = this.fb.group({
+    text: ['',
+      [
+        Validators.required,
+        Validators.pattern(/^\S*$/)
+      ]
+    ]
+  });
 
   public async send() {
 
     if (!this.enabled) return;
 
-    if (this.message == "") return;
+    if (this.form.valid) {
+      this.sendMessage.emit(this.message);
 
-    this.sendMessage.emit(this.message);
-
-    this.message = "";
+      this.message = "";
+    };
   }
 
   public uploadIMG() {
