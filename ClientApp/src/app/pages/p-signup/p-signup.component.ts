@@ -47,13 +47,25 @@ export class PSignupComponent {
 
   public form: FormGroup = this.fb.group({
     name: ['',
-      [Validators.required, Validators.maxLength(30)]
+      [
+        Validators.required, 
+        Validators.maxLength(30),
+        Validators.minLength(3),
+        // No more than one white space allowed before each word
+        Validators.pattern(/^([a-zA-Z0-9]+\s)*[a-zA-Z0-9]+$/)
+      ]
     ],
     email: ['',
-      [Validators.required, Validators.email]
+      [
+        Validators.email
+      ]
     ],
     password: ['',
-      [Validators.required, Validators.maxLength(30)]
+      [
+        Validators.required, 
+        Validators.maxLength(255),
+        Validators.minLength(8),
+      ]
     ],
     confirmPassword: ['',
       [Validators.required, Validators.maxLength(30)]

@@ -8,18 +8,24 @@ const REPQuery       = require('../Database/rep-query');
 const crypto         = require('crypto');
 const io             = require('../start');
 const model          = require('nanoid');
+const Ajv            = require('ajv');
+const user_schema    = require('../Tools/schemas');
+const ajv            = new Ajv();
+
+const validate_user  = ajv.compile(user_schema);
+
 
 
 router.post('/signUp', async (req, res) => {
-  
+
   const user = {
     email: req.body.email,
-    password: crypto.createHash('sha256').update(req.body.password).digest('hex'),
+    password: req.body.password,
     name: req.body.name,
   };
-
-  if (user.email == '' || user.password == '' || user.name == '')
-    res.status(400).send({ success: false, message: 'Email or password invalid' });
+  console.log(validate_user(user))
+  if (!validate_user(user))
+    res.status(400).send({ success: false, message: 'Invalid fields!' });
   else {
 
     await REPTools.generateCode(user.name, "USERS", "USER_CODE", async (err, code) => {
@@ -31,13 +37,15 @@ router.post('/signUp', async (req, res) => {
       } else {
         try {
 
+          const hash = crypto.createHash('sha256').update(user.password).digest('hex');
+
           await REPQuery.exec(
           `
           INSERT INTO USERS 
           (USER_CODE, PASSWORD, NAME, EMAIL)
           VALUES 
           (?, ?, ?, ?)
-          `, [code, user.password, user.name, user.email]);
+          `, [code, hash, user.name, user.email]);
 
           res.status(201).send({ success: true, message: 'User correctly signed up' });
         } catch(error) {

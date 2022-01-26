@@ -5,46 +5,47 @@
     </div>
 
     <div id="form">
-        
+
         <div id="rect"></div>
         
         <form id="signup-form" (ngSubmit)="signUp()" [formGroup]="form">
-            
+
             <h1>Sign up</h1>
-            
+
             <rep-input 
             formControlName="name" 
             maxLength="30" 
-            tooltip="The name that will be visible to all other users" 
+            tooltip="The name that will be visible to all other users (Maximum 30 characters and minimum 3)" 
             placeholder="Name" required="true"></rep-input>
-            
+
             <rep-input 
             formControlName="email" 
-            tooltip="It will be useful for login and account validation" 
+            tooltip="Needed for login and account validation" 
             placeholder="Email" required="true"></rep-input>
-            
+
             <rep-input 
             formControlName="password" 
+            tooltip="Maximum 255 characters  and minimum 8"
             maxLength="30" 
             type="password" 
             placeholder="Password" required="true"></rep-input>
-            
+
             <rep-input 
             formControlName="confirmPassword" 
             maxLength="30" 
             type="password" 
             placeholder="Confirm password" required="true"></rep-input>
-            
+
             <rep-button [enabled]="form.valid" icon="login">Sign Up</rep-button>
-            
+
             <p>{{alert}}</p>
-            
+
             <a routerLink="/login">Already registered? Log In</a>
-            
+
         </form>
-        
+
     </div>
 
     <rep-footer></rep-footer>
-        
+
 </div>
