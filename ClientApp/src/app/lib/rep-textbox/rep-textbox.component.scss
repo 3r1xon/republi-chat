@@ -13,7 +13,7 @@
         min-width: 45px;
         min-height: 45px;
         resize: none;
-        color: var(--WHITE);
+        color: var(--OBSCURE_SECONDARY);
         background: transparent;
         @include flexCenter(row);
         margin: 5px;
@@ -22,7 +22,6 @@
 
         &:hover {
             background: var(--GREY);
-            // background: lighten(#1f1a24, 50%);
         }
     }
 

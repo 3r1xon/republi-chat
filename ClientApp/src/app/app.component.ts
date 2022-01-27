@@ -5,7 +5,7 @@ import { UtilsService } from 'src/services/utils.service';
 
 
 @Component({
-  selector: 'app-root',
+  selector: 'rep-main',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
