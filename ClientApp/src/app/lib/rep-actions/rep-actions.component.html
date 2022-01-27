@@ -1,4 +1,6 @@
-<div id="rep-actions">
+<div id="rep-actions" [ngClass]="{
+    'reverse': reverse
+    }">
 
     <rep-button *ngFor="let button of actions"
         [enabled]="button.enabled == undefined ? true : button.enabled"

@@ -18,7 +18,7 @@
             placeholder="Email"
             maxLength="30" 
             ></rep-input>
-            
+
             <rep-input 
             formControlName="password" 
             type="password"
@@ -30,7 +30,9 @@
                 <rep-button [enabled]="form.valid" icon="login">Log in</rep-button>
             </div>
 
-            <p>{{alert}}</p>
+            <div id="alert">
+                <p>{{alert}}</p>
+            </div>
 
             <a routerLink="/signup">Not registered? Sign up</a>
 

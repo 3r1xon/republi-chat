@@ -97,7 +97,7 @@ export class REPInputComponent implements OnInit, ControlValueAccessor {
   public empty: boolean = false;
 
   public placeholderAnimated: boolean = false;
-  
+
   onFocus() {
     this.placeholderAnimated = true;
   }

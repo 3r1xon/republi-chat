@@ -6,21 +6,23 @@
     min-height: 75px;
     @include flexCenter(row);
 
-    
-    
     button {
+        width: 75px;
+        height: 75%;
         border: none;
         min-width: 45px;
         min-height: 45px;
         resize: none;
-        background: var(--GREY);
+        color: var(--WHITE);
+        background: transparent;
         @include flexCenter(row);
-        margin: 10px;
-        border-radius: 50%;
+        margin: 5px;
+        border-radius: 5px;
         transition: 200ms;
 
         &:hover {
-            background: lighten(#1f1a24, 50%);
+            background: var(--GREY);
+            // background: lighten(#1f1a24, 50%);
         }
     }
 

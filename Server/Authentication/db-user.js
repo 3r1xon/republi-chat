@@ -1,6 +1,6 @@
 const REPQuery       = require('../Database/rep-query');
 const permissions    = require('../Authentication/permissions');
-const msgSchema      = require('../Tools/schemas');
+const { msgSchema }  = require('../Tools/schemas');
 const io             = require('../start');
 
 
@@ -82,6 +82,8 @@ class DBUser {
 
     async msgBelong(id, callback = nocb) {
 
+        if (this.channelID == undefined) throw new Error("Channel is not set. Did you call setChannel?");
+
         try {
 
             const chMbr = await REPQuery.one(
@@ -104,6 +106,7 @@ class DBUser {
 
 
     async sendMessage(msg, callback = nocb) {
+
         this.hasPermission(permissions.sendMessages, async (err) => {
             if (err) {
                 callback(err, null);

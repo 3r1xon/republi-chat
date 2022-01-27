@@ -1,8 +1,7 @@
 <div id="master">
 
     <div id="flat-input" [ngStyle]="{
-        'border': placeholderAnimated || text != '' ? '2px solid ' + color : (required && empty ? '1px solid ' + borderColor : '1px solid gray'),
-        'padding': placeholderAnimated ? '0px ' : '1px',
+        'outline': placeholderAnimated || text != '' ? '2px solid ' + color : (required && empty ? '1px solid ' + borderColor : '1px solid gray'),
         'background': disabled ? '#3c3c3ceb' : 'transparent'
     }" [ngClass]="{
         'small': size == 'small',
@@ -28,7 +27,7 @@
 
     <label id="placeholder" [ngStyle]="{
         'color': placeholderAnimated || text != '' ? color : borderColor
-    }" [@placeholderAnimated] = "placeholderAnimated || text != '' ? 'moved' : 'static'">{{placeholder}}</label>
+    }" [@placeholderAnimated]="placeholderAnimated || text != '' ? 'moved' : 'static'">{{placeholder}}</label>
     </div>
 
     <label id="required" *ngIf="empty" [style.color]="borderColor">This field is required *</label>

@@ -17,14 +17,14 @@
             position: fixed;
             border-radius: 50%;
         }
-        
+
         @for $i from 1 through 30 {
             @keyframes particle-animation-#{$i} {
                 100% {
                     transform: translate3d((random(90) * 1vw), (random(90) * 1vh), (random(100) * 1px));
                 }
             }
-            
+
             .particle:nth-child(#{$i}){
                 animation: particle-animation-#{$i} 60s infinite;
                 $size: random(15) + 10 + px;
@@ -48,7 +48,7 @@
             background: linear-gradient(120deg, #1f1a24d5 55%, #aaa3a380 100%);
             animation: onOpenSignUp 1s forwards;
         }
-    
+
         #signup-form {
             height: 80vh;
             position: absolute;
@@ -57,25 +57,33 @@
             overflow-y: auto;
             left: 0;
             right: 0;
-    
+
             h1 {
                 color: var(--WHITE);
             }
-    
+
             rep-input {
                 margin: 25px 0 10px 0;
             }
-    
+
             rep-button {
                 margin: 10px -130px 10px 0;
                 justify-self: flex-end;
             }
-    
-            p {
-                text-align: center;
+
+            #alert {
+                width: 100%;
+                height: 15px;
+                position: relative;
+                display: grid;
+                place-items: center;
                 color: var(--DANGER);
+
+                p {
+                    position: absolute;
+                }
             }
-    
+
             a {
                 margin-top: 10px;
                 font-size: 18px;
@@ -85,12 +93,12 @@
         }
     }
 
-
     rep-footer {
         width: 100%;
     }
-
 }
+
+
 
 @keyframes onOpenSignUp {
     0% {

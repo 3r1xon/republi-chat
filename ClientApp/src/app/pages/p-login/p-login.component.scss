@@ -17,14 +17,14 @@
             position: fixed;
             border-radius: 50%;
         }
-        
+
         @for $i from 1 through 30 {
             @keyframes particle-animation-#{$i} {
                 100% {
                     transform: translate3d((random(90) * 1vw), (random(90) * 1vh), (random(100) * 1px));
                 }
             }
-            
+
             .particle:nth-child(#{$i}){
                 animation: particle-animation-#{$i} 60s infinite;
                 $size: random(10) + 15 + px;
@@ -48,37 +48,45 @@
             background: linear-gradient(120deg, #1f1a24d5 55%, #aaa3a380 100%);
             animation: onOpenLogIn 1s forwards;
         }
-    
+
         #login-form {
             position: absolute;
             @include flexCenter(column);
             z-index: 10;
             animation: fadeIn 1s;
-    
+
             h1 {
                 font-size: 31px;
                 color: var(--WHITE);
             }
-    
+
             rep-input {
                 margin: 15px;
             }
-    
+
             #button {
                 width: 80%;
                 display: flex;
                 flex-direction: row-reverse;
-    
+
                 rep-button {
                     margin: 10px;
                 }
             }
-    
-            p {
-                text-align: center;
+
+            #alert {
+                width: 100%;
+                height: 15px;
+                position: relative;
+                display: grid;
+                place-items: center;
                 color: var(--DANGER);
+
+                p {
+                    position: absolute;
+                }
             }
-    
+
             a {
                 margin: 15px;
                 font-size: 18px;
@@ -94,12 +102,14 @@
     }
 }
 
+
+
 @keyframes onOpenLogIn {
     0% {
         transform: skewY(-8deg);
         height: 60vh;
     }
-    
+
     100% {
         transform: skewY(8deg);
         height: 45vh;

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { REPButton } from 'src/interfaces/repbutton.interface';
 
 @Component({
@@ -6,13 +6,13 @@ import { REPButton } from 'src/interfaces/repbutton.interface';
   templateUrl: './rep-actions.component.html',
   styleUrls: ['./rep-actions.component.scss']
 })
-export class REPActionsComponent implements OnInit {
+export class REPActionsComponent {
 
   constructor() { }
 
-  ngOnInit(): void {
-  }
-
   @Input()
   public actions: Array<REPButton>;
+
+  @Input()
+  public reverse: boolean = false;
 }

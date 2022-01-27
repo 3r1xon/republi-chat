@@ -5,6 +5,6 @@
     [style.minWidth]="width"
     [style.minHeight]="height"
     >
-        <h1>{{letter[0]}}</h1>
+        <h1 *ngIf="letter">{{letter[0]}}</h1>
     </div>
 </div>
