@@ -52,7 +52,6 @@ export class PMainpageComponent implements OnInit {
       });
   }
 
-
   public readonly msgOptions: Array<REPButton> = [
     {
       name: "Edit",

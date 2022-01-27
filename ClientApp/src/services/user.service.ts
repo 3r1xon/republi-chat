@@ -71,29 +71,26 @@ export class UserService implements CanActivate {
   public logOut(force?: boolean) {
     this.userAuth = false;
 
+    const del = async () => {
+      this.cookieService.deleteAll();
+
+      if (force)
+        this.router.navigate(['unauthorized']);
+      else {
+        await this.router.navigate(['login']);
+        this.document.defaultView.location.reload();
+      }
+    }
+
     this.http.delete(`${server.BASE_URL}/authentication/logout`)
       .pipe(first())
       .subscribe(
         () => null,
-        () => this._utils.showBugReport(
-          "Could not log out", 
-          "Session cannot be invalidated due to a connection error! Connection must be online in order to log out properly.",
-          false
-          ),
-        async () => {
-
-          this.cookieService.deleteAll();
-
-          if (force)
-            this.router.navigate(['unauthorized']);
-          else {
-            await this.router.navigate(['login']);
-            this.document.defaultView.location.reload();
-          }
+        () => del(),
+        () => {
+          del();
         }
       );
-
-
   }
 
   /**

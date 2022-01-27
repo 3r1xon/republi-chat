@@ -164,7 +164,7 @@ class DBUser {
               try {
                 await REPQuery.exec(
                 `
-                DELETE FROM CHANNELS_MESSAGES 
+                DELETE FROM CHANNELS_MESSAGES
                 WHERE ID_CHANNEL_MESSAGE = ?
                 `, [msgID]);
 

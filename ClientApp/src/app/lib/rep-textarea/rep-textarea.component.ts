@@ -1,4 +1,11 @@
-import { Component, Input, Output, EventEmitter, forwardRef, OnInit } from '@angular/core';
+import {
+  Component,
+  Input,
+  Output,
+  EventEmitter,
+  forwardRef,
+  OnInit
+} from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 @Component({
@@ -53,7 +60,7 @@ export class REPTextareaComponent implements OnInit, ControlValueAccessor {
 
   submitHandler(event: any) {
     event.preventDefault();
-    this.send.emit(this.text);
+    this.send.emit(event);
   }
 
   onChange: any = () => {

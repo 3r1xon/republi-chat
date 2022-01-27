@@ -9,7 +9,8 @@
 
         <div id="rect"></div>
 
-        <form id="login-form" (ngSubmit)="logIn()" [formGroup]="form">
+        <form id="login-form" (ngSubmit)="logIn()" [formGroup]="form" 
+            [style.animation]="alert != '' ? 'shake 0.5s' : ''">
 
             <h1>Log in</h1>
 

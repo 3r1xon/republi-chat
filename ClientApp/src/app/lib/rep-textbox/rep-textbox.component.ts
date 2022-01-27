@@ -29,30 +29,25 @@ export class REPTextBoxComponent {
   @Input() 
   public msgMaxLength: number;
 
-  public message: string = "";
-
   public form: FormGroup = this.fb.group({
     text: ['',
       [
-        Validators.required,
-        Validators.pattern(/^\S*$/)
+        Validators.max(2000),
+        Validators.pattern(/^[^\s]+(\s+[^\s]+)*$/)
       ]
     ]
   });
 
-  public async send() {
-
+  public async send(event) {
     if (!this.enabled) return;
 
     if (this.form.valid) {
-      this.sendMessage.emit(this.message);
-
-      this.message = "";
+      this.sendMessage.emit(this.form.value["text"]);
+      this.form.reset();
     };
   }
 
   public uploadIMG() {
-
     if (!this.enabled) return;
 
     this.upload.emit("Upload");

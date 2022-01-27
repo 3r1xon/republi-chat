@@ -21,7 +21,6 @@ router.post('/signUp', async (req, res) => {
 
   const { error } = userSchema.validate(user);
 
-  console.log(error)
   if (error)
     res.status(400).send({ success: false, message: 'Invalid fields!' });
   else {
