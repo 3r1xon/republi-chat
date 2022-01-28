@@ -13,7 +13,7 @@ const permissions    = require('../Authentication/permissions');
 
 
 router.use(Auth.HTTPAuthToken);
-
+io.of("/channels").use(Auth.WSAuthToken);
 
 
 router.post('/createChannel', upload.single("image"), async (req, res) => {
@@ -165,7 +165,7 @@ router.get('/getChannels', async (req, res) => {
 
 
 
-io.on("connection", (socket) => { 
+io.of("/channels").on("connection", (socket) => { 
 
   const userID = socket.auth._id;
 

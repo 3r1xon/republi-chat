@@ -16,7 +16,6 @@ const corsOptions = {
 const io = require('socket.io')(server, {
   cors: corsOptions
 });
-io.use(Auth.WSAuthToken);
 module.exports = io;
 
 

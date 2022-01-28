@@ -5,13 +5,12 @@ const REPQuery       = require('../Database/rep-query');
 const fm             = require('date-fns');
 const io             = require('../start');
 const DBUser         = require('../Authentication/db-user');
-const permissions    = require('../Authentication/permissions');
 const clc            = require('cli-color');
 
 
 
 router.use(Auth.HTTPAuthToken);
-
+io.of("/messages").use(Auth.WSAuthToken);
 
 
 router.get('/getChannelMessages/:id/:limit', async (req, res) => {
@@ -108,7 +107,7 @@ router.get("/getChannelPermissions/:id", async (req, res) => {
 
 
 
-io.on("connection", (socket) => {
+io.of("/messages").on("connection", (socket) => {
 
   const userID = socket.auth._id;
 

@@ -7,22 +7,24 @@ import { REPButton } from 'src/interfaces/repbutton.interface';
 import { MessagesService } from 'src/services/messages.service';
 import { UserService } from 'src/services/user.service';
 import { UtilsService } from 'src/services/utils.service';
-import { WebSocketService } from 'src/services/websocket.service';
+import { WebSocket } from 'src/app/lib/websocket';
+import { server } from 'src/environments/server';
 
 @Component({
   templateUrl: './p-mainpage.component.html',
   styleUrls: ['./p-mainpage.component.scss']
 })
-export class PMainpageComponent implements OnInit {
+export class PMainpageComponent extends WebSocket implements OnInit {
 
   constructor(
     public _user: UserService,
     public _msService: MessagesService,
     public _utils: UtilsService,
-    private _webSocket: WebSocketService,
     private cookieService: CookieService,
     private router: Router
-  ) { }
+  ) { 
+    super(server.WEB_SOCKET);
+  }
 
   private sessionSubscription: Subscription;
 
@@ -45,7 +47,7 @@ export class PMainpageComponent implements OnInit {
     });
 
     this.sessionSubscription?.unsubscribe();
-    this.sessionSubscription = this._webSocket.listen(this.cookieService.get("sid"))
+    this.sessionSubscription = this.listen(this.cookieService.get("sid"))
       .subscribe((status) => {
         if (status == "forceKick")
           this._user.logOut(true);

@@ -6,20 +6,22 @@ import {
 import { Router } from '@angular/router';
 import { Account } from 'src/interfaces/account.interface';
 import { UtilsService } from 'src/services/utils.service';
-import { WebSocketService } from 'src/services/websocket.service';
+import { WebSocket } from 'src/app/lib/websocket';
+import { server } from 'src/environments/server';
 
 @Component({
   selector: 'rep-status-bar',
   templateUrl: './rep-status-bar.component.html',
   styleUrls: ['./rep-status-bar.component.scss']
 })
-export class REPStatusBarComponent {
+export class REPStatusBarComponent extends WebSocket {
 
   constructor(
     private _utils: UtilsService,
-    public _webSocket: WebSocketService,
     private router: Router,
-  ) { }
+  ) {
+    super(server.WEB_SOCKET);
+  }
 
   @Input()
   public user: Account;
