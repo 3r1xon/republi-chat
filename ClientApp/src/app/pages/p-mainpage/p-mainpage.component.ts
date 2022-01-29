@@ -22,7 +22,7 @@ export class PMainpageComponent extends WebSocket implements OnInit {
     public _utils: UtilsService,
     private cookieService: CookieService,
     private router: Router
-  ) { 
+  ) {
     super(server.WEB_SOCKET);
   }
 

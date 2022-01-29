@@ -1,11 +1,11 @@
-const REPQuery     = require('../Database/rep-query');
-const clc          = require('cli-color');
+const REPQuery = require('../Database/rep-query');
+const clc      = require('cli-color');
 
 
 class Auth {
   /**
    * Middlware that authenticate the user in the HTTP Request.
-   * 
+   *
    */
     static HTTPAuthToken = async (req, res, next) => {
 
@@ -17,8 +17,8 @@ class Auth {
 
                 const dbUser = await REPQuery.one(
                 `
-                SELECT
-                S.ID_USER
+                SELECT S.ID_USER,
+                       S.SOCKET_ID
                 FROM SESSIONS S
                 WHERE S.SID = ?
                 `, [sid]);
@@ -26,8 +26,9 @@ class Auth {
                 if (dbUser) {
                     res.locals._id = dbUser.ID_USER;
                     res.locals.sid = sid;
+                    res.locals.socket_id = dbUser.SOCKET_ID;
                     next();
-                } else { 
+                } else {
                     res.clearCookie("sid");
                     res.status(401).send({ success: false, message: "Session expired or invalid token!" })
                 };
@@ -52,9 +53,8 @@ class Auth {
 
             const dbUser = await REPQuery.one(
             `
-            SELECT
-            S.ID_USER,
-            S.ID_SESSION
+            SELECT S.ID_USER,
+                   S.ID_SESSION
             FROM SESSIONS S
             WHERE S.SID = ?
             `, [sid]);
@@ -62,10 +62,9 @@ class Auth {
             if (dbUser) {
                 await REPQuery.exec(
                 `
-                UPDATE 
-                SESSIONS 
-                SET 
-                SOCKET_ID = ?
+                UPDATE
+                    SESSIONS
+                SET SOCKET_ID = ?
                 WHERE ID_SESSION = ?
                 `, [socket.id, dbUser.ID_SESSION]);
 

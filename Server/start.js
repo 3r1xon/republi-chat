@@ -1,11 +1,12 @@
-const express        = require('express');
-const cors           = require('cors');
-const app            = express();
-const port           = 3000;
-const dotenv         = require('dotenv'); 
-const cookieParser   = require('cookie-parser');
-const Auth           = require('./Authentication/auth');
-const server         = app.listen(port, () => { console.log(`Server listening at http://localhost:${port}`); });
+const dotenv       = require('dotenv').config();
+const express      = require('express');
+const cors         = require('cors');
+const app          = express();
+const cookieParser = require('cookie-parser');
+const port         = process.env.PORT;
+const server       = app.listen(port, () => {
+  console.log(`Server listening at http://localhost:${port}`);
+});
 
 const corsOptions = {
   origin: process.env.CORS_ORIGIN,
@@ -13,13 +14,14 @@ const corsOptions = {
   exposedHeaders: ['sid'],
 };
 
-const io = require('socket.io')(server, {
-  cors: corsOptions
-});
-module.exports = io;
+
+module.exports = {
+  io: require('socket.io')(server, {
+    cors: corsOptions
+  })
+};
 
 
-dotenv.config();
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser());

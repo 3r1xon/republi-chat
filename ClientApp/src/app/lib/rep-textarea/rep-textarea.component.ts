@@ -60,6 +60,7 @@ export class REPTextareaComponent implements OnInit, ControlValueAccessor {
 
   submitHandler(event: any) {
     event.preventDefault();
+    if (!this.enabled) return;
     this.send.emit(event);
   }
 

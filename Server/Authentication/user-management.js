@@ -6,7 +6,7 @@ const multer         = require('multer');
 const upload         = multer({});
 const REPQuery       = require('../Database/rep-query');
 const crypto         = require('crypto');
-const io             = require('../start');
+const { io }         = require('../start');
 const model          = require('nanoid');
 const { userSchema } = require('../Tools/schemas');
 
@@ -287,9 +287,10 @@ router.get('/getDevices', Auth.HTTPAuthToken, async (req, res) => {
 router.delete('/disconnectDevice/:id', Auth.HTTPAuthToken, async (req, res) => {
 
   try {
-    
-    const _id    = req.params.id;
-    const userID = res.locals._id;
+
+    const _id      = req.params.id;
+    const userID   = res.locals._id;
+    const socketID = res.locals.socket_id;
 
     const session = await REPQuery.one(
     `
@@ -301,7 +302,9 @@ router.delete('/disconnectDevice/:id', Auth.HTTPAuthToken, async (req, res) => {
     RETURNING SID
     `, [_id, userID]);
 
-    io.emit(session.SID, "forceKick");
+    // io.emit(session.SID, "forceKick");
+    io.to(socketID).emit(session.SID, "forceKick");
+
 
     res.status(201).send({ 
       success: true,

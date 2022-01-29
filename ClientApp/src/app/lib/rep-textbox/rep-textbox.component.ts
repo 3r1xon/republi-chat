@@ -29,6 +29,8 @@ export class REPTextBoxComponent {
   @Input() 
   public msgMaxLength: number;
 
+  public trigger: boolean = false;
+
   public form: FormGroup = this.fb.group({
     text: ['',
       [
@@ -39,16 +41,15 @@ export class REPTextBoxComponent {
   });
 
   public async send(event) {
-    if (!this.enabled) return;
 
     if (this.form.valid) {
       this.sendMessage.emit(this.form.value["text"]);
       this.form.reset();
-    };
+      this.trigger = false;
+    } else this.trigger = true;
   }
 
   public uploadIMG() {
-    if (!this.enabled) return;
 
     this.upload.emit("Upload");
   }

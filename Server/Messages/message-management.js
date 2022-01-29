@@ -1,11 +1,11 @@
-const express        = require('express');
-const Auth           = require('../Authentication/auth');
-const router         = express.Router();
-const REPQuery       = require('../Database/rep-query');
-const fm             = require('date-fns');
-const io             = require('../start');
-const DBUser         = require('../Authentication/db-user');
-const clc            = require('cli-color');
+const express  = require('express');
+const Auth     = require('../Authentication/auth');
+const router   = express.Router();
+const REPQuery = require('../Database/rep-query');
+const fm       = require('date-fns');
+const DBUser   = require('../Authentication/db-user');
+const clc      = require('cli-color');
+const { io }   = require('../start');
 
 
 
@@ -19,7 +19,7 @@ router.get('/getChannelMessages/:id/:limit', async (req, res) => {
   const _channelID = req.params.id;
   const user       = new DBUser(_id);
 
-  user.setChannel(_channelID, async (err, user) => {
+  user.setChannel(_channelID, async (err, chUser) => {
     if (err) {
       res.status(401).send({ success: false, message: "User not in channel!" });
     } else {
@@ -30,22 +30,21 @@ router.get('/getChannelMessages/:id/:limit', async (req, res) => {
 
         const messages = await REPQuery.load(
         `
-        SELECT
-        M.ID_CHANNEL_MESSAGE as id,
-        U.COLOR as color,
-        U.NAME as name,
-        CM.ID_CHANNEL_MEMBER as author,
-        TO_BASE64(U.PROFILE_PICTURE) as picture,
-        M.MESSAGE as message,
-        M.DATE as date,
-        IF(U.ID_USER = ?, TRUE, FALSE) as auth
+        SELECT M.ID_CHANNEL_MESSAGE         as id,
+               U.COLOR                      as color,
+               U.NAME                       as name,
+               CM.ID_CHANNEL_MEMBER         as author,
+               TO_BASE64(U.PROFILE_PICTURE) as picture,
+               M.MESSAGE                    as message,
+               M.DATE                       as date
         FROM CHANNELS_MESSAGES M
-        LEFT JOIN CHANNELS_MEMBERS CM ON CM.ID_CHANNEL_MEMBER = M.ID_CHANNEL_MEMBER
-        LEFT JOIN CHANNELS C ON C.ID_CHANNEL = M.ID_CHANNEL
-        LEFT JOIN USERS U ON U.ID_USER = CM.ID_USER
+                LEFT JOIN CHANNELS_MEMBERS CM ON CM.ID_CHANNEL_MEMBER = M.ID_CHANNEL_MEMBER
+                LEFT JOIN CHANNELS C ON C.ID_CHANNEL = M.ID_CHANNEL
+                LEFT JOIN USERS U ON U.ID_USER = CM.ID_USER
         WHERE C.ID_CHANNEL = ?
+          AND M.DATE >= ?
         LIMIT ${limit}
-        `, [_id, _channelID, limit]);
+        `, [_channelID, chUser.joinDate]);
 
         res.status(200).send({ success: true, data: messages });
       }
@@ -75,12 +74,11 @@ router.get("/getChannelPermissions/:id", async (req, res) => {
 
         const permissions = await REPQuery.one(
         `
-        SELECT
-        ID_CHANNEL_MEMBER as id,
-        DELETE_MESSAGE as deleteMessage,
-        KICK_MEMBERS as kickMembers,
-        BAN_MEMBERS as banMembers,
-        SEND_MESSAGES as sendMessages
+        SELECT ID_CHANNEL_MEMBER as id,
+               DELETE_MESSAGE    as deleteMessage,
+               KICK_MEMBERS      as kickMembers,
+               BAN_MEMBERS       as banMembers,
+               SEND_MESSAGES     as sendMessages
         FROM CHANNELS_PERMISSIONS
         WHERE ID_CHANNEL_MEMBER = ?
         `, [user.channelMemberID]);

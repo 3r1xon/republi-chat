@@ -23,7 +23,7 @@ export class UserService implements CanActivate {
     private _utils: UtilsService,
     private cookieService: CookieService,
     @Inject(DOCUMENT) private document: Document
-  ) {}
+  ) { }
 
   public currentUser?: Account;
 
@@ -54,7 +54,7 @@ export class UserService implements CanActivate {
           this.userAuth = true;
           await this.router.navigate(['mainpage']);
         }
-      }, 
+      },
       () => { },
       () => {
         sub.unsubscribe();
@@ -117,7 +117,7 @@ export class UserService implements CanActivate {
    * API that gets a list of all user connected devices.
    *
    * @param deviceID The device ID that needs to be disconnected.
-   * 
+   *
    * @returns An HTTP request
    *
    */

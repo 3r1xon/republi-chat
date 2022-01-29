@@ -26,8 +26,6 @@ export class MessagesService {
   ) {
   }
 
-
-
   public messages: Array<Message> = [];
 
   public channels: Array<Channel> = [];
@@ -117,7 +115,7 @@ export class MessagesService {
                     date: new Date(msg.date),
                     picture: this._fileUpload.sanitizeIMG(msg.picture),
                     color: msg.color,
-                    auth: !!msg.auth
+                    auth: this.chPermissions.id === msg.author
                   };
                 });
 
