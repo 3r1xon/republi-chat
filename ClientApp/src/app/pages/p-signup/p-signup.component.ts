@@ -48,7 +48,7 @@ export class PSignupComponent {
   public form: FormGroup = this.fb.group({
     name: ['',
       [
-        Validators.required, 
+        Validators.required,
         Validators.maxLength(30),
         Validators.minLength(3),
         // No more than one white space allowed before each word
@@ -62,13 +62,16 @@ export class PSignupComponent {
     ],
     password: ['',
       [
-        Validators.required, 
+        Validators.required,
         Validators.maxLength(255),
         Validators.minLength(8),
       ]
     ],
     confirmPassword: ['',
-      [Validators.required, Validators.maxLength(30)]
+      [
+        Validators.required,
+        Validators.maxLength(255)
+      ]
     ]
   });
 
@@ -78,14 +81,15 @@ export class PSignupComponent {
 
     if (user.password != user.confirmPassword) {
       this.alert = "Password is not the same!";
+      this.form.controls["confirmPassword"].setValue('');
       return;
     }
 
-    this.http.post<ServerResponse>(`${server.BASE_URL}/authentication/signUp`, user).subscribe((response) => { 
+    this.http.post<ServerResponse>(`${server.BASE_URL}/authentication/signUp`, user).subscribe((response) => {
       if (response.success) {
         this.router.navigate(['login']);
       }
-    }, 
+    },
     (response) => {
       this.alert = response.error.message;
     });

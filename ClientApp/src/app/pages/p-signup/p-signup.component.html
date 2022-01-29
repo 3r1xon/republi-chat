@@ -8,32 +8,33 @@
 
         <div id="rect"></div>
         
-        <form id="signup-form" (ngSubmit)="signUp()" [formGroup]="form">
+        <form id="signup-form" (ngSubmit)="signUp()" [formGroup]="form"
+            [style.animation]="alert != '' ? 'shake 0.5s' : ''">
 
             <h1>Sign up</h1>
 
-            <rep-input 
-            formControlName="name" 
-            maxLength="30" 
-            tooltip="The name that will be visible to all other users (Maximum 30 characters and minimum 3)" 
+            <rep-input
+            formControlName="name"
+            maxLength="30"
+            tooltip="The name that will be visible to all other users (Maximum 30 characters and minimum 3)"
             placeholder="Name" required="true"></rep-input>
 
-            <rep-input 
-            formControlName="email" 
-            tooltip="Needed for login and account validation" 
+            <rep-input
+            formControlName="email"
+            tooltip="Needed for login and account validation"
             placeholder="Email" required="true"></rep-input>
 
-            <rep-input 
+            <rep-input
             formControlName="password" 
             tooltip="Maximum 255 characters  and minimum 8"
-            maxLength="30" 
-            type="password" 
+            maxLength="255"
+            type="password"
             placeholder="Password" required="true"></rep-input>
 
-            <rep-input 
+            <rep-input
             formControlName="confirmPassword" 
-            maxLength="30" 
-            type="password" 
+            maxLength="255"
+            type="password"
             placeholder="Confirm password" required="true"></rep-input>
 
             <rep-button [enabled]="form.valid" icon="login">Sign Up</rep-button>

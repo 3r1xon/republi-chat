@@ -9,22 +9,22 @@
 
         <div id="rect"></div>
 
-        <form id="login-form" (ngSubmit)="logIn()" [formGroup]="form" 
+        <form id="login-form" (ngSubmit)="logIn()" [formGroup]="form"
             [style.animation]="alert != '' ? 'shake 0.5s' : ''">
 
             <h1>Log in</h1>
 
             <rep-input
-            formControlName="email" 
+            formControlName="email"
             placeholder="Email"
-            maxLength="30" 
+            maxLength="30"
             ></rep-input>
 
-            <rep-input 
-            formControlName="password" 
+            <rep-input
+            formControlName="password"
             type="password"
             placeholder="Password"
-            maxLength="30" 
+            maxLength="255"
             ></rep-input>
 
             <div id="button">

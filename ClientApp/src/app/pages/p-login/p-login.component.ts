@@ -57,22 +57,20 @@ export class PLoginComponent {
   public form: FormGroup = this.fb.group({
     email: ['', // Default value
       [
-        Validators.required, 
-        Validators.maxLength(30), 
+        Validators.required,
+        Validators.maxLength(30),
         Validators.email
       ]
     ],
     password: ['', // Default value
       [
-        Validators.required, 
-        Validators.maxLength(30)
+        Validators.required,
+        Validators.maxLength(255)
       ]
     ]
   });
 
   async logIn() {
-
-    if (!this.form.valid) return;
 
     const browser = this._utils.detectBrowser();
 

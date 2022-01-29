@@ -38,10 +38,9 @@ router.post('/signUp', async (req, res) => {
 
           await REPQuery.exec(
           `
-          INSERT INTO USERS 
-          (USER_CODE, PASSWORD, NAME, EMAIL)
-          VALUES 
-          (?, ?, ?, ?)
+          INSERT INTO USERS
+              (USER_CODE, PASSWORD, NAME, EMAIL)
+          VALUES (?, ?, ?, ?)
           `, [code, hash, user.name, user.email]);
 
           res.status(201).send({ success: true, message: 'User correctly signed up' });
@@ -69,13 +68,12 @@ router.post('/authorize', Auth.HTTPAuthToken, async (req, res) => {
 
     const dbUser = await REPQuery.one(
     `
-    SELECT
-    U.ID_USER as id,
-    U.USER_CODE as code,
-    U.NAME as name,
-    U.COLOR as color,
-    U.EMAIL as email,
-    TO_BASE64(U.PROFILE_PICTURE) as picture
+    SELECT U.ID_USER                    as id,
+           U.USER_CODE                  as code,
+           U.NAME                       as name,
+           U.COLOR                      as color,
+           U.EMAIL                      as email,
+           TO_BASE64(U.PROFILE_PICTURE) as picture
     FROM USERS U
     WHERE U.ID_USER = ?
     `, [_id]);
@@ -104,15 +102,15 @@ router.post('/logIn', async (req, res) => {
 
     const dbUser = await REPQuery.one(
     `
-    SELECT
-    U.ID_USER as id,
-    U.USER_CODE as code,
-    U.NAME as name,
-    U.COLOR as color,
-    U.EMAIL as email,
-    TO_BASE64(U.PROFILE_PICTURE) as picture 
+    SELECT U.ID_USER                    as id,
+           U.USER_CODE                  as code,
+           U.NAME                       as name,
+           U.COLOR                      as color,
+           U.EMAIL                      as email,
+           TO_BASE64(U.PROFILE_PICTURE) as picture
     FROM USERS U
-    WHERE EMAIL = ? AND PASSWORD = ?
+    WHERE EMAIL = ?
+      AND PASSWORD = ?
     `, [user.email, user.password]);
 
 
@@ -124,8 +122,7 @@ router.post('/logIn', async (req, res) => {
       `
       INSERT INTO SESSIONS
       (ID_USER, BROWSER_NAME, BROWSER_VERSION, LATITUDE, LONGITUDE, DATE, SID)
-      VALUES
-      (?, ?, ?, ?, ?, ?, ?)
+      VALUES (?, ?, ?, ?, ?, ?, ?)
       `, [
         dbUser.id,
         BROWSER.name,
@@ -166,7 +163,7 @@ router.delete('/logout', Auth.HTTPAuthToken, async (req, res) => {
     DELETE
     FROM SESSIONS
     WHERE ID_USER = ?
-    AND SID = ?
+      AND SID = ?
     `, [userID, sid]);
 
     res.clearCookie("sid");
@@ -194,9 +191,8 @@ router.put('/editProfile', [Auth.HTTPAuthToken, upload.single("image")], async (
     await REPQuery.exec(
     `
     UPDATE
-    USERS
-    SET
-    PROFILE_PICTURE = ?
+        USERS
+    SET PROFILE_PICTURE = ?
     WHERE ID_USER = ?
     `, [file, userID]);
 
@@ -226,8 +222,7 @@ router.delete('/deleteProfile', Auth.HTTPAuthToken, async (req, res) => {
     `
     DELETE
     FROM USERS
-    WHERE 
-    ID_USER = ?
+    WHERE ID_USER = ?
     `, [_id]);
 
     res.status(201).send({ 
@@ -251,12 +246,11 @@ router.get('/getDevices', Auth.HTTPAuthToken, async (req, res) => {
 
     const devices = await REPQuery.load(
     `
-    SELECT 
-    ID_SESSION as id_session,
-    BROWSER_NAME as browserName,
-    BROWSER_VERSION as browserVersion,
-    DATE as date,
-    SID as sid
+    SELECT ID_SESSION      as id_session,
+           BROWSER_NAME    as browserName,
+           BROWSER_VERSION as browserVersion,
+           DATE            as date,
+           SID             as sid
     FROM SESSIONS
     WHERE ID_USER = ?
     `, [userID]);
@@ -296,9 +290,8 @@ router.delete('/disconnectDevice/:id', Auth.HTTPAuthToken, async (req, res) => {
     `
     DELETE
     FROM SESSIONS
-    WHERE 
-    ID_SESSION = ?
-    AND ID_USER = ?
+    WHERE ID_SESSION = ?
+      AND ID_USER = ?
     RETURNING SID
     `, [_id, userID]);
 

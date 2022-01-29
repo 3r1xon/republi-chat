@@ -2,13 +2,13 @@ create or replace table republichat.users
 (
     ID_USER         bigint auto_increment
         primary key,
-    USER_CODE       varchar(4)                    not null,
-    EMAIL           varchar(30)                   not null,
-    PASSWORD        varchar(255)                  not null,
-    NAME            varchar(30)                   null,
-    PROFILE_PICTURE mediumblob                    null,
-    COLOR           varchar(30) default '#FFFFFF' null,
-    BIOGRAPHY       varchar(200)                  null,
+    USER_CODE       varchar(4)                   not null,
+    EMAIL           varchar(320)                 not null,
+    PASSWORD        varchar(64)                  not null,
+    NAME            varchar(30)                  null,
+    PROFILE_PICTURE mediumblob                   null,
+    COLOR           varchar(7) default '#FFFFFF' null,
+    BIOGRAPHY       varchar(200)                 null,
     constraint USERS_EMAIL_uindex
         unique (EMAIL)
 );
@@ -31,10 +31,11 @@ create or replace table republichat.channels_members
 (
     ID_CHANNEL_MEMBER bigint auto_increment
         primary key,
-    ID_CHANNEL        bigint               not null,
-    ID_USER           bigint               not null,
-    BANNED            tinyint(1) default 0 null,
-    KICKED            tinyint(1) default 0 null,
+    ID_CHANNEL        bigint                       not null,
+    ID_USER           bigint                       not null,
+    BANNED            tinyint(1) default 0         null,
+    KICKED            tinyint(1) default 0         null,
+    JOIN_DATE         datetime   default curdate() not null,
     constraint CHANNELS_MEMBERS_CHANNELS_ID_CHANNEL_fk
         foreign key (ID_CHANNEL) references republichat.channels (ID_CHANNEL)
             on update cascade on delete cascade
