@@ -165,7 +165,12 @@ export class PMainpageComponent extends WebSocket implements OnInit {
           return this.chat?.selections.some(msg => msg.auth == false);
         } else return false;
       },
-      onClick: () => { }
+      onClick: () => { 
+        this.chat.selections.map((msg) => {
+          console.log(msg.id)
+          // this._msService.deleteMessage(msg.id);
+        })
+      }
     }
   ];
 
