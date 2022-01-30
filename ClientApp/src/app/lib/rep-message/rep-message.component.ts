@@ -37,6 +37,9 @@ export class REPMessageComponent {
   @Input()
   public uniqueID: number;
 
+  @Input()
+  public highlighted: boolean = false;
+
   @Output()
   public onUserClick = new EventEmitter<string>();
 

@@ -4,6 +4,7 @@ export interface REPButton {
     color?: string;
     onClick?: Function;
     route?: string;
+    tooltip?: string;
     hotkey?: string;
     enabled: Function;
     visible: Function;

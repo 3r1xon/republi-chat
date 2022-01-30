@@ -70,15 +70,7 @@ export class REPChatComponent implements AfterViewInit {
   public selections: Array<Message> = [];
 
   @Input()
-  public readonly chatOptions: Array<REPButton> = [
-    {
-      name: "Delete messages",
-      icon: "delete_sweep",
-      visible: () => true,
-      enabled: () => true,
-      onClick: () => { }
-    }
-  ];
+  public readonly chatOptions: Array<REPButton> = [];
 
   send(event) {
     this.sendMessage.emit(event);
@@ -106,7 +98,6 @@ export class REPChatComponent implements AfterViewInit {
       this.selections.push(
         this.messages[index]
       );
-      console.log(this.selections)
     } else {
       this.selections = [];
     }
@@ -115,6 +106,4 @@ export class REPChatComponent implements AfterViewInit {
   isInSelection(id: number) {
     return this.selections.some(msg => msg.id === id);
   }
-
-
 }

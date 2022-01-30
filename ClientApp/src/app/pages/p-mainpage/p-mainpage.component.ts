@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import { Subscription } from 'rxjs';
@@ -9,6 +9,7 @@ import { UserService } from 'src/services/user.service';
 import { UtilsService } from 'src/services/utils.service';
 import { WebSocket } from 'src/app/lib/websocket';
 import { server } from 'src/environments/server';
+import { REPChatComponent } from 'src/app/lib/rep-chat/rep-chat.component';
 
 @Component({
   templateUrl: './p-mainpage.component.html',
@@ -147,6 +148,24 @@ export class PMainpageComponent extends WebSocket implements OnInit {
       onClick: () => {
 
       }
+    }
+  ];
+
+  @ViewChild(REPChatComponent) private chat;
+
+  public readonly chatOptions: Array<REPButton> = [
+    {
+      name: "Delete messages",
+      icon: "delete_sweep",
+      tooltip: "Deletes selected messages",
+      visible: () => true,
+      enabled: () => {
+        if (this.chat?.selections.length > 0) {
+          if (this._msService.chPermissions?.deleteMessage) return true;
+          return this.chat?.selections.some(msg => msg.auth == false);
+        } else return false;
+      },
+      onClick: () => { }
     }
   ];
 

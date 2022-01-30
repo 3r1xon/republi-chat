@@ -1,4 +1,7 @@
-<div id="rep-icon-button">
+<div id="rep-icon-button" [ngStyle]="{
+        'opacity': enabled ? '1' : '0.5',
+        'cursor': enabled ? 'pointer' : 'default'
+    }">
     <mat-icon>
         <ng-content></ng-content>
     </mat-icon>

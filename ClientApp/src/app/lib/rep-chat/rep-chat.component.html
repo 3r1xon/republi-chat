@@ -1,6 +1,7 @@
 <div id="chat">
 
   <div *ngIf="chatOptions" id="chat-options">
+    <p [style.visibility]="selections.length > 0 ? '' : 'hidden'">{{selections.length}} Selected</p>
     <rep-actions onlyIcons="true" reverse="true" [actions]="chatOptions"></rep-actions>
   </div>
 

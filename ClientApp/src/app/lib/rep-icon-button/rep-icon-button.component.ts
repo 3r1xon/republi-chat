@@ -15,4 +15,31 @@ export class REPIconButtonComponent implements OnInit {
   @Input()
   public tooltip: string;
 
+  private _enabled: boolean | (() => boolean) = true;
+  private _visible: boolean | (() => boolean) = true;
+
+  @Input()
+  public set enabled(boolean) {
+    if (boolean != undefined) {
+      this._enabled = boolean;
+    }
+  };
+
+  public get enabled() {
+    if (typeof this._enabled == 'boolean') return this._enabled;
+    else return this._enabled();
+  }
+
+  @Input()
+  public set visible(boolean) {
+    if (boolean != undefined) {
+      this._visible = boolean;
+    }
+  }
+
+  public get visible() {
+    if (typeof this._visible == 'boolean') return this._visible;
+    else return this._visible();
+  }
+
 }

@@ -24,7 +24,7 @@
     }
 
     &:hover {
-        background: var(--GREY);
+        background: var(--VERY-DARK);
     }
 
     #message-info {
@@ -63,6 +63,10 @@
     }
 }
 
+.active {
+    background: var(--VERY-DARK);
+}
+
 
 @keyframes appear {
     0% {
@@ -70,6 +74,19 @@
     }
 
     100% {
+        opacity: 1;
+    }
+}
+
+
+@keyframes highlight {
+    0% {
+        background: #49443c;
+        opacity: 0;
+    }
+
+    100% {
+        background: transparent;
         opacity: 1;
     }
 }

@@ -7,9 +7,17 @@
     border-top-right-radius: 10px;
 
     #chat-options {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
         margin-top: 5px;
         -webkit-box-shadow: 0px 25px 15px -5px #0f0e0e52;
         box-shadow: 0px 25px 15px -5px #0f0e0e52;
+
+        p {
+            margin-left: 10px;
+        }
     }
 
     #messages {

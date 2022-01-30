@@ -1,6 +1,7 @@
-<div id="message-box" [ngStyle]="{ 
-        background: active ? '#434343' : ''
-    }">
+<div id="message-box" [ngClass]="{ 
+        'active': active
+    }"
+    [style.animation]="highlighted ? 'highlight 2s' : ''">
 
     <div id="cont" (click)="clickHandler()">
 
