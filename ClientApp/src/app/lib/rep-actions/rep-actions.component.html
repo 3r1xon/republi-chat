@@ -2,13 +2,24 @@
     'reverse': reverse
     }">
 
-    <rep-button *ngFor="let button of actions"
-        [enabled]="button.enabled == undefined ? true : button.enabled"
-        [background]="button.background"
-        [visible]="button.visible()"
-        [icon]="button.icon"
-        (onClick)="button.onClick()">
-        {{button.name}}
-    </rep-button>
+    <div *ngFor="let button of actions">
+        <rep-button *ngIf="!onlyIcons"
+            [enabled]="button.enabled == undefined ? true : button.enabled"
+            [background]="button.background"
+            [visible]="button.visible()"
+            [icon]="button.icon"
+            (onClick)="button.onClick()">
+            {{button.name}}
+        </rep-button>
+
+        <rep-icon-button *ngIf="onlyIcons"
+            [enabled]="button.enabled == undefined ? true : button.enabled"
+            [background]="button.background"
+            [visible]="button.visible()"
+            [icon]="button.icon"
+            (onClick)="button.onClick()"
+        >{{button.icon}}
+        </rep-icon-button>
+    </div>
 
 </div>

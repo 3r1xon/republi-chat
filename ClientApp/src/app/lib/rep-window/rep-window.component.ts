@@ -69,7 +69,6 @@ export class REPWindowComponent {
   clickout(event: any) {
     if (!this.eRef.nativeElement.contains(event.target)) {
       this.state = false;
-      this.open.emit(this.state);
     }
   }
 

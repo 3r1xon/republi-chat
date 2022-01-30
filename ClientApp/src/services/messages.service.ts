@@ -106,17 +106,15 @@ export class MessagesService {
 
                 this.destroyMsSubscriptions();
 
-                this.messages = res.data?.map((msg) => {
-                  return {
-                    id: msg.id,
-                    name: msg.name,
-                    author: msg.author,
-                    message: msg.message,
-                    date: new Date(msg.date),
-                    picture: this._fileUpload.sanitizeIMG(msg.picture),
-                    color: msg.color,
-                    auth: this.chPermissions.id === msg.author
-                  };
+                const mapMsg = (msg: Message) => {
+                  msg.picture = this._fileUpload.sanitizeIMG(msg.picture);
+                  msg.date = new Date(msg.date);
+                  msg.auth = this.chPermissions.id === msg.author;
+                  return msg;
+                }
+
+                this.messages = res.data?.map((msg: Message) => {
+                  return mapMsg(msg);
                 });
 
                 this.messagesIO.emit("joinChannel", {
@@ -128,18 +126,8 @@ export class MessagesService {
                   .push(
                     this.messagesIO.listen("message")
                       .subscribe((message: string) => {
-                        const msg = JSON.parse(message);
-
-                        this.messages.push({
-                          id: msg.id,
-                          name: msg.name,
-                          author: msg.author,
-                          message: msg.message,
-                          date: new Date(msg.date),
-                          picture: this._fileUpload.sanitizeIMG(msg.picture),
-                          color: msg.color,
-                          auth: this.chPermissions.id === msg.author
-                        });
+                        const msg = <Message>JSON.parse(message);
+                        this.messages.push(mapMsg(msg));
                       })
                 );
 

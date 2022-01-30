@@ -15,4 +15,7 @@ export class REPActionsComponent {
 
   @Input()
   public reverse: boolean = false;
+
+  @Input()
+  public onlyIcons: boolean = false;
 }

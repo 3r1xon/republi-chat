@@ -4,6 +4,7 @@ export interface Message {
     author?: number;
     message: string;
     color: string;
+    backgroundColor?: string;
     picture: any;
     date: Date;
     auth: boolean;

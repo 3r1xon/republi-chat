@@ -6,7 +6,7 @@ import {
   Output,
   EventEmitter,
   AfterViewInit,
-  ViewChildren
+  ViewChildren,
 } from '@angular/core';
 import { Message } from 'src/interfaces/message.interface';
 import { REPButton } from 'src/interfaces/repbutton.interface';
@@ -18,12 +18,29 @@ import { REPButton } from 'src/interfaces/repbutton.interface';
 })
 export class REPChatComponent implements AfterViewInit {
 
-  constructor() { }
+  constructor(
+  ) { 
+  }
 
   ngAfterViewInit(): void {
     this.msg.changes.subscribe(() => {
-      if (this.messages[this.messages?.length-1]?.auth)
+
+      // console.log("scrollTop ---->", this.content.nativeElement.scrollTop);
+      // console.log("width ----> ", this.content.nativeElement.scrollWidth);
+
+      if (!this.initialized) {
         this.scrollToBottom();
+        this.initialized = true;
+      }
+
+      if (this.messages[this.messages?.length-1]?.auth) {
+        this.scrollToBottom();
+
+      } else if (this.messages.length > this.prevLength) {
+        this.prevLength = this.messages.length;
+
+        this.scrollToBottom();
+      }
     });
   }
 
@@ -46,13 +63,58 @@ export class REPChatComponent implements AfterViewInit {
   @Output()
   public sendMessage = new EventEmitter();
 
+  private initialized: boolean = false;
+
+  private prevLength: number = 0;
+
+  public selections: Array<Message> = [];
+
+  @Input()
+  public readonly chatOptions: Array<REPButton> = [
+    {
+      name: "Delete messages",
+      icon: "delete_sweep",
+      visible: () => true,
+      enabled: () => true,
+      onClick: () => { }
+    }
+  ];
+
   send(event) {
     this.sendMessage.emit(event);
   }
 
-  scrollToBottom = () => {
+  scrollToBottom() {
     try {
       this.content.nativeElement.scrollTop = this.content.nativeElement.scrollHeight;
     } catch{ }
   }
+
+  select(index: number, event: any) {
+    const ctrlKey = event.ctrlKey;
+
+    if (ctrlKey) {
+
+      const exists = this.selections.some(msg => msg.id === this.messages[index].id);
+
+      if (exists) {
+        this.selections = this.selections.filter(msg => msg.id !== this.messages[index].id);
+
+        return;
+      }
+
+      this.selections.push(
+        this.messages[index]
+      );
+      console.log(this.selections)
+    } else {
+      this.selections = [];
+    }
+  }
+
+  isInSelection(id: number) {
+    return this.selections.some(msg => msg.id === id);
+  }
+
+
 }

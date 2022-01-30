@@ -36,6 +36,7 @@ export class PProfileComponent {
     name: this.user.name,
     message: "Hey, how are you doing?",
     color: this.user.color,
+    backgroundColor: this.user.backgroundColor,
     picture: this.user.picture,
     date: new Date(),
     auth: false

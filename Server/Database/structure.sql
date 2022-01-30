@@ -1,14 +1,15 @@
 create or replace table republichat.users
 (
-    ID_USER         bigint auto_increment
+    ID_USER          bigint auto_increment
         primary key,
-    USER_CODE       varchar(4)                   not null,
-    EMAIL           varchar(320)                 not null,
-    PASSWORD        varchar(64)                  not null,
-    NAME            varchar(30)                  null,
-    PROFILE_PICTURE mediumblob                   null,
-    COLOR           varchar(7) default '#FFFFFF' null,
-    BIOGRAPHY       varchar(200)                 null,
+    USER_CODE        varchar(4)                   not null,
+    EMAIL            varchar(320)                 not null,
+    PASSWORD         varchar(64)                  not null,
+    NAME             varchar(30)                  null,
+    PROFILE_PICTURE  mediumblob                   null,
+    COLOR            varchar(7) default '#FFFFFF' null,
+    BACKGROUND_COLOR varchar(7)                   null,
+    BIOGRAPHY        varchar(200)                 null,
     constraint USERS_EMAIL_uindex
         unique (EMAIL)
 );

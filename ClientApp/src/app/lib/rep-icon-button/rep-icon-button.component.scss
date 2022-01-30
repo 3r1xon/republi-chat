@@ -1,0 +1,10 @@
+#rep-icon-button {
+
+    mat-icon {
+        cursor: pointer;
+
+        &:hover {
+            color: var(--OBSCURE_SECONDARY);
+        }
+    }
+}

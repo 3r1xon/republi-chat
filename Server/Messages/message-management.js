@@ -32,15 +32,16 @@ router.get('/getChannelMessages/:id/:limit', async (req, res) => {
         `
         SELECT M.ID_CHANNEL_MESSAGE         as id,
                U.COLOR                      as color,
+               U.BACKGROUND_COLOR           as backgroundColor,
                U.NAME                       as name,
                CM.ID_CHANNEL_MEMBER         as author,
                TO_BASE64(U.PROFILE_PICTURE) as picture,
                M.MESSAGE                    as message,
                M.DATE                       as date
         FROM CHANNELS_MESSAGES M
-                LEFT JOIN CHANNELS_MEMBERS CM ON CM.ID_CHANNEL_MEMBER = M.ID_CHANNEL_MEMBER
-                LEFT JOIN CHANNELS C ON C.ID_CHANNEL = M.ID_CHANNEL
-                LEFT JOIN USERS U ON U.ID_USER = CM.ID_USER
+                 LEFT JOIN CHANNELS_MEMBERS CM ON CM.ID_CHANNEL_MEMBER = M.ID_CHANNEL_MEMBER
+                 LEFT JOIN CHANNELS C ON C.ID_CHANNEL = M.ID_CHANNEL
+                 LEFT JOIN USERS U ON U.ID_USER = CM.ID_USER
         WHERE C.ID_CHANNEL = ?
           AND M.DATE >= ?
         LIMIT ${limit}

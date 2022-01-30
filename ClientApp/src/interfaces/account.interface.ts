@@ -3,6 +3,7 @@ export interface Account {
     code: string;
     picture?: any;
     color?: string;
+    backgroundColor?: string;
     name: string;
     email: string;
 }

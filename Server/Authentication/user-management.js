@@ -72,6 +72,7 @@ router.post('/authorize', Auth.HTTPAuthToken, async (req, res) => {
            U.USER_CODE                  as code,
            U.NAME                       as name,
            U.COLOR                      as color,
+           U.BACKGROUND_COLOR           as backgroundColor,
            U.EMAIL                      as email,
            TO_BASE64(U.PROFILE_PICTURE) as picture
     FROM USERS U
@@ -106,6 +107,7 @@ router.post('/logIn', async (req, res) => {
            U.USER_CODE                  as code,
            U.NAME                       as name,
            U.COLOR                      as color,
+           U.BACKGROUND_COLOR           as backgroundColor,
            U.EMAIL                      as email,
            TO_BASE64(U.PROFILE_PICTURE) as picture
     FROM USERS U

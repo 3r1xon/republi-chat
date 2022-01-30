@@ -21,5 +21,17 @@ export class REPProfilePicComponent {
   @Input()
   public height: string = "45px";
 
+  private _color: string = "royalblue";
+
+  @Input()
+  public set color(cl: string) {
+    cl ??= "royalblue";
+    this._color = cl;
+  }
+
+  public get color() {
+    return this._color;
+  }
+
   public pictureError: boolean = false;
 }
