@@ -35,7 +35,6 @@ export class REPTextBoxComponent {
     text: ['',
       [
         Validators.max(2000),
-        Validators.pattern(/^[^\s]+(\s+[^\s]+)*$/)
       ]
     ]
   });
@@ -43,7 +42,8 @@ export class REPTextBoxComponent {
   public async send(event) {
 
     if (this.form.valid) {
-      this.sendMessage.emit(this.form.value["text"]);
+      const txt = this.form.value["text"].trim();
+      this.sendMessage.emit(txt);
       this.form.reset();
       this.trigger = false;
     } else this.trigger = true;
