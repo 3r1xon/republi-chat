@@ -7,24 +7,28 @@
     border-top-right-radius: 10px;
 
     #chat-options {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
+        height: 25px;
         position: relative;
 
         margin-top: 5px;
         -webkit-box-shadow: 0px 25px 15px -5px #0f0e0e52;
         box-shadow: 0px 25px 15px -5px #0f0e0e52;
 
-        p {
+        #selection {
             margin-left: 10px;
+            position: absolute;
+            left: 0;
         }
 
         #chat-name {
             position: absolute;
             text-align: center;
-            white-space: nowrap;
             left: 0;
+            right: 0;
+        }
+
+        rep-actions {
+            position: absolute;
             right: 0;
         }
     }
@@ -36,7 +40,7 @@
         overflow-y: auto;
         overflow-x: hidden;
 
-        div {
+        rep-message {
             margin-top: 5px;
         }
     }
@@ -44,8 +48,4 @@
     #textbox {
         height: 100px;
     }
-}
-
-.active {
-    background: #434343;
 }

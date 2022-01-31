@@ -30,22 +30,7 @@
             border-radius: 50%;
             margin: 10px;
         }
-
-        mat-icon {
-            cursor: pointer;
-            color: var(--WHITE);
-            margin-right: 15px;
-        }
-
-        #settings {
-            transition: 500ms;
-
-            &:hover, &:focus {
-                transform: rotate(90deg);
-            }
-        }
     }
-    
 }
 
 .connected {

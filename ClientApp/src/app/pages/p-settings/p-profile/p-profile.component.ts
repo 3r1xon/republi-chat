@@ -93,40 +93,40 @@ export class PProfileComponent {
 
     this.file = <File>event[0];
 
-    // const file = <File>event[0];
+    const file = <File>event[0];
 
-    // const fd = new FormData();
-    // fd.append("image", file, file.name);
+    const fd = new FormData();
+    fd.append("image", file, file.name);
     
-    // const res = await this.http.put<ServerResponse>(
-    // `${server.BASE_URL}/authentication/editProfile`, 
-    // fd
-    // ).toPromise();
+    const res = await this.http.put<ServerResponse>(
+    `${server.BASE_URL}/authentication/editProfile`, 
+    fd
+    ).toPromise();
     
-    // if (res.success) {
-    //   this._user.currentUser.profilePicture = this._fileUpload.sanitizeIMG(res.data);
-    // }
+    if (res.success) {
+      this._user.currentUser.picture = this._fileUpload.sanitizeIMG(res.data);
+    }
   }
 
   save() {
 
-    let fd;
-    if (this.file) {
-      fd = new FormData();
-      fd.append("image", this.file, this.file.name);
-    } else {
-      this.user.picture = null;
-    }
+    // let fd;
+    // if (this.file) {
+    //   fd = new FormData();
+    //   fd.append("image", this.file, this.file.name);
+    // } else {
+    //   this.user.picture = null;
+    // }
 
-    this.http.put<ServerResponse>(
-    `${server.BASE_URL}/authentication/editProfile`, {
-      body: {
-        fd,
-        user: this.user
-      }
-    })
-      .pipe(first())
-      .subscribe();
+    // this.http.put<ServerResponse>(
+    // `${server.BASE_URL}/authentication/editProfile`, {
+    //   body: {
+    //     fd,
+    //     user: this.user
+    //   }
+    // })
+    //   .pipe(first())
+    //   .subscribe();
   }
 
   deleteProfile() {

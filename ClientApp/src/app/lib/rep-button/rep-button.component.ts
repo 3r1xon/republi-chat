@@ -23,19 +23,24 @@ export class REPButtonComponent {
   @Input()
   public icon: string = "open_in_new";
 
+  private _background: string = "royalblue";
+
   @Input()
   public set background(color: string) {
-    if (color in this.defColors) this.backColor = this.defColors[color];
-    else if (color != undefined) this.backColor = color;
+    if (color in this.defColors) this._background = this.defColors[color];
+    else if (color != undefined) this._background = color;
   };
 
-  public backColor: string = "royalblue";
+  public get background() {
+    return this._background;
+  }
 
   @Input()
   public set color(color: string) {
     if (color in this.defColors) this.fontColor = this.defColors[color];
     else if (color != undefined) this.fontColor = color;
   }
+
 
   public fontColor: string = "#FFFFFF";
 

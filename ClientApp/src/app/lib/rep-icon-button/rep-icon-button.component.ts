@@ -1,19 +1,34 @@
-import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'rep-icon-button',
   templateUrl: './rep-icon-button.component.html',
   styleUrls: ['./rep-icon-button.component.scss']
 })
-export class REPIconButtonComponent implements OnInit {
+export class REPIconButtonComponent {
 
   constructor() { }
 
-  ngOnInit(): void {
-  }
+  private readonly defColors = {
+    success: "#46a35e",
+    warning: "#F59E0B",
+    danger: "#c62828"
+  };
 
   @Input()
   public tooltip: string;
+
+  private _color: string = "#ffffff";
+
+  @Input()
+  public set color(color: string) {
+    if (color in this.defColors) this._color = this.defColors[color];
+    else if (color != undefined) this._color = color;
+  };
+
+  public get color() {
+    return this._color;
+  }
 
   private _enabled: boolean | (() => boolean) = true;
   private _visible: boolean | (() => boolean) = true;
@@ -36,6 +51,8 @@ export class REPIconButtonComponent implements OnInit {
       this._visible = boolean;
     }
   }
+
+  public hovering: boolean = false;
 
   public get visible() {
     if (typeof this._visible == 'boolean') return this._visible;

@@ -1,7 +1,7 @@
 <div id="chat">
 
   <div *ngIf="chatOptions" id="chat-options">
-    <p [style.visibility]="selections.length > 0 ? '' : 'hidden'">{{selections.length}} Selected</p>
+    <p id="selection" [style.visibility]="selections.length > 0 ? '' : 'hidden'">{{selections.length}} Selected</p>
 
     <p id="chat-name">{{chatName}}</p>
 
@@ -10,15 +10,13 @@
 
   <div id="messages" #content>
 
-    <div #msg *ngFor="let message of messages; let i = index;" (click)="select(i, $event)" [ngClass]="{
-      'active': isInSelection(message.id)
-    }">
-      <rep-message
-        [message]="message"
-        [options]="msOptions"
-        [uniqueID]="i"
-      ></rep-message>
-    </div>
+    <rep-message #msg *ngFor="let message of messages; let i = index;"
+      [message]="message"
+      [options]="msOptions"
+      [uniqueID]="i"
+      [hold]="isInSelection(message.id)"
+      (click)="select(i, $event)"
+    ></rep-message>
 
   </div>
 

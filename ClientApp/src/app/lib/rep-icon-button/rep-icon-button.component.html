@@ -1,10 +1,12 @@
-<div id="rep-icon-button" *ngIf="visible">
+<div id="rep-icon-button" *ngIf="visible" [ngStyle]="{
+        'opacity': enabled && !hovering ? '1' : '0.5'
+    }" (mouseover)="hovering = true" (mouseout)="hovering = false">
     <mat-icon (click)="checkClick()" [ngStyle]="{
-        'cursor': enabled ? 'pointer' : 'default',
-        'opacity': enabled ? '1' : '0.5'
-    }">
+        'cursor': enabled ? 'pointer' : 'default'
+    }" [style.color]="color">
         <ng-content></ng-content>
     </mat-icon>
 
-    <rep-tooltip *ngIf="tooltip">{{tooltip}}</rep-tooltip>
 </div>
+
+<rep-tooltip *ngIf="tooltip && hovering">{{tooltip}}</rep-tooltip>

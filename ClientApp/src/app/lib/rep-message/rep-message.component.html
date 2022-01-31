@@ -1,15 +1,17 @@
 <div id="message-box" [ngClass]="{ 
-        'active': active
+        'active': active && !hold,
+        'hold': hold
     }"
     [style.animation]="highlighted ? 'highlight 2s' : ''">
 
     <div id="cont" (click)="clickHandler()">
 
         <rep-profile-pic
-        [src]="message.picture"
-        [letter]="message.name[0]"
-        [color]="message.backgroundColor"
-        (click)="onUserClick.emit('onUserClick')">
+            [src]="message.picture"
+            [letter]="message.name[0]"
+            [color]="message.backgroundColor"
+            (click)="onUserClick.emit('onUserClick')"
+        >
         </rep-profile-pic>
 
         <div id="message-info">
@@ -31,8 +33,9 @@
     </div>
 
     <rep-window *ngIf="options"
-    [subMenu]="options"
-    [uniqueID]="uniqueID"
-    (open)="setToggle($event)"></rep-window>
+        [subMenu]="options"
+        [uniqueID]="uniqueID"
+        (open)="setToggle($event)"
+    ></rep-window>
 
 </div>

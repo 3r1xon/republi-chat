@@ -34,6 +34,7 @@ export class REPTextBoxComponent {
   public form: FormGroup = this.fb.group({
     text: ['',
       [
+        Validators.required,
         Validators.max(2000),
       ]
     ]

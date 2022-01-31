@@ -9,6 +9,7 @@ const crypto         = require('crypto');
 const { io }         = require('../start');
 const model          = require('nanoid');
 const { userSchema } = require('../Tools/schemas');
+const clc            = require('cli-color');
 
 
 router.post('/signUp', async (req, res) => {
@@ -83,7 +84,7 @@ router.post('/authorize', Auth.HTTPAuthToken, async (req, res) => {
 
     res.status(401).send({ success: false, message: "There has been an error with the token authentication!"});
   } catch(err) {
-    console.log(err);
+    console.log(clc.red(err));
     res.status(500).send({ success: false, message: "Internal server error!" });
   }
 });
@@ -147,7 +148,7 @@ router.post('/logIn', async (req, res) => {
     }
   }
   catch (err) {
-    console.log(err);
+    console.log(clc.red(err));
     res.status(500).send({ success: false, message: "Internal server error!" });
   }
 });
@@ -172,7 +173,7 @@ router.delete('/logout', Auth.HTTPAuthToken, async (req, res) => {
     res.status(200).send({ success: true });
 
   } catch(err) {
-    console.log(err);
+    console.log(clc.red(err));
     res.status(500).send({ success: false, message: "Internal server error!" });
   }
   
@@ -204,7 +205,7 @@ router.put('/editProfile', [Auth.HTTPAuthToken, upload.single("image")], async (
     });
 
   } catch(err) {
-    console.log(err);
+    console.log(clc.red(err));
 
     res.status(500).send({ success: false, message: "Internal server error!" });
   }
@@ -232,7 +233,7 @@ router.delete('/deleteProfile', Auth.HTTPAuthToken, async (req, res) => {
     });
 
   } catch(err) {
-    console.log(err);
+    console.log(clc.red(err));
 
     res.status(500).send({ success: false, message: "Internal server error!" });
   }
@@ -272,7 +273,7 @@ router.get('/getDevices', Auth.HTTPAuthToken, async (req, res) => {
     });
 
   } catch(err) {
-    console.log(err);
+    console.log(clc.red(err));
 
     res.status(500).send({ success: false, message: "Internal server error!" });
   }
@@ -306,7 +307,7 @@ router.delete('/disconnectDevice/:id', Auth.HTTPAuthToken, async (req, res) => {
     });
 
   } catch(err) {
-    console.log(err);
+    console.log(clc.red(err));
 
     res.status(500).send({ success: false, message: "Internal server error!" });
   }

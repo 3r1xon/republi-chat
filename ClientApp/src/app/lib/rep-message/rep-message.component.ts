@@ -40,6 +40,9 @@ export class REPMessageComponent {
   @Input()
   public highlighted: boolean = false;
 
+  @Input()
+  public hold: boolean = false;
+
   @Output()
   public onUserClick = new EventEmitter<string>();
 

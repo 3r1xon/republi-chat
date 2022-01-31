@@ -18,8 +18,8 @@ export class REPTooltipComponent implements AfterViewInit {
   @ViewChild('tooltip')
   private tooltip: ElementRef;
 
-  public marginLeft: string = "0px";
-  public marginRight: string = "0px";
+  public marginLeft: number = 0;
+  public marginRight: number = 0;
 
   ngAfterViewInit(): void {
 
@@ -29,7 +29,7 @@ export class REPTooltipComponent implements AfterViewInit {
     const { x, y } = this.tooltip.nativeElement.getBoundingClientRect();
 
     if (x + tooltipWidth > window.innerWidth) {
-      this.marginLeft = `${x - window.innerWidth - tooltipWidth}px`;
+      this.marginLeft = x - window.innerWidth - tooltipWidth;
     }
 
     this.cd.detectChanges();

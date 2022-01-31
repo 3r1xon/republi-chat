@@ -160,13 +160,12 @@ export class PMainpageComponent extends WebSocket implements OnInit {
       name: "Delete messages",
       icon: "delete_sweep",
       tooltip: "Deletes selected messages",
-      visible: () => true,
+      background: "danger",
+      visible: () => this.chat?.selections.length > 0,
       enabled: () => {
-        if (this.chat?.selections.length > 0) {
-          if (this._msService.chPermissions.deleteMessage)
-            return true;
-          return !this.chat.selections.some((msg: Message) => msg.auth == false);
-        } else return false;
+        if (this._msService.chPermissions.deleteMessage)
+          return true;
+        return !this.chat.selections.some((msg: Message) => msg.auth == false);
       },
       onClick: () => { 
         const selNum = this.chat.selections.length;
@@ -183,8 +182,9 @@ export class PMainpageComponent extends WebSocket implements OnInit {
     },
     {
       name: "Deselect",
-      icon: "subject",
+      icon: "clear_all",
       tooltip: "Deselect all",
+      background: "warning",
       visible: () => this.chat?.selections.length > 0,
       enabled: () => true,
       onClick: () => { 

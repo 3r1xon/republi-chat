@@ -14,9 +14,10 @@
 
         <rep-icon-button *ngIf="onlyIcons"
             [enabled]="button.enabled == undefined ? true : button.enabled"
-            [background]="button.background"
+            [color]="button.background"
             [visible]="button.visible()"
             [icon]="button.icon"
+            [tooltip]="button.tooltip"
             (onClick)="button.onClick()"
         >{{button.icon}}
         </rep-icon-button>

@@ -1,12 +1,12 @@
 <div id="rep-status-bar">
 
     <div id="profile">
-        <rep-profile-pic
-        [src]="user.picture"
-        [letter]="user.name[0]"
-        [color]="user.backgroundColor"
-        width="40px"
-        height="35px"
+        <rep-profile-pic routerLink="/settings/profile"
+            [src]="user.picture"
+            [letter]="user.name[0]"
+            [color]="user.backgroundColor"
+            width="40px"
+            height="40px"
         >
         </rep-profile-pic>
         <p [style.color]="user.color">{{user.name}}</p>
@@ -18,8 +18,7 @@
             'disconnected': !socket.connected
         }">
         </span>
-        <mat-icon (click)="toggleServerGroup()">group</mat-icon>
-        <mat-icon id="settings" routerLink="/settings/">settings</mat-icon>
+        <rep-actions onlyIcons="true" [actions]="navigations"></rep-actions>
     </div>
 
 </div>

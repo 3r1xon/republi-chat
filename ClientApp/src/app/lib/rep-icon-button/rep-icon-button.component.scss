@@ -1,9 +1,3 @@
 #rep-icon-button {
-
-    mat-icon {
-
-        &:hover {
-            opacity: 0.5;
-        }
-    }
+    transition: 100ms;
 }
