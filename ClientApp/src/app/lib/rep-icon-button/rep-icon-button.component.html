@@ -1,8 +1,8 @@
-<div id="rep-icon-button" [ngStyle]="{
-        'opacity': enabled ? '1' : '0.5',
-        'cursor': enabled ? 'pointer' : 'default'
+<div id="rep-icon-button" *ngIf="visible">
+    <mat-icon (click)="checkClick()" [ngStyle]="{
+        'cursor': enabled ? 'pointer' : 'default',
+        'opacity': enabled ? '1' : '0.5'
     }">
-    <mat-icon>
         <ng-content></ng-content>
     </mat-icon>
 

@@ -34,7 +34,7 @@ export class MessagesService {
 
   public chPermissions: ChannelPermissions;
 
-  public currentRoom: number;
+  public currentRoom: Channel;
 
   private msSubscriptions: Array<Subscription> = [];
 
@@ -86,7 +86,7 @@ export class MessagesService {
    * @param room The channel ID you want to join into.
    *
    */
-  public joinChannel(room: number) {
+  public joinChannel(room: Channel) {
 
     this.getChPermissions(room)
     .pipe(first())
@@ -118,7 +118,7 @@ export class MessagesService {
                 });
 
                 this.messagesIO.emit("joinChannel", {
-                  room: this.currentRoom,
+                  room: this.currentRoom._id,
                   userID: this._user.currentUser.id
                 });
 
@@ -168,16 +168,16 @@ export class MessagesService {
     );
   }
 
-  public getChMessages(room: number, limit: number) {
-    return this.http.get<ServerResponse>(`${server.BASE_URL}/messages/getChannelMessages/${room}/${limit}`);
+  public getChMessages(room: Channel, limit: number) {
+    return this.http.get<ServerResponse>(`${server.BASE_URL}/messages/getChannelMessages/${room._id}/${limit}`);
   }
 
-  public getChPermissions(room: number) {
-    return this.http.get<ServerResponse>(`${server.BASE_URL}/messages/getChannelPermissions/${room}`);
+  public getChPermissions(room: Channel) {
+    return this.http.get<ServerResponse>(`${server.BASE_URL}/messages/getChannelPermissions/${room._id}`);
   }
 
   public leaveChannel(room: number) {
-    
+
   }
 
   /**
@@ -205,9 +205,9 @@ export class MessagesService {
    * 
    * @param _id The ID of the user you want to ban.
    */
-  public banUser(room: number, _id: number) {
+  public banUser(room: Channel, _id: number) {
     this.messagesIO.emit("ban", {
-      room: room,
+      room: room._id,
       _id: _id
     });
   }
@@ -219,9 +219,9 @@ export class MessagesService {
    * 
    * @param _id The ID of the user you want to kick.
    */
-   public kickUser(room: number, _id: number) {
+   public kickUser(room: Channel, _id: number) {
     this.messagesIO.emit("kick", {
-      room: room,
+      room: room._id,
       _id: _id
     });
   }

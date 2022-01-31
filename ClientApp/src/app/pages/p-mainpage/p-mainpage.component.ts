@@ -10,6 +10,8 @@ import { UtilsService } from 'src/services/utils.service';
 import { WebSocket } from 'src/app/lib/websocket';
 import { server } from 'src/environments/server';
 import { REPChatComponent } from 'src/app/lib/rep-chat/rep-chat.component';
+import { Message } from 'src/interfaces/message.interface';
+import { Channel } from 'src/interfaces/channel.interface';
 
 @Component({
   templateUrl: './p-mainpage.component.html',
@@ -29,6 +31,8 @@ export class PMainpageComponent extends WebSocket implements OnInit {
 
   private sessionSubscription: Subscription;
 
+  @ViewChild(REPChatComponent) private chat: REPChatComponent;
+
   ngOnInit(): void {
     this._msService.getChannels();
 
@@ -40,7 +44,7 @@ export class PMainpageComponent extends WebSocket implements OnInit {
 
         channelsRef.sections = this._msService.channels;
 
-        const room = channelsRef.sections[0]?._id;
+        const room = channelsRef.sections[0];
 
         if (room) {
           this._msService.joinChannel(room);
@@ -151,8 +155,6 @@ export class PMainpageComponent extends WebSocket implements OnInit {
     }
   ];
 
-  @ViewChild(REPChatComponent) private chat;
-
   public readonly chatOptions: Array<REPButton> = [
     {
       name: "Delete messages",
@@ -161,15 +163,32 @@ export class PMainpageComponent extends WebSocket implements OnInit {
       visible: () => true,
       enabled: () => {
         if (this.chat?.selections.length > 0) {
-          if (this._msService.chPermissions?.deleteMessage) return true;
-          return this.chat?.selections.some(msg => msg.auth == false);
+          if (this._msService.chPermissions.deleteMessage)
+            return true;
+          return !this.chat.selections.some((msg: Message) => msg.auth == false);
         } else return false;
       },
       onClick: () => { 
-        this.chat.selections.map((msg) => {
-          console.log(msg.id)
-          // this._msService.deleteMessage(msg.id);
-        })
+        const selNum = this.chat.selections.length;
+
+        const delSelected = () => {
+          this.chat.selections.map((msg: Message) => {
+            this._msService.deleteMessage(msg.id);
+          })
+          this.chat.selections = [];
+        }
+
+        this._utils.showRequest(`Delete ${selNum} messages?`, `Are you sure you want to delete ${selNum} messages?`, delSelected);
+      }
+    },
+    {
+      name: "Deselect",
+      icon: "subject",
+      tooltip: "Deselect all",
+      visible: () => this.chat?.selections.length > 0,
+      enabled: () => true,
+      onClick: () => { 
+        this.chat.selections = [];
       }
     }
   ];
@@ -218,7 +237,7 @@ export class PMainpageComponent extends WebSocket implements OnInit {
   ];
 
 
-  selectChannel(room: number) {
+  selectChannel(room: Channel) {
     this._msService.joinChannel(room);
   }
 

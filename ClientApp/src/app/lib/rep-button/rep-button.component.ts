@@ -70,7 +70,7 @@ export class REPButtonComponent {
   public onClick: EventEmitter<boolean> = new EventEmitter();
 
   checkClick() {
-    if (!this._enabled) return;
+    if (!this.enabled) return;
 
     this.onClick.emit();
   }

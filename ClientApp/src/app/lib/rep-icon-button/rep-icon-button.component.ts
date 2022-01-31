@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'rep-icon-button',
@@ -40,6 +40,15 @@ export class REPIconButtonComponent implements OnInit {
   public get visible() {
     if (typeof this._visible == 'boolean') return this._visible;
     else return this._visible();
+  }
+
+  @Output()
+  public onClick: EventEmitter<boolean> = new EventEmitter();
+
+  checkClick() {
+    if (!this.enabled) return;
+
+    this.onClick.emit();
   }
 
 }

@@ -60,6 +60,9 @@ export class REPChatComponent implements AfterViewInit {
   @Input()
   public msgMaxLength: number = 2000;
 
+  @Input()
+  public chatName: string;
+
   @Output()
   public sendMessage = new EventEmitter();
 
