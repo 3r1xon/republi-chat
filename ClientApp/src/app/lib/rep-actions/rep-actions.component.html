@@ -2,7 +2,7 @@
     'reverse': reverse
     }">
 
-    <div *ngFor="let button of actions">
+    <ng-container *ngFor="let button of actions">
         <rep-button *ngIf="!onlyIcons"
             [enabled]="button.enabled == undefined ? true : button.enabled"
             [background]="button.background"
@@ -21,6 +21,6 @@
             (onClick)="button.onClick()"
         >{{button.icon}}
         </rep-icon-button>
-    </div>
+    </ng-container>
 
 </div>

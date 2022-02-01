@@ -136,7 +136,7 @@ router.post('/logIn', async (req, res) => {
         sid
       ]);
 
-      res.cookie("sid", sid);
+      res.cookie("sid", sid, { maxAge: 31556952000 });
 
       // Session ID created only at login time
       res.status(200).send({ success: true, data: {

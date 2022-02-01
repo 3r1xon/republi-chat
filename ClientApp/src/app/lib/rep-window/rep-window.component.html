@@ -1,12 +1,13 @@
 <mat-icon (click)="openSubMenu($event)" id="more"
-        [ngStyle]="{ 
-            background: state ? '#24252a' : '' 
-}">more_vert</mat-icon>
+    [ngStyle]="{ 
+        background: state ? '#24252a' : ''
+    }"
+    >more_vert</mat-icon>
 
 <div id="submenu" *ngIf="state" #submenu
     [style.left]="offsetX + 'px'"
     [style.top]="offsetY + 'px'">
-    <rep-button *ngFor="let section of subMenu" matRipple 
+    <rep-button *ngFor="let section of subMenu" matRipple
         (mouseenter)="section.highlighted = true"
         (mouseleave)="section.highlighted = false"
         [icon]="section.icon"
