@@ -298,9 +298,8 @@ router.delete('/disconnectDevice/:id', Auth.HTTPAuthToken, async (req, res) => {
     RETURNING SID
     `, [_id, userID]);
 
-    // io.emit(session.SID, "forceKick");
-    io.to(socketID).emit(session.SID, "forceKick");
-
+    io.emit(session.SID, "forceKick");
+    // io.to(socketID).emit(session.SID, "forceKick");
 
     res.status(201).send({ 
       success: true,

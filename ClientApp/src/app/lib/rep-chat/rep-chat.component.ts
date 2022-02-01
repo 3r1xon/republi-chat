@@ -7,9 +7,11 @@ import {
   EventEmitter,
   AfterViewInit,
   ViewChildren,
+  HostListener,
 } from '@angular/core';
 import { Message } from 'src/interfaces/message.interface';
 import { REPButton } from 'src/interfaces/repbutton.interface';
+
 
 @Component({
   selector: 'rep-chat',
@@ -24,10 +26,8 @@ export class REPChatComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {
     this.msg.changes.subscribe(() => {
-
       // console.log("scrollTop ---->", this.content.nativeElement.scrollTop);
       // console.log("width ----> ", this.content.nativeElement.scrollWidth);
-
       if (!this.initialized) {
         this.scrollToBottom();
         this.initialized = true;
@@ -85,7 +85,11 @@ export class REPChatComponent implements AfterViewInit {
     } catch{ }
   }
 
-  select(index: number, event: any) {
+  deselectAll() {
+    this.selections = [];
+  }
+
+  select(index: number, event: KeyboardEvent) {
     const ctrlKey = event.ctrlKey;
 
     if (ctrlKey) {
@@ -102,9 +106,24 @@ export class REPChatComponent implements AfterViewInit {
         this.messages[index]
       );
     } else {
-      this.selections = [];
+      this.deselectAll();
     }
   }
+
+  @HostListener('document:keydown.shift.arrowup', ['$event']) 
+  selectUp() {
+    if (this.selections.length > 0) {
+
+    }
+  }
+
+  @HostListener('document:keydown.shift.arrowdown', ['$event']) 
+  selectDown() {
+    if (this.selections.length > 0) {
+
+    }
+  }
+
 
   isInSelection(id: number) {
     return this.selections.some(msg => msg.id === id);

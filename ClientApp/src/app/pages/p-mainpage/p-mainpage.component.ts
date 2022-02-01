@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import { Subscription } from 'rxjs';
@@ -13,11 +13,12 @@ import { REPChatComponent } from 'src/app/lib/rep-chat/rep-chat.component';
 import { Message } from 'src/interfaces/message.interface';
 import { Channel } from 'src/interfaces/channel.interface';
 
+
 @Component({
   templateUrl: './p-mainpage.component.html',
   styleUrls: ['./p-mainpage.component.scss']
 })
-export class PMainpageComponent extends WebSocket implements OnInit {
+export class PMainpageComponent extends WebSocket implements OnInit, OnDestroy {
 
   constructor(
     public _user: UserService,
@@ -30,6 +31,7 @@ export class PMainpageComponent extends WebSocket implements OnInit {
   }
 
   private sessionSubscription: Subscription;
+  private messageSubscription: Subscription;
 
   @ViewChild(REPChatComponent) private chat: REPChatComponent;
 
@@ -51,12 +53,21 @@ export class PMainpageComponent extends WebSocket implements OnInit {
         }
     });
 
+    this.messageSubscription = this._msService.messages$
+      .subscribe(() => {
+        this.chat.deselectAll();
+    });
+
     this.sessionSubscription?.unsubscribe();
     this.sessionSubscription = this.listen(this.cookieService.get("sid"))
       .subscribe((status) => {
         if (status == "forceKick")
           this._user.logOut(true);
       });
+  }
+
+  ngOnDestroy(): void {
+    this.messageSubscription.unsubscribe();
   }
 
   public readonly msgOptions: Array<REPButton> = [
@@ -174,7 +185,7 @@ export class PMainpageComponent extends WebSocket implements OnInit {
           this.chat.selections.map((msg: Message) => {
             this._msService.deleteMessage(msg.id);
           })
-          this.chat.selections = [];
+          this.chat.deselectAll();
         }
 
         this._utils.showRequest(`Delete ${selNum} messages?`, `Are you sure you want to delete ${selNum} messages?`, delSelected);
@@ -188,7 +199,7 @@ export class PMainpageComponent extends WebSocket implements OnInit {
       visible: () => this.chat?.selections.length > 0,
       enabled: () => true,
       onClick: () => { 
-        this.chat.selections = [];
+        this.chat.deselectAll();
       }
     }
   ];

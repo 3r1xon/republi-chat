@@ -81,6 +81,7 @@ export class PProfileComponent {
       name: "Delete profile",
       icon: "dangerous",
       background: "danger",
+      outline: true,
       visible: () => true,
       enabled: () => true,
       onClick: () => { this.deleteProfile() }

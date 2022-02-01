@@ -28,6 +28,8 @@ export class MessagesService {
 
   public messages: Array<Message> = [];
 
+  public messages$: Subject<any> = new Subject<any>();
+
   public channels: Array<Channel> = [];
 
   public channels$: Subject<any> = new Subject<any>();
@@ -116,6 +118,8 @@ export class MessagesService {
                 this.messages = res.data?.map((msg: Message) => {
                   return mapMsg(msg);
                 });
+
+                this.messages$.next();
 
                 this.messagesIO.emit("joinChannel", {
                   room: this.currentRoom._id,

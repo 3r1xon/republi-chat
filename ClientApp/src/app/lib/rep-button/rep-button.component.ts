@@ -41,6 +41,8 @@ export class REPButtonComponent {
     else if (color != undefined) this.fontColor = color;
   }
 
+  @Input()
+  public outline: boolean = false;
 
   public fontColor: string = "#FFFFFF";
 
