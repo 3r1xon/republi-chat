@@ -8,6 +8,6 @@
         <ng-content></ng-content>
     </mat-icon>
 
+    <rep-tooltip *ngIf="tooltip && hovering">{{tooltip}}</rep-tooltip>
 </div>
 
-<rep-tooltip *ngIf="tooltip && hovering">{{tooltip}}</rep-tooltip>

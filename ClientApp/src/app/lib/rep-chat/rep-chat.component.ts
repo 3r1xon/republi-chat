@@ -113,14 +113,12 @@ export class REPChatComponent implements AfterViewInit {
   @HostListener('document:keydown.shift.arrowup', ['$event']) 
   selectUp() {
     if (this.selections.length > 0) {
-
     }
   }
 
   @HostListener('document:keydown.shift.arrowdown', ['$event']) 
   selectDown() {
     if (this.selections.length > 0) {
-
     }
   }
 
