@@ -7,8 +7,6 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 })
 export class REPIconButtonComponent {
 
-  constructor() { }
-
   private readonly defColors = {
     success: "#46a35e",
     warning: "#F59E0B",

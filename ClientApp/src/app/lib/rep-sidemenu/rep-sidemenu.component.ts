@@ -1,16 +1,11 @@
-import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'rep-sidemenu',
   templateUrl: './rep-sidemenu.component.html',
   styleUrls: ['./rep-sidemenu.component.scss']
 })
-export class REPSidemenuComponent implements OnInit {
-
-  constructor() { }
-
-  ngOnInit(): void {
-  }
+export class REPSidemenuComponent {
 
   @Input()
   public entries: Array<{ 

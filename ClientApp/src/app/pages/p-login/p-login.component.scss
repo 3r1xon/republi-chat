@@ -65,10 +65,11 @@
                 margin: 15px;
             }
 
-            #button {
+            .buttons {
                 width: 80%;
                 display: flex;
                 flex-direction: row-reverse;
+                justify-content: center;
 
                 rep-button {
                     margin: 10px;
@@ -102,12 +103,6 @@
         width: 100%;
     }
 }
-
-
-.error {
-    animation: shake 1s;
-}
-
 
 
 @keyframes onOpenLogIn {

@@ -39,8 +39,6 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 })
 export class REPInputComponent implements OnInit, ControlValueAccessor {
 
-  constructor() { }
-
   ngOnInit() {
     this.placeholderAnimated = this.text != '';
     this.prevValue = this.text;

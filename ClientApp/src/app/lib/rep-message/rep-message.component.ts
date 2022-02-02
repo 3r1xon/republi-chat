@@ -18,8 +18,7 @@ export class REPMessageComponent {
 
   constructor(
     private eRef: ElementRef
-  ) {
-  }
+  ) { }
 
   public active: boolean = false;
 

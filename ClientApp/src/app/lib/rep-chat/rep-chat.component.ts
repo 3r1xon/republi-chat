@@ -20,10 +20,6 @@ import { REPButton } from 'src/interfaces/repbutton.interface';
 })
 export class REPChatComponent implements AfterViewInit {
 
-  constructor(
-  ) { 
-  }
-
   ngAfterViewInit(): void {
     this.msg.changes.subscribe(() => {
       // console.log("scrollTop ---->", this.content.nativeElement.scrollTop);

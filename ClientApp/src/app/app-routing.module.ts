@@ -35,6 +35,7 @@ const routes: Routes = [
   { path: '404', component: PNotFoundComponent },
 ];
 
+
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]

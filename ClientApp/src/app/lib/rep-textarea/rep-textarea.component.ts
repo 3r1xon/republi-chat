@@ -22,9 +22,6 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 })
 export class REPTextareaComponent implements OnInit, ControlValueAccessor {
 
-  constructor(
-  ) { }
-
   ngOnInit(): void {
     this.prevValue = this.text;
   }

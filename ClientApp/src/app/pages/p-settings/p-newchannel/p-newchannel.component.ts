@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Channel } from 'src/interfaces/channel.interface';
@@ -10,7 +10,7 @@ import { UtilsService } from 'src/services/utils.service';
   templateUrl: './p-newchannel.component.html',
   styleUrls: ['./p-newchannel.component.scss']
 })
-export class PNewChannelComponent implements OnInit {
+export class PNewChannelComponent {
 
   constructor(
     private _msService: MessagesService,
@@ -18,9 +18,6 @@ export class PNewChannelComponent implements OnInit {
     private router: Router,
     private fb: FormBuilder
   ) { }
-
-  ngOnInit(): void {
-  }
 
   public formCreation: FormGroup = this.fb.group({
     channelImage: [null],

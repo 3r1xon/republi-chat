@@ -8,8 +8,6 @@ import { REPButton } from 'src/interfaces/repbutton.interface';
 })
 export class REPActionsComponent {
 
-  constructor() { }
-
   @Input()
   public actions: Array<REPButton>;
 

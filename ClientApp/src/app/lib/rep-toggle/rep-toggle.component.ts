@@ -1,16 +1,11 @@
-import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'rep-toggle',
   templateUrl: './rep-toggle.component.html',
   styleUrls: ['./rep-toggle.component.scss']
 })
-export class REPToggleComponent implements OnInit {
-
-  constructor() { }
-
-  ngOnInit(): void {
-  }
+export class REPToggleComponent {
 
   @Input()
   public checked: boolean = false;

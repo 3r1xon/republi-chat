@@ -1,16 +1,11 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'rep-info',
   templateUrl: './rep-info.component.html',
   styleUrls: ['./rep-info.component.scss']
 })
-export class REPInfoComponent implements OnInit {
-
-  constructor() { }
-
-  ngOnInit(): void {
-  }
+export class REPInfoComponent {
 
   @Input()
   public background: string = "#FFFFFF";

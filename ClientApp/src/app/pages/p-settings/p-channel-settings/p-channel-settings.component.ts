@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { REPButton } from 'src/interfaces/repbutton.interface';
 import { MessagesService } from 'src/services/messages.service';
 import { UtilsService } from 'src/services/utils.service';
@@ -7,15 +7,12 @@ import { UtilsService } from 'src/services/utils.service';
   templateUrl: './p-channel-settings.component.html',
   styleUrls: ['./p-channel-settings.component.scss']
 })
-export class PChannelSettingsComponent implements OnInit {
+export class PChannelSettingsComponent {
 
   constructor(
     public _msService: MessagesService,
     private _utils: UtilsService
   ) { }
-
-  ngOnInit(): void {
-  }
 
   public chOptions: Array<REPButton> = [
     {

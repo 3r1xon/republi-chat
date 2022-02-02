@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { Router } from '@angular/router';
 import { REPButton } from 'src/interfaces/repbutton.interface';
 import { UserService } from 'src/services/user.service';
@@ -7,15 +7,12 @@ import { UserService } from 'src/services/user.service';
   templateUrl: './p-main.component.html',
   styleUrls: ['./p-main.component.scss']
 })
-export class PSettingsComponent implements OnInit {
+export class PSettingsComponent {
 
   constructor(
     private _user: UserService,
     private router: Router
     ) { }
-
-  ngOnInit(): void {
-  }
 
   public menus: Array<REPButton> = [
     {

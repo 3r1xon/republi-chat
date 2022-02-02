@@ -1,8 +1,7 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import { Subscription } from 'rxjs';
-import { first } from 'rxjs/operators';
 import { REPButton } from 'src/interfaces/repbutton.interface';
 import { MessagesService } from 'src/services/messages.service';
 import { UserService } from 'src/services/user.service';
@@ -12,13 +11,15 @@ import { server } from 'src/environments/server';
 import { REPChatComponent } from 'src/app/lib/rep-chat/rep-chat.component';
 import { Message } from 'src/interfaces/message.interface';
 import { Channel } from 'src/interfaces/channel.interface';
+import { Unsubscriber } from 'src/app/lib/rep-decorators';
 
 
 @Component({
   templateUrl: './p-mainpage.component.html',
   styleUrls: ['./p-mainpage.component.scss']
 })
-export class PMainpageComponent extends WebSocket implements OnInit, OnDestroy {
+@Unsubscriber
+export class PMainpageComponent extends WebSocket implements OnInit {
 
   constructor(
     public _user: UserService,
@@ -30,45 +31,36 @@ export class PMainpageComponent extends WebSocket implements OnInit, OnDestroy {
     super(server.WEB_SOCKET);
   }
 
-  private sessionSubscription: Subscription;
-  private messageSubscription: Subscription;
-
   @ViewChild(REPChatComponent) private chat: REPChatComponent;
 
   ngOnInit(): void {
     this._msService.getChannels();
 
-    this._msService.channels$
-      .pipe(first())
-      .subscribe(() => {
-
-        const channelsRef = this.channels.find(tab => tab.tabname == "Channels");
-
-        channelsRef.sections = this._msService.channels;
-
-        const room = channelsRef.sections[0];
-
-        if (room) {
-          this._msService.joinChannel(room);
-        }
-    });
-
-    this.messageSubscription = this._msService.messages$
-      .subscribe(() => {
-        this.chat.deselectAll();
-    });
-
-    this.sessionSubscription?.unsubscribe();
-    this.sessionSubscription = this.listen(this.cookieService.get("sid"))
+    this.listen(this.cookieService.get("sid"))
       .subscribe((status) => {
         if (status == "forceKick")
           this._user.logOut(true);
       });
   }
 
-  ngOnDestroy(): void {
-    this.messageSubscription.unsubscribe();
-  }
+  private messageSubscription: Subscription = this._msService.messages$
+    .subscribe(() => {
+      this.chat.deselectAll();
+  });
+
+  private channelSubscription: Subscription = this._msService.channels$
+    .subscribe(() => {
+      const channelsRef = this.channels.find(tab => tab.tabname == "Channels");
+
+      channelsRef.sections = this._msService.channels;
+
+      const room = channelsRef.sections[0];
+
+      if (room) {
+        this._msService.joinChannel(room);
+      }
+  });
+
 
   public readonly msgOptions: Array<REPButton> = [
     {
