@@ -28,7 +28,7 @@ export class PLoginComponent {
     @Inject(DOCUMENT) private document: Document
   ) { }
 
-  public alert: string = "";
+  public alert: string;
 
   public emojis: Array<string> = [
     "😀",
@@ -67,6 +67,7 @@ export class PLoginComponent {
     {
       name: "Log in",
       icon: "login",
+      type: "submit",
       enabled: () => this.form.valid,
     }
   ];

@@ -48,7 +48,6 @@ class Auth {
     static WSAuthToken = async (socket, next) => {
 
         try {
-
             const sid = socket.request.headers.cookie.split("sid=")[1];
 
             const dbUser = await REPQuery.one(

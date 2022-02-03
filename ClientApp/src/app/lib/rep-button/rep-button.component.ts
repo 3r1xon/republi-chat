@@ -7,8 +7,6 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 })
 export class REPButtonComponent {
 
-  constructor() { }
-
   private readonly defColors = {
     success: "#46a35e",
     warning: "#F59E0B",
@@ -22,6 +20,19 @@ export class REPButtonComponent {
 
   @Input()
   public icon: string = "open_in_new";
+
+  private _type: string = "button";
+
+  @Input()
+  public set type(tp: string) {
+    if (tp != undefined) {
+      this._type = tp;
+    }
+  };
+
+  public get type() {
+    return this._type;
+  }
 
   private _background: string = "royalblue";
 

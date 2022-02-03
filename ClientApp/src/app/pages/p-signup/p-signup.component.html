@@ -9,7 +9,7 @@
         <div class="rect"></div>
 
         <form class="signup-form" (ngSubmit)="signUp()" [formGroup]="form"
-            [style.animation]="alert != '' ? 'shake 0.5s' : ''">
+            [style.animation]="alert ? 'shake 0.5s' : ''">
 
             <h1>Sign up</h1>
 
@@ -29,19 +29,19 @@
             ></rep-input>
 
             <rep-input
-                formControlName="password" 
+                formControlName="password"
                 tooltip="Maximum 255 characters  and minimum 8"
                 maxLength="255"
                 type="password"
-                placeholder="Password" 
+                placeholder="Password"
                 required="true"
             ></rep-input>
 
             <rep-input
-                formControlName="confirmPassword" 
+                formControlName="confirmPassword"
                 maxLength="255"
                 type="password"
-                placeholder="Confirm password" 
+                placeholder="Confirm password"
                 required="true"
             ></rep-input>
 

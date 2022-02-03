@@ -56,12 +56,13 @@ export class PSignupComponent {
     {
       name: "Sign Up",
       icon: "person_add",
+      type: "submit",
       enabled: () => this.form.valid,
       onClick: () => { }
     }
   ];
 
-  public alert: string = "";
+  public alert: string;
 
   public form: FormGroup = this.fb.group({
     name: ['',
