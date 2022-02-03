@@ -34,9 +34,9 @@ export class MessagesService {
 
   public channels$: Subject<any> = new Subject<any>();
 
-  public chPermissions: ChannelPermissions;
-
   public currentRoom: Channel;
+
+  public chPermissions: ChannelPermissions;
 
   private msSubscriptions: Array<Subscription> = [];
 
@@ -54,7 +54,7 @@ export class MessagesService {
     this.http.get<ServerResponse>(`${server.BASE_URL}/channels/getChannels`)
       .pipe(first())
       .subscribe(
-        (res) => {
+        (res: ServerResponse) => {
           if (res.success) {
             this.channels = res.data;
 
@@ -98,7 +98,7 @@ export class MessagesService {
         this.getChMessages(room, 50)
           .pipe(first())
           .subscribe(
-            (res) => {
+            (res: ServerResponse) => {
 
               if (res.success) {
 

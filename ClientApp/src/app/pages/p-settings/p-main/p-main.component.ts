@@ -19,53 +19,39 @@ export class PSettingsComponent {
       name: "Profile",
       icon: "person",
       route: '/settings/profile',
-      enabled: () => true,
-      visible: () => true,
     },
     {
       name: "Privacy",
       icon: "security",
       route: '/settings/privacy',
-      enabled: () => true,
-      visible: () => true,
     },
     {
       name: "New channel",
       icon: "add",
       route: '/settings/newchannel',
-      enabled: () => true,
-      visible: () => true,
     },
     {
       name: "Channel settings",
       icon: "admin_panel_settings",
       route: '/settings/channelsettings',
-      enabled: () => true,
-      visible: () => true,
     },
     {
       name: "Appearance",
       color: "hotpink",
       icon: "tune",
       route: '/settings/newchannel',
-      enabled: () => true,
-      visible: () => true,
     },
     {
       name: "Hot Keys",
       icon: "keyboard",
       route: '/settings/newchannel',
-      enabled: () => true,
-      visible: () => true,
     },
     {
       name: "Log out",
       color: "#ff0000",
       icon: "logout",
-      enabled: () => true,
-      visible: () => true,
-      onClick: async () => { 
-        await this._user.logOut();
+      onClick: () => { 
+        this._user.logOut();
       }
     },
   ];

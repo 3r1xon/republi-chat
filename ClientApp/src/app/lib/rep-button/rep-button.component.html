@@ -1,5 +1,5 @@
 <button *ngIf="visible" class="master" [disabled]="!enabled" #trigger
-    (click)="checkClick()" 
+    (click)="checkClick()"
     (mouseover)="toggleTooltip()" (mouseout)="toggleTooltip()">
     <div id="flat-button" matRipple [matRippleTrigger]="trigger" [ngStyle]="{
             'background': outline ? 'transparent' : background,

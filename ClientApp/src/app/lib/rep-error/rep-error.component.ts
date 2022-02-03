@@ -29,7 +29,6 @@ export class REPErrorComponent implements OnInit {
       name: "Send report",
       background: "warning",
       icon: "report_problem",
-      enabled: () => true,
       visible: () => this._utils.bugReport.send,
       onClick: () => {
         console.log("Report unavailable");
@@ -39,8 +38,6 @@ export class REPErrorComponent implements OnInit {
       name: "Close",
       background: "royalblue",
       icon: "close",
-      enabled: () => true,
-      visible: () => true,
       onClick: () => {
         this.hideError();
       }

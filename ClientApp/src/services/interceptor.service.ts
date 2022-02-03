@@ -11,7 +11,6 @@ import { Observable } from 'rxjs';
 import { UtilsService } from './utils.service';
 import { tap } from 'rxjs/operators';
 import { UserService } from './user.service';
-import { server } from 'src/environments/server';
 
 
 @Injectable({
@@ -24,10 +23,7 @@ export class InterceptorService implements HttpInterceptor {
     private _user: UserService,
     ) { }
 
-  private readonly loadingBlackList: Array<string> = [
-    `${server.BASE_URL}/messages/sendMessage`,
-    `${server.BASE_URL}/messages/deleteMessage`
-  ];
+  private readonly loadingBlackList: Array<string> = [];
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 

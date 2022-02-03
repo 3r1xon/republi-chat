@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { server } from 'src/environments/server';
+import { REPButton } from 'src/interfaces/repbutton.interface';
 import { ServerResponse } from 'src/interfaces/response.interface';
 
 @Component({
@@ -41,6 +42,23 @@ export class PSignupComponent {
     "🌮",
     "🎃",
     "🔥"
+  ];
+
+  public actions: Array<REPButton> = [
+    {
+      name: "Log in",
+      icon: "login",
+      outline: true,
+      onClick: () => {
+        this.router.navigate(['login']);
+      }
+    },
+    {
+      name: "Sign Up",
+      icon: "person_add",
+      enabled: () => this.form.valid,
+      onClick: () => { }
+    }
   ];
 
   public alert: string = "";

@@ -6,8 +6,6 @@ import {
 import { Router } from '@angular/router';
 import { Account } from 'src/interfaces/account.interface';
 import { UtilsService } from 'src/services/utils.service';
-import { WebSocket } from 'src/app/lib/websocket';
-import { server } from 'src/environments/server';
 import { REPButton } from 'src/interfaces/repbutton.interface';
 
 @Component({
@@ -15,14 +13,12 @@ import { REPButton } from 'src/interfaces/repbutton.interface';
   templateUrl: './rep-status-bar.component.html',
   styleUrls: ['./rep-status-bar.component.scss']
 })
-export class REPStatusBarComponent extends WebSocket {
+export class REPStatusBarComponent {
 
   constructor(
-    private _utils: UtilsService,
+    public _utils: UtilsService,
     private router: Router,
-  ) {
-    super(server.WEB_SOCKET);
-  }
+  ) { }
 
   @Input()
   public user: Account;
@@ -39,8 +35,6 @@ export class REPStatusBarComponent extends WebSocket {
       name: "Close Group",
       icon: "group",
       tooltip: "Close right side-bar",
-      visible: () => true,
-      enabled: () => true,
       onClick: () => { 
         this._utils.showServerGroup = !this._utils.showServerGroup;
       }
@@ -49,8 +43,6 @@ export class REPStatusBarComponent extends WebSocket {
       name: "Settings",
       icon: "settings",
       tooltip: "Navige to settings",
-      visible: () => true,
-      enabled: () => true,
       onClick: () => {
         this.router.navigate(['settings']);
       }

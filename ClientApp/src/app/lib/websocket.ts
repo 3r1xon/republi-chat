@@ -14,17 +14,6 @@ export class WebSocket {
 
   constructor(connection: string, options = socketOptions) {
     this.socket = io(connection, options);
-
-    // this.listen("connect")
-    //   .subscribe(() => {
-    //     this._utils.loading = false;
-    //   });
-
-    // this.listen("disconnect")
-    //   .subscribe(() => {
-    //     if (this._user.userAuth)
-    //       this._utils.loading = true;
-    //   });
   }
 
   public socket: Socket;

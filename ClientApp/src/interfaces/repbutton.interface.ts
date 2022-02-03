@@ -7,8 +7,8 @@ export interface REPButton {
     tooltip?: string;
     outline?: boolean;
     hotkey?: string;
-    enabled: Function;
-    visible: Function;
+    enabled?: Function;
+    visible?: Function;
     highlighted?: boolean;
     background?: string;
 }

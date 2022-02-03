@@ -63,7 +63,11 @@ body {
   color: var(--WHITE);
 }
 
-
+a {
+  font-size: 18px;
+  text-decoration: none;
+  color: hotpink;
+}
 
 ::-webkit-scrollbar {
   width: 5px;

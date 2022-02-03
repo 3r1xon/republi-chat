@@ -39,7 +39,6 @@ export class PNewChannelComponent {
     {
       name: "Create channel",
       icon: "save",
-      visible: () => true,
       enabled: () => this.formCreation.valid,
       background: "success",
       onClick: () => { this.createChannel(); }
@@ -50,7 +49,6 @@ export class PNewChannelComponent {
     {
       name: "Add channel",
       icon: "add",
-      visible: () => true,
       enabled: () => this.formAdd.valid,
       background: "success",
       onClick: () => { this.addChannel(); }
@@ -82,8 +80,6 @@ export class PNewChannelComponent {
                 {
                   name: "Mainpage",
                   icon: "home",
-                  visible: () => true,
-                  enabled: () => true,
                   onClick: () => {
                     this.router.navigate(['mainpage']);
                   },
@@ -92,8 +88,6 @@ export class PNewChannelComponent {
                 {
                   name: "Close",
                   icon: "close",
-                  visible: () => true,
-                  enabled: () => true,
                 }
               ]);
           }
@@ -131,8 +125,6 @@ export class PNewChannelComponent {
                 {
                   name: "Mainpage",
                   icon: "home",
-                  visible: () => true,
-                  enabled: () => true,
                   onClick: () => {
                     this.router.navigate(['mainpage']);
                   },
@@ -141,8 +133,6 @@ export class PNewChannelComponent {
                 {
                   name: "Close",
                   icon: "close",
-                  visible: () => true,
-                  enabled: () => true,
                 }
               ]);
           } else {
@@ -153,8 +143,6 @@ export class PNewChannelComponent {
                 {
                   name: "Close",
                   icon: "close",
-                  visible: () => true,
-                  enabled: () => true,
                 }
               ]);
           }

@@ -6,20 +6,20 @@
         <rep-button *ngIf="!onlyIcons"
             [enabled]="button.enabled == undefined ? true : button.enabled"
             [background]="button.background"
-            [visible]="button.visible()"
+            [visible]="button.visible"
             [icon]="button.icon"
             [outline]="button.outline"
-            (onClick)="button.onClick()">
-            {{button.name}}
+            (onClick)="button.onClick ? button.onClick() : ''"
+        >{{button.name}}
         </rep-button>
 
         <rep-icon-button *ngIf="onlyIcons"
             [enabled]="button.enabled == undefined ? true : button.enabled"
             [color]="button.background"
-            [visible]="button.visible()"
+            [visible]="button.visible"
             [icon]="button.icon"
             [tooltip]="button.tooltip"
-            (onClick)="button.onClick()"
+            (onClick)="button.onClick ? button.onClick() : ''"
         >{{button.icon}}
         </rep-icon-button>
     </ng-container>

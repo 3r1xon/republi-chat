@@ -1,39 +1,36 @@
 <div id="login">
 
-    <div id="particle-container">
+    <div class="particle-container">
         <span class="particle"
         *ngFor="let emoji of emojis">{{emoji}}</span>
     </div>
 
-    <div id="form">
+    <div class="form">
 
-        <div id="rect"></div>
+        <div class="rect"></div>
 
-        <form id="login-form" (ngSubmit)="logIn()" [formGroup]="form"
+        <form class="login-form" (ngSubmit)="logIn()" [formGroup]="form"
             [style.animation]="alert != '' ? 'shake 0.5s' : ''">
 
             <h1>Log in</h1>
 
             <rep-input
-            formControlName="email"
-            placeholder="Email"
-            maxLength="30"
+                formControlName="email"
+                placeholder="Email"
+                maxLength="30"
             ></rep-input>
 
             <rep-input
-            formControlName="password"
-            type="password"
-            placeholder="Password"
-            maxLength="255"
+                formControlName="password"
+                type="password"
+                placeholder="Password"
+                maxLength="255"
             ></rep-input>
 
-            <div class="buttons">
-                <rep-button [enabled]="form.valid" icon="login">Log in</rep-button>
-                <rep-button routerLink="/signup" outline="true" icon="person_add">Sign Up</rep-button>
-            </div>
+            <rep-actions [actions]="actions"></rep-actions>
 
-            <div id="alert">
-                <p>{{alert}}</p>
+            <div class="alert">
+                {{alert}}
             </div>
 
             <a routerLink="">Forgot password?</a>

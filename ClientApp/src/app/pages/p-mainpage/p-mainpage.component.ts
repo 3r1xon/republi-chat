@@ -1,13 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { CookieService } from 'ngx-cookie-service';
 import { Subscription } from 'rxjs';
 import { REPButton } from 'src/interfaces/repbutton.interface';
 import { MessagesService } from 'src/services/messages.service';
 import { UserService } from 'src/services/user.service';
 import { UtilsService } from 'src/services/utils.service';
-import { WebSocket } from 'src/app/lib/websocket';
-import { server } from 'src/environments/server';
 import { REPChatComponent } from 'src/app/lib/rep-chat/rep-chat.component';
 import { Message } from 'src/interfaces/message.interface';
 import { Channel } from 'src/interfaces/channel.interface';
@@ -19,36 +16,27 @@ import { Unsubscriber } from 'src/app/lib/rep-decorators';
   styleUrls: ['./p-mainpage.component.scss']
 })
 @Unsubscriber
-export class PMainpageComponent extends WebSocket implements OnInit {
+export class PMainpageComponent implements OnInit {
 
   constructor(
     public _user: UserService,
     public _msService: MessagesService,
     public _utils: UtilsService,
-    private cookieService: CookieService,
     private router: Router
-  ) {
-    super(server.WEB_SOCKET);
-  }
+  ) { }
 
   @ViewChild(REPChatComponent) private chat: REPChatComponent;
 
   ngOnInit(): void {
     this._msService.getChannels();
-
-    this.listen(this.cookieService.get("sid"))
-      .subscribe((status) => {
-        if (status == "forceKick")
-          this._user.logOut(true);
-      });
   }
 
-  private messageSubscription: Subscription = this._msService.messages$
+  private readonly messageSubscription: Subscription = this._msService.messages$
     .subscribe(() => {
       this.chat.deselectAll();
   });
 
-  private channelSubscription: Subscription = this._msService.channels$
+  private readonly channelSubscription: Subscription = this._msService.channels$
     .subscribe(() => {
       const channelsRef = this.channels.find(tab => tab.tabname == "Channels");
 
@@ -61,13 +49,11 @@ export class PMainpageComponent extends WebSocket implements OnInit {
       }
   });
 
-
   public readonly msgOptions: Array<REPButton> = [
     {
       name: "Edit",
       icon: "edit",
       visible: (msgIndex: number) => this._msService.messages[msgIndex].auth,
-      enabled: () => true,
       onClick: (msgIndex: number) => {
         console.log("EDIT");
       }
@@ -75,7 +61,6 @@ export class PMainpageComponent extends WebSocket implements OnInit {
     {
       name: "Report",
       icon: "flag",
-      enabled: () => true,
       visible: (msgIndex: number) => !this._msService.messages[msgIndex].auth,
       onClick: (msgIndex: number) => {
         console.log("REPORT");
@@ -85,7 +70,6 @@ export class PMainpageComponent extends WebSocket implements OnInit {
       name: "Delete",
       icon: "delete",
       color: "danger",
-      enabled: () => true,
       visible: (msgIndex: number) => {
         if (this._msService.messages[msgIndex].auth) {
           return true;
@@ -103,7 +87,6 @@ export class PMainpageComponent extends WebSocket implements OnInit {
       name: "Kick",
       icon: "remove_circle_outline",
       color: "warning",
-      enabled: () => true,
       visible: (msgIndex: number) => {
         if (this._msService.messages[msgIndex].auth) {
           return false;
@@ -123,7 +106,6 @@ export class PMainpageComponent extends WebSocket implements OnInit {
       name: "Ban",
       icon: "delete_forever",
       color: "danger",
-      enabled: () => true,
       visible: (msgIndex: number) => {
         if (this._msService.messages[msgIndex].auth) {
           return false;
@@ -150,8 +132,6 @@ export class PMainpageComponent extends WebSocket implements OnInit {
       name: "Leave",
       icon: "delete",
       color: "danger",
-      enabled: () => true,
-      visible: () => true,
       onClick: () => {
 
       }
@@ -189,7 +169,6 @@ export class PMainpageComponent extends WebSocket implements OnInit {
       tooltip: "Deselect all",
       background: "warning",
       visible: () => this.chat?.selections.length > 0,
-      enabled: () => true,
       onClick: () => { 
         this.chat.deselectAll();
       }

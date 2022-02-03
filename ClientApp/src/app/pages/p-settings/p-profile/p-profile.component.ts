@@ -45,8 +45,6 @@ export class PProfileComponent {
     {
       name: "Example",
       icon: "info_outline",
-      visible: () => true,
-      enabled: () => true,
       onClick: () => {
 
         const messages = [
@@ -68,7 +66,6 @@ export class PProfileComponent {
     {
       name: "Save",
       icon: "save",
-      visible: () => true,
       enabled: () => false,
       background: "success",
       onClick: () => { this.save() }
@@ -81,8 +78,6 @@ export class PProfileComponent {
       icon: "dangerous",
       background: "danger",
       outline: true,
-      visible: () => true,
-      enabled: () => true,
       onClick: () => { this.deleteProfile() }
     }
   ];

@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { first } from 'rxjs/operators';
 import { server } from 'src/environments/server';
 import { Account } from 'src/interfaces/account.interface';
+import { REPButton } from 'src/interfaces/repbutton.interface';
 import { ServerResponse } from 'src/interfaces/response.interface';
 import { FileUploadService } from 'src/services/file-upload.service';
 import { UserService } from 'src/services/user.service';
@@ -52,6 +53,22 @@ export class PLoginComponent {
     "🌮",
     "🎃",
     "🔥"
+  ];
+
+  public actions: Array<REPButton> = [
+    {
+      name: "Sign Up",
+      icon: "person_add",
+      outline: true,
+      onClick: () => { 
+        this.router.navigate(['signup']);
+      }
+    },
+    {
+      name: "Log in",
+      icon: "login",
+      enabled: () => this.form.valid,
+    }
   ];
 
   public form: FormGroup = this.fb.group({

@@ -14,8 +14,8 @@
 
     <div id="right">
         <span id="connection" [ngClass]="{
-            'connected': socket.connected,
-            'disconnected': !socket.connected
+            'connected': _utils.wsConnected,
+            'disconnected': !_utils.wsConnected
         }">
         </span>
         <rep-actions onlyIcons="true" [actions]="navigations"></rep-actions>

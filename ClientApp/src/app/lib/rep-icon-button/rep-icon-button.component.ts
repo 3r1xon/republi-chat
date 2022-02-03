@@ -18,6 +18,8 @@ export class REPIconButtonComponent {
 
   private _color: string = "#ffffff";
 
+  public hovering: boolean = false;
+
   @Input()
   public set color(color: string) {
     if (color in this.defColors) this._color = this.defColors[color];
@@ -28,8 +30,7 @@ export class REPIconButtonComponent {
     return this._color;
   }
 
-  private _enabled: boolean | (() => boolean) = true;
-  private _visible: boolean | (() => boolean) = true;
+  private _enabled: boolean | ((uniqueID: number) => boolean) = true;
 
   @Input()
   public set enabled(boolean) {
@@ -40,8 +41,10 @@ export class REPIconButtonComponent {
 
   public get enabled() {
     if (typeof this._enabled == 'boolean') return this._enabled;
-    else return this._enabled();
+    else return this._enabled(this.uniqueID);
   }
+
+  private _visible: boolean | ((uniqueID: number) => boolean) = true;
 
   @Input()
   public set visible(boolean) {
@@ -50,12 +53,13 @@ export class REPIconButtonComponent {
     }
   }
 
-  public hovering: boolean = false;
-
   public get visible() {
     if (typeof this._visible == 'boolean') return this._visible;
-    else return this._visible();
+    else return this._visible(this.uniqueID);
   }
+
+  @Input()
+  public uniqueID: number;
 
   @Output()
   public onClick: EventEmitter<boolean> = new EventEmitter();

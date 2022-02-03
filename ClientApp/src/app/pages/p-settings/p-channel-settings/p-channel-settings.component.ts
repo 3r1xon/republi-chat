@@ -18,16 +18,12 @@ export class PChannelSettingsComponent {
     {
       name: "Settings",
       icon: "settings",
-      enabled: () => true,
-      visible: () => true,
       onClick: () => {}
     },
     {
       name: "Leave",
       icon: "delete",
       color: "danger",
-      enabled: () => true,
-      visible: () => true,
       onClick: () => {
         this._utils.showRequest(
           "Are you sure you want to leave this channel?",

@@ -1,14 +1,14 @@
 <div id="signup">
 
-    <div id="particle-container">
+    <div class="particle-container">
         <span class="particle" *ngFor="let emoji of emojis">{{emoji}}</span>
     </div>
 
-    <div id="form">
+    <div class="form">
 
-        <div id="rect"></div>
+        <div class="rect"></div>
 
-        <form id="signup-form" (ngSubmit)="signUp()" [formGroup]="form"
+        <form class="signup-form" (ngSubmit)="signUp()" [formGroup]="form"
             [style.animation]="alert != '' ? 'shake 0.5s' : ''">
 
             <h1>Sign up</h1>
@@ -45,13 +45,10 @@
                 required="true"
             ></rep-input>
 
-            <div class="buttons">
-                <rep-button [enabled]="form.valid" icon="person_add">Sign Up</rep-button>
-                <rep-button routerLink="/login" outline="true" icon="login">Log in</rep-button>
-            </div>
+            <rep-actions [actions]="actions"></rep-actions>
 
-            <div id="alert">
-                <p>{{alert}}</p>
+            <div class="alert">
+                {{alert}}
             </div>
 
         </form>

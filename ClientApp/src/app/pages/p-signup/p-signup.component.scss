@@ -9,7 +9,7 @@
     @include flexCenter(column);
 
 
-    #particle-container {
+    .particle-container {
         width: 100%;
         height: 100%;
         animation: particlesSpawn 3s;
@@ -36,21 +36,21 @@
         }
     }
 
-    #form {
+    .form {
         width: 100%;
         height: 100%;
         position: absolute;
         @include flexCenter(row);
 
 
-        #rect {
+        .rect {
             width: 100%;
             background: #1f1a24;
             background: linear-gradient(120deg, #1f1a24d5 55%, #aaa3a380 100%);
             animation: onOpenSignUp 1s forwards;
         }
 
-        #signup-form {
+        .signup-form {
             height: 80vh;
             position: absolute;
             @include flexCenter(column);
@@ -66,35 +66,17 @@
                 margin: 25px 0 10px 0;
             }
 
-            .buttons {
-                width: 80%;
-                display: flex;
-                flex-direction: row-reverse;
-                justify-content: center;
-
-                rep-button {
-                    margin: 10px;
-                }
+            rep-actions {
+                margin-top: 15px;
             }
 
-            #alert {
+            .alert {
                 width: 100%;
                 height: 15px;
                 position: relative;
                 display: grid;
                 place-items: center;
                 color: var(--DANGER);
-
-                p {
-                    position: absolute;
-                }
-            }
-
-            a {
-                margin-top: 10px;
-                font-size: 18px;
-                text-decoration: none;
-                color: hotpink;
             }
         }
     }
