@@ -40,9 +40,9 @@ router.post('/signUp', async (req, res) => {
           await REPQuery.exec(
           `
           INSERT INTO USERS
-              (USER_CODE, PASSWORD, NAME, EMAIL)
-          VALUES (?, ?, ?, ?)
-          `, [code, hash, user.name, user.email]);
+              (USER_CODE, PASSWORD, NAME, EMAIL, BACKGROUND_COLOR)
+          VALUES (?, ?, ?, ?, ?)
+          `, [code, hash, user.name, user.email, REPTools.randomHex()]);
 
           res.status(201).send({ success: true, message: 'User correctly signed up' });
         } catch(error) {
@@ -287,7 +287,6 @@ router.delete('/disconnectDevice/:id', Auth.HTTPAuthToken, async (req, res) => {
 
     const _id      = req.params.id;
     const userID   = res.locals._id;
-    const socketID = res.locals.socket_id;
 
     const session = await REPQuery.one(
     `
@@ -299,7 +298,6 @@ router.delete('/disconnectDevice/:id', Auth.HTTPAuthToken, async (req, res) => {
     `, [_id, userID]);
 
     io.emit(session.SID, "forceKick");
-    // io.to(socketID).emit(session.SID, "forceKick");
 
     res.status(201).send({ 
       success: true,

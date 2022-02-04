@@ -1,10 +1,11 @@
-const dotenv       = require('dotenv').config();
-const express      = require('express');
-const cors         = require('cors');
-const app          = express();
-const cookieParser = require('cookie-parser');
-const port         = process.env.PORT;
-const server       = app.listen(port, () => {
+const dotenv         = require('dotenv').config();
+const express        = require('express');
+const cors           = require('cors');
+const app            = express();
+const cookieParser   = require('cookie-parser');
+const wsCookieParser = require('socket.io-cookie-parser');
+const port           = process.env.PORT;
+const server         = app.listen(port, () => {
   console.log(`Server listening at http://localhost:${port}`);
 });
 
@@ -14,24 +15,20 @@ const corsOptions = {
   exposedHeaders: ['sid'],
 };
 
+const io = require('socket.io')(server, {
+  cors: corsOptions
+});
+
+io.use(wsCookieParser());
 
 module.exports = {
-  io: require('socket.io')(server, {
-    cors: corsOptions
-  })
+  io: io
 };
 
 
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser());
-
-
-// Get the exact time of the request, available for every request.
-app.use((req, res, next) => { 
-  res.locals._requestDate = new Date(parseInt(req.headers['requestdate']));
-  next(); 
-});
 
 
 

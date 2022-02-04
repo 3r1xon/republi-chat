@@ -23,8 +23,7 @@ export class MessagesService {
     private _fileUpload: FileUploadService,
     private _utils: UtilsService,
     private http: HttpClient
-  ) {
-  }
+  ) { }
 
   public messages: Array<Message> = [];
 
@@ -66,7 +65,7 @@ export class MessagesService {
                 .subscribe((banID) => {
                   if (banID == this.chPermissions.id) {
                     this.messages = [];
-                    // this.channels.find(channel => channel.)
+
                     this._utils.showRequest(
                       "Banned",
                       "You have been banned!"

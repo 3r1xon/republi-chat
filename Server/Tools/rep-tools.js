@@ -49,6 +49,10 @@ class REPTools {
     static getVariableName(variable) {
         return Object.keys(variable)[0];
     }
+
+    static randomHex() {
+        return "#" + Math.floor(Math.random()*16777215).toString(16);
+    }
 }
 
 module.exports = REPTools;

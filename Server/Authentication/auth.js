@@ -17,8 +17,7 @@ class Auth {
 
                 const dbUser = await REPQuery.one(
                 `
-                SELECT S.ID_USER,
-                       S.SOCKET_ID
+                SELECT S.ID_USER
                 FROM SESSIONS S
                 WHERE S.SID = ?
                 `, [sid]);
@@ -26,7 +25,6 @@ class Auth {
                 if (dbUser) {
                     res.locals._id = dbUser.ID_USER;
                     res.locals.sid = sid;
-                    res.locals.socket_id = dbUser.SOCKET_ID;
                     next();
                 } else {
                     res.clearCookie("sid");
@@ -48,7 +46,7 @@ class Auth {
     static WSAuthToken = async (socket, next) => {
 
         try {
-            const sid = socket.request.headers.cookie.split("sid=")[1];
+            const sid = socket.request.cookies["sid"];
 
             const dbUser = await REPQuery.one(
             `
@@ -59,13 +57,6 @@ class Auth {
             `, [sid]);
 
             if (dbUser) {
-                await REPQuery.exec(
-                `
-                UPDATE
-                    SESSIONS
-                SET SOCKET_ID = ?
-                WHERE ID_SESSION = ?
-                `, [socket.id, dbUser.ID_SESSION]);
 
                 socket.auth = {
                     _id: dbUser.ID_USER,

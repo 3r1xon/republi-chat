@@ -14,8 +14,8 @@ import { WebSocket } from './lib/websocket';
 export class AppComponent extends WebSocket implements OnInit {
 
   constructor(
-    private _user: UserService,
     private cookieService: CookieService,
+    private _user: UserService,
     public _utils: UtilsService
   ) {
     super(server.WEB_SOCKET);

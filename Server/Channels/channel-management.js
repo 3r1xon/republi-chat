@@ -23,7 +23,7 @@ router.post('/createChannel', upload.single("image"), async (req, res) => {
     picture: req.body.picture
   };
 
-  const creationDate = fm.format(res.locals._requestDate, 'yyyy-MM-dd HH:mm');
+  const creationDate = fm.format(new Date(), 'yyyy-MM-dd HH:mm');
 
   await REPTools.generateCode(channel.name, "CHANNELS", "CHANNEL_CODE", async (err, code) => {
     if (err) {
