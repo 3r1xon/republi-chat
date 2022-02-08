@@ -59,6 +59,9 @@ export class REPChatComponent implements AfterViewInit {
   @Input()
   public chatName: string;
 
+  @Input()
+  public dateFormat: string = "dd/MM/yyyy";
+
   @Output()
   public sendMessage = new EventEmitter();
 
@@ -121,5 +124,22 @@ export class REPChatComponent implements AfterViewInit {
 
   isInSelection(id: number) {
     return this.selections.some(msg => msg.id === id);
+  }
+
+
+  spreadDate(date: Date, index: number) {
+
+    const before = this.messages[index-1]?.date;
+
+    const after = new Date(date);
+
+    before?.setHours(0, 0, 0, 0);
+
+    after?.setHours(0, 0, 0, 0);
+
+    if (after > before)
+      return true;
+
+    return false;
   }
 }

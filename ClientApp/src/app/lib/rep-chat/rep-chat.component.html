@@ -10,13 +10,19 @@
 
   <div id="messages" #content>
 
-    <rep-message #msg *ngFor="let message of messages; let i = index;"
-      [message]="message"
-      [options]="msOptions"
-      [uniqueID]="i"
-      [hold]="isInSelection(message.id)"
-      (click)="select(i, $event)"
-    ></rep-message>
+    <ng-container *ngFor="let message of messages; let i = index;">
+
+      <rep-separator *ngIf="spreadDate(message.date, i)">{{message.date | date: dateFormat}}</rep-separator>
+
+      <rep-message #msg
+        [message]="message"
+        [options]="msOptions"
+        [uniqueID]="i"
+        [hold]="isInSelection(message.id)"
+        (click)="select(i, $event)"
+      ></rep-message>
+
+    </ng-container>
 
   </div>
 
