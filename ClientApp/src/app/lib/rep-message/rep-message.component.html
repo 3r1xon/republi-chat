@@ -4,7 +4,7 @@
     }"
     [style.animation]="highlighted ? 'highlight 2s' : ''">
 
-    <div id="cont" (click)="clickHandler()">
+    <div class="cont" (click)="clickHandler()">
 
         <rep-profile-pic
             [src]="message.picture"
@@ -14,19 +14,23 @@
         >
         </rep-profile-pic>
 
-        <div id="message-info">
+        <div class="message-info">
 
-            <div>
-                <p id="username"
-                [style.color]="message.color"
-                (click)="onUserClick.emit('onUserClick')">
-                {{message.name}}</p>
-                <p id="time">{{message.date | date: dateFormat}}</p>
-            </div>
+            <span>
+                <p
+                    class="username"
+                    [style.color]="message.color"
+                    (click)="onUserClick.emit('onUserClick')"
+                >
+                {{message.name}}
+                </p>
 
-            <div id="content">
+                <p class="time">{{message.date | date: dateFormat}}</p>
+            </span>
+
+            <span class="content">
                 <p>{{message.message}}</p>
-            </div>
+            </span>
 
         </div>
 

@@ -4,7 +4,7 @@
 
         <button class="tab" *ngFor="let tab of entries; let i = index;"
             (click)="selectTab(i)"
-            [ngClass]="{ 
+            [ngClass]="{
                 'normal': currentIndex != i,
                 'hovered': currentIndex == i
             }"

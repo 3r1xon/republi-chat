@@ -8,7 +8,7 @@
     position: relative;
     transition: 150ms;
 
-    #cont {
+    .cont {
         width: 100%;
         display: flex;
         align-items: center;
@@ -27,7 +27,7 @@
         background: var(--VERY-DARK);
     }
 
-    #message-info {
+    .message-info {
         width: 100%;
         display: flex;
         flex-direction: column;
@@ -36,11 +36,11 @@
         left: 0;
         word-break: normal;
 
-        div {
+        span {
             display: flex;
         }
 
-        #username {
+        .username {
             cursor: pointer;
             white-space: nowrap;
             text-overflow: ellipsis;
@@ -51,7 +51,9 @@
             margin-bottom: 5px;
         }
 
-        #time {
+        .time {
+            font-size: 14px;
+            align-self: flex-end;
             color: var(--OBSCURE_SECONDARY);
             white-space: nowrap;
         }

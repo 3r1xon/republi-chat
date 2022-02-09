@@ -6,7 +6,7 @@
     display: flex;
     align-items: center;
 
-    #content {
+    .content {
         white-space: nowrap;
         width: auto;
         @include flexCenter(row);

@@ -27,16 +27,15 @@ export class REPChatComponent implements AfterViewInit, OnInit {
       icon: "search",
       tooltip: "Search a message",
       onClick: () => {
-        
+
       }
     });
   }
 
   ngAfterViewInit(): void {
-    console.log()
     this.msg.changes.subscribe(() => {
-      // console.log("scrollTop ---->", this.content.nativeElement.scrollTop);
-      // console.log("width ----> ", this.content.nativeElement.scrollWidth);
+      console.log("scrollTop ---->", this.content.nativeElement.scrollTop);
+      console.log("width     ---->", this.content.nativeElement.scrollWidth);
       if (!this.initialized) {
         this.scrollToBottom();
         this.initialized = true;
@@ -106,7 +105,7 @@ export class REPChatComponent implements AfterViewInit, OnInit {
 
     if (ctrlKey) {
 
-      const exists = this.selections.some(msg => msg.id === this.messages[index].id);
+      const exists = this.isInSelection(this.messages[index].id);
 
       if (exists) {
         this.selections = this.selections.filter(msg => msg.id !== this.messages[index].id);
@@ -122,15 +121,29 @@ export class REPChatComponent implements AfterViewInit, OnInit {
     }
   }
 
-  @HostListener('document:keydown.shift.arrowup', ['$event']) 
+  @HostListener('document:keydown.shift.arrowup', ['$event'])
   selectUp() {
     if (this.selections.length > 0) {
+      for (let i = 0; i < this.messages.length; i++) {
+        if (this.isInSelection(this.messages[i].id)) {
+          if (this.messages[i-1] === undefined) return;
+          this.selections.push(this.messages[i-1]);
+          return;
+        }
+      }
     }
   }
 
-  @HostListener('document:keydown.shift.arrowdown', ['$event']) 
+  @HostListener('document:keydown.shift.arrowdown', ['$event'])
   selectDown() {
     if (this.selections.length > 0) {
+      for (let i = this.messages.length-1; i > 0; i--) {
+        if (this.isInSelection(this.messages[i].id)) {
+          if (this.messages[i+1] === undefined) return;
+          this.selections.push(this.messages[i+1]);
+          return;
+        }
+      }
     }
   }
 

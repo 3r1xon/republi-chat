@@ -1,4 +1,4 @@
-<div id="rep-profile-pic">
+<ng-container>
     <img *ngIf="!pictureError" class="user-image" [src]="src" (error)="pictureError = true"
         [style.minWidth]="width"
         [style.maxWidth]="width"
@@ -6,7 +6,7 @@
         [style.maxHeight]="height"
     >
 
-    <div class="user-image absent-image" *ngIf="pictureError"
+    <span class="user-image absent-image" *ngIf="pictureError"
         [style.minWidth]="width"
         [style.minHeight]="height"
         [style.background]="color"
@@ -14,5 +14,5 @@
         [style.maxHeight]="height"
     >
         <h1 *ngIf="letter">{{letter[0]}}</h1>
-    </div>
-</div>
+    </span>
+</ng-container>

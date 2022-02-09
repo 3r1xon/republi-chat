@@ -1,14 +1,14 @@
 <div id="chat">
 
-  <div *ngIf="chatOptions" id="chat-options">
-    <p id="selection" [style.visibility]="selections.length > 0 ? '' : 'hidden'">{{selections.length}} Selected</p>
+  <div *ngIf="chatOptions" class="chat-options">
+    <p [style.visibility]="selections.length > 0 ? '' : 'hidden'">{{selections.length}} Selected</p>
 
-    <p id="chat-name">{{chatName}}</p>
+    <p>{{chatName}}</p>
 
     <rep-actions onlyIcons="true" reverse="true" [actions]="chatOptions"></rep-actions>
   </div>
 
-  <div id="messages" #content>
+  <div class="messages" #content>
 
     <ng-container *ngFor="let message of messages; let i = index;">
 
@@ -26,7 +26,7 @@
 
   </div>
 
-  <div id="textbox">
+  <div class="textbox">
 
     <rep-textbox [msgMaxLength]="msgMaxLength" [enabled]="textboxEnabled" (sendMessage)="send($event)"></rep-textbox>
 
