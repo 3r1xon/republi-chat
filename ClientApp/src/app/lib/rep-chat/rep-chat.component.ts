@@ -8,6 +8,7 @@ import {
   AfterViewInit,
   ViewChildren,
   HostListener,
+  OnInit,
 } from '@angular/core';
 import { Message } from 'src/interfaces/message.interface';
 import { REPButton } from 'src/interfaces/repbutton.interface';
@@ -18,9 +19,21 @@ import { REPButton } from 'src/interfaces/repbutton.interface';
   templateUrl: './rep-chat.component.html',
   styleUrls: ['./rep-chat.component.scss']
 })
-export class REPChatComponent implements AfterViewInit {
+export class REPChatComponent implements AfterViewInit, OnInit {
+
+  ngOnInit(): void {
+    this.chatOptions.unshift({
+      name: "Search",
+      icon: "search",
+      tooltip: "Search a message",
+      onClick: () => {
+        
+      }
+    });
+  }
 
   ngAfterViewInit(): void {
+    console.log()
     this.msg.changes.subscribe(() => {
       // console.log("scrollTop ---->", this.content.nativeElement.scrollTop);
       // console.log("width ----> ", this.content.nativeElement.scrollWidth);

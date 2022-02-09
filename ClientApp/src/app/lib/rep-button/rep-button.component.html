@@ -4,7 +4,6 @@
     (mouseover)="toggleTooltip()" (mouseout)="toggleTooltip()">
     <div id="flat-button" matRipple [matRippleTrigger]="trigger" [ngStyle]="{
             'background': outline ? 'transparent' : background,
-            'opacity': enabled ? '1' : '0.5',
             'cursor': enabled ? 'pointer' : 'default',
             'border': '1px solid ' + background
         }">

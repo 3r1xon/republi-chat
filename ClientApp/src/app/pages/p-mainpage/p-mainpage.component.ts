@@ -31,12 +31,12 @@ export class PMainpageComponent implements OnInit {
     this._msService.getChannels();
   }
 
-  private readonly messageSubscription: Subscription = this._msService.messages$
+  protected readonly messageSubscription: Subscription = this._msService.messages$
     .subscribe(() => {
       this.chat.deselectAll();
   });
 
-  private readonly channelSubscription: Subscription = this._msService.channels$
+  protected readonly channelSubscription: Subscription = this._msService.channels$
     .subscribe(() => {
       const channelsRef = this.channels.find(tab => tab.tabname == "Channels");
 

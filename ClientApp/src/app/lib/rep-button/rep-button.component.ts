@@ -2,6 +2,9 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'rep-button',
+  host: {
+    "[style.opacity]": "enabled ? '1' : '0.5'",
+  },
   templateUrl: './rep-button.component.html',
   styleUrls: ['./rep-button.component.scss']
 })
