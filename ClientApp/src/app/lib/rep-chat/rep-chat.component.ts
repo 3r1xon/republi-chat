@@ -9,6 +9,7 @@ import {
   ViewChildren,
   HostListener,
   OnInit,
+  OnDestroy,
 } from '@angular/core';
 import { Message } from 'src/interfaces/message.interface';
 import { REPButton } from 'src/interfaces/repbutton.interface';
@@ -19,27 +20,12 @@ import { REPButton } from 'src/interfaces/repbutton.interface';
   templateUrl: './rep-chat.component.html',
   styleUrls: ['./rep-chat.component.scss']
 })
-export class REPChatComponent implements AfterViewInit, OnInit {
-
-  ngOnInit(): void {
-    this.chatOptions.unshift({
-      name: "Search",
-      icon: "search",
-      tooltip: "Search a message",
-      onClick: () => {
-
-      }
-    });
-  }
+export class REPChatComponent implements AfterViewInit, OnDestroy {
 
   ngAfterViewInit(): void {
     this.msg.changes.subscribe(() => {
-      console.log("scrollTop ---->", this.content.nativeElement.scrollTop);
-      console.log("width     ---->", this.content.nativeElement.scrollWidth);
-      if (!this.initialized) {
-        this.scrollToBottom();
-        this.initialized = true;
-      }
+      // console.log("scrollTop ---->", this.content.nativeElement.scrollTop);
+      // console.log("width     ---->", this.content.nativeElement.scrollWidth);
 
       if (this.messages[this.messages?.length-1]?.auth) {
         this.scrollToBottom();
@@ -52,9 +38,15 @@ export class REPChatComponent implements AfterViewInit, OnInit {
     });
   }
 
-  @ViewChild('content') content: ElementRef;
+  ngOnDestroy(): void {
+    this.msg.changes?.unsubscribe();
+  }
 
-  @ViewChildren('msg') msg: any;
+  @ViewChild('content')
+  private content: ElementRef;
+
+  @ViewChildren('msg')
+  private msg: any;
 
   @Input()
   public textboxEnabled: boolean = true;
@@ -77,14 +69,33 @@ export class REPChatComponent implements AfterViewInit, OnInit {
   @Output()
   public sendMessage = new EventEmitter();
 
-  private initialized: boolean = false;
-
   private prevLength: number = 0;
 
   public selections: Array<Message> = [];
 
+  public _chatOptions: Array<REPButton> = [];
+
+  private readonly DEFAULT_OPTIONS: Array<REPButton> = [
+    {
+      name: "Search",
+      icon: "search",
+      tooltip: "Search a message",
+      onClick: () => {
+
+      }
+    }
+  ];
+
   @Input()
-  public readonly chatOptions: Array<REPButton> = [];
+  public set chatOptions(options: Array<REPButton>) {
+    options.unshift(...this.DEFAULT_OPTIONS);
+    this._chatOptions = options;
+  }
+
+  public get chatOptions() {
+    return this._chatOptions;
+  }
+
 
   send(event) {
     this.sendMessage.emit(event);

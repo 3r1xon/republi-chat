@@ -42,9 +42,11 @@ export class REPWindowComponent {
 
   openSubMenu(event) {
 
-    this.state = true;
+    if (!this.state) {
+      this.state = true;
 
-    this.cd.detectChanges();
+      this.cd.detectChanges();
+    }
 
     const winWidth = this.submenu.nativeElement.offsetWidth;
     const winHeight = this.submenu.nativeElement.offsetHeight;

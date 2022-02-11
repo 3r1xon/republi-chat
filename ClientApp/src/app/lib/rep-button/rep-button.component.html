@@ -7,10 +7,10 @@
             'cursor': enabled ? 'pointer' : 'default',
             'border': '1px solid ' + background
         }">
-            <p [style.color]="outline ? background : fontColor">
+            <p [style.color]="outline ? background : color">
                 <ng-content></ng-content>
             </p>
-        <mat-icon [style.color]="outline ? background : fontColor" *ngIf="icon">{{icon}}</mat-icon>
+        <mat-icon [style.color]="outline ? background : color" *ngIf="icon">{{icon}}</mat-icon>
     </div>
     <rep-tooltip *ngIf="tooltipVisible">{{tooltip}}</rep-tooltip>
 </button>
