@@ -12,7 +12,7 @@ export class PSettingsComponent {
   constructor(
     private _user: UserService,
     private router: Router
-    ) { }
+  ) { }
 
   public menus: Array<REPButton> = [
     {
@@ -39,7 +39,7 @@ export class PSettingsComponent {
       name: "Appearance",
       color: "hotpink",
       icon: "tune",
-      route: '/settings/newchannel',
+      route: '/settings/appearance',
     },
     {
       name: "Hot Keys",
@@ -50,7 +50,7 @@ export class PSettingsComponent {
       name: "Log out",
       color: "#ff0000",
       icon: "logout",
-      onClick: () => { 
+      onClick: () => {
         this._user.logOut();
       }
     },

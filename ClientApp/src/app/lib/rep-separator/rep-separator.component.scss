@@ -5,6 +5,7 @@
     height: 1px;
     display: flex;
     align-items: center;
+    user-select: none;
 
     .content {
         white-space: nowrap;

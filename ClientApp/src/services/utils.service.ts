@@ -9,7 +9,8 @@ import { UAParser } from 'ua-parser-js';
 })
 export class UtilsService {
 
-  constructor() { }
+  constructor(
+  ) { }
 
   // Every HTTP Request, except black listed ones, will set 
   // this variable to true till a response has been received
@@ -20,7 +21,37 @@ export class UtilsService {
 
   public rqsBody: Request;
 
-  public showServerGroup: boolean = true;
+  public set showServerGroup(bool: boolean) {
+    this.setSetting("showServerGroup", bool);
+  };
+
+  public get showServerGroup(): boolean {
+    return this.getSetting("showServerGroup");
+  }
+
+  public set showChannels(bool: boolean) {
+    this.setSetting("showChannels", bool);
+  }
+
+  public get showChannels(): boolean {
+    return this.getSetting("showChannels");
+  }
+
+  public set animationsEnabled(bool: boolean) {
+    this.setSetting("animationsEnabled", bool);
+  }
+
+  public get animationsEnabled(): boolean {
+    return this.getSetting("animationsEnabled");
+  }
+
+  public setSetting(name, value) {
+    localStorage.setItem(name, value);
+  }
+
+  public getSetting(name) {
+    return JSON.parse(localStorage.getItem(name));
+  }
 
   /**
    * Shows a pop-up with a request.

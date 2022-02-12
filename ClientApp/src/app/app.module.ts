@@ -45,6 +45,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { GlobalErrorHandler } from './lib/error-handler';
 import { StopPropagationDirective } from './directives/stop-propagation.directive';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { PAppearanceComponent } from './pages/p-settings/p-appearance/p-appearance.component';
 
 
 
@@ -83,6 +84,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
     PUnauthorizedComponent,
     PNewChannelComponent,
     PNotFoundComponent,
+    PAppearanceComponent,
 
     StopPropagationDirective,
   ],

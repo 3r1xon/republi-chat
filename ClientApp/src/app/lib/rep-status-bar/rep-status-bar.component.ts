@@ -32,6 +32,14 @@ export class REPStatusBarComponent {
 
   public readonly navigations: Array<REPButton> = [
     {
+      name: "Close Channels",
+      icon: "list",
+      tooltip: "Close left side-bar",
+      onClick: () => { 
+        this._utils.showChannels = !this._utils.showChannels;
+      }
+    },
+    {
       name: "Close Group",
       icon: "group",
       tooltip: "Close right side-bar",

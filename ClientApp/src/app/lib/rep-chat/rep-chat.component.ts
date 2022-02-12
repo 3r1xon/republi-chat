@@ -8,7 +8,6 @@ import {
   AfterViewInit,
   ViewChildren,
   HostListener,
-  OnInit,
   OnDestroy,
 } from '@angular/core';
 import { Message } from 'src/interfaces/message.interface';
@@ -24,16 +23,17 @@ export class REPChatComponent implements AfterViewInit, OnDestroy {
 
   ngAfterViewInit(): void {
     this.msg.changes.subscribe(() => {
-      // console.log("scrollTop ---->", this.content.nativeElement.scrollTop);
-      // console.log("width     ---->", this.content.nativeElement.scrollWidth);
+
+      if (!this.initialized) {
+        this.scrollToBottom();
+        this.initialized = true;
+      }
+      const scrollTop = this.content.nativeElement.scrollTop;
+      const scrollWidth = this.content.nativeElement.scrollWidth;
 
       if (this.messages[this.messages?.length-1]?.auth) {
         this.scrollToBottom();
 
-      } else if (this.messages.length > this.prevLength) {
-        this.prevLength = this.messages.length;
-
-        this.scrollToBottom();
       }
     });
   }
@@ -41,6 +41,8 @@ export class REPChatComponent implements AfterViewInit, OnDestroy {
   ngOnDestroy(): void {
     this.msg.changes?.unsubscribe();
   }
+
+  private initialized: boolean = false;
 
   @ViewChild('content')
   private content: ElementRef;
@@ -69,11 +71,9 @@ export class REPChatComponent implements AfterViewInit, OnDestroy {
   @Output()
   public sendMessage = new EventEmitter();
 
-  private prevLength: number = 0;
-
   public selections: Array<Message> = [];
 
-  public _chatOptions: Array<REPButton> = [];
+  private _chatOptions: Array<REPButton> = [];
 
   private readonly DEFAULT_OPTIONS: Array<REPButton> = [
     {
@@ -101,10 +101,13 @@ export class REPChatComponent implements AfterViewInit, OnDestroy {
     this.sendMessage.emit(event);
   }
 
+  reset() {
+    this.initialized = false;
+    this.deselectAll();
+  }
+
   scrollToBottom() {
-    try {
-      this.content.nativeElement.scrollTop = this.content.nativeElement.scrollHeight;
-    } catch{ }
+    this.content.nativeElement.scrollTop = this.content.nativeElement.scrollHeight;
   }
 
   deselectAll() {

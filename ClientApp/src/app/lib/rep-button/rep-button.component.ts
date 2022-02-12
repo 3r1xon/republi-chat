@@ -104,12 +104,12 @@ export class REPButtonComponent {
   public uniqueID: number;
 
   @Output()
-  public onClick: EventEmitter<boolean> = new EventEmitter();
+  public onClick: EventEmitter<any> = new EventEmitter();
 
-  checkClick() {
+  checkClick(event) {
     if (!this.enabled) return;
 
-    this.onClick.emit();
+    this.onClick.emit(event);
   }
 
   toggleTooltip() {

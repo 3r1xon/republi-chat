@@ -1,10 +1,12 @@
-<div id="mainpage">
+<div id="mainpage" [@.disabled]="!hasLoaded">
 
     <rep-status-bar [user]="_user.currentUser"></rep-status-bar>
 
     <div id="main">
 
         <rep-sidemenu
+            *ngIf="_utils.showChannels"
+            @openLeft
             id="channels"
             [entries]="channels"
             (onNew)="addNew()"
@@ -35,8 +37,9 @@
             (sendMessage)="sendChannelMessage($event)"
         ></rep-chat>
 
-        <rep-sidemenu 
+        <rep-sidemenu
             *ngIf="_utils.showServerGroup"
+            @openRight
             id="ch-info"
             [entries]="serverInfo"
             [add]="false"

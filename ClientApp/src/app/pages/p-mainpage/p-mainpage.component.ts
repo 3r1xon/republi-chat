@@ -1,4 +1,3 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { REPButton } from 'src/interfaces/repbutton.interface';
@@ -9,11 +8,21 @@ import { REPChatComponent } from 'src/app/lib/rep-chat/rep-chat.component';
 import { Message } from 'src/interfaces/message.interface';
 import { Channel } from 'src/interfaces/channel.interface';
 import { Unsubscriber } from 'src/app/lib/rep-decorators';
+import {
+  Component,
+  OnInit,
+  ViewChild
+} from '@angular/core';
+import { openLeft, openRight } from 'src/app/lib/animations';
 
 
 @Component({
   templateUrl: './p-mainpage.component.html',
-  styleUrls: ['./p-mainpage.component.scss']
+  styleUrls: ['./p-mainpage.component.scss'],
+  animations: [
+    openRight("100ms", "-250px"),
+    openLeft("100ms", "-250px")
+  ]
 })
 @Unsubscriber
 export class PMainpageComponent implements OnInit {
@@ -29,11 +38,17 @@ export class PMainpageComponent implements OnInit {
 
   ngOnInit(): void {
     this._msService.getChannels();
+
+    setTimeout(() => {
+      this.hasLoaded = true;
+    });
   }
+
+  public hasLoaded: boolean = false;
 
   protected readonly messageSubscription: Subscription = this._msService.messages$
     .subscribe(() => {
-      this.chat.deselectAll();
+      this.chat.reset();
   });
 
   protected readonly channelSubscription: Subscription = this._msService.channels$

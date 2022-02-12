@@ -9,6 +9,9 @@ import { WebSocket } from './lib/websocket';
 @Component({
   selector: 'rep-main',
   templateUrl: './app.component.html',
+  host: {
+    "[@.disabled]": "!_utils.animationsEnabled",
+  },
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent extends WebSocket implements OnInit {

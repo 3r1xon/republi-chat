@@ -67,10 +67,20 @@ export class REPWindowComponent {
   }
 
 
+  @HostListener('window:resize', ['$event'])
+  onResize() {
+    this.state = false;
+
+    this.open.emit(this.state);
+  }
+
+
   @HostListener('document:click', ['$event'])
   clickout(event: any) {
     if (!this.eRef.nativeElement.contains(event.target)) {
       this.state = false;
+
+      this.open.emit(this.state);
     }
   }
 

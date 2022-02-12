@@ -4,7 +4,6 @@
     min-height: 55px;
     height: auto;
     display: flex;
-    animation: appear 500ms;
     position: relative;
     transition: 150ms;
 
@@ -71,16 +70,6 @@
 
 .hold {
     background: var(--OBSCURE);
-}
-
-@keyframes appear {
-    0% {
-        opacity: 0;
-    }
-
-    100% {
-        opacity: 1;
-    }
 }
 
 

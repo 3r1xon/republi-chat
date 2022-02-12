@@ -1,5 +1,5 @@
 <div id="rep-icon-button" *ngIf="visible">
-    <mat-icon (click)="checkClick()"
+    <mat-icon (click)="checkClick($event)"
     (mouseover)="hovering = true" (mouseout)="hovering = false"
     [ngStyle]="{
         'cursor': enabled ? 'pointer' : 'default',

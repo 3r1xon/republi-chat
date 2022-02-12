@@ -7,7 +7,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 })
 export class REPIconButtonComponent {
 
-  private readonly defColors = {
+  private readonly DEFAULT_COLORS = {
     success: "#46a35e",
     warning: "#F59E0B",
     danger: "#c62828"
@@ -22,8 +22,10 @@ export class REPIconButtonComponent {
 
   @Input()
   public set color(color: string) {
-    if (color in this.defColors) this._color = this.defColors[color];
-    else if (color != undefined) this._color = color;
+    if (color in this.DEFAULT_COLORS)
+      this._color = this.DEFAULT_COLORS[color];
+    else if (color != undefined)
+      this._color = color;
   };
 
   public get color() {
@@ -40,8 +42,10 @@ export class REPIconButtonComponent {
   };
 
   public get enabled() {
-    if (typeof this._enabled == 'boolean') return this._enabled;
-    else return this._enabled(this.uniqueID);
+    if (typeof this._enabled == 'boolean')
+      return this._enabled;
+
+    return this._enabled(this.uniqueID);
   }
 
   private _visible: boolean | ((uniqueID: number) => boolean) = true;
@@ -54,20 +58,22 @@ export class REPIconButtonComponent {
   }
 
   public get visible() {
-    if (typeof this._visible == 'boolean') return this._visible;
-    else return this._visible(this.uniqueID);
+    if (typeof this._visible == 'boolean')
+      return this._visible;
+
+    return this._visible(this.uniqueID);
   }
 
   @Input()
   public uniqueID: number;
 
   @Output()
-  public onClick: EventEmitter<boolean> = new EventEmitter();
+  public onClick: EventEmitter<any> = new EventEmitter();
 
-  checkClick() {
+  checkClick(event) {
     if (!this.enabled) return;
 
-    this.onClick.emit();
+    this.onClick.emit(event);
   }
 
 }
