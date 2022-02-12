@@ -1,20 +1,20 @@
 <div id="profile">
 
-    <div id="banner">
+    <div class="banner">
 
-        <div id="profile-info">
+        <div class="profile-info">
 
-            <div id="image-upload">
+            <div class="image-upload">
 
                 <label for="file-input">
-                  <img [src]="_user.currentUser.picture" id="picture" onerror="this.src = '/assets/user-image.png'"/>
+                  <img [src]="_user.currentUser.picture" class="picture" onerror="this.src = '/assets/user-image.png'"/>
                 </label>
 
-                <input id="file-input" type="file" (change)="onChange($event.target.files)" />
+                <input class="file-input" type="file" (change)="onChange($event.target.files)" />
 
             </div>
 
-            <div id="banner-info">
+            <div class="banner-info">
 
                 <h2 [style.color]="_user.currentUser.color">{{_user.currentUser.name}}</h2>
 
@@ -35,7 +35,7 @@
 
     </div>
 
-    <div id="settings">
+    <div class="settings">
 
         <rep-message [message]="exampleMsg" [options]="exampleMsgOptions"></rep-message>
 
@@ -59,16 +59,16 @@
 
             <div class="aligned">
 
-                <rep-input 
+                <rep-input
                 [(text)]="user.email"
-                placeholder="Email" 
+                placeholder="Email"
                 required="true"
                 [enabled]="editEmail"
                 ></rep-input>
 
                 <rep-toggle
                 [(checked)]="editEmail"
-                iconOnTrue="lock_open" 
+                iconOnTrue="lock_open"
                 iconOnFalse="lock"
                 ></rep-toggle>
 
@@ -80,11 +80,11 @@
 
         <rep-separator>Strict settings</rep-separator>
 
-        <!-- <input id="user-color"
+        <!-- <input class="user-color"
         [(ngModel)]="user.userColor"
         [(ngModel)]="exampleMsg.userColor" type="color"> -->
 
-        <div id="strict">
+        <div class="strict">
             <rep-actions [actions]="strictActions"></rep-actions>
         </div>
 
