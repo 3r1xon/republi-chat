@@ -36,7 +36,7 @@ export class REPStatusBarComponent {
       icon: "list",
       tooltip: "Close left side-bar",
       onClick: () => { 
-        this._utils.showChannels = !this._utils.showChannels;
+        this._utils.settings.showChannels = !this._utils.settings.showChannels;
       }
     },
     {
@@ -44,7 +44,7 @@ export class REPStatusBarComponent {
       icon: "group",
       tooltip: "Close right side-bar",
       onClick: () => { 
-        this._utils.showServerGroup = !this._utils.showServerGroup;
+        this._utils.settings.showServerGroup = !this._utils.settings.showServerGroup;
       }
     },
     {

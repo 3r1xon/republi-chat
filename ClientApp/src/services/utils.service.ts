@@ -3,6 +3,7 @@ import { Request } from 'src/interfaces/request.interface';
 import { REPButton } from 'src/interfaces/repbutton.interface';
 import { BugReport } from 'src/interfaces/bugreport.interface';
 import { UAParser } from 'ua-parser-js';
+import { Settings } from 'src/interfaces/settings.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -21,37 +22,15 @@ export class UtilsService {
 
   public rqsBody: Request;
 
-  public set showServerGroup(bool: boolean) {
-    this.setSetting("showServerGroup", bool);
+  /**
+   * Default settings
+   * 
+   */
+  public settings: Settings = {
+    showChannels: true,
+    showServerGroup: true,
+    animations: true
   };
-
-  public get showServerGroup(): boolean {
-    return this.getSetting("showServerGroup");
-  }
-
-  public set showChannels(bool: boolean) {
-    this.setSetting("showChannels", bool);
-  }
-
-  public get showChannels(): boolean {
-    return this.getSetting("showChannels");
-  }
-
-  public set animationsEnabled(bool: boolean) {
-    this.setSetting("animationsEnabled", bool);
-  }
-
-  public get animationsEnabled(): boolean {
-    return this.getSetting("animationsEnabled");
-  }
-
-  public setSetting(name, value) {
-    localStorage.setItem(name, value);
-  }
-
-  public getSetting(name) {
-    return JSON.parse(localStorage.getItem(name));
-  }
 
   /**
    * Shows a pop-up with a request.

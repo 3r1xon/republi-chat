@@ -44,6 +44,8 @@ router.post('/signUp', async (req, res) => {
           VALUES (?, ?, ?, ?, ?)
           `, [code, hash, user.name, user.email, REPTools.randomHex()]);
 
+          // SQL Trigger will take care of the rest
+
           res.status(201).send({ success: true, message: 'User correctly signed up' });
         } catch(error) {
 
@@ -258,14 +260,12 @@ router.get('/getDevices', Auth.HTTPAuthToken, async (req, res) => {
     WHERE ID_USER = ?
     `, [userID]);
 
-    devices.map((device) => {
+    for (let device of devices) {
       if (device.sid == res.locals.sid) {
         device.current = true;
-      } else {
-        device.current = false;
       }
       delete device.sid;
-    });
+    }
 
     res.status(201).send({
       success: true,
@@ -301,6 +301,35 @@ router.delete('/disconnectDevice/:id', Auth.HTTPAuthToken, async (req, res) => {
 
     res.status(201).send({ 
       success: true,
+    });
+
+  } catch(err) {
+    console.log(clc.red(err));
+
+    res.status(500).send({ success: false, message: "Internal server error!" });
+  }
+});
+
+
+
+router.get('/getSettings', Auth.HTTPAuthToken, async (req, res) => {
+
+  const userID = res.locals._id;
+
+  try {
+
+    const settings = await REPQuery.one(
+    `
+    SELECT SHOW_CHANNELS     as showChannels,
+           SHOW_SERVER_GROUP as showServerGroup,
+           ANIMATIONS        as animations
+    FROM SETTINGS
+    WHERE ID_USER = ?
+    `, [userID]);
+
+    res.status(201).send({
+      success: true,
+      data: REPTools.keysToBool(settings)
     });
 
   } catch(err) {

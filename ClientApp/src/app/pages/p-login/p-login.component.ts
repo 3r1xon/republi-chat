@@ -106,6 +106,7 @@ export class PLoginComponent {
           this._user.currentUser = <Account>response.data.user;
           this._user.currentUser.picture = this._fileUpload.sanitizeIMG(this._user.currentUser.picture);
           this._user.userAuth = true;
+          this._user.loadSettings();
           await this.router.navigate(['mainpage']);
         }, 
         (response) => {

@@ -78,6 +78,7 @@ create or replace table republichat.sessions
         primary key,
     ID_USER         bigint      not null,
     SID             varchar(50) not null,
+    SOCKET_ID       varchar(30) null,
     BROWSER_NAME    varchar(30) null,
     BROWSER_VERSION varchar(30) null,
     LATITUDE        varchar(30) null,
@@ -85,7 +86,24 @@ create or replace table republichat.sessions
     DATE            datetime    null,
     constraint sessions_SESSION_ID_uindex
         unique (SID),
+    constraint sessions_SOCKET_ID_uindex
+        unique (SOCKET_ID),
     constraint FK_USERS_1
+        foreign key (ID_USER) references republichat.users (ID_USER)
+            on update cascade on delete cascade
+);
+
+create or replace table republichat.settings
+(
+    ID_SETTING        bigint auto_increment
+        primary key,
+    ID_USER           bigint               not null,
+    SHOW_CHANNELS     tinyint(1) default 1 null,
+    SHOW_SERVER_GROUP tinyint(1) default 1 null,
+    ANIMATIONS        tinyint(1) default 1 null,
+    constraint settings_ID_USER_uindex
+        unique (ID_USER),
+    constraint settings_users_ID_USER_fk
         foreign key (ID_USER) references republichat.users (ID_USER)
             on update cascade on delete cascade
 );

@@ -5,7 +5,7 @@
     <div id="main">
 
         <rep-sidemenu
-            *ngIf="_utils.showChannels"
+            *ngIf="_utils.settings.showChannels"
             @openLeft
             id="channels"
             [entries]="channels"
@@ -22,9 +22,7 @@
             >
             </rep-message>
 
-            <p *ngIf="channels[channelsTab]?.sections.length == 0">
-                <small>{{channels[channelsTab]?.tabname}} is empty</small>
-            </p>
+            <small *ngIf="channels[channelsTab]?.sections.length == 0">{{channels[channelsTab]?.tabname}} is empty</small>
 
         </rep-sidemenu>
 
@@ -38,7 +36,7 @@
         ></rep-chat>
 
         <rep-sidemenu
-            *ngIf="_utils.showServerGroup"
+            *ngIf="_utils.settings.showServerGroup"
             @openRight
             id="ch-info"
             [entries]="serverInfo"
@@ -46,9 +44,7 @@
             (onTab)="serverInfoTab = $event"
         >
 
-            <p *ngIf="serverInfo[serverInfoTab]?.sections.length == 0">
-                <small>Empty.</small>
-            </p>
+            <small *ngIf="serverInfo[serverInfoTab]?.sections.length == 0">{{serverInfo[serverInfoTab]?.tabname}} is Empty.</small>
 
         </rep-sidemenu>
 

@@ -1,15 +1,14 @@
-const express     = require('express');
-const Auth        = require('../Authentication/auth');
-const REPTools    = require('../Tools/rep-tools');
-const router      = express.Router();
-const REPQuery    = require('../Database/rep-query');
-const multer      = require('multer');
-const upload      = multer({});
-const fm          = require('date-fns');
-const clc         = require('cli-color');
-const DBUser      = require('../Authentication/db-user');
-const permissions = require('../Authentication/permissions');
-const { io }      = require('../start');
+const express  = require('express');
+const Auth     = require('../Authentication/auth');
+const REPTools = require('../Tools/rep-tools');
+const router   = express.Router();
+const REPQuery = require('../Database/rep-query');
+const multer   = require('multer');
+const upload   = multer({});
+const fm       = require('date-fns');
+const clc      = require('cli-color');
+const DBUser   = require('../Authentication/db-user');
+const { io }   = require('../start');
 
 
 router.use(Auth.HTTPAuthToken);
@@ -36,7 +35,7 @@ router.post('/createChannel', upload.single("image"), async (req, res) => {
 
         const _userID = res.locals._id;
 
-        const dbChannel = await REPQuery.one(
+        await REPQuery.one(
         `
         INSERT INTO CHANNELS
             (ID_USER, NAME, CHANNEL_CODE, PICTURE, CREATION_DATE)
@@ -44,20 +43,7 @@ router.post('/createChannel', upload.single("image"), async (req, res) => {
         RETURNING ID_CHANNEL
         `, [_userID, channel.name, code, channel.picture, creationDate]);
 
-        const chMember = await REPQuery.one(
-        `
-        INSERT INTO CHANNELS_MEMBERS
-            (ID_USER, ID_CHANNEL, JOIN_DATE)
-        VALUES (?, ?, ?)
-        RETURNING ID_CHANNEL_MEMBER
-        `, [_userID, dbChannel.ID_CHANNEL, new Date()]);
-
-        await REPQuery.exec(
-        `
-        INSERT INTO CHANNELS_PERMISSIONS
-        (ID_CHANNEL_MEMBER, DELETE_MESSAGE, KICK_MEMBERS, BAN_MEMBERS, SEND_MESSAGES)
-        VALUES (?, ?, ?, ?, ?)
-        `, [chMember.ID_CHANNEL_MEMBER, true, true, true, true]);
+        // Triggers will take care of the rest
 
         res.status(201).send({ success: true });
 
@@ -103,13 +89,6 @@ router.post('/addChannel', async (req, res) => {
           VALUES (?, ?, ?)
           RETURNING ID_CHANNEL_MEMBER
           `, [_userID, _channelID, new Date()]);
-
-          await REPQuery.exec(
-          `
-          INSERT INTO CHANNELS_PERMISSIONS
-              (ID_CHANNEL_MEMBER)
-          VALUES (?)
-          `, [member.ID_CHANNEL_MEMBER]);
 
           res.status(201).send({ success: true });
 

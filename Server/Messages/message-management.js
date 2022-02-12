@@ -6,6 +6,7 @@ const fm       = require('date-fns');
 const DBUser   = require('../Authentication/db-user');
 const clc      = require('cli-color');
 const { io }   = require('../start');
+const REPTools = require('../Tools/rep-tools');
 
 
 
@@ -86,10 +87,7 @@ router.get("/getChannelPermissions/:id", async (req, res) => {
 
         const _id = permissions.id;
 
-        Object.keys(permissions)
-          .forEach((k) => {
-            permissions[k] = !!permissions[k];
-          });
+        REPTools.keysToBool(permissions);
 
         permissions.id = _id;
 

@@ -10,6 +10,7 @@ import { FileUploadService } from './file-upload.service';
 import { UtilsService } from './utils.service';
 import { DOCUMENT } from '@angular/common';
 import { first } from 'rxjs/operators';
+import { Settings } from 'src/interfaces/settings.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -52,6 +53,7 @@ export class UserService implements CanActivate {
           this.currentUser = <Account>res.data;
           this.currentUser.picture = this._fileUpload.sanitizeIMG(this.currentUser.picture);
           this.userAuth = true;
+          this.loadSettings();
           await this.router.navigate(['mainpage']);
         }
       },
@@ -93,6 +95,17 @@ export class UserService implements CanActivate {
       );
   }
 
+  public loadSettings() {
+    const sub = this.getSettings()
+      .subscribe((response) => {
+        this._utils.settings = <Settings>response.data;
+      },
+      () => { },
+      () => {
+        sub.unsubscribe();
+      });
+  }
+
   /**
    * API for deleting the user profile.
    *
@@ -123,5 +136,15 @@ export class UserService implements CanActivate {
    */
   public disconnectDevice(deviceID: number) {
     return this.http.delete<ServerResponse>(`${server.BASE_URL}/authentication/disconnectDevice/${deviceID}`);
+  }
+
+  /**
+   * API that gets a list of settings.
+   *
+   * @returns An HTTP request
+   *
+   */
+  public getSettings() {
+    return this.http.get<ServerResponse>(`${server.BASE_URL}/authentication/getSettings`);
   }
 }

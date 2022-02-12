@@ -31,7 +31,7 @@ const routes: Routes = [
       { path: 'channelsettings', component: PChannelSettingsComponent, pathMatch: 'full' },
       { path: 'appearance', component: PAppearanceComponent, pathMatch: 'full' }
     ],
-    canActivate: [UserService] 
+    canActivate: [UserService]
   },
   { path: '**', redirectTo: '404' },
   { path: '404', component: PNotFoundComponent },

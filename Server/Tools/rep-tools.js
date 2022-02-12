@@ -53,6 +53,14 @@ class REPTools {
     static randomHex() {
         return "#" + Math.floor(Math.random()*16777215).toString(16);
     }
+
+    static keysToBool(obj) {
+        Object.keys(obj)
+        .forEach((k) => {
+            obj[k] = !!obj[k];
+        });
+        return obj;
+    }
 }
 
 module.exports = REPTools;

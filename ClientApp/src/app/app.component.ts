@@ -10,7 +10,7 @@ import { WebSocket } from './lib/websocket';
   selector: 'rep-main',
   templateUrl: './app.component.html',
   host: {
-    "[@.disabled]": "!_utils.animationsEnabled",
+    "[@.disabled]": "!_utils.settings.animations",
   },
   styleUrls: ['./app.component.scss']
 })
