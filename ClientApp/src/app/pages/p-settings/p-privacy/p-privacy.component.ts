@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from 'src/services/user.service';
+import { UtilsService } from 'src/services/utils.service';
 
 @Component({
   templateUrl: './p-privacy.component.html',
@@ -8,7 +9,8 @@ import { UserService } from 'src/services/user.service';
 export class PPrivacyComponent implements OnInit {
 
   constructor(
-    private _user: UserService
+    private _user: UserService,
+    public _utils: UtilsService
   ) { }
 
   ngOnInit() {

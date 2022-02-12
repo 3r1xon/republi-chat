@@ -4,15 +4,7 @@
 
         <div class="profile-info">
 
-            <div class="image-upload">
-
-                <label for="file-input">
-                  <img [src]="_user.currentUser.picture" class="picture" onerror="this.src = '/assets/user-image.png'"/>
-                </label>
-
-                <input class="file-input" type="file" (change)="onChange($event.target.files)" />
-
-            </div>
+            <rep-img-upload [src]="_user.currentUser.picture" (image)="onChange($event)"></rep-img-upload>
 
             <div class="banner-info">
 
@@ -21,9 +13,7 @@
                 <div style="display: flex;">
 
                     <p>{{_user.currentUser.code}}</p>
-                    <rep-info>
-                        This is your unique code, give this code to a friend in order to be added in his friend list
-                    </rep-info>
+                    <rep-info tooltip="This is your unique code, give this code to a friend in order to be added in his friend list"></rep-info>
 
                 </div>
 
@@ -46,12 +36,14 @@
             <div class="aligned">
 
                 <rep-input
-                [(text)]="user.name"
-                [(text)]="exampleMsg.name"
-                maxLength="30"
-                required="true"
-                [enabled]="editName"
-                placeholder="Name"></rep-input>
+                    [(text)]="user.name"
+                    [(text)]="exampleMsg.name"
+                    maxLength="30"
+                    required="true"
+                    [enabled]="editName"
+                    placeholder="Name"
+                >
+                </rep-input>
 
                 <rep-toggle [(checked)]="editName" iconOnTrue="lock_open" iconOnFalse="lock"></rep-toggle>
 
@@ -60,16 +52,16 @@
             <div class="aligned">
 
                 <rep-input
-                [(text)]="user.email"
-                placeholder="Email"
-                required="true"
-                [enabled]="editEmail"
+                    [(text)]="user.email"
+                    placeholder="Email"
+                    required="true"
+                    [enabled]="editEmail"
                 ></rep-input>
 
                 <rep-toggle
-                [(checked)]="editEmail"
-                iconOnTrue="lock_open"
-                iconOnFalse="lock"
+                    [(checked)]="editEmail"
+                    iconOnTrue="lock_open"
+                    iconOnFalse="lock"
                 ></rep-toggle>
 
             </div>

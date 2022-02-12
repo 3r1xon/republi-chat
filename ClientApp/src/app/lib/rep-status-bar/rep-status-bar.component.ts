@@ -50,7 +50,7 @@ export class REPStatusBarComponent {
     {
       name: "Settings",
       icon: "settings",
-      tooltip: "Navige to settings",
+      tooltip: "Navigate to settings",
       onClick: () => {
         this.router.navigate(['settings']);
       }

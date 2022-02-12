@@ -9,7 +9,6 @@ import { REPLoadingComponent } from './lib/rep-loading/rep-loading.component';
 import { REPWindowComponent } from './lib/rep-window/rep-window.component';
 import { REPButtonComponent } from './lib/rep-button/rep-button.component';
 import { REPFooterComponent } from './lib/rep-footer/rep-footer.component';
-import { REPTooltipComponent } from './lib/rep-tooltip/rep-tooltip.component';
 import { REPSidemenuComponent } from './lib/rep-sidemenu/rep-sidemenu.component';
 import { REPToggleComponent } from './lib/rep-toggle/rep-toggle.component';
 import { REPRequestComponent } from './lib/rep-request/rep-request.component';
@@ -21,6 +20,7 @@ import { REPInfoComponent } from './lib/rep-info/rep-info.component';
 import { REPStatusBarComponent } from './lib/rep-status-bar/rep-status-bar.component';
 import { REPProfilePicComponent } from './lib/rep-profile-pic/rep-profile-pic.component';
 import { REPIconButtonComponent } from './lib/rep-icon-button/rep-icon-button.component';
+import { REPImgUploadComponent } from './lib/rep-img-upload/rep-img-upload.component';
 
 import { PSignupComponent } from './pages/p-signup/p-signup.component';
 import { PLoginComponent } from './pages/p-login/p-login.component';
@@ -46,6 +46,7 @@ import { GlobalErrorHandler } from './lib/error-handler';
 import { StopPropagationDirective } from './directives/stop-propagation.directive';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { PAppearanceComponent } from './pages/p-settings/p-appearance/p-appearance.component';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 
 
@@ -61,7 +62,6 @@ import { PAppearanceComponent } from './pages/p-settings/p-appearance/p-appearan
     REPLoadingComponent,
     REPWindowComponent,
     REPFooterComponent,
-    REPTooltipComponent,
     REPSidemenuComponent,
     REPToggleComponent,
     REPRequestComponent,
@@ -73,6 +73,7 @@ import { PAppearanceComponent } from './pages/p-settings/p-appearance/p-appearan
     REPStatusBarComponent,
     REPProfilePicComponent,
     REPIconButtonComponent,
+    REPImgUploadComponent,
 
     PChannelSettingsComponent,
     PSignupComponent,
@@ -99,11 +100,12 @@ import { PAppearanceComponent } from './pages/p-settings/p-appearance/p-appearan
     FormsModule,
     ReactiveFormsModule,
     DragDropModule,
+    MatTooltipModule
   ],
   providers: [
     { 
-      provide: HTTP_INTERCEPTORS, 
-      useClass: InterceptorService, 
+      provide: HTTP_INTERCEPTORS,
+      useClass: InterceptorService,
       multi: true 
     },
     {

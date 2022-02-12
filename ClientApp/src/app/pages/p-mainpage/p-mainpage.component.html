@@ -32,6 +32,7 @@
             [chatName]="_msService.currentRoom?.name"
             [msOptions]="msgOptions"
             [chatOptions]="chatOptions"
+            [dateFormat]="_utils.settings.dateFormat"
             (sendMessage)="sendChannelMessage($event)"
         ></rep-chat>
 

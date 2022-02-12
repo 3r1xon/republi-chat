@@ -1,0 +1,9 @@
+<div id="rep-img-upload">
+
+    <label for="file-input">
+        <img [src]="src" class="picture"/>
+    </label>
+
+    <input id="file-input" type="file" (change)="onChange($event.target.files)" />
+
+</div>

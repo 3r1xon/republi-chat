@@ -76,6 +76,7 @@ export class PProfileComponent {
     {
       name: "Delete profile",
       icon: "dangerous",
+      tooltip: "Delete all your data",
       background: "danger",
       outline: true,
       onClick: () => { this.deleteProfile() }
@@ -86,13 +87,14 @@ export class PProfileComponent {
 
   async onChange(event) {
 
+    console.log("aaa")
     this.file = <File>event[0];
 
     const file = <File>event[0];
 
     const fd = new FormData();
     fd.append("image", file, file.name);
-    
+
     const res = await this.http.put<ServerResponse>(
     `${server.BASE_URL}/authentication/editProfile`, 
     fd

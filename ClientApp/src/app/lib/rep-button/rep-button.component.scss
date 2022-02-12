@@ -6,6 +6,7 @@
     background: transparent;
     text-decoration: none;
     white-space: nowrap;
+    transition: 150ms;
 
     #flat-button {
         width: 100%;
@@ -25,5 +26,10 @@
             margin-left: 10px;
             color: #FFFFFF;
         }
+    }
+
+    &:active {
+        -webkit-box-shadow: 0px 3px 12px 2px var(--VERY-DARK);
+        box-shadow: 0px 3px 12px 2px var(--VERY-DARK);
     }
 }

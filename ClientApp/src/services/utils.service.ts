@@ -29,7 +29,8 @@ export class UtilsService {
   public settings: Settings = {
     showChannels: true,
     showServerGroup: true,
-    animations: true
+    animations: true,
+    dateFormat: "dd/MM/yyyy HH:mm:ss"
   };
 
   /**

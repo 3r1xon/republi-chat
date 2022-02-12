@@ -16,8 +16,6 @@ export class REPButtonComponent {
     danger: "#c62828"
   };
 
-  public tooltipVisible: boolean = false;
-
   @Input()
   public tooltip: string;
 
@@ -110,10 +108,5 @@ export class REPButtonComponent {
     if (!this.enabled) return;
 
     this.onClick.emit(event);
-  }
-
-  toggleTooltip() {
-    if (this.tooltip)
-      this.tooltipVisible = !this.tooltipVisible;
   }
 }

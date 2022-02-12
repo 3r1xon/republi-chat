@@ -322,7 +322,8 @@ router.get('/getSettings', Auth.HTTPAuthToken, async (req, res) => {
     `
     SELECT SHOW_CHANNELS     as showChannels,
            SHOW_SERVER_GROUP as showServerGroup,
-           ANIMATIONS        as animations
+           ANIMATIONS        as animations,
+           DATE_FORMAT       as dateFormat
     FROM SETTINGS
     WHERE ID_USER = ?
     `, [userID]);

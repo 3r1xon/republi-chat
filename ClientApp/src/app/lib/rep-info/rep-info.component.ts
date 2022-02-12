@@ -10,10 +10,6 @@ export class REPInfoComponent {
   @Input()
   public background: string = "#FFFFFF";
 
-  public tooltipVisible: boolean = false;
-
-  toggleTooltip(): void {
-    this.tooltipVisible = !this.tooltipVisible;
-  }
-
+  @Input()
+  public tooltip: string;
 }

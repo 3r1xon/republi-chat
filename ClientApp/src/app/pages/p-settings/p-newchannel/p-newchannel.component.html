@@ -6,15 +6,7 @@
 
     <form class="channel-info column" [formGroup]="formCreation">
 
-        <div id="image-upload">
-
-            <label for="file-input">
-                <img src="/assets/upload.png" id="picture"/>
-            </label>
-
-            <input formControlName="channelImage" id="file-input" type="file" (change)="onChange($event.target.files)" />
-
-        </div>
+        <rep-img-upload></rep-img-upload>
 
         <div class="aligned">
             <rep-input formControlName="channelName" placeholder="Channel name" required="true"></rep-input>

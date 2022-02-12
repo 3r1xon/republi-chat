@@ -22,7 +22,7 @@
                 [maxlength]="maxLength"
             />
             <mat-icon [style.color]="color" *ngIf="icon">{{icon}}</mat-icon>
-            <rep-info *ngIf="tooltip" [background]="placeholderAnimated ? color : borderColor">{{tooltip}}</rep-info>
+            <rep-info *ngIf="tooltip" [tooltip]="tooltip" [background]="placeholderAnimated ? color : borderColor"></rep-info>
         </span>
 
         <label id="placeholder" [ngStyle]="{

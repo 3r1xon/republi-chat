@@ -9,9 +9,7 @@ const { io }   = require('../start');
 const REPTools = require('../Tools/rep-tools');
 
 
-
 router.use(Auth.HTTPAuthToken);
-io.of("/messages").use(Auth.WSAuthToken);
 
 
 router.get('/getChannelMessages/:id/:limit', async (req, res) => {
@@ -104,7 +102,7 @@ router.get("/getChannelPermissions/:id", async (req, res) => {
 
 
 
-io.of("/messages").on("connection", (socket) => {
+io.on("connection", (socket) => {
 
   const userID = socket.auth._id;
 

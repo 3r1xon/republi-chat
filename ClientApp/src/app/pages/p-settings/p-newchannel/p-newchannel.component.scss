@@ -9,12 +9,12 @@
 
     rep-separator {
         width: 100%;
-        margin: 15px;
+        margin-bottom: 15px;
     }
 
     p, h1 {
-        margin-top: 10px;
         align-self: flex-start;
+        margin-bottom: 15px;
     }
 
     h1 {
@@ -22,32 +22,8 @@
     }
 
 
-    #image-upload {
-        width: 75px;
-        height: 75px;
-        border-radius: 50%;
-        border: 5px solid var(--LIGHT-DARK);
+    rep-img-upload {
         justify-self: center;
-
-        #picture {
-            width: 75px;
-            height: 75px;
-            cursor: pointer;
-            border-radius: 50%;
-            transition: 100ms;
-            -webkit-user-drag: none;
-
-            &:hover {
-                opacity: 0.5;
-            }
-        }
-
-        #file-input {
-            display: none;
-            visibility: hidden;
-            width: 0;
-            height: 0;
-        }
     }
 
     .channel-info {
@@ -75,7 +51,7 @@
     }
 
     rep-input {
-        margin-right: 15px;
+        margin: 0 15px 15px 0;
     }
 
     rep-actions {

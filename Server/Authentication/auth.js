@@ -1,6 +1,6 @@
 const REPQuery = require('../Database/rep-query');
 const clc      = require('cli-color');
-
+const cookie   = require('cookie');
 
 class Auth {
   /**
@@ -46,7 +46,7 @@ class Auth {
     static WSAuthToken = async (socket, next) => {
 
         try {
-            const sid = socket.request.cookies["sid"];
+            const sid = cookie.parse(socket.request.headers.cookie)["sid"];
 
             const dbUser = await REPQuery.one(
             `

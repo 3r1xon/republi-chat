@@ -28,6 +28,7 @@ export class REPChatComponent implements AfterViewInit, OnDestroy {
         this.scrollToBottom();
         this.initialized = true;
       }
+
       const scrollTop = this.content.nativeElement.scrollTop;
       const scrollWidth = this.content.nativeElement.scrollWidth;
 
@@ -65,8 +66,16 @@ export class REPChatComponent implements AfterViewInit, OnDestroy {
   @Input()
   public chatName: string;
 
+  private _dateFormat: string = "dd/MM/yyyy";
+
   @Input()
-  public dateFormat: string = "dd/MM/yyyy";
+  public set dateFormat(format: string) {
+    this._dateFormat = format.replace(":ss", "");
+  };
+
+  public get dateFormat() {
+    return this._dateFormat;
+  }
 
   @Output()
   public sendMessage = new EventEmitter();

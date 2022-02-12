@@ -57,7 +57,8 @@ class REPTools {
     static keysToBool(obj) {
         Object.keys(obj)
         .forEach((k) => {
-            obj[k] = !!obj[k];
+            if (obj[k] == 1 || obj[k] == 0)
+                obj[k] = !!obj[k];
         });
         return obj;
     }

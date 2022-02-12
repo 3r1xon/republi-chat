@@ -5,12 +5,12 @@ import { UserService } from './user.service';
 import { server } from 'src/environments/server';
 import { ServerResponse } from 'src/interfaces/response.interface';
 import { FileUploadService } from './file-upload.service';
-import { WebSocket } from '../app/lib/websocket';
 import { Channel } from 'src/interfaces/channel.interface';
 import { Subject, Subscription } from 'rxjs';
 import { first } from 'rxjs/operators';
 import { ChannelPermissions } from 'src/interfaces/channelPermissions.interface';
 import { UtilsService } from './utils.service';
+import { WebSocketService } from './websocket.service';
 
 
 @Injectable({
@@ -22,6 +22,7 @@ export class MessagesService {
     private _user: UserService,
     private _fileUpload: FileUploadService,
     private _utils: UtilsService,
+    private _webSocket: WebSocketService,
     private http: HttpClient
   ) { }
 
@@ -41,9 +42,6 @@ export class MessagesService {
 
   private chSubscriptions: Array<Subscription> = [];
 
-  private channelsIO: WebSocket = new WebSocket(server.WEB_SOCKET + "/channels");
-
-  private messagesIO: WebSocket = new WebSocket(server.WEB_SOCKET + "/messages");
 
   /**
    * Get the current user channels.
@@ -61,7 +59,7 @@ export class MessagesService {
 
             this.chSubscriptions
             .push(
-              this.channelsIO.listen("ban")
+              this._webSocket.listen("ban")
                 .subscribe((banID) => {
                   if (banID == this.chPermissions.id) {
                     this.messages = [];
@@ -120,14 +118,14 @@ export class MessagesService {
 
                 this.messages$.next();
 
-                this.messagesIO.emit("joinChannel", {
+                this._webSocket.emit("joinChannel", {
                   room: this.currentRoom._id,
                   userID: this._user.currentUser.id
                 });
 
                 this.msSubscriptions
                   .push(
-                    this.messagesIO.listen("message")
+                    this._webSocket.listen("message")
                       .subscribe((message: string) => {
                         const msg = <Message>JSON.parse(message);
                         this.messages.push(mapMsg(msg));
@@ -136,7 +134,7 @@ export class MessagesService {
 
                 this.msSubscriptions
                   .push(
-                    this.messagesIO.listen("deleteMessage")
+                    this._webSocket.listen("deleteMessage")
                       .subscribe((_id: number) => {
                         const index = this.messages.findIndex(msg => msg.id == _id);
                         this.messages.splice(index, 1);
@@ -146,7 +144,7 @@ export class MessagesService {
 
                 this.msSubscriptions
                 .push(
-                  this.messagesIO.listen("connect")
+                  this._webSocket.listen("connect")
                     .subscribe(() => {
                       const room = this.currentRoom;
 
@@ -160,7 +158,7 @@ export class MessagesService {
 
                 this.msSubscriptions
                 .push(
-                  this.messagesIO.listen("disconnect")
+                  this._webSocket.listen("disconnect")
                     .subscribe(() => {
                     })
                 );
@@ -189,7 +187,7 @@ export class MessagesService {
    * @param message The string that contains the message.
    */
   public sendMessage(message: string) {
-    this.messagesIO.emit("message", message);
+    this._webSocket.emit("message", message);
   }
 
   /**
@@ -198,7 +196,7 @@ export class MessagesService {
    * @param _id The message ID you want to remove.
    */
   public deleteMessage(_id: number) {
-    this.messagesIO.emit("deleteMessage", _id);
+    this._webSocket.emit("deleteMessage", _id);
   }
 
   /**
@@ -209,7 +207,7 @@ export class MessagesService {
    * @param _id The ID of the user you want to ban.
    */
   public banUser(room: Channel, _id: number) {
-    this.messagesIO.emit("ban", {
+    this._webSocket.emit("ban", {
       room: room._id,
       _id: _id
     });
@@ -223,7 +221,7 @@ export class MessagesService {
    * @param _id The ID of the user you want to kick.
    */
    public kickUser(room: Channel, _id: number) {
-    this.messagesIO.emit("kick", {
+    this._webSocket.emit("kick", {
       room: room._id,
       _id: _id
     });

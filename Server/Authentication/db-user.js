@@ -146,7 +146,7 @@ class DBUser {
             WHERE M.ID_CHANNEL_MESSAGE = ?
             `, [chMsg.ID_CHANNEL_MESSAGE]);
 
-            io.of("/messages").to(this.channelID).emit("message", JSON.stringify(message));
+            io.to(this.channelID).emit("message", JSON.stringify(message));
 
             callback(null, this);
           }
@@ -171,7 +171,7 @@ class DBUser {
             WHERE ID_CHANNEL_MESSAGE = ?
             `, [msgID]);
 
-            io.of("/messages").to(this.channelID).emit("deleteMessage", `${msgID}`);
+            io.to(this.channelID).emit("deleteMessage", `${msgID}`);
 
             callback(null, this);
 

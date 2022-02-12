@@ -1,7 +1,8 @@
 <button *ngIf="visible" class="master" [disabled]="!enabled" #trigger
     [type]="type"
     (click)="checkClick($event)"
-    (mouseover)="toggleTooltip()" (mouseout)="toggleTooltip()">
+    [matTooltip]="tooltip"
+    >
     <div id="flat-button" matRipple [matRippleTrigger]="trigger" [ngStyle]="{
             'background': outline ? 'transparent' : background,
             'cursor': enabled ? 'pointer' : 'default',
@@ -12,5 +13,4 @@
             </p>
         <mat-icon [style.color]="outline ? background : color" *ngIf="icon">{{icon}}</mat-icon>
     </div>
-    <rep-tooltip *ngIf="tooltipVisible">{{tooltip}}</rep-tooltip>
 </button>

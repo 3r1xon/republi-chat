@@ -1,8 +1,8 @@
 <div id="rep-info">
-    <mat-icon 
-    [style.color]="background"
-    id="info" (mouseover)="toggleTooltip()" (mouseout)="toggleTooltip()">info</mat-icon>
-    <rep-tooltip *ngIf="tooltipVisible">
-        <ng-content></ng-content>
-    </rep-tooltip>
+    <mat-icon
+        id="info"
+        [style.color]="background"
+        [matTooltip]="tooltip"
+    >info
+    </mat-icon>
 </div>
