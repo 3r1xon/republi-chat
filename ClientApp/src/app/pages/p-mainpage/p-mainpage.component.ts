@@ -246,4 +246,13 @@ export class PMainpageComponent implements OnInit {
     await this.router.navigateByUrl('/settings/newchannel');
   }
 
+
+  public roomsArr = [
+    "Room 1",
+    "Room 2",
+    "Room 3",
+    "Room 4",
+    "Room 5",
+    "Room 6",
+  ]
 }

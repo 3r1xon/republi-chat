@@ -43,6 +43,10 @@
             cursor: pointer;
             white-space: nowrap;
             text-overflow: ellipsis;
+            
+            &:hover {
+                text-decoration: underline;
+            }
         }
 
         p {

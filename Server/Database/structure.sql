@@ -72,6 +72,18 @@ create or replace table republichat.channels_permissions
             on update cascade on delete cascade
 );
 
+create or replace table republichat.channels_rooms
+(
+    ID_CHANNEL_ROOM bigint auto_increment
+        primary key,
+    ID_CHANNEL      bigint               not null,
+    ROOM_NAME       varchar(30)          not null,
+    TEXT_ROOM       tinyint(1) default 1 null,
+    constraint channels_rooms_channels_ID_CHANNEL_fk
+        foreign key (ID_CHANNEL) references republichat.channels (ID_CHANNEL)
+            on update cascade on delete cascade
+);
+
 create or replace table republichat.sessions
 (
     ID_SESSION      bigint auto_increment
@@ -97,10 +109,11 @@ create or replace table republichat.settings
 (
     ID_SETTING        bigint auto_increment
         primary key,
-    ID_USER           bigint               not null,
-    SHOW_CHANNELS     tinyint(1) default 1 null,
-    SHOW_SERVER_GROUP tinyint(1) default 1 null,
-    ANIMATIONS        tinyint(1) default 1 null,
+    ID_USER           bigint                                    not null,
+    SHOW_CHANNELS     tinyint(1)  default 1                     null,
+    SHOW_SERVER_GROUP tinyint(1)  default 1                     null,
+    ANIMATIONS        tinyint(1)  default 1                     null,
+    DATE_FORMAT       varchar(30) default 'dd/MM/yyyy HH:mm:ss' null,
     constraint settings_ID_USER_uindex
         unique (ID_USER),
     constraint settings_users_ID_USER_fk

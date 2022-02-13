@@ -5,22 +5,39 @@
     <div id="main">
 
         <rep-sidemenu
+            id="channels"
             *ngIf="_utils.settings.showChannels"
             @openLeft
-            id="channels"
             [entries]="channels"
             (onNew)="addNew()"
             (onTab)="channelsTab = $event"
         >
 
-            <rep-message
+            <rep-accordion *ngFor="let section of channels[channelsTab]?.sections; let i = index">
+
+                <rep-message header
+                    (onClick)="selectChannel(section)"
+                    [message]="section"
+                    [options]="options"
+                    [hold]="_msService.currentRoom?._id == section._id"
+                >
+                </rep-message>
+
+                <div class="rooms" body>
+                    <span *ngFor="let room of roomsArr">{{room}}</span>
+                </div>
+
+            </rep-accordion>
+
+            <!-- Original -->
+            <!-- <rep-message
                 *ngFor="let section of channels[channelsTab]?.sections; let i = index"
                 (onClick)="selectChannel(section)"
                 [message]="section"
                 [options]="options"
                 [hold]="_msService.currentRoom?._id == section._id"
             >
-            </rep-message>
+            </rep-message> -->
 
             <small *ngIf="channels[channelsTab]?.sections.length == 0">{{channels[channelsTab]?.tabname}} is empty</small>
 

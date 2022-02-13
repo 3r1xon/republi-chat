@@ -72,3 +72,16 @@ export const openLeft = (timings, margin) => {
         ]
     );
 };
+
+export const expand = (timings) => {
+  return trigger('expand', [
+    transition('void => *', [
+        style({
+            height: 0,
+        }),
+        animate(timings, style({
+            height: "*"
+        }))
+    ])
+  ]);
+}

@@ -12,7 +12,7 @@ const nocb = () => { };
 class DBUser {
 
     constructor(userID) {
-        this.userID = userID;
+      this.userID = userID;
     }
 
 
@@ -25,7 +25,7 @@ class DBUser {
           const channelMember = await REPQuery.one(
           `
           SELECT ID_CHANNEL_MEMBER,
-                  JOIN_DATE
+                 JOIN_DATE
           FROM CHANNELS_MEMBERS
           WHERE ID_CHANNEL = ?
             AND ID_USER = ?

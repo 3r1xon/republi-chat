@@ -21,6 +21,7 @@ import { REPStatusBarComponent } from './lib/rep-status-bar/rep-status-bar.compo
 import { REPProfilePicComponent } from './lib/rep-profile-pic/rep-profile-pic.component';
 import { REPIconButtonComponent } from './lib/rep-icon-button/rep-icon-button.component';
 import { REPImgUploadComponent } from './lib/rep-img-upload/rep-img-upload.component';
+import { REPAccordionComponent } from './lib/rep-accordion/rep-accordion.component';
 
 import { PSignupComponent } from './pages/p-signup/p-signup.component';
 import { PLoginComponent } from './pages/p-login/p-login.component';
@@ -74,6 +75,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     REPProfilePicComponent,
     REPIconButtonComponent,
     REPImgUploadComponent,
+    REPAccordionComponent,
 
     PChannelSettingsComponent,
     PSignupComponent,

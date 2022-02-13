@@ -12,7 +12,7 @@
 
     <ng-container *ngFor="let message of messages; let i = index;">
 
-      <rep-separator *ngIf="spreadDate(message.date, i)">{{message.date | date: dateFormat}}</rep-separator>
+      <rep-separator *ngIf="spreadDate(message.date, i)">{{message.date | date: dateFormat.split(" ")[0]}}</rep-separator>
 
       <rep-message #msg
         [message]="message"
