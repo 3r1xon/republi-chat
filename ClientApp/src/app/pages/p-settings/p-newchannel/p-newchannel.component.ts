@@ -62,7 +62,7 @@ export class PNewChannelComponent {
       picture: null
     };
 
-    const sub = this._msService.createChannel(channel)
+    const sub = this._msService.API_createChannel(channel)
       .subscribe(
         (res) => {
 
@@ -107,7 +107,7 @@ export class PNewChannelComponent {
       code: this.formAdd.value.channelCode
     };
 
-    const sub = this._msService.addChannel(channel)
+    const sub = this._msService.API_addChannel(channel)
       .subscribe(
         (res) => {
 

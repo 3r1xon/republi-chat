@@ -1,4 +1,4 @@
-create or replace table republichat.users
+create or replace table users
 (
     ID_USER          bigint auto_increment
         primary key,
@@ -14,7 +14,7 @@ create or replace table republichat.users
         unique (EMAIL)
 );
 
-create or replace table republichat.channels
+create or replace table channels
 (
     ID_CHANNEL    bigint auto_increment
         primary key,
@@ -24,11 +24,11 @@ create or replace table republichat.channels
     PICTURE       mediumblob  null,
     CREATION_DATE datetime    null,
     constraint CHANNELS_USERS_ID_USER_fk
-        foreign key (ID_USER) references republichat.users (ID_USER)
+        foreign key (ID_USER) references users (ID_USER)
             on update cascade on delete cascade
 );
 
-create or replace table republichat.channels_members
+create or replace table channels_members
 (
     ID_CHANNEL_MEMBER bigint auto_increment
         primary key,
@@ -38,27 +38,11 @@ create or replace table republichat.channels_members
     KICKED            tinyint(1) default 0         null,
     JOIN_DATE         datetime   default curdate() not null,
     constraint CHANNELS_MEMBERS_CHANNELS_ID_CHANNEL_fk
-        foreign key (ID_CHANNEL) references republichat.channels (ID_CHANNEL)
+        foreign key (ID_CHANNEL) references channels (ID_CHANNEL)
             on update cascade on delete cascade
 );
 
-create or replace table republichat.channels_messages
-(
-    ID_CHANNEL_MESSAGE bigint auto_increment
-        primary key,
-    ID_CHANNEL         bigint        not null,
-    ID_CHANNEL_MEMBER  bigint        not null,
-    MESSAGE            varchar(2000) null,
-    DATE               datetime      null,
-    constraint FK_CHANNELS_MESSAGES
-        foreign key (ID_CHANNEL) references republichat.channels (ID_CHANNEL)
-            on update cascade on delete cascade,
-    constraint FK_USERS
-        foreign key (ID_CHANNEL_MEMBER) references republichat.channels_members (ID_CHANNEL_MEMBER)
-            on update cascade on delete cascade
-);
-
-create or replace table republichat.channels_permissions
+create or replace table channels_permissions
 (
     ID_CHANNEL_PERMISSION bigint auto_increment
         primary key,
@@ -68,11 +52,11 @@ create or replace table republichat.channels_permissions
     BAN_MEMBERS           tinyint(1) default 0 null,
     SEND_MESSAGES         tinyint(1) default 1 null,
     constraint FK_MEMBERS
-        foreign key (ID_CHANNEL_MEMBER) references republichat.channels_members (ID_CHANNEL_MEMBER)
+        foreign key (ID_CHANNEL_MEMBER) references channels_members (ID_CHANNEL_MEMBER)
             on update cascade on delete cascade
 );
 
-create or replace table republichat.channels_rooms
+create or replace table channels_rooms
 (
     ID_CHANNEL_ROOM bigint auto_increment
         primary key,
@@ -80,11 +64,27 @@ create or replace table republichat.channels_rooms
     ROOM_NAME       varchar(30)          not null,
     TEXT_ROOM       tinyint(1) default 1 null,
     constraint channels_rooms_channels_ID_CHANNEL_fk
-        foreign key (ID_CHANNEL) references republichat.channels (ID_CHANNEL)
+        foreign key (ID_CHANNEL) references channels (ID_CHANNEL)
             on update cascade on delete cascade
 );
 
-create or replace table republichat.sessions
+create or replace table channels_messages
+(
+    ID_CHANNEL_MESSAGE bigint auto_increment
+        primary key,
+    ID_CHANNEL_ROOM    bigint        not null,
+    ID_CHANNEL_MEMBER  bigint        not null,
+    MESSAGE            varchar(2000) null,
+    DATE               datetime      null,
+    constraint FK_USERS
+        foreign key (ID_CHANNEL_MEMBER) references channels_members (ID_CHANNEL_MEMBER)
+            on update cascade on delete cascade,
+    constraint channels_messages_channels_rooms_ID_CHANNEL_ROOM_fk
+        foreign key (ID_CHANNEL_ROOM) references channels_rooms (ID_CHANNEL_ROOM)
+            on update cascade on delete cascade
+);
+
+create or replace table sessions
 (
     ID_SESSION      bigint auto_increment
         primary key,
@@ -101,11 +101,11 @@ create or replace table republichat.sessions
     constraint sessions_SOCKET_ID_uindex
         unique (SOCKET_ID),
     constraint FK_USERS_1
-        foreign key (ID_USER) references republichat.users (ID_USER)
+        foreign key (ID_USER) references users (ID_USER)
             on update cascade on delete cascade
 );
 
-create or replace table republichat.settings
+create or replace table settings
 (
     ID_SETTING        bigint auto_increment
         primary key,
@@ -117,6 +117,6 @@ create or replace table republichat.settings
     constraint settings_ID_USER_uindex
         unique (ID_USER),
     constraint settings_users_ID_USER_fk
-        foreign key (ID_USER) references republichat.users (ID_USER)
+        foreign key (ID_USER) references users (ID_USER)
             on update cascade on delete cascade
 );

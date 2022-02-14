@@ -132,7 +132,7 @@ export class PProfileComponent {
       "Are you sure you want to continue?",
       `By doing so your account will be deleted along with all your messages and other data. This action is permanent since RepubliChat will NOT keep the remaining data. If you change your mind you will be able to create a new account with the same email.`,
       () => {
-        this._user.deleteProfile()
+        this._user.API_deleteProfile()
           .pipe(first())
           .subscribe(
             (res) => {

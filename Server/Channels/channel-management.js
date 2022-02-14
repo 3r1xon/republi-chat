@@ -40,7 +40,6 @@ router.post('/createChannel', upload.single("image"), async (req, res) => {
         INSERT INTO CHANNELS
             (ID_USER, NAME, CHANNEL_CODE, PICTURE, CREATION_DATE)
         VALUES (?, ?, ?, ?, ?)
-        RETURNING ID_CHANNEL
         `, [_userID, channel.name, code, channel.picture, creationDate]);
 
         // Triggers will take care of the rest
@@ -82,12 +81,11 @@ router.post('/addChannel', async (req, res) => {
       user.setChannel(_channelID, async (err, user) => {
         if (err) {
           // It means the user is not in the desired channel so it can be added
-          const member = await REPQuery.one(
+          await REPQuery.one(
           `
           INSERT INTO CHANNELS_MEMBERS
               (ID_USER, ID_CHANNEL, JOIN_DATE)
           VALUES (?, ?, ?)
-          RETURNING ID_CHANNEL_MEMBER
           `, [_userID, _channelID, new Date()]);
 
           res.status(201).send({ success: true });
@@ -112,7 +110,7 @@ router.get('/getChannels', async (req, res) => {
 
   try {
 
-    const _id = res.locals._id;
+    const userID = res.locals._id;
 
     const channels = await REPQuery.load(
     `
@@ -125,9 +123,46 @@ router.get('/getChannels', async (req, res) => {
     WHERE CM.ID_USER = ?
       AND CM.BANNED = ?
       AND CM.KICKED = ?
-    `, [_id, false, false]);
+    `, [userID, false, false]);
 
     res.status(200).send({ success: true, data: channels });
+
+  } catch (error) {
+    console.log(clc.red(error));
+    res.status(500).send({ success: false, message: `Internal server error!!` });
+  }
+
+});
+
+
+
+router.get('/getChannelRooms/:id', (req, res) => {
+
+  try {
+
+    const userID = res.locals._id;
+
+    const channelID = req.params.id;
+
+    const user = new DBUser(userID);
+
+    user.setChannel(channelID, async (err) => {
+      if (err) {
+        res.status(401).send({ success: false, message: "User not in channel!" });
+      } else {
+
+        const rooms = await REPQuery.load(
+        `
+        SELECT CR.ID_CHANNEL_ROOM as roomID,
+               CR.ROOM_NAME       as roomName,
+               CR.TEXT_ROOM       as textRoom
+        FROM CHANNELS_ROOMS CR
+        WHERE CR.ID_CHANNEL = ?
+        `, [channelID]);
+
+        res.status(200).send({ success: true, data: rooms });
+      }
+    })
 
   } catch (error) {
     console.log(clc.red(error));

@@ -135,7 +135,7 @@ export class PMainpageComponent implements OnInit {
           `Ban ${msg.name}`, 
           `Are you sure you want to ban ${msg.name}? He will NOT be able to rejoin later till his ban is revoked!`, 
           () => {
-            this._msService.banUser(this._msService.currentRoom, msg.author);
+            this._msService.banUser(this._msService.currentChannel, msg.author);
           }
         );
       }

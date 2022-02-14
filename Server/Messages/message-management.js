@@ -12,7 +12,7 @@ const REPTools = require('../Tools/rep-tools');
 router.use(Auth.HTTPAuthToken);
 
 
-router.get('/getChannelMessages/:id/:limit', async (req, res) => {
+router.get('/getRoomMessages/:id/:limit', async (req, res) => {
 
   const _id        = res.locals._id;
   const _channelID = req.params.id;

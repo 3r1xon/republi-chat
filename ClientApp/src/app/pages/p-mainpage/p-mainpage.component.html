@@ -19,7 +19,7 @@
                     (onClick)="selectChannel(section)"
                     [message]="section"
                     [options]="options"
-                    [hold]="_msService.currentRoom?._id == section._id"
+                    [hold]="_msService.currentChannel?._id == section._id"
                 >
                 </rep-message>
 
@@ -35,7 +35,7 @@
                 (onClick)="selectChannel(section)"
                 [message]="section"
                 [options]="options"
-                [hold]="_msService.currentRoom?._id == section._id"
+                [hold]="_msService.currentChannel?._id == section._id"
             >
             </rep-message> -->
 
@@ -46,7 +46,7 @@
         <rep-chat
             [messages]="_msService.messages"
             [textboxEnabled]="_msService.chPermissions?.sendMessages"
-            [chatName]="_msService.currentRoom?.name"
+            [chatName]="_msService.currentChannel?.name"
             [msOptions]="msgOptions"
             [chatOptions]="chatOptions"
             [dateFormat]="_utils.settings.dateFormat"

@@ -96,7 +96,7 @@ export class UserService implements CanActivate {
   }
 
   public loadSettings() {
-    const sub = this.getSettings()
+    const sub = this.API_getSettings()
       .subscribe((response) => {
         this._utils.settings = <Settings>response.data;
       },
@@ -112,7 +112,7 @@ export class UserService implements CanActivate {
    * @returns An HTTP request
    *
    */
-  public deleteProfile() {
+  public API_deleteProfile() {
     return this.http.delete<ServerResponse>(`${server.BASE_URL}/authentication/deleteProfile`);
   }
 
@@ -122,7 +122,7 @@ export class UserService implements CanActivate {
    * @returns An HTTP request
    *
    */
-  public getDevices() {
+  public API_getDevices() {
     return this.http.get<ServerResponse>(`${server.BASE_URL}/authentication/getDevices`);
   }
 
@@ -134,7 +134,7 @@ export class UserService implements CanActivate {
    * @returns An HTTP request
    *
    */
-  public disconnectDevice(deviceID: number) {
+  public API_disconnectDevice(deviceID: number) {
     return this.http.delete<ServerResponse>(`${server.BASE_URL}/authentication/disconnectDevice/${deviceID}`);
   }
 
@@ -144,7 +144,7 @@ export class UserService implements CanActivate {
    * @returns An HTTP request
    *
    */
-  public getSettings() {
+  public API_getSettings() {
     return this.http.get<ServerResponse>(`${server.BASE_URL}/authentication/getSettings`);
   }
 }

@@ -14,7 +14,7 @@ export class PPrivacyComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    const sub = this._user.getDevices()
+    const sub = this._user.API_getDevices()
       .subscribe(
         (res) => {
           this.devices = res.data;
@@ -30,7 +30,7 @@ export class PPrivacyComponent implements OnInit {
 
   disconnectDevice(index: number) {
     const deviceID = this.devices[index].id_session;
-    const sub = this._user.disconnectDevice(deviceID)
+    const sub = this._user.API_disconnectDevice(deviceID)
       .subscribe(
         (res) => {
           if (res.success) {

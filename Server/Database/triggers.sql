@@ -8,8 +8,16 @@ CREATE TRIGGER channels_trigger
     AFTER INSERT
     ON channels
     FOR EACH ROW
+BEGIN
+    DECLARE NEW_ID_CHANNEL bigint;
+    SET NEW_ID_CHANNEL = NEW.ID_USER;
+
     insert into channels_members(ID_USER, ID_CHANNEL, JOIN_DATE)
-    values (NEW.ID_USER, NEW.ID_CHANNEL, current_timestamp());
+    values (NEW.ID_USER, NEW_ID_CHANNEL, current_timestamp());
+
+    insert into channels_rooms(ID_CHANNEL, ROOM_NAME, TEXT_ROOM)
+    values (NEW_ID_CHANNEL, 'Default', true);
+END;
 
 
 CREATE TRIGGER channels_members_trigger
