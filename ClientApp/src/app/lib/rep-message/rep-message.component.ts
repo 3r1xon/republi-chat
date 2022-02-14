@@ -8,16 +8,12 @@ import {
 } from '@angular/core';
 import { Message } from 'src/interfaces/message.interface';
 import { REPButton } from 'src/interfaces/repbutton.interface';
-import { fade } from '../animations';
 
 
 @Component({
   selector: 'rep-message',
   templateUrl: './rep-message.component.html',
   styleUrls: ['./rep-message.component.scss'],
-  animations: [
-    fade("250ms")
-  ]
 })
 export class REPMessageComponent {
 

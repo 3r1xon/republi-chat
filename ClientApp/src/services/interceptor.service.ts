@@ -11,6 +11,7 @@ import { Observable } from 'rxjs';
 import { UtilsService } from './utils.service';
 import { tap } from 'rxjs/operators';
 import { UserService } from './user.service';
+import { server } from 'src/environments/server';
 
 
 @Injectable({
@@ -23,13 +24,18 @@ export class InterceptorService implements HttpInterceptor {
     private _user: UserService,
     ) { }
 
-  private readonly loadingBlackList: Array<string> = [];
+  private readonly loadingBlackList: Array<string> = [
+    `${server.BASE_URL}/channels/getChannels`,
+    `${server.BASE_URL}/messages/getChannelMessages`,
+    `${server.BASE_URL}/authentication/getSettings`,
+    `${server.BASE_URL}/messages/getChannelPermissions`
+  ];
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 
-    const route = this.loadingBlackList.find(route => route == req.url);
+    const blacklisted = !this.loadingBlackList.some(route => req.url.startsWith(route));
 
-    this._utils.loading = route != req.url;
+    this._utils.loading = blacklisted;
 
     const authReq = req.clone({
       headers: req.headers
