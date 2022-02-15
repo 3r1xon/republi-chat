@@ -24,7 +24,7 @@
                 </rep-message>
 
                 <div class="rooms" body>
-                    <span *ngFor="let room of roomsArr">{{room}}</span>
+                    <span *ngFor="let room of _msService.currentChannel?.rooms">{{room.roomName}}</span>
                 </div>
 
             </rep-accordion>

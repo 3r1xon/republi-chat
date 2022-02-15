@@ -101,7 +101,13 @@ export class MessagesService {
         this.API_getChRooms(room)
           .pipe(first())
           .subscribe((res: ServerResponse) => {
-            console.log(res);
+            this.currentChannel.rooms = res.data;
+
+            if (this.currentChannel.rooms.length > 0) {
+
+              this.getRoomMessages(this.currentChannel.rooms[0]);
+
+            }
           });
 
       }
