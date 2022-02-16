@@ -45,7 +45,6 @@ export class MessagesService {
 
   private chSubscriptions: Array<Subscription> = [];
 
-
   /**
    * Get the current user channels.
    *
@@ -105,8 +104,9 @@ export class MessagesService {
 
             if (this.currentChannel.rooms.length > 0) {
 
-              this.getRoomMessages(this.currentChannel.rooms[0]);
+              this.currentRoom = this.currentChannel.rooms[0];
 
+              this.getRoomMessages(this.currentChannel.rooms[0]);
             }
           });
       () => { console.log("There has been an error"); }
@@ -138,28 +138,28 @@ export class MessagesService {
 
           this.messages$.next();
 
-          this._webSocket.emit("joinChannel", {
+          this._webSocket.emit("joinRoom", {
             room: this.currentRoom.roomID,
             userID: this._user.currentUser.id
           });
 
           // Initializes all sockets
           this.msSubscriptions
-            .push(
-              this._webSocket.listen("message")
-                .subscribe((message: string) => {
-                  const msg = <Message>JSON.parse(message);
-                  this.messages.push(mapMsg(msg));
-                })
+          .push(
+            this._webSocket.listen("message")
+              .subscribe((message: string) => {
+                const msg = <Message>JSON.parse(message);
+                this.messages.push(mapMsg(msg));
+              })
           );
 
           this.msSubscriptions
-            .push(
-              this._webSocket.listen("deleteMessage")
-                .subscribe((_id: number) => {
-                  const index = this.messages.findIndex(msg => msg.id == _id);
-                  this.messages.splice(index, 1);
-                })
+          .push(
+            this._webSocket.listen("deleteMessage")
+              .subscribe((_id: number) => {
+                const index = this.messages.findIndex(msg => msg.id == _id);
+                this.messages.splice(index, 1);
+              })
           );
 
           this.msSubscriptions

@@ -1,3 +1,9 @@
+create or replace table republichat.channels_rooms_permissions
+(
+    ID_CHANNEL_ROOM_PERMISSION bigint auto_increment
+        primary key
+);
+
 create or replace table republichat.users
 (
     ID_USER          bigint auto_increment
@@ -63,24 +69,9 @@ create or replace table republichat.channels_rooms
     ID_CHANNEL      bigint               not null,
     ROOM_NAME       varchar(30)          not null,
     TEXT_ROOM       tinyint(1) default 1 null,
+    AUTO_JOIN       tinyint(1) default 0 null,
     constraint channels_rooms_channels_ID_CHANNEL_fk
         foreign key (ID_CHANNEL) references republichat.channels (ID_CHANNEL)
-            on update cascade on delete cascade
-);
-
-create or replace table republichat.channels_messages
-(
-    ID_CHANNEL_MESSAGE bigint auto_increment
-        primary key,
-    ID_CHANNEL_ROOM    bigint        not null,
-    ID_CHANNEL_MEMBER  bigint        not null,
-    MESSAGE            varchar(2000) null,
-    DATE               datetime      null,
-    constraint FK_USERS
-        foreign key (ID_CHANNEL_MEMBER) references republichat.channels_members (ID_CHANNEL_MEMBER)
-            on update cascade on delete cascade,
-    constraint channels_messages_channels_rooms_ID_CHANNEL_ROOM_fk
-        foreign key (ID_CHANNEL_ROOM) references republichat.channels_rooms (ID_CHANNEL_ROOM)
             on update cascade on delete cascade
 );
 
@@ -88,8 +79,25 @@ create or replace table republichat.channels_rooms_members
 (
     ID_CHANNEL_ROOM_MEMBER bigint auto_increment
         primary key,
-    ID_CHANNEL_ROOM        bigint not null,
+    ID_CHANNEL_ROOM        bigint                     not null,
+    JOIN_DATE              datetime default curdate() null,
     constraint CHANNELS_ROOMS_MEMBERS_CHANNELS_ROOMS_ID_CHANNEL_ROOM_FK
+        foreign key (ID_CHANNEL_ROOM) references republichat.channels_rooms (ID_CHANNEL_ROOM)
+            on update cascade on delete cascade
+);
+
+create or replace table republichat.channels_rooms_messages
+(
+    ID_CHANNEL_ROOM_MESSAGE bigint auto_increment
+        primary key,
+    ID_CHANNEL_ROOM         bigint        not null,
+    ID_CHANNEL_ROOM_MEMBER  bigint        not null,
+    MESSAGE                 varchar(2000) null,
+    DATE                    datetime      null,
+    constraint FK_USERS
+        foreign key (ID_CHANNEL_ROOM_MEMBER) references republichat.channels_rooms_members (ID_CHANNEL_ROOM_MEMBER)
+            on update cascade on delete cascade,
+    constraint channels_messages_channels_rooms_ID_CHANNEL_ROOM_fk
         foreign key (ID_CHANNEL_ROOM) references republichat.channels_rooms (ID_CHANNEL_ROOM)
             on update cascade on delete cascade
 );
@@ -130,4 +138,3 @@ create or replace table republichat.settings
         foreign key (ID_USER) references republichat.users (ID_USER)
             on update cascade on delete cascade
 );
-

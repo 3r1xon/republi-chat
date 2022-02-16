@@ -17,6 +17,8 @@ router.get('/getRoomMessages/:id/:limit', async (req, res) => {
   const _id        = res.locals._id;
   const _channelID = req.params.id;
   const user       = new DBUser(_id);
+
+  res.status(200).send({ success: true, data: [] });
   // TODO:
   // user.setChannel(_channelID, async (err, chUser) => {
   //   if (err) {
@@ -110,7 +112,7 @@ io.on("connection", (socket) => {
 
   let room;
 
-  socket.on("joinChannel", (obj) => {
+  socket.on("joinRoom", (obj) => {
 
     const rqRoom = obj.room;
 
