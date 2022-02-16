@@ -109,7 +109,7 @@ export class MessagesService {
 
             }
           });
-
+      () => { console.log("There has been an error"); }
       }
     );
   }

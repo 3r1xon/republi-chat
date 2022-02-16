@@ -10,7 +10,7 @@ CREATE TRIGGER channels_trigger
     FOR EACH ROW
 BEGIN
     DECLARE NEW_ID_CHANNEL bigint;
-    SET NEW_ID_CHANNEL = NEW.ID_USER;
+    SET NEW_ID_CHANNEL = NEW.ID_CHANNEL;
 
     insert into channels_members(ID_USER, ID_CHANNEL, JOIN_DATE)
     values (NEW.ID_USER, NEW_ID_CHANNEL, current_timestamp());

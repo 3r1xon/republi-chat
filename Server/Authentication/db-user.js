@@ -22,29 +22,53 @@ class DBUser {
 
       try {
 
-          const channelMember = await REPQuery.one(
-          `
-          SELECT ID_CHANNEL_MEMBER,
-                 JOIN_DATE
-          FROM CHANNELS_MEMBERS
-          WHERE ID_CHANNEL = ?
-            AND ID_USER = ?
-            AND BANNED = ?
-            AND KICKED = ?
-          `, [this.channelID, this.userID, false, false]);
+        const channelMember = await REPQuery.one(
+        `
+        SELECT ID_CHANNEL_MEMBER,
+               JOIN_DATE
+        FROM CHANNELS_MEMBERS
+        WHERE ID_CHANNEL = ?
+          AND ID_USER = ?
+          AND BANNED = ?
+          AND KICKED = ?
+        `, [this.channelID, this.userID, false, false]);
 
-          if (channelMember) {
-              this.channelMemberID = channelMember.ID_CHANNEL_MEMBER;
-              this.joinDate = channelMember.JOIN_DATE;
+        if (channelMember) {
+          this.channelMemberID = channelMember.ID_CHANNEL_MEMBER;
+          this.joinDate = channelMember.JOIN_DATE;
 
-              callback(null, this);
+          callback(null, this);
 
-              return this;
-          }
-          else
-              callback(new Error("User is not a member of this channel!"), null);
+          return this;
+        }
+        else
+          callback(new Error("User is not a member of this channel!"), null);
       } catch(err) {
           callback(err, null);
+      }
+    }
+
+
+
+    async setRoom(roomID, callback = nocb) {
+
+      try {
+
+        const room = await REPQuery.one(
+        `
+        SELECT ID_CHANNEL_ROOM,
+               ID_CHANNEL,
+               ROOM_NAME,
+               TEXT_ROOM
+        FROM CHANNELS_ROOMS
+        WHERE ID_CHANNEL_ROOM = ?
+        `, [roomID]);
+
+        this.room = room;
+
+
+      } catch(err) {
+
       }
     }
 

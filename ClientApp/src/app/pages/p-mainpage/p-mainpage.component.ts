@@ -57,10 +57,10 @@ export class PMainpageComponent implements OnInit {
 
       channelsRef.sections = this._msService.channels;
 
-      const room = channelsRef.sections[0];
+      const channel = channelsRef.sections[0];
 
-      if (room) {
-        this._msService.joinChannel(room);
+      if (channel) {
+        this._msService.joinChannel(channel);
       }
   });
 
@@ -234,8 +234,8 @@ export class PMainpageComponent implements OnInit {
   ];
 
 
-  selectChannel(room: Channel) {
-    this._msService.joinChannel(room);
+  selectChannel(channel: Channel) {
+    this._msService.joinChannel(channel);
   }
 
   sendChannelMessage(message: string) {

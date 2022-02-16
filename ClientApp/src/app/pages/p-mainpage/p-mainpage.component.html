@@ -13,10 +13,10 @@
             (onTab)="channelsTab = $event"
         >
 
-            <rep-accordion *ngFor="let section of channels[channelsTab]?.sections; let i = index">
+            <rep-accordion *ngFor="let section of channels[channelsTab]?.sections; let i = index"
+                (click)="selectChannel(section)">
 
                 <rep-message header
-                    (onClick)="selectChannel(section)"
                     [message]="section"
                     [options]="options"
                     [hold]="_msService.currentChannel?._id == section._id"
@@ -24,7 +24,10 @@
                 </rep-message>
 
                 <div class="rooms" body>
-                    <span *ngFor="let room of _msService.currentChannel?.rooms">{{room.roomName}}</span>
+                    <span *ngFor="let room of _msService.currentChannel?.rooms">
+                        <mat-icon>{{room.textRoom ? 'question_answer' : 'headset_mic'}}</mat-icon>
+                        {{room.roomName}}
+                    </span>
                 </div>
 
             </rep-accordion>
