@@ -89,6 +89,7 @@ export class REPChatComponent implements AfterViewInit, OnDestroy {
       name: "Search",
       icon: "search",
       tooltip: "Search a message",
+      enabled: () => this.messages.length > 0,
       onClick: () => {
 
       }

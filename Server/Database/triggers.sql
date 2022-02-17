@@ -35,34 +35,24 @@ CREATE TRIGGER channels_members_trigger
     END IF;
 
 
+CREATE TRIGGER CHANNELS_MEMBERS_TRIGGER
+    AFTER INSERT
+    ON CHANNELS_MEMBERS
+    FOR EACH ROW
+BEGIN 
+    IF NEW.ID_USER = (SELECT ID_USER
+                      FROM CHANNELS CH
+                      WHERE CH.ID_CHANNEL = NEW.ID_CHANNEL) THEN
+        INSERT INTO CHANNELS_PERMISSIONS(ID_CHANNEL_MEMBER, DELETE_MESSAGE, KICK_MEMBERS, BAN_MEMBERS,
+                                         SEND_MESSAGES)
+        VALUES (NEW.ID_CHANNEL_MEMBER, TRUE, TRUE, TRUE, TRUE);
+    ELSE
+        INSERT INTO CHANNELS_PERMISSIONS(ID_CHANNEL_MEMBER, DELETE_MESSAGE, KICK_MEMBERS, BAN_MEMBERS,
+                                         SEND_MESSAGES)
+        VALUES (NEW.ID_CHANNEL_MEMBER, FALSE, FALSE, FALSE, TRUE);
+    END IF;
 
--- CREATE TRIGGER channels_members_trigger
---     AFTER INSERT
---     ON channels_members
---     FOR EACH ROW
--- BEGIN
---     DECLARE NEW_ID_CHANNEL_ROOM bigint;
---     DECLARE I bigint;
---     SET I = 1;
+    INSERT INTO CHANNELS_ROOMS_MEMBERS(ID_CHANNEL_ROOM)
+    SELECT ID_CHANNEL_ROOM FROM CHANNELS_ROOMS WHERE AUTO_JOIN = TRUE AND ID_CHANNEL = NEW.ID_CHANNEL;
 
---     SELECT @ROWS = COUNT(0) FROM channels_rooms WHERE AUTO_JOIN = true AND ID_CHANNEL = NEW.ID_CHANNEL;
-
---     WHILE I <= @ROWS
---         DO
---             SET NEW_ID_CHANNEL_ROOM =
---                     (SELECT ID_CHANNEL_ROOM FROM channels_rooms WHERE AUTO_JOIN = true AND ID_CHANNEL = NEW.ID_CHANNEL);
---             insert into channels_rooms_members(ID_CHANNEL_ROOM)
---                 VALUE (NEW_ID_CHANNEL_ROOM);
---             SET I = I + 1;
---         END WHILE;
-
---     IF NEW.ID_USER = (SELECT ID_USER
---                       FROM channels ch
---                       where ch.ID_CHANNEL = NEW.ID_CHANNEL) THEN
---         insert into channels_permissions(ID_CHANNEL_MEMBER, DELETE_MESSAGE, KICK_MEMBERS, BAN_MEMBERS, SEND_MESSAGES)
---         values (NEW.ID_CHANNEL_MEMBER, true, true, true, true);
---     ELSE
---         insert into channels_permissions(ID_CHANNEL_MEMBER, DELETE_MESSAGE, KICK_MEMBERS, BAN_MEMBERS, SEND_MESSAGES)
---         values (NEW.ID_CHANNEL_MEMBER, false, false, false, true);
---     END IF;
--- END;
+END;
