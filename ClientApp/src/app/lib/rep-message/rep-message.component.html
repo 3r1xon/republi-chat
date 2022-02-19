@@ -37,6 +37,7 @@
     </div>
 
     <rep-window *ngIf="options"
+        stopPropagation
         [subMenu]="options"
         [uniqueID]="uniqueID"
         (open)="setToggle($event)"

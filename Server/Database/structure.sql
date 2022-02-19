@@ -1,9 +1,3 @@
-create or replace table republichat.channels_rooms_permissions
-(
-    ID_CHANNEL_ROOM_PERMISSION bigint auto_increment
-        primary key
-);
-
 create or replace table republichat.users
 (
     ID_USER          bigint auto_increment
@@ -53,7 +47,7 @@ create or replace table republichat.channels_permissions
     ID_CHANNEL_PERMISSION bigint auto_increment
         primary key,
     ID_CHANNEL_MEMBER     bigint               not null,
-    DELETE_MESSAGE        tinyint(1) default 0 null,
+    DELETE_MESSAGES       tinyint(1) default 0 null,
     KICK_MEMBERS          tinyint(1) default 0 null,
     BAN_MEMBERS           tinyint(1) default 0 null,
     SEND_MESSAGES         tinyint(1) default 1 null,
@@ -79,10 +73,14 @@ create or replace table republichat.channels_rooms_members
 (
     ID_CHANNEL_ROOM_MEMBER bigint auto_increment
         primary key,
+    ID_CHANNEL_MEMBER      bigint                     null,
     ID_CHANNEL_ROOM        bigint                     not null,
     JOIN_DATE              datetime default curdate() null,
     constraint CHANNELS_ROOMS_MEMBERS_CHANNELS_ROOMS_ID_CHANNEL_ROOM_FK
         foreign key (ID_CHANNEL_ROOM) references republichat.channels_rooms (ID_CHANNEL_ROOM)
+            on update cascade on delete cascade,
+    constraint channels_rooms_members_channels_members_ID_CHANNEL_MEMBER_fk
+        foreign key (ID_CHANNEL_MEMBER) references republichat.channels_members (ID_CHANNEL_MEMBER)
             on update cascade on delete cascade
 );
 
@@ -99,6 +97,18 @@ create or replace table republichat.channels_rooms_messages
             on update cascade on delete cascade,
     constraint channels_messages_channels_rooms_ID_CHANNEL_ROOM_fk
         foreign key (ID_CHANNEL_ROOM) references republichat.channels_rooms (ID_CHANNEL_ROOM)
+            on update cascade on delete cascade
+);
+
+create or replace table republichat.channels_rooms_permissions
+(
+    ID_CHANNEL_ROOM_PERMISSION bigint auto_increment
+        primary key,
+    ID_CHANNEL_ROOM_MEMBER     bigint               null,
+    SEND_MESSAGES              tinyint(1) default 1 null,
+    DELETE_MESSAGES            tinyint(1) default 0 null,
+    constraint FK_CRP_TO_CRM
+        foreign key (ID_CHANNEL_ROOM_MEMBER) references republichat.channels_rooms_members (ID_CHANNEL_ROOM_MEMBER)
             on update cascade on delete cascade
 );
 
