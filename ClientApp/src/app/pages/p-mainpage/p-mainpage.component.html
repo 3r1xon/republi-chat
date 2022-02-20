@@ -24,7 +24,7 @@
                 </rep-message>
 
                 <div class="rooms" body>
-                    <span *ngFor="let room of _msService.currentChannel?.rooms">
+                    <span *ngFor="let room of _msService.currentChannel?.rooms" (click)="selectRoom(room)">
                         <mat-icon>{{room.textRoom ? 'question_answer' : 'headset_mic'}}</mat-icon>
                         {{room.roomName}}
                     </span>

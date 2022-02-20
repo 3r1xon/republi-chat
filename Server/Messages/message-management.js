@@ -77,7 +77,7 @@ router.get("/getChannelPermissions/:id", async (req, res) => {
         const permissions = await REPQuery.one(
         `
         SELECT ID_CHANNEL_MEMBER as id,
-               DELETE_MESSAGE    as deleteMessage,
+               DELETE_MESSAGES   as deleteMessage,
                KICK_MEMBERS      as kickMembers,
                BAN_MEMBERS       as banMembers,
                SEND_MESSAGES     as sendMessages
@@ -118,7 +118,7 @@ io.on("connection", (socket) => {
 
     socket.leave(room);
 
-    user.setChannel(rqRoom, async (err) => {
+    user.setRoom(rqRoom, async (err) => {
       if (err) {
         console.log(clc.yellow(err));
       } else {

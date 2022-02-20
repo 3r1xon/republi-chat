@@ -24,6 +24,8 @@ class DBUser {
   channelPermissions;
 
   room;
+  roomMemberID;
+  roomJoinDate;
 
   async setChannel(channel, callback = nocb) {
 
@@ -63,20 +65,26 @@ class DBUser {
 
     try {
 
-      const room = await REPQuery.one(
+      const roomMember = await REPQuery.one(
       `
-      SELECT ID_CHANNEL_ROOM as channelRoomID,
-             ID_CHANNEL      as channelID,
-             ROOM_NAME       as roomName,
-             TEXT_ROOM       as textRoom
-      FROM CHANNELS_ROOMS
-      WHERE ID_CHANNEL_ROOM = ?
+      SELECT CRM.ID_CHANNEL_ROOM_MEMBER as roomMemberID,
+             CRM.JOIN_DATE              as joinDate
+      FROM channels_rooms_members CRM
+      WHERE CRM.ID_CHANNEL_ROOM = ?
       `, [roomID]);
 
-      this.room = room;
+      if (roomMember) {
+        this.room = roomMember;
+
+        this.roomMemberID = roomMember.roomMemberID;
+        this.roomJoinDate = roomMember.joinDate;
+
+        callback(null, this);
+
+      } else callback(new Error("User is not a member of this room!"), null);
 
     } catch(err) {
-
+      callback(err, null);
     }
   }
 

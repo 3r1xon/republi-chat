@@ -14,6 +14,7 @@ import {
   ViewChild
 } from '@angular/core';
 import { openLeft, openRight } from 'src/app/lib/animations';
+import { Room } from 'src/interfaces/room.interface';
 
 
 @Component({
@@ -238,6 +239,10 @@ export class PMainpageComponent implements OnInit {
     this._msService.joinChannel(channel);
   }
 
+  selectRoom(room: Room) {
+    
+  }
+
   sendChannelMessage(message: string) {
     this._msService.sendMessage(message);
   }
@@ -245,14 +250,4 @@ export class PMainpageComponent implements OnInit {
   async addNew() {
     await this.router.navigateByUrl('/settings/newchannel');
   }
-
-
-  public roomsArr = [
-    "Room 1",
-    "Room 2",
-    "Room 3",
-    "Room 4",
-    "Room 5",
-    "Room 6",
-  ]
 }
