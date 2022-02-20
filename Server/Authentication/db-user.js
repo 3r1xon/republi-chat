@@ -20,7 +20,7 @@ class DBUser {
 
   channelID;
   channelMemberID;
-  joinDate;
+  channelJoinDate;
   channelPermissions;
 
   room;
@@ -46,7 +46,7 @@ class DBUser {
         this.channelID = channel;
 
         this.channelMemberID = channelUser.channelMemberID;
-        this.joinDate = channelUser.joinDate;
+        this.channelJoinDate = channelUser.joinDate;
 
         callback(null, this);
 

@@ -143,17 +143,6 @@ export class PMainpageComponent implements OnInit {
     }
   ];
 
-  public readonly options: Array<REPButton> = [
-    {
-      name: "Leave",
-      icon: "delete",
-      color: "danger",
-      onClick: () => {
-
-      }
-    }
-  ];
-
   public readonly chatOptions: Array<REPButton> = [
     {
       name: "Delete messages",

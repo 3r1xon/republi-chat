@@ -14,49 +14,48 @@ router.use(Auth.HTTPAuthToken);
 
 router.get('/getRoomMessages/:id/:limit', async (req, res) => {
 
-  const _id        = res.locals._id;
-  const _channelID = req.params.id;
-  const user       = new DBUser(_id);
+  const userID     = res.locals._id;
+  const roomID     = req.params.id;
+  const user       = new DBUser(userID);
 
-  res.status(200).send({ success: true, data: [] });
-  // TODO:
-  // user.setChannel(_channelID, async (err, chUser) => {
-  //   if (err) {
-  //     res.status(401).send({ success: false, message: "User not in channel!" });
-  //   } else {
+  user.setRoom(roomID, async (err, chUser) => {
+    if (err) {
+      res.status(401).send({ success: false, message: "User not in channel!" });
+    } else {
 
-  //     try {
-  //       // Ensures limit is a number
-  //       const limit = parseInt(req.params.limit);
+      try {
+        // Ensures limit is a number
+        const limit = parseInt(req.params.limit);
 
-  //       const messages = await REPQuery.load(
-  //       `
-  //       SELECT M.ID_CHANNEL_MESSAGE         as id,
-  //              U.COLOR                      as color,
-  //              U.BACKGROUND_COLOR           as backgroundColor,
-  //              U.NAME                       as name,
-  //              CM.ID_CHANNEL_MEMBER         as author,
-  //              TO_BASE64(U.PROFILE_PICTURE) as picture,
-  //              M.MESSAGE                    as message,
-  //              M.DATE                       as date
-  //       FROM CHANNELS_MESSAGES M
-  //                LEFT JOIN CHANNELS_MEMBERS CM ON CM.ID_CHANNEL_MEMBER = M.ID_CHANNEL_MEMBER
-  //                LEFT JOIN CHANNELS C ON C.ID_CHANNEL = M.ID_CHANNEL
-  //                LEFT JOIN USERS U ON U.ID_USER = CM.ID_USER
-  //       WHERE C.ID_CHANNEL = ?
-  //         AND M.DATE >= ?
-  //       LIMIT ${limit}
-  //       `, [_channelID, chUser.joinDate]);
+        const messages = await REPQuery.load(
+        `
+        SELECT CRM.ID_CHANNEL_ROOM_MESSAGE  as id,
+               U.COLOR                      as color,
+               U.BACKGROUND_COLOR           as backgroundColor,
+               U.NAME                       as name,
+               CM.ID_CHANNEL_MEMBER         as author,
+               TO_BASE64(U.PROFILE_PICTURE) as picture,
+               CRM.MESSAGE                  as message,
+               CRM.DATE                     as date
+        FROM CHANNELS_ROOMS_MESSAGES CRM
+                 LEFT JOIN channels_rooms_members CRMB ON CRMB.ID_CHANNEL_ROOM_MEMBER = CRM.ID_CHANNEL_ROOM_MEMBER
+                 LEFT JOIN CHANNELS_MEMBERS CM ON CM.ID_CHANNEL_MEMBER = CRMB.ID_CHANNEL_MEMBER
+                 LEFT JOIN CHANNELS C ON C.ID_CHANNEL = CM.ID_CHANNEL
+                 LEFT JOIN USERS U ON U.ID_USER = CM.ID_USER
+        WHERE CRM.ID_CHANNEL_ROOM = ?
+          AND CRM.DATE >= ?
+        LIMIT ${limit}
+        `, [roomID, chUser.roomJoinDate]);
 
-  //       res.status(200).send({ success: true, data: messages });
-  //     }
-  //     catch (error) {
-  //       console.log(clc.red(error));
+        res.status(200).send({ success: true, data: messages });
+      }
+      catch (error) {
+        console.log(clc.red(error));
 
-  //       res.status(500).send({ success: false, message: "Internal server error!" });
-  //     }
-  //   }
-  // });
+        res.status(500).send({ success: false, message: "Internal server error!" });
+      }
+    }
+  });
 });
 
 
