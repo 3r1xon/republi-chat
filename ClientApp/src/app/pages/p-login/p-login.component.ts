@@ -1,5 +1,4 @@
 import { DOCUMENT } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
 import { Component, Inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -20,7 +19,6 @@ export class PLoginComponent {
     private _utils: UtilsService,
     private _fileUpload: FileUploadService,
     private router: Router,
-    private http: HttpClient,
     private fb: FormBuilder,
     @Inject(DOCUMENT) private document: Document
   ) { }

@@ -1,6 +1,6 @@
 <div id="rep-status-bar">
 
-    <div id="profile">
+    <div class="profile">
         <rep-profile-pic routerLink="/settings/profile"
             [src]="user.picture"
             [letter]="user.name[0]"
@@ -12,8 +12,8 @@
         <p [style.color]="user.color">{{user.name}}</p>
     </div>
 
-    <div id="right">
-        <span id="connection" [ngClass]="{
+    <div class="right">
+        <span class="connection" [ngClass]="{
             'connected': _utils.wsConnected,
             'disconnected': !_utils.wsConnected
         }">

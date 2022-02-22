@@ -1,6 +1,6 @@
 <div id="master">
 
-    <div id="flat-input" [ngStyle]="{
+    <div class="flat-input" [ngStyle]="{
         'outline': placeholderAnimated || text != '' ? '2px solid ' + color : (required && empty ? '1px solid ' + borderColor : '1px solid gray'),
         'background': disabled ? '#3c3c3ceb' : 'transparent'
     }" [ngClass]="{
@@ -9,7 +9,7 @@
         'big': size == 'big'
     }">
 
-        <span id="main-content">
+        <span class="main-content">
             <input
                 [placeholder]="getPlaceholder()"
                 [disabled]="disabled"
@@ -25,12 +25,12 @@
             <rep-info *ngIf="tooltip" [tooltip]="tooltip" [background]="placeholderAnimated ? color : borderColor"></rep-info>
         </span>
 
-        <label id="placeholder" [ngStyle]="{
+        <label class="placeholder" [ngStyle]="{
             'color': placeholderAnimated || text != '' ? color : borderColor
         }" [@placeholderAnimated]="placeholderAnimated || text != '' ? 'moved' : 'static'">{{placeholder}}</label>
 
     </div>
 
-    <label id="required" *ngIf="empty" [style.color]="borderColor">This field is required *</label>
+    <label class="required" *ngIf="empty" [style.color]="borderColor">This field is required *</label>
 
 </div>

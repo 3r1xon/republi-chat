@@ -8,7 +8,7 @@
     background: var(--LIGHT-DARK);
 
 
-    #profile {
+    .profile {
         height: 100%;
         display: flex;
         align-items: center;
@@ -19,12 +19,12 @@
         }
     }
 
-    #right {
+    .right {
         display: flex;
         align-items: center;
         margin-right: 15px;
 
-        #connection {
+        .connection {
             width: 5px;
             height: 5px;
             border-radius: 50%;

@@ -1,29 +1,28 @@
 <div id="obscure" (click)="hideError()">
 
-    <div id="rep-error" stopPropagation>
+    <div class="rep-error" stopPropagation>
 
-        <div id="icon">
+        <div class="icon">
 
             <mat-icon>bug_report</mat-icon>
 
         </div>
 
-        <div id="info">
-            
-            <div id="error">
+        <div class="info">
 
-                <div id="title">
+            <div class="error">
+
+                <div class="title">
                     <p>
                         {{_utils.bugReport.title}}
                     </p>
                 </div>
 
-                <div id="message">
+                <div class="message">
                     <p>
                         {{_utils.bugReport.callstack}}
                     </p>
                 </div>
-
 
             </div>
 

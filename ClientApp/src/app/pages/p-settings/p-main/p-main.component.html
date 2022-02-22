@@ -1,6 +1,6 @@
 <div id="settings">
 
-    <nav id="menu">
+    <nav class="menu">
 
         <button *ngFor="let submenu of menus; let i = index" class="submenu" matRipple matRippleColor="#ffffff47"
             (click)="changeRoute(i)"
@@ -13,15 +13,15 @@
 
     </nav>
 
-    <div id="section">
+    <div class="section">
 
-        <div id="navigator">
+        <div class="navigator">
 
-            <div id="spacer">
+            <div class="spacer">
 
                 <h1>{{currentRoute}}</h1>
 
-                <button id="back" routerLink="/mainpage"> 
+                <button class="back" routerLink="/mainpage"> 
                     <mat-icon>arrow_back</mat-icon>
                 </button>
 
@@ -29,7 +29,7 @@
 
         </div>
 
-        <div id="router">
+        <div class="router">
 
             <router-outlet></router-outlet>
 

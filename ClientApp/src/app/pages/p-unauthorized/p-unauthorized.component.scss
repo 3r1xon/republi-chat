@@ -9,13 +9,13 @@
     background: var(--VERY-DARK);
     color: #FFFFFF;
 
-    #security {
+    .security {
         font-size: 48px;
         @include flexCenter(row);
         margin: 10px;
     }
 
-    #message {
+    .message {
         @include flexCenter(column);
         padding: 25px;
         background: #000000;

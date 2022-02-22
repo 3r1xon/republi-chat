@@ -1,7 +1,7 @@
 @import 'src/app/styles/mixins';
 
 
-#text-box {
+#rep-textbox {
     height: 100%;
     min-height: 75px;
     @include flexCenter(row);

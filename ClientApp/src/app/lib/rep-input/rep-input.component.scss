@@ -1,12 +1,12 @@
 #master {
     position: relative;
 
-    #flat-input {
+    .flat-input {
         position: relative;
         border-radius: 5px;
         margin: 2px;
 
-        #placeholder {
+        .placeholder {
             position: absolute;
             top: 50%;
             left: 10px;
@@ -17,7 +17,7 @@
         }
 
 
-        #main-content {
+        .main-content {
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -44,7 +44,7 @@
         
     }
 
-    #required {
+    .required {
         padding: 1px;
         font-size: 14px;
         position: absolute;

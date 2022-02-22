@@ -2,10 +2,10 @@
 
     <rep-status-bar [user]="_user.currentUser"></rep-status-bar>
 
-    <div id="main">
+    <div class="main">
 
         <rep-sidemenu
-            id="channels"
+            class="channels"
             *ngIf="_utils.settings.showChannels"
             @openLeft
             [entries]="channels"
@@ -48,7 +48,7 @@
         <rep-sidemenu
             *ngIf="_utils.settings.showServerGroup"
             @openRight
-            id="ch-info"
+            class="ch-info"
             [entries]="serverInfo"
             [add]="false"
             (onTab)="serverInfoTab = $event"

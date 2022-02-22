@@ -1,7 +1,7 @@
 @import 'src/app/styles/mixins';
 
 
-#more {
+.more {
     width: 30px;
     height: 30px;
     border-radius: 50%;
@@ -16,7 +16,7 @@
     }
 }
 
-#submenu {
+.submenu {
     position: fixed;
     background: var(--LIGHT-DARK);
     @include flexCenter(column);

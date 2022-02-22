@@ -1,19 +1,19 @@
 <div id="obscure"
     (click)="hideRequest()">
 
-    <div id="dialog" stopPropagation cdkDrag cdkDragBoundary="#obscure">
+    <div class="dialog" stopPropagation cdkDrag cdkDragBoundary="#obscure">
 
-        <div id="bar" cdkDragHandle>
-            <button id="back" (click)="hideRequest()"> 
+        <div class="bar" cdkDragHandle>
+            <button class="back" (click)="hideRequest()"> 
                 <mat-icon>close</mat-icon>
             </button>
         </div>
 
-        <div id="title">
+        <div class="title">
             <h1>{{_utils.rqsBody.title}}</h1>
         </div>
 
-        <div id="message">
+        <div class="message">
             <p>
                 {{_utils.rqsBody.message}}
             </p>
