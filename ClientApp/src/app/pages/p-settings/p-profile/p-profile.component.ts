@@ -9,7 +9,6 @@ import { REPButton } from 'src/interfaces/repbutton.interface';
 import { FileUploadService } from 'src/services/file-upload.service';
 import { UserService } from 'src/services/user.service';
 import { UtilsService } from 'src/services/utils.service';
-import { first } from 'rxjs/operators';
 
 @Component({
   templateUrl: './p-profile.component.html',
@@ -133,8 +132,8 @@ export class PProfileComponent {
       `By doing so your account will be deleted along with all your messages and other data. This action is permanent since RepubliChat will NOT keep the remaining data. If you change your mind you will be able to create a new account with the same email.`,
       () => {
         this._user.API_deleteProfile()
-          .pipe(first())
-          .subscribe(
+          .toPromise()
+          .then(
             (res) => {
               if (res.success) 
                 this.router.navigate(['login']);

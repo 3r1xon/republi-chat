@@ -7,7 +7,6 @@ import { ServerResponse } from 'src/interfaces/response.interface';
 import { FileUploadService } from './file-upload.service';
 import { Channel } from 'src/interfaces/channel.interface';
 import { Subject, Subscription } from 'rxjs';
-import { first } from 'rxjs/operators';
 import { ChannelPermissions } from 'src/interfaces/channelPermissions.interface';
 import { UtilsService } from './utils.service';
 import { WebSocketService } from './websocket.service';
@@ -51,8 +50,8 @@ export class MessagesService {
    */
   public getChannels() {
     this.API_getChannels()
-    .pipe(first())
-    .subscribe(
+    .toPromise()
+    .then(
       (res: ServerResponse) => {
         if (res.success) {
           this.channels = res.data;
@@ -89,8 +88,8 @@ export class MessagesService {
   public joinChannel(room: Channel) {
 
     this.API_getChPermissions(room)
-    .pipe(first())
-    .subscribe(
+    .toPromise()
+    .then(
       (channel) => {
 
         this.currentChannel = room;
@@ -98,8 +97,8 @@ export class MessagesService {
         this.chPermissions = <ChannelPermissions>channel.data;
 
         this.API_getChRooms(room)
-          .pipe(first())
-          .subscribe((res: ServerResponse) => {
+          .toPromise()
+          .then((res: ServerResponse) => {
             this.currentChannel.rooms = res.data;
 
             if (this.currentChannel.rooms.length > 0) {
@@ -109,16 +108,15 @@ export class MessagesService {
               this.getRoomMessages(this.currentChannel.rooms[0]);
             }
           });
-      () => { console.log("There has been an error"); }
       }
-    );
+    ).catch(() => console.log("There has been an error"))
   }
 
   public getRoomMessages(room: Room) {
 
     this.API_getRoomMessages(room, 50)
-    .pipe(first())
-    .subscribe(
+    .toPromise()
+    .then(
       (res: ServerResponse) => {
 
         if (res.success) {

@@ -9,7 +9,6 @@ import { CookieService } from 'ngx-cookie-service';
 import { FileUploadService } from './file-upload.service';
 import { UtilsService } from './utils.service';
 import { DOCUMENT } from '@angular/common';
-import { first } from 'rxjs/operators';
 import { Settings } from 'src/interfaces/settings.interface';
 
 @Injectable({
@@ -45,10 +44,9 @@ export class UserService implements CanActivate {
 
     const browser = this._utils.detectBrowser();
 
-    const sub = this.http.post<ServerResponse>(`${server.BASE_URL}/authentication/authorize`, {
-      BROWSER: browser
-    })
-      .subscribe(async (res) => {
+    this.API_authorize({ BROWSER: browser })
+      .toPromise()
+      .then(async (res) => {
         if (res.success) {
           this.currentUser = <Account>res.data;
           this.currentUser.picture = this._fileUpload.sanitizeIMG(this.currentUser.picture);
@@ -56,12 +54,7 @@ export class UserService implements CanActivate {
           this.loadSettings();
           await this.router.navigate(['mainpage']);
         }
-      },
-      () => { },
-      () => {
-        sub.unsubscribe();
-      }
-    );
+      });
   }
 
   /**
@@ -84,28 +77,35 @@ export class UserService implements CanActivate {
       }
     }
 
-    this.http.delete(`${server.BASE_URL}/authentication/logout`)
-      .pipe(first())
-      .subscribe(
-        () => null,
-        () => del(),
-        () => {
-          del();
-        }
-      );
-  }
-
-  public loadSettings() {
-    const sub = this.API_getSettings()
-      .subscribe((response) => {
-        this._utils.settings = <Settings>response.data;
-      },
-      () => { },
-      () => {
-        sub.unsubscribe();
+    this.API_logout()
+      .toPromise()
+      .then(
+        () => del()
+      )
+      .catch(() => {
+        del();
       });
   }
 
+  public loadSettings() {
+    this.API_getSettings()
+      .toPromise()
+      .then((response) => {
+        this._utils.settings = <Settings>response.data;
+      });
+  }
+
+  public API_logout() {
+    return this.http.delete(`${server.BASE_URL}/authentication/logout`);
+  }
+
+  public API_authorize(data) {
+    return this.http.post<ServerResponse>(`${server.BASE_URL}/authentication/authorize`, data);
+  }
+
+  public API_login(data) {
+    return this.http.post<ServerResponse>(`${server.BASE_URL}/authentication/logIn`, data);
+  }
   /**
    * API for deleting the user profile.
    *

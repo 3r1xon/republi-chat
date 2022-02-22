@@ -14,14 +14,11 @@ export class PPrivacyComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    const sub = this._user.API_getDevices()
-      .subscribe(
+    this._user.API_getDevices()
+      .toPromise()
+      .then(
         (res) => {
           this.devices = res.data;
-        },
-        () => { },
-        () => {
-          sub.unsubscribe();
         }
       );
   }
@@ -30,16 +27,13 @@ export class PPrivacyComponent implements OnInit {
 
   disconnectDevice(index: number) {
     const deviceID = this.devices[index].id_session;
-    const sub = this._user.API_disconnectDevice(deviceID)
-      .subscribe(
+    this._user.API_disconnectDevice(deviceID)
+      .toPromise()
+      .then(
         (res) => {
           if (res.success) {
             this.devices.splice(index, 1);
           }
-        }, 
-        () => { },
-        () => {
-          sub.unsubscribe();
         }
       );
   }

@@ -3,11 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { Component, Inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { first } from 'rxjs/operators';
-import { server } from 'src/environments/server';
 import { Account } from 'src/interfaces/account.interface';
 import { REPButton } from 'src/interfaces/repbutton.interface';
-import { ServerResponse } from 'src/interfaces/response.interface';
 import { FileUploadService } from 'src/services/file-upload.service';
 import { UserService } from 'src/services/user.service';
 import { UtilsService } from 'src/services/utils.service';
@@ -92,29 +89,28 @@ export class PLoginComponent {
 
     const browser = this._utils.detectBrowser();
 
-    this.document.defaultView.navigator.geolocation.getCurrentPosition((position) => {
-      browser.longitude = position.coords.longitude;
-      browser.latitude = position.coords.latitude;
+    this.document.defaultView.navigator.geolocation.getCurrentPosition(
+      (position) => {
+        browser.longitude = position.coords.longitude;
+        browser.latitude = position.coords.latitude;
 
-      this.http.post<ServerResponse>(`${server.BASE_URL}/authentication/logIn`, {
-        email: this.form.value.email,
-        password: this.form.value.password,
-        BROWSER: browser
-      })
-        .pipe(first())
-        .subscribe(async (response) => {
-          this._user.currentUser = <Account>response.data.user;
-          this._user.currentUser.picture = this._fileUpload.sanitizeIMG(this._user.currentUser.picture);
-          this._user.userAuth = true;
-          this._user.loadSettings();
-          await this.router.navigate(['mainpage']);
-        }, 
-        (response) => {
-          this.alert = response.error.message;
-        });
-    }, () => {
-        this.alert = "Position is mandatory! Click 'Allow' and try again.";
-    });
+        this._user.API_login({ email: this.form.value.email, password: this.form.value.password, BROWSER: browser })
+          .toPromise()
+          .then(async (response) => {
+            this._user.currentUser = <Account>response.data.user;
+            this._user.currentUser.picture = this._fileUpload.sanitizeIMG(this._user.currentUser.picture);
+            this._user.userAuth = true;
+            this._user.loadSettings();
+            await this.router.navigate(['mainpage']);
+          })
+          .catch((response) => {
+            this.alert = response.error.message;
+          });
+
+      },
+      () => {
+          this.alert = "Position is mandatory! Click 'Allow' and try again.";
+      });
 
   }
 }

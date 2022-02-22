@@ -62,17 +62,18 @@ export class PNewChannelComponent {
       picture: null
     };
 
-    const sub = this._msService.API_createChannel(channel)
-      .subscribe(
+    this._msService.API_createChannel(channel)
+      .toPromise()
+      .then(
         (res) => {
 
           if (res.success) {
-      
+
             this.formCreation.setValue({ 
               channelName: '',
               channelImage: null
             });
-      
+
             this._utils.showRequest(
               "Channel created successfully", 
               `The channel "${channel.name}" has been created successfully, you can now find it at the main page!`, 
@@ -89,14 +90,10 @@ export class PNewChannelComponent {
                   name: "Close",
                   icon: "close",
                 }
-              ]);
+              ]
+            );
           }
-        },
-        () => { }, 
-        () => {
-          sub.unsubscribe();
-        }
-    );
+      });
 
   }
 
@@ -107,20 +104,21 @@ export class PNewChannelComponent {
       code: this.formAdd.value.channelCode
     };
 
-    const sub = this._msService.API_addChannel(channel)
-      .subscribe(
+    this._msService.API_addChannel(channel)
+      .toPromise()
+      .then(
         (res) => {
 
           if (res.success) {
-      
-            this.formAdd.setValue({ 
+
+            this.formAdd.setValue({
               channelName: '',
               channelCode: ''
             });
-      
+
             this._utils.showRequest(
-              "Channel found and added", 
-              `The channel "${channel.name}" has been successfully added, you can now find it at the main page!`, 
+              "Channel found and added",
+              `The channel "${channel.name}" has been successfully added, you can now find it at the main page!`,
               [
                 {
                   name: "Mainpage",
@@ -134,24 +132,21 @@ export class PNewChannelComponent {
                   name: "Close",
                   icon: "close",
                 }
-              ]);
+              ]
+            );
           } else {
             this._utils.showRequest(
-              "Channel not found", 
-              `The channel "${channel.name}" was not found, are you sure the name and code is correct?`, 
+              "Channel not found",
+              `The channel "${channel.name}" was not found, are you sure the name and code is correct?`,
               [
                 {
                   name: "Close",
                   icon: "close",
                 }
-              ]);
+              ]
+            );
           }
-        },
-        () => { },
-        () => {
-          sub.unsubscribe();
-        }
-      );
+        });
 
   }
 
