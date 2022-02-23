@@ -95,6 +95,10 @@ export class UserService implements CanActivate {
       });
   }
 
+  public API_signup(user) {
+    return this.http.post<ServerResponse>(`${server.BASE_URL}/authentication/signUp`, user);
+  }
+
   public API_logout() {
     return this.http.delete(`${server.BASE_URL}/authentication/logout`);
   }

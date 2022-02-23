@@ -1,10 +1,9 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { server } from 'src/environments/server';
 import { REPButton } from 'src/interfaces/repbutton.interface';
-import { ServerResponse } from 'src/interfaces/response.interface';
+import { UserService } from 'src/services/user.service';
 
 @Component({
   templateUrl: './p-signup.component.html',
@@ -13,7 +12,7 @@ import { ServerResponse } from 'src/interfaces/response.interface';
 export class PSignupComponent {
 
   constructor(
-    private http: HttpClient,
+    private _user: UserService,
     private router: Router,
     private fb: FormBuilder
   ) { }
@@ -104,14 +103,15 @@ export class PSignupComponent {
       return;
     }
 
-    this.http.post<ServerResponse>(`${server.BASE_URL}/authentication/signUp`, user).subscribe((response) => {
-      if (response.success) {
-        this.router.navigate(['login']);
-      }
-    },
-    (response) => {
-      this.alert = response.error.message;
-    });
+    this._user.API_signup(user)
+      .toPromise()
+      .then((response) => {
+        if (response.success) {
+          this.router.navigate(['login']);
+        }
+      }).catch((response: HttpErrorResponse) => {
+        this.alert = response.message;
+      });
   }
 
 }
