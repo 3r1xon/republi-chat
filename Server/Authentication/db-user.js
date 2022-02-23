@@ -163,26 +163,26 @@ class DBUser {
 
           const chMsg = await REPQuery.one(
           `
-          INSERT INTO CHANNELS_MESSAGES
-              (ID_CHANNEL, ID_CHANNEL_MEMBER, MESSAGE, DATE)
+          INSERT INTO CHANNELS_ROOMS_MESSAGES
+              (ID_CHANNEL_ROOM, ID_CHANNEL_ROOM_MEMBER, MESSAGE, DATE)
           VALUES (?, ?, ?, ?)
-          RETURNING ID_CHANNEL_MESSAGE
-          `, [this.channelID, this.channelMemberID, msg, new Date()]);
+          RETURNING ID_CHANNEL_ROOM_MESSAGE
+          `, [this.room, this.channelMemberID, msg, new Date()]);
 
           const message = await REPQuery.one(
           `
           SELECT M.ID_CHANNEL_MESSAGE         as id,
-                  U.USER_CODE                  as code,
-                  U.COLOR                      as color,
-                  U.BACKGROUND_COLOR           as backgroundColor,
-                  U.NAME                       as name,
-                  CM.ID_CHANNEL_MEMBER         as author,
-                  TO_BASE64(U.PROFILE_PICTURE) as picture,
-                  M.MESSAGE                    as message,
-                  M.DATE                       as date
+                 U.USER_CODE                  as code,
+                 U.COLOR                      as color,
+                 U.BACKGROUND_COLOR           as backgroundColor,
+                 U.NAME                       as name,
+                 CM.ID_CHANNEL_MEMBER         as author,
+                 TO_BASE64(U.PROFILE_PICTURE) as picture,
+                 M.MESSAGE                    as message,
+                 M.DATE                       as date
           FROM CHANNELS_MESSAGES M
-                    LEFT JOIN CHANNELS_MEMBERS CM ON CM.ID_CHANNEL_MEMBER = M.ID_CHANNEL_MEMBER
-                    LEFT JOIN USERS U ON U.ID_USER = CM.ID_USER
+                   LEFT JOIN CHANNELS_MEMBERS CM ON CM.ID_CHANNEL_MEMBER = M.ID_CHANNEL_MEMBER
+                   LEFT JOIN USERS U ON U.ID_USER = CM.ID_USER
           WHERE M.ID_CHANNEL_MESSAGE = ?
           `, [chMsg.ID_CHANNEL_MESSAGE]);
 

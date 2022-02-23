@@ -21,6 +21,10 @@ import { REPButton } from 'src/interfaces/repbutton.interface';
 })
 export class REPChatComponent implements AfterViewInit, OnDestroy {
 
+  constructor(
+    private eRef: ElementRef
+  ) { }
+
   ngAfterViewInit(): void {
     this.msg.changes.subscribe(() => {
 
@@ -168,6 +172,13 @@ export class REPChatComponent implements AfterViewInit, OnDestroy {
           return;
         }
       }
+    }
+  }
+
+  @HostListener('document:click', ['$event'])
+  clickout() {
+    if (!this.eRef.nativeElement.contains(event.target)) {
+      this.deselectAll();
     }
   }
 

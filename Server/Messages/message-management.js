@@ -14,9 +14,9 @@ router.use(Auth.HTTPAuthToken);
 
 router.get('/getRoomMessages/:id/:limit', async (req, res) => {
 
-  const userID     = res.locals._id;
-  const roomID     = req.params.id;
-  const user       = new DBUser(userID);
+  const userID = res.locals._id;
+  const roomID = req.params.id;
+  const user   = new DBUser(userID);
 
   user.setRoom(roomID, async (err, chUser) => {
     if (err) {
@@ -121,6 +121,7 @@ io.on("connection", (socket) => {
       if (err) {
         console.log(clc.yellow(err));
       } else {
+        console.log("joining")
         socket.join(rqRoom);
         room = rqRoom;
       }
