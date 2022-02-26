@@ -185,7 +185,7 @@ export class PMainpageComponent implements OnInit {
   public channels: Array<{ 
     tabname: string,
     icon?: string,
-    sections: Array<any> 
+    sections: Array<any>
   }> = [
     {
       tabname: "Channels",
@@ -223,13 +223,20 @@ export class PMainpageComponent implements OnInit {
     },
   ];
 
+  displayChatName() {
+    return this._msService.currentChannel?.name + " - " + this._msService.currentRoom?.roomName;
+  }
 
   selectChannel(channel: Channel) {
+    if (channel._id == this._msService.currentChannel._id) return;
+
     this._msService.joinChannel(channel);
   }
 
   selectRoom(room: Room) {
-    
+    if (room.roomID == this._msService.currentRoom.roomID) return;
+
+    this._msService.listRoomMessages(this._msService.currentChannel, room);
   }
 
   sendChannelMessage(message: string) {
@@ -238,5 +245,13 @@ export class PMainpageComponent implements OnInit {
 
   async addNew() {
     await this.router.navigateByUrl('/settings/newchannel');
+  }
+
+  expandChannel(index: number) {
+    this.channels.map((ch: any) => {
+      (ch).open = false;
+    });
+
+    (this.channels[index] as any).open = true;
   }
 }

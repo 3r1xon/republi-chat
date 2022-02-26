@@ -5,16 +5,18 @@
     <div class="main">
 
         <rep-sidemenu
-            class="channels"
             *ngIf="_utils.settings.showChannels"
+            class="channels"
             @openLeft
             [entries]="channels"
             (onNew)="addNew()"
             (onTab)="channelsTab = $event"
         >
 
-            <rep-accordion *ngFor="let section of channels[channelsTab]?.sections; let i = index"
-                (click)="selectChannel(section)">
+            <rep-accordion
+                *ngFor="let section of channels[channelsTab]?.sections; let i = index"
+                [open]="section.open"
+                (click)="selectChannel(section); expandChannel(i)">
 
                 <rep-message header
                     [message]="section"
@@ -22,11 +24,16 @@
                 >
                 </rep-message>
 
-                <div class="rooms" body>
-                    <span *ngFor="let room of _msService.currentChannel?.rooms" (click)="selectRoom(room)">
-                        <mat-icon>{{room.textRoom ? 'tag' : 'volume_up'}}</mat-icon>
-                        {{room.roomName}}
-                    </span>
+                <div class="rooms" body stopPropagation>
+
+                    <rep-room
+                        *ngFor="let room of _msService.currentChannel?.rooms"
+                        [roomName]="room.roomName"
+                        [textRoom]="room.textRoom"
+                        (click)="selectRoom(room)"
+                    >
+                    </rep-room>
+
                 </div>
 
             </rep-accordion>
@@ -38,7 +45,7 @@
         <rep-chat
             [messages]="_msService.messages"
             [textboxEnabled]="_msService.chPermissions?.sendMessages"
-            [chatName]="_msService.currentChannel?.name"
+            [chatName]="displayChatName()"
             [msOptions]="msgOptions"
             [chatOptions]="chatOptions"
             [dateFormat]="_utils.settings.dateFormat"

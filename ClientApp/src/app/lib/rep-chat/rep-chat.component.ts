@@ -111,24 +111,24 @@ export class REPChatComponent implements AfterViewInit, OnDestroy {
   }
 
 
-  send(event) {
+  send(event): void {
     this.sendMessage.emit(event);
   }
 
-  reset() {
+  reset(): void {
     this.initialized = false;
     this.deselectAll();
   }
 
-  scrollToBottom() {
+  scrollToBottom(): void {
     this.content.nativeElement.scrollTop = this.content.nativeElement.scrollHeight;
   }
 
-  deselectAll() {
+  deselectAll(): void {
     this.selections = [];
   }
 
-  select(index: number, event: KeyboardEvent) {
+  select(index: number, event: KeyboardEvent): void {
     const ctrlKey = event.ctrlKey;
 
     if (ctrlKey) {
@@ -150,7 +150,7 @@ export class REPChatComponent implements AfterViewInit, OnDestroy {
   }
 
   @HostListener('document:keydown.shift.arrowup', ['$event'])
-  selectUp() {
+  selectUp(): void {
     if (this.selections.length > 0) {
       for (let i = 0; i < this.messages.length; i++) {
         if (this.isInSelection(this.messages[i].id)) {
@@ -163,7 +163,7 @@ export class REPChatComponent implements AfterViewInit, OnDestroy {
   }
 
   @HostListener('document:keydown.shift.arrowdown', ['$event'])
-  selectDown() {
+  selectDown(): void {
     if (this.selections.length > 0) {
       for (let i = this.messages.length-1; i > 0; i--) {
         if (this.isInSelection(this.messages[i].id)) {
@@ -176,19 +176,21 @@ export class REPChatComponent implements AfterViewInit, OnDestroy {
   }
 
   @HostListener('document:click', ['$event'])
-  clickout() {
+  clickout(): void {
     if (!this.eRef.nativeElement.contains(event.target)) {
       this.deselectAll();
     }
   }
 
 
-  isInSelection(id: number) {
+  isInSelection(id: number): boolean {
     return this.selections.some(msg => msg.id === id);
   }
 
 
-  spreadDate(date: Date, index: number) {
+  spreadDate(date: Date, index: number): boolean {
+
+    if (index == 0) return true;
 
     const before = this.messages[index-1]?.date;
 

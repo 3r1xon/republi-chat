@@ -11,7 +11,7 @@ export class REPProfilePicComponent {
   public letter: string = "";
 
   @Input()
-  public src: string = "";
+  public src: string;
 
   @Input()
   public width: string = "45px";
@@ -30,6 +30,4 @@ export class REPProfilePicComponent {
   public get color() {
     return this._color;
   }
-
-  public pictureError: boolean = false;
 }

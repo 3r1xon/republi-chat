@@ -25,39 +25,29 @@
 
         rep-accordion {
             width: 100%;
+            user-select: none;
+
+            rep-message {
+                cursor: pointer;
+            }
 
             .rooms {
                 width: 100%;
                 height: 100%;
                 display: flex;
+                background: var(--GREY);
                 flex-direction: column;
                 justify-content: center;
                 align-items: center;
 
-                span {
-                    width: 100%;
-                    height: 20px;
-                    display: flex;
-                    align-items: center;
-                    cursor: pointer;
-                    margin: 5px 0 5px 0;
-
-                    mat-icon {
-                        margin-right: 5px;
-                    }
-
-                    &:hover {
-                        background: red;
-                    }
+                rep-room {
+                    width: 95%;
+                    height: 25px;
+                    margin: 5px;
                 }
             }
         }
 
-        // Original
-        // rep-message {
-        //     width: 100%;
-        //     cursor: pointer;
-        // }
     }
 
     rep-chat {

@@ -6,11 +6,11 @@ import { server } from 'src/environments/server';
 import { ServerResponse } from 'src/interfaces/response.interface';
 import { FileUploadService } from './file-upload.service';
 import { Channel } from 'src/interfaces/channel.interface';
+import { Room } from 'src/interfaces/room.interface';
 import { Subject, Subscription } from 'rxjs';
 import { ChannelPermissions } from 'src/interfaces/channelPermissions.interface';
 import { UtilsService } from './utils.service';
 import { WebSocketService } from './websocket.service';
-import { Room } from 'src/interfaces/room.interface';
 
 
 @Injectable({
@@ -82,44 +82,44 @@ export class MessagesService {
   /**
    * Get the current room messages and initializes all sockets.
    *
-   * @param room The channel ID you want to join into.
+   * @param channel The channel object you want to join into.
    *
    */
-  public joinChannel(room: Channel) {
+  public joinChannel(channel: Channel) {
 
-    this.API_getChPermissions(room)
+    this.API_getChPermissions(channel)
     .toPromise()
     .then(
-      (channel) => {
+      (resChannel: ServerResponse) => {
 
-        this.currentChannel = room;
+        this.currentChannel = channel;
 
-        this.chPermissions = <ChannelPermissions>channel.data;
+        this.chPermissions = resChannel.data as ChannelPermissions;
 
-        this.API_getChRooms(room)
+        this.API_getChRooms(channel)
           .toPromise()
           .then((res: ServerResponse) => {
             this.currentChannel.rooms = res.data;
 
-            if (this.currentChannel.rooms.length > 0) {
-
-              this.currentRoom = this.currentChannel.rooms[0];
-
-              this.getRoomMessages(this.currentChannel.rooms[0]);
-            }
+            if (this.currentChannel.rooms.length > 0)
+              this.listRoomMessages(channel, this.currentChannel.rooms[0]);
           });
       }
-    ).catch(() => console.log("There has been an error"))
+    ).catch(() => { 
+      this._utils.showBugReport("Server error!", "There has been an error while requesting the channels!", false);
+    });
   }
 
-  public getRoomMessages(room: Room) {
+  public listRoomMessages(channel: Channel, room: Room) {
 
-    this.API_getRoomMessages(room, 50)
+    this.API_getRoomMessages(channel, room, 50)
     .toPromise()
     .then(
       (res: ServerResponse) => {
 
         if (res.success) {
+
+          this.currentRoom = room;
 
           this.destroyMsSubscriptions();
 
@@ -128,7 +128,7 @@ export class MessagesService {
             msg.date = new Date(msg.date);
             msg.auth = this.chPermissions.id === msg.author;
             return msg;
-          }
+          };
 
           this.messages = res.data?.map((msg: Message) => {
             return mapMsg(msg);
@@ -137,7 +137,8 @@ export class MessagesService {
           this.messages$.next();
 
           this._webSocket.emit("joinRoom", {
-            room: this.currentRoom.roomID,
+            channel: channel._id,
+            room: room.roomID,
             userID: this._user.currentUser.id
           });
 
@@ -146,7 +147,7 @@ export class MessagesService {
           .push(
             this._webSocket.listen("message")
               .subscribe((message: string) => {
-                const msg = <Message>JSON.parse(message);
+                const msg = JSON.parse(message) as Message;
                 this.messages.push(mapMsg(msg));
               })
           );
@@ -182,7 +183,9 @@ export class MessagesService {
           );
         }
       }
-    );
+    ).catch(() => {
+      this._utils.showBugReport("Server error!", "There has been an error while requesting the messages!", false);
+    });
 
   }
 
@@ -190,8 +193,8 @@ export class MessagesService {
     return this.http.get<ServerResponse>(`${server.BASE_URL}/channels/getChannels`);
   }
 
-  public API_getRoomMessages(channel: Room, limit: number) {
-    return this.http.get<ServerResponse>(`${server.BASE_URL}/messages/getRoomMessages/${channel.roomID}/${limit}`);
+  public API_getRoomMessages(channel: Channel, room: Room, limit: number = 50) {
+    return this.http.get<ServerResponse>(`${server.BASE_URL}/messages/getRoomMessages/${channel._id}/${room.roomID}/${limit}`);
   }
 
   public API_getChRooms(channel: Channel) {

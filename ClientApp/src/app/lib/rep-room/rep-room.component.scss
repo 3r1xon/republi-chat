@@ -1,0 +1,16 @@
+#rep-room {
+    width: 100%;
+    height: 100%;
+    border-radius: 5px;
+    background: var(--DARK);
+    color: var(--OBSCURE_SECONDARY);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    transition: 150ms;
+    gap: 10px;
+
+    &:hover {
+        background: lighten($color: #1a1c1d, $amount: 10%);
+    }
+}

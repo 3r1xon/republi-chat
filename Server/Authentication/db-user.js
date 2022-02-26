@@ -23,7 +23,7 @@ class DBUser {
   channelJoinDate;
   channelPermissions;
 
-  room;
+  roomID;
   roomMemberID;
   roomJoinDate;
 
@@ -63,18 +63,22 @@ class DBUser {
 
   async setRoom(roomID, callback = nocb) {
 
+    if (this.channelID == undefined) 
+      return callback(new Error("Channel is not set. Did you call setChannel?"), null);
+
     try {
 
       const roomMember = await REPQuery.one(
       `
       SELECT CRM.ID_CHANNEL_ROOM_MEMBER as roomMemberID,
              CRM.JOIN_DATE              as joinDate
-      FROM channels_rooms_members CRM
+      FROM CHANNELS_ROOMS_MEMBERS CRM
       WHERE CRM.ID_CHANNEL_ROOM = ?
-      `, [roomID]);
+        AND CRM.ID_CHANNEL_MEMBER = ?
+      `, [roomID, this.channelMemberID]);
 
       if (roomMember) {
-        this.room = roomMember;
+        this.roomID = roomID;
 
         this.roomMemberID = roomMember.roomMemberID;
         this.roomJoinDate = roomMember.joinDate;
@@ -93,7 +97,7 @@ class DBUser {
   // Verifies if the user has a permission based on the current channel.
   async hasPermission(permission, callback = nocb) {
 
-    if (this.room == undefined) 
+    if (this.roomID == undefined) 
       return callback(new Error("Room is not set. Did you call setRoom?"), null);
 
     try {
@@ -149,7 +153,6 @@ class DBUser {
 
 
   async sendMessage(msg, callback = nocb) {
-
     this.hasPermission(permissions.sendMessages, async (err) => {
       if (err) {
         callback(err, null);
@@ -167,30 +170,34 @@ class DBUser {
               (ID_CHANNEL_ROOM, ID_CHANNEL_ROOM_MEMBER, MESSAGE, DATE)
           VALUES (?, ?, ?, ?)
           RETURNING ID_CHANNEL_ROOM_MESSAGE
-          `, [this.room, this.channelMemberID, msg, new Date()]);
+          `, [this.roomID, this.roomMemberID, msg, new Date()]);
+
 
           const message = await REPQuery.one(
           `
-          SELECT M.ID_CHANNEL_MESSAGE         as id,
+          SELECT CRM.ID_CHANNEL_ROOM_MESSAGE  as id,
                  U.USER_CODE                  as code,
                  U.COLOR                      as color,
                  U.BACKGROUND_COLOR           as backgroundColor,
                  U.NAME                       as name,
                  CM.ID_CHANNEL_MEMBER         as author,
                  TO_BASE64(U.PROFILE_PICTURE) as picture,
-                 M.MESSAGE                    as message,
-                 M.DATE                       as date
-          FROM CHANNELS_MESSAGES M
-                   LEFT JOIN CHANNELS_MEMBERS CM ON CM.ID_CHANNEL_MEMBER = M.ID_CHANNEL_MEMBER
+                 CRM.MESSAGE                  as message,
+                 CRM.DATE                     as date
+          FROM CHANNELS_ROOMS_MESSAGES CRM
+                   LEFT JOIN channels_rooms_members CRMB ON CRMB.ID_CHANNEL_ROOM_MEMBER = CRM.ID_CHANNEL_ROOM_MEMBER
+                   LEFT JOIN CHANNELS_MEMBERS CM ON CM.ID_CHANNEL_MEMBER = CRMB.ID_CHANNEL_MEMBER
                    LEFT JOIN USERS U ON U.ID_USER = CM.ID_USER
-          WHERE M.ID_CHANNEL_MESSAGE = ?
-          `, [chMsg.ID_CHANNEL_MESSAGE]);
+          WHERE CRM.ID_CHANNEL_ROOM_MESSAGE = ?
+          `, [chMsg.ID_CHANNEL_ROOM_MESSAGE]);
 
-          io.to(this.channelID).emit("message", JSON.stringify(message));
+          io.to(this.roomID).emit("message", JSON.stringify(message));
 
           callback(null, this);
         }
         catch (error) {
+          console.log(error)
+
           callback(error, null);
         }
       }
@@ -207,11 +214,11 @@ class DBUser {
           await REPQuery.exec(
           `
           DELETE
-          FROM CHANNELS_MESSAGES
-          WHERE ID_CHANNEL_MESSAGE = ?
+          FROM CHANNELS_ROOMS_MESSAGES
+          WHERE ID_CHANNEL_ROOM_MESSAGE = ?
           `, [msgID]);
 
-          io.to(this.channelID).emit("deleteMessage", `${msgID}`);
+          io.to(this.roomID).emit("deleteMessage", `${msgID}`);
 
           callback(null, this);
 

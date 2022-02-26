@@ -22,6 +22,7 @@ import { REPProfilePicComponent } from './lib/rep-profile-pic/rep-profile-pic.co
 import { REPIconButtonComponent } from './lib/rep-icon-button/rep-icon-button.component';
 import { REPImgUploadComponent } from './lib/rep-img-upload/rep-img-upload.component';
 import { REPAccordionComponent } from './lib/rep-accordion/rep-accordion.component';
+import { REPRoomComponent } from './lib/rep-room/rep-room.component';
 
 import { PSignupComponent } from './pages/p-signup/p-signup.component';
 import { PLoginComponent } from './pages/p-login/p-login.component';
@@ -76,6 +77,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     REPIconButtonComponent,
     REPImgUploadComponent,
     REPAccordionComponent,
+    REPRoomComponent,
 
     PChannelSettingsComponent,
     PSignupComponent,

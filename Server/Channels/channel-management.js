@@ -157,8 +157,12 @@ router.get('/getChannelRooms/:id', (req, res) => {
                CR.ROOM_NAME       as roomName,
                CR.TEXT_ROOM       as textRoom
         FROM CHANNELS_ROOMS CR
+                LEFT JOIN CHANNELS_ROOMS_MEMBERS CRMB ON CRMB.ID_CHANNEL_ROOM = CR.ID_CHANNEL_ROOM
+                LEFT JOIN CHANNELS_MEMBERS CM ON CM.ID_CHANNEL_MEMBER = CRMB.ID_CHANNEL_MEMBER
         WHERE CR.ID_CHANNEL = ?
-        `, [channelID]);
+          AND CM.ID_USER = ?
+        ORDER BY CR.TEXT_ROOM DESC
+        `, [channelID, userID]);
 
         res.status(200).send({ success: true, data: rooms });
       }

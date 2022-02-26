@@ -1,12 +1,12 @@
 <ng-container>
-    <img *ngIf="!pictureError" class="user-image" [src]="src" (error)="pictureError = true"
+    <img *ngIf="src != null" class="user-image" [src]="src"
         [style.minWidth]="width"
         [style.maxWidth]="width"
         [style.minHeight]="height"
         [style.maxHeight]="height"
     >
 
-    <span class="user-image absent-image" *ngIf="pictureError"
+    <span class="user-image absent-image" *ngIf="src == null"
         [style.minWidth]="width"
         [style.minHeight]="height"
         [style.background]="color"
