@@ -11,4 +11,6 @@ export class REPRoomComponent {
 
   @Input() textRoom: boolean = true;
 
+  @Input() hold: boolean = false;
+
 }

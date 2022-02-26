@@ -1,7 +1,9 @@
-<div id="rep-room">
+<span id="rep-room" [ngClass]="{
+        'hold': hold
+    }">
 
     <mat-icon>{{textRoom ? 'tag' : 'volume_up'}}</mat-icon>
 
     <p>{{roomName}}</p>
 
-</div>
+</span>

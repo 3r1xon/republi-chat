@@ -15,8 +15,9 @@
 
             <rep-accordion
                 *ngFor="let section of channels[channelsTab]?.sections; let i = index"
-                [open]="section.open"
-                (click)="selectChannel(section); expandChannel(i)">
+                [open]="channels[channelsTab].sections[i].open"
+                (click)="selectChannel(section); expandChannel(i)"
+            >
 
                 <rep-message header
                     [message]="section"
@@ -26,13 +27,19 @@
 
                 <div class="rooms" body stopPropagation>
 
-                    <rep-room
-                        *ngFor="let room of _msService.currentChannel?.rooms"
-                        [roomName]="room.roomName"
-                        [textRoom]="room.textRoom"
-                        (click)="selectRoom(room)"
-                    >
-                    </rep-room>
+                    <ng-container *ngFor="let room of _msService.currentChannel?.rooms; let j = index">
+
+                        <rep-separator *ngIf="j == 0">Text rooms</rep-separator>
+
+                        <rep-room
+                            [roomName]="room.roomName"
+                            [textRoom]="room.textRoom"
+                            [hold]="room.roomID == _msService.currentRoom?.roomID"
+                            (click)="selectRoom(room)"
+                        >
+                        </rep-room>
+
+                    </ng-container>
 
                 </div>
 

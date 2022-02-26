@@ -3,7 +3,7 @@
     <button
         [disabled]="!form.valid"
         (click)="uploadIMG()"
-        [style.cursor]="enabled ? 'pointer' : 'not-allowed' "
+        [style.cursor]="enabled ? 'pointer' : 'not-allowed'"
     >
         <mat-icon>upload</mat-icon>
     </button>
@@ -21,7 +21,7 @@
     <button
         [disabled]="!form.valid"
         (click)="send($event)"
-        [style.cursor]="enabled && form.valid ? 'pointer' : 'not-allowed' "
+        [style.cursor]="enabled && form.valid ? 'pointer' : 'not-allowed'"
         [style.opacity]="form.valid ? '1' : '0.1'"
     >
         <mat-icon>send</mat-icon>

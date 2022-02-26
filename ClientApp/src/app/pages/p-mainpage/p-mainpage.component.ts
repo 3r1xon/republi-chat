@@ -248,10 +248,10 @@ export class PMainpageComponent implements OnInit {
   }
 
   expandChannel(index: number) {
-    this.channels.map((ch: any) => {
-      (ch).open = false;
+    this.channels[this.channelsTab].sections.map((ch: any) => {
+      ch.open = false;
     });
 
-    (this.channels[index] as any).open = true;
+    (this.channels[this.channelsTab].sections[index] as any).open = true;
   }
 }

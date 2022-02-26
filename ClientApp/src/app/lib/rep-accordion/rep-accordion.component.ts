@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { expand } from '../animations';
 
 @Component({
@@ -13,8 +13,5 @@ export class REPAccordionComponent {
 
   @Input()
   public open: boolean = false;
-
-  @Output()
-  public openChange: EventEmitter<boolean> = new EventEmitter();
 
 }
