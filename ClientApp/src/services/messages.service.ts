@@ -99,10 +99,11 @@ export class MessagesService {
         this.API_getChRooms(channel)
           .toPromise()
           .then((res: ServerResponse) => {
+
             this.currentChannel.rooms = res.data;
 
-            if (this.currentChannel.rooms.length > 0)
-              this.listRoomMessages(channel, this.currentChannel.rooms[0]);
+            if (this.currentChannel.rooms.text.length > 0)
+              this.listRoomMessages(channel, this.currentChannel.rooms.text[0]);
           });
       }
     ).catch(() => { 

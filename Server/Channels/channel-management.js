@@ -164,7 +164,11 @@ router.get('/getChannelRooms/:id', (req, res) => {
         ORDER BY CR.TEXT_ROOM DESC
         `, [channelID, userID]);
 
-        res.status(200).send({ success: true, data: rooms });
+        res.status(200).send({ success: true, data: {
+            text: rooms?.filter(obj => obj.textRoom),
+            vocal: rooms.filter(obj => !obj.textRoom)
+          }
+        });
       }
     })
 

@@ -6,7 +6,7 @@ import { expand } from '../animations';
   templateUrl: './rep-accordion.component.html',
   styleUrls: ['./rep-accordion.component.scss'],
   animations: [
-    expand("150ms")
+    expand("200ms")
   ]
 })
 export class REPAccordionComponent {

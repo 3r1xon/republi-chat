@@ -1,4 +1,4 @@
-import { animate, style, transition, trigger } from "@angular/animations";
+import { animate, state, style, transition, trigger } from "@angular/animations";
 
 export const fade = (timings) => {
     return trigger('fade', [
@@ -75,13 +75,15 @@ export const openLeft = (timings, margin) => {
 
 export const expand = (timings) => {
   return trigger('expand', [
-    transition('void => *', [
-        style({
-            height: 0,
-        }),
-        animate(timings, style({
-            height: "*"
-        }))
-    ])
+    state('initial', style({
+      height: '0',
+      overflow: 'hidden',
+      opacity: '0',
+      visibility: 'hidden'
+    })),
+    state('final', style({
+      overflow: 'hidden'
+    })),
+    transition('initial <=> final', animate(timings))
   ]);
 }

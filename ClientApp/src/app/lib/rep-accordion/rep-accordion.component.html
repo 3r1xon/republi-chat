@@ -7,7 +7,7 @@
     </div>
 
 
-    <div class="body" *ngIf="open" @expand>
+    <div class="body" [@expand]="open ? 'final' : 'initial'">
         <ng-content select="[body]"></ng-content>
     </div>
 

@@ -132,7 +132,7 @@ class DBUser {
         return;
       }
 
-      if (!room[permission]) {
+      if (room[permission]) {
         callback(null, this);
         return;
       }

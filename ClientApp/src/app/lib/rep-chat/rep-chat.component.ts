@@ -128,10 +128,10 @@ export class REPChatComponent implements AfterViewInit, OnDestroy {
     this.selections = [];
   }
 
-  select(index: number, event: KeyboardEvent): void {
+  select(index: number, event: KeyboardEvent, surpassCtrl: boolean = false): void {
     const ctrlKey = event.ctrlKey;
 
-    if (ctrlKey) {
+    if (ctrlKey || surpassCtrl) {
 
       const exists = this.isInSelection(this.messages[index].id);
 

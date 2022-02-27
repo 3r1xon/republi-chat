@@ -228,6 +228,9 @@ export class PMainpageComponent implements OnInit {
   ];
 
   displayChatName() {
+    if (!this._msService.currentChannel?.name)
+      return '';
+
     return this._msService.currentChannel?.name + " - " + this._msService.currentRoom?.roomName;
   }
 
