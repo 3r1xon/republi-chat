@@ -17,8 +17,8 @@ class REPTools {
 
         const pk = await REPQuery.one(
         `
-        SHOW KEYS 
-        FROM ${TABLE_NAME} 
+        SHOW KEYS
+        FROM ${TABLE_NAME}
         WHERE Key_name = 'PRIMARY'
         `);
 

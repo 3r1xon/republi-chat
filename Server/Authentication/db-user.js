@@ -63,7 +63,7 @@ class DBUser {
 
   async setRoom(roomID, callback = nocb) {
 
-    if (this.channelID == undefined) 
+    if (this.channelID == undefined)
       return callback(new Error("Channel is not set. Did you call setChannel?"), null);
 
     try {
@@ -102,9 +102,12 @@ class DBUser {
 
     try {
 
-      const auth = await REPQuery.one(
+      const global = await REPQuery.one(
       `
-      SELECT CP.${permission}
+      SELECT CP.DELETE_MESSAGES,
+             CP.KICK_MEMBERS,
+             CP.BAN_MEMBERS,
+             CP.SEND_MESSAGES
       FROM CHANNELS_PERMISSIONS CP
                LEFT JOIN CHANNELS_MEMBERS CM ON CM.ID_CHANNEL_MEMBER = CP.ID_CHANNEL_MEMBER
       WHERE CP.ID_CHANNEL_MEMBER = ?
@@ -112,9 +115,26 @@ class DBUser {
         AND CM.KICKED = ?
       `, [this.channelMemberID, false, false]);
 
-      if (!!auth[permission]) {
+      const room = await REPQuery.one(
+      `
+      SELECT CRP.${permission}
+      FROM CHANNELS_ROOMS_PERMISSIONS CRP
+               LEFT JOIN CHANNELS_ROOMS_MEMBERS CRM ON CRM.ID_CHANNEL_ROOM_MEMBER = CRP.ID_CHANNEL_ROOM_MEMBER
+      WHERE CRM.ID_CHANNEL_ROOM_MEMBER = ?
+      `, [this.roomMemberID]);
+
+      REPTools.keysToBool(global);
+
+      REPTools.keysToBool(room);
+
+      if (!global[permission]) {
+        callback(new Error("User does not have the required permission!"), null);
+        return;
+      }
+
+      if (!room[permission]) {
         callback(null, this);
-        return this;
+        return;
       }
 
       callback(new Error("User does not have the required permission!"), null);
@@ -128,7 +148,7 @@ class DBUser {
 
   async msgBelong(id, callback = nocb) {
 
-    if (this.channelID == undefined) 
+    if (this.channelID == undefined)
       return callback(new Error("Channel is not set. Did you call setChannel?"), null);
 
     try {
