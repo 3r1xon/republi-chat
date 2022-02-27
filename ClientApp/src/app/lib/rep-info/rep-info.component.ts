@@ -8,7 +8,7 @@ import { Component, Input } from '@angular/core';
 export class REPInfoComponent {
 
   @Input()
-  public background: string = "#FFFFFF";
+  public background: string = "#ffffff98";
 
   @Input()
   public tooltip: string;

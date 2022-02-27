@@ -32,15 +32,19 @@ export class PMainpageComponent implements OnInit {
     public _user: UserService,
     public _msService: MessagesService,
     public _utils: UtilsService,
-    private router: Router
+    private router: Router,
   ) { }
 
   @ViewChild(REPChatComponent) private chat: REPChatComponent;
 
   ngOnInit(): void {
-    this._msService.getChannels();
+    // Should be called only one time
+    // since getChannels invoke next
+    // and other tasks will run
+    if (this._msService.channels.length == 0)
+      this._msService.getChannels();
 
-    setTimeout(() => {
+    Promise.resolve().then(() => {
       this.hasLoaded = true;
     });
   }
