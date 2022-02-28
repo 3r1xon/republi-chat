@@ -5,6 +5,9 @@ import { expand } from '../animations';
   selector: 'rep-accordion',
   templateUrl: './rep-accordion.component.html',
   styleUrls: ['./rep-accordion.component.scss'],
+  host: {
+    'role': 'button'
+  },
   animations: [
     expand("200ms")
   ]

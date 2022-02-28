@@ -1,0 +1,34 @@
+#channels {
+    width: 100%;
+    height: 100%;
+
+    rep-accordion {
+        width: 100%;
+        user-select: none;
+
+        rep-message {
+            cursor: pointer;
+        }
+
+        .rooms {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            background: var(--OBSCURE);
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+
+            rep-room {
+                width: 95%;
+                height: 30px;
+                margin: 5px;
+            }
+
+            rep-separator {
+                width: 95%;
+                margin: 10px;
+            }
+        }
+    }
+}

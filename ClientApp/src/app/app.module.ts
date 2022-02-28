@@ -49,6 +49,7 @@ import { StopPropagationDirective } from './directives/stop-propagation.directiv
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { PAppearanceComponent } from './pages/p-settings/p-appearance/p-appearance.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MainpageModule } from './pages/p-mainpage/mainpage.module';
 
 
 
@@ -104,7 +105,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     FormsModule,
     ReactiveFormsModule,
     DragDropModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MainpageModule
   ],
   providers: [
     { 

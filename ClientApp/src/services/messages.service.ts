@@ -77,7 +77,7 @@ export class MessagesService {
           this.channels$.next();
         }
       } 
-    );
+    ).catch(() => { });
   }
 
   /**

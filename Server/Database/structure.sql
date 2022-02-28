@@ -148,3 +148,7 @@ create or replace table republichat.settings
         foreign key (ID_USER) references republichat.users (ID_USER)
             on update cascade on delete cascade
 );
+
+ALTER DATABASE republichat CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
+
+alter schema republichat collate utf8mb4_unicode_ci;

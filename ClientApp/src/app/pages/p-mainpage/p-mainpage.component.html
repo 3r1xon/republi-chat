@@ -4,81 +4,11 @@
 
     <div class="main">
 
-        <rep-sidemenu
-            *ngIf="_utils.settings.showChannels"
-            class="channels"
-            @openLeft
-            [entries]="channels"
-            (onNew)="addNew()"
-            (onTab)="channelsTab = $event"
-        >
+        <channels *ngIf="_utils.settings.showChannels" @openLeft></channels>
 
-            <rep-accordion
-                *ngFor="let section of channels[channelsTab]?.sections; let i = index"
-                [open]="channels[channelsTab].sections[i].open || section._id == _msService.currentChannel?._id"
-                (click)="selectChannel(section); expandChannel(i)"
-            >
+        <chat></chat>
 
-                <rep-message header
-                    [message]="section"
-                    [hold]="_msService.currentChannel?._id == section._id"
-                >
-                </rep-message>
-
-                <div class="rooms" body stopPropagation>
-
-                    <rep-separator *ngIf="_msService.currentChannel?.rooms?.text.length > 0">Text rooms</rep-separator>
-
-                    <rep-room
-                        *ngFor="let room of _msService.currentChannel?.rooms?.text"
-                        [roomName]="room.roomName"
-                        [textRoom]="room.textRoom"
-                        [hold]="room.roomID == _msService.currentRoom?.roomID"
-                        (click)="selectRoom(room)"
-                    >
-                    </rep-room>
-
-                    <rep-separator *ngIf="_msService.currentChannel?.rooms?.vocal.length > 0">Vocal rooms</rep-separator>
-
-                    <rep-room
-                        *ngFor="let room of _msService.currentChannel?.rooms?.vocal"
-                        [roomName]="room.roomName"
-                        [textRoom]="room.textRoom"
-                        [hold]="room.roomID == _msService.currentRoom?.roomID"
-                        (click)="selectRoom(room)"
-                    >
-                    </rep-room>
-
-                </div>
-
-            </rep-accordion>
-
-            <small *ngIf="channels[channelsTab]?.sections.length == 0">{{channels[channelsTab]?.tabname}} is empty</small>
-
-        </rep-sidemenu>
-
-        <rep-chat
-            [messages]="_msService.messages"
-            [textboxEnabled]="_msService.chPermissions?.sendMessages"
-            [chatName]="displayChatName()"
-            [msOptions]="msgOptions"
-            [chatOptions]="chatOptions"
-            [dateFormat]="_utils.settings.dateFormat"
-            (sendMessage)="sendChannelMessage($event)"
-        ></rep-chat>
-
-        <rep-sidemenu
-            *ngIf="_utils.settings.showServerGroup"
-            @openRight
-            class="ch-info"
-            [entries]="serverInfo"
-            [add]="false"
-            (onTab)="serverInfoTab = $event"
-        >
-
-            <small *ngIf="serverInfo[serverInfoTab]?.sections.length == 0">{{serverInfo[serverInfoTab]?.tabname}} is Empty.</small>
-
-        </rep-sidemenu>
+        <channel-info *ngIf="_utils.settings.showServerGroup" @openRight></channel-info>
 
     </div>
 
