@@ -60,9 +60,16 @@ export class PMainpageComponent implements OnInit {
     .subscribe(() => {
       const channelsRef = this.channels.find(tab => tab.tabname == "Channels");
 
-      channelsRef.sections = this._msService.channels;
+      channelsRef.sections = this._msService.channels.map((ch) => {
+        return <Message>{
+          id: ch._id,
+          name: ch.name,
+          message: ch.code,
+          picture: ch.picture
+        };
+      });
 
-      const channel = channelsRef.sections[0];
+      const channel = this._msService.channels[0];
 
       if (channel) {
         this._msService.joinChannel(channel);

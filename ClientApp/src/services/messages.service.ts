@@ -55,6 +55,7 @@ export class MessagesService {
       (res: ServerResponse) => {
         if (res.success) {
           this.channels = res.data;
+          console.log(this.channels)
 
           this.destroyChSubscriptions();
 

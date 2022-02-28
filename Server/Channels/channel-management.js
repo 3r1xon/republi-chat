@@ -35,16 +35,17 @@ router.post('/createChannel', upload.single("image"), async (req, res) => {
 
         const _userID = res.locals._id;
 
-        await REPQuery.one(
+        const newChannel = await REPQuery.one(
         `
         INSERT INTO CHANNELS
             (ID_USER, NAME, CHANNEL_CODE, PICTURE, CREATION_DATE)
         VALUES (?, ?, ?, ?, ?)
+        RETURNING ID_CHANNEL as _id, NAME as name, CHANNEL_CODE as code, PICTURE as picture
         `, [_userID, channel.name, code, channel.picture, creationDate]);
 
         // Triggers will take care of the rest
 
-        res.status(201).send({ success: true });
+        res.status(201).send({ success: true, data: newChannel });
 
       } catch(error) {
         console.log(clc.red(error));
@@ -116,7 +117,7 @@ router.get('/getChannels', async (req, res) => {
     `
     SELECT C.ID_CHANNEL   as _id,
            C.NAME         as name,
-           C.CHANNEL_CODE as message,
+           C.CHANNEL_CODE as code,
            C.PICTURE      as picture
     FROM CHANNELS C
             LEFT JOIN CHANNELS_MEMBERS CM ON CM.ID_CHANNEL = C.ID_CHANNEL

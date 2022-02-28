@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Channel } from 'src/interfaces/channel.interface';
 import { REPButton } from 'src/interfaces/repbutton.interface';
+import { ServerResponse } from 'src/interfaces/response.interface';
 import { MessagesService } from 'src/services/messages.service';
 import { UtilsService } from 'src/services/utils.service';
 
@@ -65,9 +66,11 @@ export class PNewChannelComponent {
     this._msService.API_createChannel(channel)
       .toPromise()
       .then(
-        (res) => {
+        (res: ServerResponse) => {
 
           if (res.success) {
+
+            this._msService.channels.push(res.data);
 
             this.formCreation.setValue({ 
               channelName: '',
@@ -107,9 +110,11 @@ export class PNewChannelComponent {
     this._msService.API_addChannel(channel)
       .toPromise()
       .then(
-        (res) => {
+        (res: ServerResponse) => {
 
           if (res.success) {
+
+            this._msService.channels.push(res.data);
 
             this.formAdd.setValue({
               channelName: '',
