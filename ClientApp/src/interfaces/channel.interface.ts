@@ -1,7 +1,7 @@
 import { Room } from "./room.interface";
 
 export interface Channel {
-    _id?: number;
+    id?: number;
     name: string;
     rooms?: {
         text: Array<Room>,

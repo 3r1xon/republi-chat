@@ -139,7 +139,7 @@ export class MessagesService {
           this.messages$.next();
 
           this._webSocket.emit("joinRoom", {
-            channel: channel._id,
+            channel: channel.id,
             room: room.roomID,
             userID: this._user.currentUser.id
           });
@@ -196,15 +196,15 @@ export class MessagesService {
   }
 
   public API_getRoomMessages(channel: Channel, room: Room, limit: number = 50) {
-    return this.http.get<ServerResponse>(`${server.BASE_URL}/messages/getRoomMessages/${channel._id}/${room.roomID}/${limit}`);
+    return this.http.get<ServerResponse>(`${server.BASE_URL}/messages/getRoomMessages/${channel.id}/${room.roomID}/${limit}`);
   }
 
   public API_getChRooms(channel: Channel) {
-    return this.http.get<ServerResponse>(`${server.BASE_URL}/channels/getChannelRooms/${channel._id}`);
+    return this.http.get<ServerResponse>(`${server.BASE_URL}/channels/getChannelRooms/${channel.id}`);
   }
 
   public API_getChPermissions(channel: Channel) {
-    return this.http.get<ServerResponse>(`${server.BASE_URL}/messages/getChannelPermissions/${channel._id}`);
+    return this.http.get<ServerResponse>(`${server.BASE_URL}/messages/getChannelPermissions/${channel.id}`);
   }
 
   public leaveChannel(room: number) {
@@ -238,7 +238,7 @@ export class MessagesService {
    */
   public banUser(room: Channel, _id: number) {
     this._webSocket.emit("ban", {
-      room: room._id,
+      room: room.id,
       _id: _id
     });
   }
@@ -252,7 +252,7 @@ export class MessagesService {
    */
    public kickUser(room: Channel, _id: number) {
     this._webSocket.emit("kick", {
-      room: room._id,
+      room: room.id,
       _id: _id
     });
   }

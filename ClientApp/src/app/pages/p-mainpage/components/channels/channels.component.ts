@@ -26,7 +26,7 @@ export class ChannelsComponent {
 
     channelsRef.sections = this._msService.channels.map((ch) => {
       return <Message>{
-        id: ch._id,
+        id: ch.id,
         name: ch.name,
         message: ch.code,
         picture: ch.picture
@@ -60,7 +60,7 @@ export class ChannelsComponent {
   ];
 
   selectChannel(channel: Channel) {
-    if (channel._id == this._msService.currentChannel._id) return;
+    if (channel.id == this._msService.currentChannel.id) return;
 
     this._msService.joinChannel(channel);
   }

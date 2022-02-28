@@ -62,6 +62,7 @@
         border-radius: 10px;
         background: var(--SUCCESS);
         color: var(--WHITE);
+        border: none;
         @include flexCenter(row);
         cursor: pointer;
     }

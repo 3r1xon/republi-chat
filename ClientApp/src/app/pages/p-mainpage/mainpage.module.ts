@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ChatComponent } from './components/chat/chat.component';
 import { ChannelsComponent } from './components/channels/channels.component';
 import { ChannelInfoComponent } from './components/channel-info/channel-info.component';
+import { REPModule } from 'src/app/lib/rep.module';
 
 
 
@@ -18,7 +19,8 @@ import { ChannelInfoComponent } from './components/channel-info/channel-info.com
     ChannelInfoComponent
   ],
   imports: [
-    CommonModule
+    CommonModule,
+    REPModule
   ]
 })
 export class MainpageModule { }

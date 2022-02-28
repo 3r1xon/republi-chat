@@ -21,10 +21,16 @@
 
     </div>
 
-    <div class="new" (click)="onNew.emit('onNew')" *ngIf="add" matTooltip="Add new">
+    <button
+        *ngIf="add"
+        class="new"
+        (click)="onNew.emit('onNew')"
+        matTooltip="Add new"
+        matRipple
+    >
 
         <mat-icon>add</mat-icon>
 
-    </div>
+    </button>
 
 </nav>

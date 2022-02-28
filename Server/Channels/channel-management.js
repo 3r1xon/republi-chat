@@ -40,7 +40,7 @@ router.post('/createChannel', upload.single("image"), async (req, res) => {
         INSERT INTO CHANNELS
             (ID_USER, NAME, CHANNEL_CODE, PICTURE, CREATION_DATE)
         VALUES (?, ?, ?, ?, ?)
-        RETURNING ID_CHANNEL as _id, NAME as name, CHANNEL_CODE as code, PICTURE as picture
+        RETURNING ID_CHANNEL as id, NAME as name, CHANNEL_CODE as code, PICTURE as picture
         `, [_userID, channel.name, code, channel.picture, creationDate]);
 
         // Triggers will take care of the rest
@@ -115,7 +115,7 @@ router.get('/getChannels', async (req, res) => {
 
     const channels = await REPQuery.load(
     `
-    SELECT C.ID_CHANNEL   as _id,
+    SELECT C.ID_CHANNEL   as id,
            C.NAME         as name,
            C.CHANNEL_CODE as code,
            C.PICTURE      as picture
