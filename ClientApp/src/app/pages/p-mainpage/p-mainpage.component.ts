@@ -13,8 +13,8 @@ import { openLeft, openRight } from 'src/app/lib/animations';
   templateUrl: './p-mainpage.component.html',
   styleUrls: ['./p-mainpage.component.scss'],
   animations: [
-    openRight("100ms", "-250px"),
-    openLeft("100ms", "-250px")
+    openLeft("100ms", "-250px"),
+    openRight("100ms", "-250px")
   ]
 })
 @Unsubscriber

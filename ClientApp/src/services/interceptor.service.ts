@@ -22,7 +22,7 @@ export class InterceptorService implements HttpInterceptor {
   constructor(
     private _utils: UtilsService,
     private _user: UserService,
-    ) { }
+  ) { }
 
   private readonly loadingBlackList: Array<string> = [
     `${server.BASE_URL}/channels/getChannels`,

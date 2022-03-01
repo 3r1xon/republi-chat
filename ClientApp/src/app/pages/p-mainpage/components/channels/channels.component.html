@@ -1,4 +1,4 @@
-<rep-sidemenu
+<rep-tabs
     id="channels"
     [entries]="channels"
     (onNew)="addNew()"
@@ -47,4 +47,4 @@
 
     <small *ngIf="channels[channelsTab]?.sections.length == 0">{{channels[channelsTab]?.tabname}} is empty</small>
 
-</rep-sidemenu>
+</rep-tabs>

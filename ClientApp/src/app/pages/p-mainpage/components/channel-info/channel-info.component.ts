@@ -15,13 +15,8 @@ export class ChannelInfoComponent {
     sections: Array<any>
   }> = [
     {
-      tabname: "Online",
+      tabname: "Members",
       icon: "public",
-      sections: []
-    },
-    {
-      tabname: "Offline",
-      icon: "no_accounts",
       sections: []
     },
     {

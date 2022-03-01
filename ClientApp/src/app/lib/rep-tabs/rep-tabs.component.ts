@@ -1,11 +1,11 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
-  selector: 'rep-sidemenu',
-  templateUrl: './rep-sidemenu.component.html',
-  styleUrls: ['./rep-sidemenu.component.scss']
+  selector: 'rep-tabs',
+  templateUrl: './rep-tabs.component.html',
+  styleUrls: ['./rep-tabs.component.scss']
 })
-export class REPSidemenuComponent {
+export class REPTabsComponent {
 
   @Input()
   public entries: Array<{ 

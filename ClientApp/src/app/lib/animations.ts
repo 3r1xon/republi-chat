@@ -87,3 +87,28 @@ export const expand = (timings) => {
     transition('initial <=> final', animate(timings))
   ]);
 }
+
+// export const expand = (timings) => {
+//   return trigger('expand', [
+//     transition(
+//       ':enter',
+//       [
+//         style({
+//           height: '0',
+//           overflow: 'hidden',
+//           opacity: '1',
+//         }),
+//         animate(`${timings} ease-in`, style({ }))
+//       ]
+//     ),
+//     transition(
+//       ':leave',
+//       [
+//         animate(`${timings} ease-out`, style({
+//           height: '0',
+//           opacity: '0',
+//         }))
+//       ],
+//     )
+//   ]);
+// }

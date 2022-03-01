@@ -1,4 +1,4 @@
-<rep-sidemenu
+<rep-tabs
     id="channel-info"
     [entries]="serverInfo"
     [add]="false"
@@ -7,4 +7,4 @@
 
     <small *ngIf="serverInfo[serverInfoTab]?.sections.length == 0">{{serverInfo[serverInfoTab]?.tabname}} is Empty.</small>
 
-</rep-sidemenu>
+</rep-tabs>

@@ -8,7 +8,6 @@ import { REPButtonComponent } from './rep-button/rep-button.component';
 import { REPLoadingComponent } from './rep-loading/rep-loading.component';
 import { REPWindowComponent } from './rep-window/rep-window.component';
 import { REPFooterComponent } from './rep-footer/rep-footer.component';
-import { REPSidemenuComponent } from './rep-sidemenu/rep-sidemenu.component';
 import { REPToggleComponent } from './rep-toggle/rep-toggle.component';
 import { REPRequestComponent } from './rep-request/rep-request.component';
 import { REPActionsComponent } from './rep-actions/rep-actions.component';
@@ -30,6 +29,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatRippleModule } from '@angular/material/core';
 import { GlobalErrorHandler } from './error-handler';
 import { StopPropagationDirective } from '../directives/stop-propagation.directive';
+import { REPTabsComponent } from './rep-tabs/rep-tabs.component';
 
 
 
@@ -43,7 +43,7 @@ import { StopPropagationDirective } from '../directives/stop-propagation.directi
     REPLoadingComponent,
     REPWindowComponent,
     REPFooterComponent,
-    REPSidemenuComponent,
+    REPTabsComponent,
     REPToggleComponent,
     REPRequestComponent,
     REPActionsComponent,
@@ -69,7 +69,7 @@ import { StopPropagationDirective } from '../directives/stop-propagation.directi
     REPLoadingComponent,
     REPWindowComponent,
     REPFooterComponent,
-    REPSidemenuComponent,
+    REPTabsComponent,
     REPToggleComponent,
     REPRequestComponent,
     REPActionsComponent,
