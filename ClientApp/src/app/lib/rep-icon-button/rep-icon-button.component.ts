@@ -3,7 +3,12 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 @Component({
   selector: 'rep-icon-button',
   templateUrl: './rep-icon-button.component.html',
-  styleUrls: ['./rep-icon-button.component.scss']
+  styleUrls: ['./rep-icon-button.component.scss'],
+  host: {
+    'role': 'button',
+    'tabindex': '0',
+    '(keypress)': 'checkClick($event)'
+  }
 })
 export class REPIconButtonComponent {
 

@@ -2,7 +2,12 @@
 
     <ul class="tabs">
 
-        <li role="tablist" class="tab" tabindex="0" *ngFor="let tab of entries; let i = index;">
+        <li role="tablist"
+            class="tab"
+            tabindex="0"
+            *ngFor="let tab of entries; let i = index;"
+            (keypress)="selectTab(i)"
+        >
 
             <a role="tab"
                (click)="selectTab(i)"

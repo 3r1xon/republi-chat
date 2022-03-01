@@ -12,7 +12,8 @@ create or replace table republichat.users
     BIOGRAPHY        varchar(200)                 null,
     constraint USERS_EMAIL_uindex
         unique (EMAIL)
-);
+)
+    charset = utf8;
 
 create or replace table republichat.channels
 (
@@ -26,7 +27,8 @@ create or replace table republichat.channels
     constraint CHANNELS_USERS_ID_USER_fk
         foreign key (ID_USER) references republichat.users (ID_USER)
             on update cascade on delete cascade
-);
+)
+    charset = utf8;
 
 create or replace table republichat.channels_members
 (
@@ -40,7 +42,8 @@ create or replace table republichat.channels_members
     constraint CHANNELS_MEMBERS_CHANNELS_ID_CHANNEL_fk
         foreign key (ID_CHANNEL) references republichat.channels (ID_CHANNEL)
             on update cascade on delete cascade
-);
+)
+    charset = utf8;
 
 create or replace table republichat.channels_permissions
 (
@@ -54,20 +57,22 @@ create or replace table republichat.channels_permissions
     constraint FK_MEMBERS
         foreign key (ID_CHANNEL_MEMBER) references republichat.channels_members (ID_CHANNEL_MEMBER)
             on update cascade on delete cascade
-);
+)
+    charset = utf8;
 
 create or replace table republichat.channels_rooms
 (
     ID_CHANNEL_ROOM bigint auto_increment
         primary key,
-    ID_CHANNEL      bigint               not null,
-    ROOM_NAME       varchar(30)          not null,
-    TEXT_ROOM       tinyint(1) default 1 null,
-    AUTO_JOIN       tinyint(1) default 0 null,
+    ID_CHANNEL      bigint                                 not null,
+    ROOM_NAME       varchar(30) collate utf8mb4_unicode_ci null,
+    TEXT_ROOM       tinyint(1) default 1                   null,
+    AUTO_JOIN       tinyint(1) default 0                   null,
     constraint channels_rooms_channels_ID_CHANNEL_fk
         foreign key (ID_CHANNEL) references republichat.channels (ID_CHANNEL)
             on update cascade on delete cascade
-);
+)
+    charset = utf8;
 
 create or replace table republichat.channels_rooms_members
 (
@@ -82,23 +87,25 @@ create or replace table republichat.channels_rooms_members
     constraint channels_rooms_members_channels_members_ID_CHANNEL_MEMBER_fk
         foreign key (ID_CHANNEL_MEMBER) references republichat.channels_members (ID_CHANNEL_MEMBER)
             on update cascade on delete cascade
-);
+)
+    charset = utf8;
 
 create or replace table republichat.channels_rooms_messages
 (
     ID_CHANNEL_ROOM_MESSAGE bigint auto_increment
         primary key,
-    ID_CHANNEL_ROOM         bigint        not null,
-    ID_CHANNEL_ROOM_MEMBER  bigint        not null,
-    MESSAGE                 varchar(2000) null,
-    DATE                    datetime      null,
+    ID_CHANNEL_ROOM         bigint                                   not null,
+    ID_CHANNEL_ROOM_MEMBER  bigint                                   not null,
+    MESSAGE                 varchar(2000) collate utf8mb4_unicode_ci null,
+    DATE                    datetime                                 null,
     constraint FK_USERS
         foreign key (ID_CHANNEL_ROOM_MEMBER) references republichat.channels_rooms_members (ID_CHANNEL_ROOM_MEMBER)
             on update cascade on delete cascade,
     constraint channels_messages_channels_rooms_ID_CHANNEL_ROOM_fk
         foreign key (ID_CHANNEL_ROOM) references republichat.channels_rooms (ID_CHANNEL_ROOM)
             on update cascade on delete cascade
-);
+)
+    charset = utf8;
 
 create or replace table republichat.channels_rooms_permissions
 (
@@ -110,7 +117,8 @@ create or replace table republichat.channels_rooms_permissions
     constraint FK_CRP_TO_CRM
         foreign key (ID_CHANNEL_ROOM_MEMBER) references republichat.channels_rooms_members (ID_CHANNEL_ROOM_MEMBER)
             on update cascade on delete cascade
-);
+)
+    charset = utf8;
 
 create or replace table republichat.sessions
 (
@@ -131,7 +139,8 @@ create or replace table republichat.sessions
     constraint FK_USERS_1
         foreign key (ID_USER) references republichat.users (ID_USER)
             on update cascade on delete cascade
-);
+)
+    charset = utf8;
 
 create or replace table republichat.settings
 (
@@ -147,8 +156,5 @@ create or replace table republichat.settings
     constraint settings_users_ID_USER_fk
         foreign key (ID_USER) references republichat.users (ID_USER)
             on update cascade on delete cascade
-);
-
-ALTER DATABASE republichat CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
-
-alter schema republichat collate utf8mb4_unicode_ci;
+)
+    charset = utf8;

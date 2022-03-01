@@ -1,18 +1,16 @@
-<ng-container>
-    <img *ngIf="src != null" class="user-image" [src]="src"
-        [style.minWidth]="width"
-        [style.maxWidth]="width"
-        [style.minHeight]="height"
-        [style.maxHeight]="height"
-    >
+<img *ngIf="src != null" class="user-image" [src]="src"
+    [style.minWidth]="width"
+    [style.maxWidth]="width"
+    [style.minHeight]="height"
+    [style.maxHeight]="height"
+>
 
-    <span class="user-image absent-image" *ngIf="src == null" matRipple
-        [style.minWidth]="width"
-        [style.minHeight]="height"
-        [style.background]="color"
-        [style.minHeight]="height"
-        [style.maxHeight]="height"
-    >
-        <h1 *ngIf="letter">{{letter[0]}}</h1>
-    </span>
-</ng-container>
+<span class="user-image absent-image" *ngIf="src == null" matRipple
+    [style.minWidth]="width"
+    [style.minHeight]="height"
+    [style.background]="color"
+    [style.minHeight]="height"
+    [style.maxHeight]="height"
+>
+    <h1 *ngIf="letter">{{letter[0]}}</h1>
+</span>

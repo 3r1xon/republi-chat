@@ -192,7 +192,7 @@ export class REPChatComponent implements AfterViewInit, OnDestroy {
 
     if (index == 0) return true;
 
-    const before = this.messages[index-1]?.date;
+    const before = new Date(this.messages[index-1]?.date);
 
     const after = new Date(date);
 

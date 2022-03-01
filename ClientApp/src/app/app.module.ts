@@ -25,6 +25,7 @@ import { PAppearanceComponent } from './pages/p-settings/p-appearance/p-appearan
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MainpageModule } from './pages/p-mainpage/mainpage.module';
 import { REPModule } from './lib/rep.module';
+import { MatRippleModule } from '@angular/material/core';
 
 
 
@@ -55,6 +56,7 @@ import { REPModule } from './lib/rep.module';
     DragDropModule,
     MatTooltipModule,
     MainpageModule,
+    MatRippleModule,
     REPModule
   ],
   providers: [
