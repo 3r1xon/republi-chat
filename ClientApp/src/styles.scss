@@ -74,6 +74,9 @@ a {
   height: 5px;
 }
 
+::-webkit-scrollbar-track {
+}
+
 ::-webkit-scrollbar-thumb {
   border-radius: 10px;
   background: var(--GREY);

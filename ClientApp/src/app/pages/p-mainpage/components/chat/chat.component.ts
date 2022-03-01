@@ -21,9 +21,9 @@ export class ChatComponent {
   @ViewChild(REPChatComponent) private chat: REPChatComponent;
 
   protected readonly messageSubscription: Subscription = this._msService.messages$
-  .subscribe(() => {
-    this.chat.reset();
-  });
+    .subscribe(() => {
+      this.chat.reset();
+    });
 
   public readonly msgOptions: Array<REPButton> = [
     {
