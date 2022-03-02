@@ -9,11 +9,11 @@ import { UtilsService } from 'src/services/utils.service';
 import { REPButton } from 'src/interfaces/repbutton.interface';
 
 @Component({
-  selector: 'rep-status-bar',
-  templateUrl: './rep-status-bar.component.html',
-  styleUrls: ['./rep-status-bar.component.scss']
+  selector: 'status-bar',
+  templateUrl: './status-bar.component.html',
+  styleUrls: ['./status-bar.component.scss']
 })
-export class REPStatusBarComponent {
+export class StatusBarComponent {
 
   constructor(
     public _utils: UtilsService,

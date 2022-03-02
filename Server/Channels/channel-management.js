@@ -182,6 +182,94 @@ router.get('/getChannelRooms/:id', (req, res) => {
 
 
 
+router.get("/getChannelPermissions/:id", async (req, res) => {
+
+  const _id        = res.locals._id;
+  const _channelID = req.params.id;
+  const user       = new DBUser(_id);
+
+  user.setChannel(_channelID, async (err, user) => {
+    if (err) {
+      res.status(401).send({ success: false, message: "User not in channel!" });
+    } else {
+
+      try {
+
+        const permissions = await REPQuery.one(
+        `
+        SELECT DELETE_MESSAGES   as deleteMessage,
+               KICK_MEMBERS      as kickMembers,
+               BAN_MEMBERS       as banMembers,
+               SEND_MESSAGES     as sendMessages
+        FROM CHANNELS_PERMISSIONS
+        WHERE ID_CHANNEL_MEMBER = ?
+        `, [user.channelMemberID]);
+
+        REPTools.keysToBool(permissions);
+
+        permissions.id = user.channelMemberID;
+
+        res.status(200).send({ success: true, data: permissions });
+      }
+      catch (error) {
+        console.log(clc.red(error));
+
+        res.status(500).send({ success: false, message: "Internal server error!" });
+      }
+    }
+  });
+});
+
+
+
+router.get('/getChRoomPermissions/:chID/:roomID', (req, res) => {
+
+  try {
+
+    const userID = res.locals._id;
+
+    const channelID = req.params.chID;
+
+    const roomID = req.params.roomID;
+
+    const user = new DBUser(userID);
+
+    user.setChannel(channelID, (chErr) => {
+      if (chErr) {
+        res.status(401).send({ success: false, message: "User not in channel!" });
+      } else {
+
+        user.setRoom(roomID, async (roomError) => {
+          if (roomError) {
+            res.status(401).send({ success: false, message: "User not in room!" });
+          } else {
+
+            const permissions = await REPQuery.one(
+            `
+            SELECT SEND_MESSAGES   as sendMessages,
+                   DELETE_MESSAGES as deleteMessages
+            FROM CHANNELS_ROOMS_PERMISSIONS
+            WHERE ID_CHANNEL_ROOM_MEMBER = ?
+            `, user.roomMemberID);
+
+            permissions.id = user.roomMemberID;
+
+            res.status(200).send({ success: true, data: permissions });
+          }
+        });
+
+      }
+    })
+
+  } catch (error) {
+    console.log(clc.red(error));
+    res.status(500).send({ success: false, message: `Internal server error!!` });
+  }
+
+});
+
+
+
 io.on("connection", (socket) => { 
 
   const userID = socket.auth._id;

@@ -15,7 +15,6 @@ import { REPSeparatorComponent } from './rep-separator/rep-separator.component';
 import { REPErrorComponent } from './rep-error/rep-error.component';
 import { REPTextareaComponent } from './rep-textarea/rep-textarea.component';
 import { REPInfoComponent } from './rep-info/rep-info.component';
-import { REPStatusBarComponent } from './rep-status-bar/rep-status-bar.component';
 import { REPProfilePicComponent } from './rep-profile-pic/rep-profile-pic.component';
 import { REPIconButtonComponent } from './rep-icon-button/rep-icon-button.component';
 import { REPImgUploadComponent } from './rep-img-upload/rep-img-upload.component';
@@ -51,7 +50,6 @@ import { REPTabsComponent } from './rep-tabs/rep-tabs.component';
     REPErrorComponent,
     REPTextareaComponent,
     REPInfoComponent,
-    REPStatusBarComponent,
     REPProfilePicComponent,
     REPIconButtonComponent,
     REPImgUploadComponent,
@@ -77,7 +75,6 @@ import { REPTabsComponent } from './rep-tabs/rep-tabs.component';
     REPErrorComponent,
     REPTextareaComponent,
     REPInfoComponent,
-    REPStatusBarComponent,
     REPProfilePicComponent,
     REPIconButtonComponent,
     REPImgUploadComponent,

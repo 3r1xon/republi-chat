@@ -8,7 +8,7 @@ import { FileUploadService } from './file-upload.service';
 import { Channel } from 'src/interfaces/channel.interface';
 import { Room } from 'src/interfaces/room.interface';
 import { Subject, Subscription } from 'rxjs';
-import { ChannelPermissions } from 'src/interfaces/channelPermissions.interface';
+import { ChannelPermissions, RoomPermissions } from 'src/interfaces/channelPermissions.interface';
 import { UtilsService } from './utils.service';
 import { WebSocketService } from './websocket.service';
 
@@ -40,6 +40,8 @@ export class MessagesService {
 
   public chPermissions: ChannelPermissions;
 
+  public roomPermissions: RoomPermissions;
+
   private msSubscriptions: Array<Subscription> = [];
 
   private chSubscriptions: Array<Subscription> = [];
@@ -55,7 +57,6 @@ export class MessagesService {
       (res: ServerResponse) => {
         if (res.success) {
           this.channels = res.data;
-          console.log(this.channels)
 
           this.destroyChSubscriptions();
 
@@ -104,7 +105,7 @@ export class MessagesService {
             this.currentChannel.rooms = res.data;
 
             if (this.currentChannel.rooms.text.length > 0)
-              this.listRoomMessages(channel, this.currentChannel.rooms.text[0]);
+              this.joinRoom(channel, this.currentChannel.rooms.text[0]);
           });
       }
     ).catch(() => { 
@@ -112,83 +113,91 @@ export class MessagesService {
     });
   }
 
-  public listRoomMessages(channel: Channel, room: Room) {
+  public joinRoom(channel: Channel, room: Room) {
 
-    this.API_getRoomMessages(channel, room, 50)
-    .toPromise()
-    .then(
-      (res: ServerResponse) => {
-
-        if (res.success) {
+    this.API_getChRoomPermissions(channel, room)
+      .toPromise()
+      .then(
+        (resRoom: ServerResponse) => {
 
           this.currentRoom = room;
 
-          this.destroyMsSubscriptions();
+          this.roomPermissions = resRoom.data as RoomPermissions;
 
-          const mapMsg = (msg: Message) => {
-            msg.picture = this._fileUpload.sanitizeIMG(msg.picture);
-            msg.date = new Date(msg.date);
-            msg.auth = this.chPermissions.id === msg.author;
-            return msg;
-          };
+          this.API_getRoomMessages(channel, room, 50)
+          .toPromise()
+          .then(
+            (res: ServerResponse) => {
 
-          this.messages = res.data?.map((msg: Message) => {
-            return mapMsg(msg);
+              if (res.success) {
+
+                this.destroyMsSubscriptions();
+
+                const mapMsg = (msg: Message) => {
+                  msg.picture = this._fileUpload.sanitizeIMG(msg.picture);
+                  msg.date = new Date(msg.date);
+                  msg.auth = this.chPermissions.id === msg.author;
+                  return msg;
+                };
+
+                this.messages = res.data?.map((msg: Message) => {
+                  return mapMsg(msg);
+                });
+
+                this.messages$.next();
+
+                this._webSocket.emit("joinRoom", {
+                  channel: channel.id,
+                  room: room.roomID,
+                  userID: this._user.currentUser.id
+                });
+
+                // Initializes all sockets
+                this.msSubscriptions
+                .push(
+                  this._webSocket.listen("message")
+                    .subscribe((message: string) => {
+                      const msg = JSON.parse(message) as Message;
+                      this.messages.push(mapMsg(msg));
+                    })
+                );
+
+                this.msSubscriptions
+                .push(
+                  this._webSocket.listen("deleteMessage")
+                    .subscribe((_id: number) => {
+                      const index = this.messages.findIndex(msg => msg.id == _id);
+                      this.messages.splice(index, 1);
+                    })
+                );
+
+                this.msSubscriptions
+                .push(
+                  this._webSocket.listen("connect")
+                    .subscribe(() => {
+                      const channel = this.currentChannel;
+
+                      if (this.currentRoom) {
+                        this.currentRoom = undefined;
+
+                        this.joinChannel(channel);
+                      }
+                    })
+                );
+
+                this.msSubscriptions
+                .push(
+                  this._webSocket.listen("disconnect")
+                    .subscribe(() => {
+                    })
+                );
+              }
+            }
+          ).catch(() => {
+            this._utils.showBugReport("Server error!", "There has been an error while requesting the messages!", false);
           });
-
-          this.messages$.next();
-
-          this._webSocket.emit("joinRoom", {
-            channel: channel.id,
-            room: room.roomID,
-            userID: this._user.currentUser.id
-          });
-
-          // Initializes all sockets
-          this.msSubscriptions
-          .push(
-            this._webSocket.listen("message")
-              .subscribe((message: string) => {
-                const msg = JSON.parse(message) as Message;
-                this.messages.push(mapMsg(msg));
-              })
-          );
-
-          this.msSubscriptions
-          .push(
-            this._webSocket.listen("deleteMessage")
-              .subscribe((_id: number) => {
-                const index = this.messages.findIndex(msg => msg.id == _id);
-                this.messages.splice(index, 1);
-              })
-          );
-
-          this.msSubscriptions
-          .push(
-            this._webSocket.listen("connect")
-              .subscribe(() => {
-                const channel = this.currentChannel;
-
-                if (this.currentRoom) {
-                  this.currentRoom = undefined;
-
-                  this.joinChannel(channel);
-                }
-              })
-          );
-
-          this.msSubscriptions
-          .push(
-            this._webSocket.listen("disconnect")
-              .subscribe(() => {
-              })
-          );
         }
-      }
-    ).catch(() => {
-      this._utils.showBugReport("Server error!", "There has been an error while requesting the messages!", false);
-    });
-
+      );
   }
 
   public API_getChannels() {
@@ -204,7 +213,11 @@ export class MessagesService {
   }
 
   public API_getChPermissions(channel: Channel) {
-    return this.http.get<ServerResponse>(`${server.BASE_URL}/messages/getChannelPermissions/${channel.id}`);
+    return this.http.get<ServerResponse>(`${server.BASE_URL}/channels/getChannelPermissions/${channel.id}`);
+  }
+
+  public API_getChRoomPermissions(channel: Channel, room: Room) {
+    return this.http.get<ServerResponse>(`${server.BASE_URL}/channels/getChRoomPermissions/${channel.id}/${room.roomID}`);
   }
 
   public leaveChannel(room: number) {

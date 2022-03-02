@@ -5,3 +5,9 @@ export interface ChannelPermissions {
     banMembers: boolean;
     sendMessages: boolean;
 }
+
+export interface RoomPermissions {
+    id: number;
+    sendMessages: boolean;
+    banMembers: boolean;
+}

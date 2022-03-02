@@ -67,49 +67,6 @@ router.get('/getRoomMessages/:chID/:roomID/:limit', async (req, res) => {
 
 
 
-router.get("/getChannelPermissions/:id", async (req, res) => {
-
-  const _id        = res.locals._id;
-  const _channelID = req.params.id;
-  const user       = new DBUser(_id);
-
-  user.setChannel(_channelID, async (err, user) => {
-    if (err) {
-      res.status(401).send({ success: false, message: "User not in channel!" });
-    } else {
-
-      try {
-
-        const permissions = await REPQuery.one(
-        `
-        SELECT ID_CHANNEL_MEMBER as id,
-               DELETE_MESSAGES   as deleteMessage,
-               KICK_MEMBERS      as kickMembers,
-               BAN_MEMBERS       as banMembers,
-               SEND_MESSAGES     as sendMessages
-        FROM CHANNELS_PERMISSIONS
-        WHERE ID_CHANNEL_MEMBER = ?
-        `, [user.channelMemberID]);
-
-        const _id = permissions.id;
-
-        REPTools.keysToBool(permissions);
-
-        permissions.id = _id;
-
-        res.status(200).send({ success: true, data: permissions });
-      }
-      catch (error) {
-        console.log(clc.red(error));
-
-        res.status(500).send({ success: false, message: "Internal server error!" });
-      }
-    }
-  });
-});
-
-
-
 io.on("connection", (socket) => {
 
   const userID = socket.auth._id;

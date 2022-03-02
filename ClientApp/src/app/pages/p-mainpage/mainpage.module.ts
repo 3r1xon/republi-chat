@@ -3,7 +3,9 @@ import { CommonModule } from '@angular/common';
 import { ChatComponent } from './components/chat/chat.component';
 import { ChannelsComponent } from './components/channels/channels.component';
 import { ChannelInfoComponent } from './components/channel-info/channel-info.component';
+import { StatusBarComponent } from './components/status-bar/status-bar.component';
 import { REPModule } from 'src/app/lib/rep.module';
+import { AppRoutingModule } from 'src/app/app-routing.module';
 
 
 
@@ -11,15 +13,18 @@ import { REPModule } from 'src/app/lib/rep.module';
   declarations: [
     ChatComponent,
     ChannelsComponent,
-    ChannelInfoComponent
+    ChannelInfoComponent,
+    StatusBarComponent
   ],
   exports: [
     ChatComponent,
     ChannelsComponent,
-    ChannelInfoComponent
+    ChannelInfoComponent,
+    StatusBarComponent
   ],
   imports: [
     CommonModule,
+    AppRoutingModule,
     REPModule
   ]
 })

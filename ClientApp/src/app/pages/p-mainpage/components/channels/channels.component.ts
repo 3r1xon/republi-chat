@@ -68,7 +68,7 @@ export class ChannelsComponent {
   selectRoom(room: Room) {
     if (room.roomID == this._msService.currentRoom.roomID) return;
 
-    this._msService.listRoomMessages(this._msService.currentChannel, room);
+    this._msService.joinRoom(this._msService.currentChannel, room);
   }
 
   expandChannel(index: number) {

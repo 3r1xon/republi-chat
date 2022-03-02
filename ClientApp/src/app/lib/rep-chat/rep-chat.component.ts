@@ -176,7 +176,7 @@ export class REPChatComponent implements AfterViewInit, OnDestroy {
   }
 
   @HostListener('document:click', ['$event'])
-  clickout(): void {
+  clickout(event): void {
     if (!this.eRef.nativeElement.contains(event.target)) {
       this.deselectAll();
     }
