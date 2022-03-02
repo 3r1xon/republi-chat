@@ -155,12 +155,12 @@ class DBUser {
 
       const chMbr = await REPQuery.one(
       `
-      SELECT ID_CHANNEL_MEMBER
-      FROM CHANNELS_MESSAGES
-      WHERE ID_CHANNEL_MESSAGE = ?
+      SELECT ID_CHANNEL_ROOM_MEMBER
+      FROM CHANNELS_ROOMS_MESSAGES
+      WHERE ID_CHANNEL_ROOM_MESSAGE = ?
       `, [id]);
 
-      if (chMbr.ID_CHANNEL_MEMBER == this.channelMemberID) {
+      if (chMbr.ID_CHANNEL_ROOM_MEMBER == this.roomMemberID) {
         callback(null, this);
       } else {
         callback(new Error("Message not belonging to user!"), null);

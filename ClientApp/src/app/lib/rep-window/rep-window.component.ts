@@ -1,11 +1,11 @@
-import { 
-  ChangeDetectorRef, 
-  Component, 
-  ElementRef, 
-  HostListener, 
+import {
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  HostListener,
   Input,
-  Output, 
-  ViewChild 
+  Output,
+  ViewChild
 } from '@angular/core';
 import { REPButton } from 'src/interfaces/repbutton.interface';
 import { EventEmitter } from '@angular/core';
@@ -25,6 +25,7 @@ export class REPWindowComponent {
   @Input()
   public subMenu: Array<REPButton>;
 
+  @Input()
   public state: boolean = false;
 
   @Output()

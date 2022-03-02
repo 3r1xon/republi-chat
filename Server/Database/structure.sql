@@ -13,7 +13,7 @@ create or replace table republichat.users
     constraint USERS_EMAIL_uindex
         unique (EMAIL)
 )
-    charset = utf8;
+    charset = utf8mb3;
 
 create or replace table republichat.channels
 (
@@ -28,7 +28,32 @@ create or replace table republichat.channels
         foreign key (ID_USER) references republichat.users (ID_USER)
             on update cascade on delete cascade
 )
-    charset = utf8;
+    charset = utf8mb3;
+
+create or replace definer = root@localhost trigger republichat.channels_trigger
+    after insert
+    on republichat.channels
+    for each row
+BEGIN
+    DECLARE NEW_ID_CHANNEL bigint;
+    DECLARE NEW_ID_CHANNEL_MEMBER bigint;
+    DECLARE NEW_ID_CHANNEL_ROOM bigint;
+
+    SET NEW_ID_CHANNEL = NEW.ID_CHANNEL;
+
+    insert into channels_members(ID_USER, ID_CHANNEL, JOIN_DATE)
+    values (NEW.ID_USER, NEW_ID_CHANNEL, current_timestamp());
+
+    SET NEW_ID_CHANNEL_MEMBER = (SELECT ID_CHANNEL_MEMBER FROM CHANNELS_MEMBERS WHERE ID_CHANNEL = NEW_ID_CHANNEL);
+
+    insert into channels_rooms(ID_CHANNEL, ID_CHANNEL_MEMBER, ROOM_NAME, TEXT_ROOM, AUTO_JOIN)
+    values (NEW_ID_CHANNEL, NEW_ID_CHANNEL_MEMBER, 'Default', true, true);
+
+    SET NEW_ID_CHANNEL_ROOM = (SELECT ID_CHANNEL_ROOM FROM channels_rooms WHERE ID_CHANNEL = NEW_ID_CHANNEL);
+
+    insert into channels_rooms_members(id_channel_member, id_channel_room)
+    values (NEW_ID_CHANNEL_MEMBER, NEW_ID_CHANNEL_ROOM);
+END;
 
 create or replace table republichat.channels_members
 (
@@ -43,7 +68,29 @@ create or replace table republichat.channels_members
         foreign key (ID_CHANNEL) references republichat.channels (ID_CHANNEL)
             on update cascade on delete cascade
 )
-    charset = utf8;
+    charset = utf8mb3;
+
+create or replace definer = root@localhost trigger republichat.CHANNELS_MEMBERS_TRIGGER
+    after insert
+    on republichat.channels_members
+    for each row
+BEGIN
+    IF NEW.ID_USER = (SELECT ID_USER
+                      FROM CHANNELS CH
+                      WHERE CH.ID_CHANNEL = NEW.ID_CHANNEL) THEN
+        INSERT INTO CHANNELS_PERMISSIONS(ID_CHANNEL_MEMBER, DELETE_MESSAGES, KICK_MEMBERS, BAN_MEMBERS,
+                                         SEND_MESSAGES)
+        VALUES (NEW.ID_CHANNEL_MEMBER, TRUE, TRUE, TRUE, TRUE);
+    ELSE
+        INSERT INTO CHANNELS_PERMISSIONS(ID_CHANNEL_MEMBER, DELETE_MESSAGES, KICK_MEMBERS, BAN_MEMBERS,
+                                         SEND_MESSAGES, CREATE_ROOMS)
+        VALUES (NEW.ID_CHANNEL_MEMBER, FALSE, FALSE, FALSE, TRUE, TRUE);
+    END IF;
+
+    INSERT INTO CHANNELS_ROOMS_MEMBERS(ID_CHANNEL_ROOM, ID_CHANNEL_MEMBER)
+    SELECT ID_CHANNEL_ROOM, NEW.ID_CHANNEL_MEMBER FROM CHANNELS_ROOMS WHERE AUTO_JOIN = TRUE AND ID_CHANNEL = NEW.ID_CHANNEL;
+
+END;
 
 create or replace table republichat.channels_permissions
 (
@@ -54,25 +101,30 @@ create or replace table republichat.channels_permissions
     KICK_MEMBERS          tinyint(1) default 0 null,
     BAN_MEMBERS           tinyint(1) default 0 null,
     SEND_MESSAGES         tinyint(1) default 1 null,
+    CREATE_ROOMS          tinyint(1) default 0 null,
     constraint FK_MEMBERS
         foreign key (ID_CHANNEL_MEMBER) references republichat.channels_members (ID_CHANNEL_MEMBER)
             on update cascade on delete cascade
 )
-    charset = utf8;
+    charset = utf8mb3;
 
 create or replace table republichat.channels_rooms
 (
-    ID_CHANNEL_ROOM bigint auto_increment
+    ID_CHANNEL_ROOM   bigint auto_increment
         primary key,
-    ID_CHANNEL      bigint                                 not null,
-    ROOM_NAME       varchar(30) collate utf8mb4_unicode_ci null,
-    TEXT_ROOM       tinyint(1) default 1                   null,
-    AUTO_JOIN       tinyint(1) default 0                   null,
+    ID_CHANNEL        bigint                                 not null,
+    ID_CHANNEL_MEMBER bigint                                 not null,
+    ROOM_NAME         varchar(30) collate utf8mb4_unicode_ci null,
+    TEXT_ROOM         tinyint(1) default 1                   null,
+    AUTO_JOIN         tinyint(1) default 0                   null,
     constraint channels_rooms_channels_ID_CHANNEL_fk
         foreign key (ID_CHANNEL) references republichat.channels (ID_CHANNEL)
+            on update cascade on delete cascade,
+    constraint channels_rooms_channels_members_ID_CHANNEL_MEMBER_fk
+        foreign key (ID_CHANNEL_MEMBER) references republichat.channels_members (ID_CHANNEL_MEMBER)
             on update cascade on delete cascade
 )
-    charset = utf8;
+    charset = utf8mb3;
 
 create or replace table republichat.channels_rooms_members
 (
@@ -88,7 +140,25 @@ create or replace table republichat.channels_rooms_members
         foreign key (ID_CHANNEL_MEMBER) references republichat.channels_members (ID_CHANNEL_MEMBER)
             on update cascade on delete cascade
 )
-    charset = utf8;
+    charset = utf8mb3;
+
+create or replace definer = root@localhost trigger republichat.CHANNELS_ROOMS_MEMBERS_TRIGGER
+    after insert
+    on republichat.channels_rooms_members
+    for each row
+BEGIN
+
+    IF NEW.ID_CHANNEL_MEMBER =
+       (SELECT ID_CHANNEL_MEMBER FROM channels_rooms WHERE ID_CHANNEL_ROOM = NEW.ID_CHANNEL_ROOM) THEN
+
+        INSERT INTO channels_rooms_permissions (ID_CHANNEL_ROOM_MEMBER, SEND_MESSAGES, DELETE_MESSAGES)
+        VALUES (NEW.ID_CHANNEL_ROOM_MEMBER, true, true);
+    ELSE
+        INSERT INTO channels_rooms_permissions (ID_CHANNEL_ROOM_MEMBER, SEND_MESSAGES, DELETE_MESSAGES)
+        VALUES (NEW.ID_CHANNEL_ROOM_MEMBER, true, false);
+    END IF;
+
+END;
 
 create or replace table republichat.channels_rooms_messages
 (
@@ -105,7 +175,7 @@ create or replace table republichat.channels_rooms_messages
         foreign key (ID_CHANNEL_ROOM) references republichat.channels_rooms (ID_CHANNEL_ROOM)
             on update cascade on delete cascade
 )
-    charset = utf8;
+    charset = utf8mb3;
 
 create or replace table republichat.channels_rooms_permissions
 (
@@ -118,7 +188,7 @@ create or replace table republichat.channels_rooms_permissions
         foreign key (ID_CHANNEL_ROOM_MEMBER) references republichat.channels_rooms_members (ID_CHANNEL_ROOM_MEMBER)
             on update cascade on delete cascade
 )
-    charset = utf8;
+    charset = utf8mb3;
 
 create or replace table republichat.sessions
 (
@@ -140,7 +210,7 @@ create or replace table republichat.sessions
         foreign key (ID_USER) references republichat.users (ID_USER)
             on update cascade on delete cascade
 )
-    charset = utf8;
+    charset = utf8mb3;
 
 create or replace table republichat.settings
 (
@@ -157,4 +227,10 @@ create or replace table republichat.settings
         foreign key (ID_USER) references republichat.users (ID_USER)
             on update cascade on delete cascade
 )
-    charset = utf8;
+    charset = utf8mb3;
+
+create or replace definer = root@localhost trigger republichat.settings_trigger
+    after insert
+    on republichat.users
+    for each row
+    insert into settings(ID_USER) values (NEW.ID_USER);
