@@ -42,7 +42,7 @@ export class REPTextBoxComponent {
 
   public async send(event) {
 
-    if (this.form.valid) {
+    if (this.form.valid && this.enabled) {
       const txt = this.form.value["text"].trim();
       this.sendMessage.emit(txt);
       this.form.reset();

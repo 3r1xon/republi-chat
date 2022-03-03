@@ -254,6 +254,8 @@ router.get('/getChRoomPermissions/:chID/:roomID', (req, res) => {
             WHERE ID_CHANNEL_ROOM_MEMBER = ?
             `, user.roomMemberID);
 
+            REPTools.keysToBool(permissions);
+
             permissions.id = user.roomMemberID;
 
             res.status(200).send({ success: true, data: permissions });

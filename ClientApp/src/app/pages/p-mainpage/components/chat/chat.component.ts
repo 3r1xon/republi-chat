@@ -51,7 +51,7 @@ export class ChatComponent {
           return true;
         }
 
-        return this._msService.chPermissions.deleteMessage;
+        return this._msService.roomPermissions.deleteMessage;
       },
       onClick: (msgIndex: number) => {
         this._utils.showRequest("Delete message", "Are you sure you want to delete this message?", () => {
@@ -111,7 +111,7 @@ export class ChatComponent {
       background: "danger",
       visible: () => this.chat?.selections.length > 0,
       enabled: () => {
-        if (this._msService.chPermissions.deleteMessage)
+        if (this._msService.roomPermissions.deleteMessage)
           return true;
         return !this.chat.selections.some((msg: Message) => msg.auth == false);
       },

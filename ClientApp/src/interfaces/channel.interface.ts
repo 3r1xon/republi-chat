@@ -12,3 +12,17 @@ export interface Channel {
     color?: string;
     backgroundColor?: string;
 }
+
+export interface ChannelPermissions {
+    id: number;
+    deleteMessage: boolean;
+    kickMembers: boolean;
+    banMembers: boolean;
+    sendMessages: boolean;
+}
+
+export interface RoomPermissions {
+    id: number;
+    sendMessages: boolean;
+    deleteMessage: boolean;
+}

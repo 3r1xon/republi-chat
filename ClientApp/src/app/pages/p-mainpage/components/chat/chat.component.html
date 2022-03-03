@@ -1,6 +1,6 @@
 <rep-chat
     [messages]="_msService.messages"
-    [textboxEnabled]="_msService.chPermissions?.sendMessages"
+    [textboxEnabled]="_msService.roomPermissions?.sendMessages"
     [chatName]="displayChatName()"
     [msOptions]="msgOptions"
     [chatOptions]="chatOptions"

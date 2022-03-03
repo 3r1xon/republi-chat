@@ -8,7 +8,7 @@ import { FileUploadService } from './file-upload.service';
 import { Channel } from 'src/interfaces/channel.interface';
 import { Room } from 'src/interfaces/room.interface';
 import { Subject, Subscription } from 'rxjs';
-import { ChannelPermissions, RoomPermissions } from 'src/interfaces/channelPermissions.interface';
+import { ChannelPermissions, RoomPermissions } from 'src/interfaces/channel.interface';
 import { UtilsService } from './utils.service';
 import { WebSocketService } from './websocket.service';
 
@@ -77,7 +77,7 @@ export class MessagesService {
 
           this.channels$.next();
         }
-      } 
+      }
     ).catch(() => { });
   }
 
