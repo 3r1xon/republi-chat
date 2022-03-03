@@ -40,6 +40,7 @@ export class PNewChannelComponent {
     {
       name: "Create channel",
       icon: "save",
+      type: "submit",
       enabled: () => this.formCreation.valid,
       background: "success",
       onClick: () => { this.createChannel(); }

@@ -9,4 +9,6 @@ export interface Channel {
     },
     code?: string;
     picture?: any;
+    color?: string;
+    backgroundColor?: string;
 }

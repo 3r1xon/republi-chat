@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { Channel } from 'src/interfaces/channel.interface';
@@ -12,7 +12,7 @@ import { UtilsService } from 'src/services/utils.service';
   templateUrl: './channels.component.html',
   styleUrls: ['./channels.component.scss']
 })
-export class ChannelsComponent {
+export class ChannelsComponent implements OnInit {
 
   constructor(
     public _msService: MessagesService,
@@ -20,8 +20,16 @@ export class ChannelsComponent {
     private router: Router,
   ) { }
 
+  ngOnInit(): void {
+    this.fillSections();
+  }
+
   protected readonly channelSubscription: Subscription = this._msService.channels$
   .subscribe(() => {
+    this.fillSections();
+  });
+
+  private fillSections() {
     const channelsRef = this.channels.find(tab => tab.tabname == "Channels");
 
     channelsRef.sections = this._msService.channels.map((ch) => {
@@ -29,7 +37,9 @@ export class ChannelsComponent {
         id: ch.id,
         name: ch.name,
         message: ch.code,
-        picture: ch.picture
+        picture: ch.picture,
+        color: ch.color,
+        backgroundColor: ch.backgroundColor
       };
     });
 
@@ -38,11 +48,11 @@ export class ChannelsComponent {
     if (channel) {
       this._msService.joinChannel(channel);
     }
-  });
+  }
 
   public channelsTab: number = 0;
 
-  public channels: Array<{ 
+  public channels: Array<{
     tabname: string,
     icon?: string,
     sections: Array<any>

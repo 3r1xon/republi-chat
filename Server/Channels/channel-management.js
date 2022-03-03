@@ -38,10 +38,10 @@ router.post('/createChannel', upload.single("image"), async (req, res) => {
         const newChannel = await REPQuery.one(
         `
         INSERT INTO CHANNELS
-            (ID_USER, NAME, CHANNEL_CODE, PICTURE, CREATION_DATE)
-        VALUES (?, ?, ?, ?, ?)
-        RETURNING ID_CHANNEL as id, NAME as name, CHANNEL_CODE as code, PICTURE as picture
-        `, [_userID, channel.name, code, channel.picture, creationDate]);
+            (ID_USER, NAME, CHANNEL_CODE, PICTURE, CREATION_DATE, BACKGROUND_COLOR)
+        VALUES (?, ?, ?, ?, ?, ?)
+        RETURNING ID_CHANNEL as id, NAME as name, CHANNEL_CODE as code, PICTURE as picture, COLOR as color, BACKGROUND_COLOR as backgroundColor
+        `, [_userID, channel.name, code, channel.picture, creationDate, REPTools.randomHex()]);
 
         // Triggers will take care of the rest
 
@@ -115,12 +115,14 @@ router.get('/getChannels', async (req, res) => {
 
     const channels = await REPQuery.load(
     `
-    SELECT C.ID_CHANNEL   as id,
-           C.NAME         as name,
-           C.CHANNEL_CODE as code,
-           C.PICTURE      as picture
+    SELECT C.ID_CHANNEL       as id,
+           C.NAME             as name,
+           C.CHANNEL_CODE     as code,
+           C.PICTURE          as picture,
+           C.COLOR            as color,
+           C.BACKGROUND_COLOR as backgroundColor
     FROM CHANNELS C
-            LEFT JOIN CHANNELS_MEMBERS CM ON CM.ID_CHANNEL = C.ID_CHANNEL
+             LEFT JOIN CHANNELS_MEMBERS CM ON CM.ID_CHANNEL = C.ID_CHANNEL
     WHERE CM.ID_USER = ?
       AND CM.BANNED = ?
       AND CM.KICKED = ?
