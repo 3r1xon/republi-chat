@@ -1,4 +1,19 @@
-<div class="submenu" #submenu
+<mat-icon (click)="openSubMenu($event)" class="more"
+    [ngStyle]="{
+        background: state ? '#24252a' : ''
+    }"
+    >more_vert</mat-icon>
+
+
+<rep-window
+    [subMenu]="subMenu"
+    [state]="state"
+    [uniqueID]="uniqueID"
+>
+
+</rep-window>
+
+<!-- <div class="submenu" *ngIf="state" #submenu
     [style.left]="offsetX + 'px'"
     [style.top]="offsetY + 'px'">
     <rep-button *ngFor="let section of subMenu" matRipple
@@ -14,4 +29,4 @@
 
         {{section.name}}
     </rep-button>
-</div>
+</div> -->

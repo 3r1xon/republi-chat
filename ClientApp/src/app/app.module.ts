@@ -43,7 +43,7 @@ import { MatRippleModule } from '@angular/material/core';
     PUnauthorizedComponent,
     PNewChannelComponent,
     PNotFoundComponent,
-    PAppearanceComponent
+    PAppearanceComponent,
   ],
   imports: [
     BrowserModule,

@@ -33,7 +33,7 @@ router.post('/createChannel', upload.single("image"), async (req, res) => {
     } else {
       try {
 
-        const _userID = res.locals._id;
+        const userID = res.locals._id;
 
         const newChannel = await REPQuery.one(
         `
@@ -41,7 +41,7 @@ router.post('/createChannel', upload.single("image"), async (req, res) => {
             (ID_USER, NAME, CHANNEL_CODE, PICTURE, CREATION_DATE, BACKGROUND_COLOR)
         VALUES (?, ?, ?, ?, ?, ?)
         RETURNING ID_CHANNEL as id, NAME as name, CHANNEL_CODE as code, PICTURE as picture, COLOR as color, BACKGROUND_COLOR as backgroundColor
-        `, [_userID, channel.name, code, channel.picture, creationDate, REPTools.randomHex()]);
+        `, [userID, channel.name, code, channel.picture, creationDate, REPTools.randomHex()]);
 
         // Triggers will take care of the rest
 
@@ -61,13 +61,18 @@ router.post('/createChannel', upload.single("image"), async (req, res) => {
 router.post('/addChannel', async (req, res) => {
 
   const { name, code } = req.body;
-  const _userID        = res.locals._id;
+  const userID         = res.locals._id;
 
   try {
 
+    // Name and channel code are not selected
+    // but added to the object later
     const channel = await REPQuery.one(
     `
-    SELECT ID_CHANNEL
+    SELECT ID_CHANNEL       as id,
+           PICTURE          as picture,
+           COLOR            as color,
+           BACKGROUND_COLOR as backgroundColor
     FROM CHANNELS
     WHERE NAME = ?
       AND CHANNEL_CODE = ?
@@ -75,11 +80,11 @@ router.post('/addChannel', async (req, res) => {
 
     if (channel) {
 
-      const _channelID = channel.ID_CHANNEL;
+      const channelID = channel.id;
 
-      const user = new DBUser(_userID);
+      const user = new DBUser(userID);
 
-      user.setChannel(_channelID, async (err, user) => {
+      user.setChannel(channelID, async (err, user) => {
         if (err) {
           // It means the user is not in the desired channel so it can be added
           await REPQuery.one(
@@ -87,9 +92,12 @@ router.post('/addChannel', async (req, res) => {
           INSERT INTO CHANNELS_MEMBERS
               (ID_USER, ID_CHANNEL, JOIN_DATE)
           VALUES (?, ?, ?)
-          `, [_userID, _channelID, new Date()]);
+          `, [userID, channelID, new Date()]);
 
-          res.status(201).send({ success: true });
+          channel.name = name;
+          channel.code = code;
+
+          res.status(201).send({ success: true, data: channel });
 
         } else {
 

@@ -1,14 +1,14 @@
-import {
+import { 
   ChangeDetectorRef,
   Component,
   ElementRef,
+  EventEmitter,
   HostListener,
   Input,
   Output,
   ViewChild
 } from '@angular/core';
 import { REPButton } from 'src/interfaces/repbutton.interface';
-import { EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'rep-window',
@@ -84,5 +84,4 @@ export class REPWindowComponent {
       this.open.emit(this.state);
     }
   }
-
 }

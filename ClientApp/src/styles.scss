@@ -70,22 +70,22 @@ a {
 }
 
 ::-webkit-scrollbar {
-  width: 5px;
-  height: 5px;
+  width: 10px;
 }
 
 ::-webkit-scrollbar-track {
+  border: solid 3px transparent;
 }
 
 ::-webkit-scrollbar-thumb {
+  box-shadow: inset 0 0 10px 10px var(--GREY);
+  border: solid 3px transparent;
   border-radius: 10px;
-  background: var(--GREY);
 
   &:hover {
-    background: var(--OBSCURE);
+    box-shadow: inset 0 0 10px 10px var(--OBSCURE);
   }
 }
-
 
 mat-icon {
   user-select: none;

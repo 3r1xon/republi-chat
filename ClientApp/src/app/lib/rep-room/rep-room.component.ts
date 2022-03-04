@@ -13,4 +13,9 @@ export class REPRoomComponent {
 
   @Input() hold: boolean = false;
 
+  openContext(event) {
+    console.log("context");
+    event.preventDefault();
+  }
+
 }

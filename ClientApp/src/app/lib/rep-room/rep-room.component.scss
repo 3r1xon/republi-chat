@@ -17,6 +17,12 @@
         background: lighten($color: #1a1c1d, $amount: 10%);
     }
 
+    p {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+
 }
 
 .hold {

@@ -29,6 +29,7 @@ import { MatRippleModule } from '@angular/material/core';
 import { GlobalErrorHandler } from './error-handler';
 import { StopPropagationDirective } from '../directives/stop-propagation.directive';
 import { REPTabsComponent } from './rep-tabs/rep-tabs.component';
+import { REPMoreComponent } from './rep-more/rep-more.component';
 
 
 
@@ -55,6 +56,7 @@ import { REPTabsComponent } from './rep-tabs/rep-tabs.component';
     REPImgUploadComponent,
     REPAccordionComponent,
     REPRoomComponent,
+    REPMoreComponent,
 
     StopPropagationDirective
   ],
@@ -80,6 +82,7 @@ import { REPTabsComponent } from './rep-tabs/rep-tabs.component';
     REPImgUploadComponent,
     REPAccordionComponent,
     REPRoomComponent,
+    REPMoreComponent,
 
     StopPropagationDirective,
   ],
