@@ -85,9 +85,9 @@ create or replace table republichat.channels_rooms_members
 (
     ID_CHANNEL_ROOM_MEMBER bigint auto_increment
         primary key,
-    ID_CHANNEL_MEMBER      bigint                     null,
-    ID_CHANNEL_ROOM        bigint                     not null,
-    JOIN_DATE              datetime default curdate() null,
+    ID_CHANNEL_MEMBER      bigint                               null,
+    ID_CHANNEL_ROOM        bigint                               not null,
+    JOIN_DATE              datetime default current_timestamp() null,
     constraint CHANNELS_ROOMS_MEMBERS_CHANNELS_ROOMS_ID_CHANNEL_ROOM_FK
         foreign key (ID_CHANNEL_ROOM) references republichat.channels_rooms (ID_CHANNEL_ROOM)
             on update cascade on delete cascade,

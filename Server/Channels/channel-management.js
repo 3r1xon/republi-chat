@@ -164,7 +164,6 @@ router.get('/getChannelRooms/:id', (req, res) => {
                 LEFT JOIN CHANNELS_MEMBERS CM ON CM.ID_CHANNEL_MEMBER = CRMB.ID_CHANNEL_MEMBER
         WHERE CR.ID_CHANNEL = ?
           AND CM.ID_USER = ?
-        ORDER BY CR.TEXT_ROOM DESC
         `, [channelID, userID]);
 
         res.status(200).send({ success: true, data: {

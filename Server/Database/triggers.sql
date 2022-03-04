@@ -1,11 +1,10 @@
-create or replace definer = root@localhost trigger republichat.channels_trigger
+create definer = root@localhost trigger channels_trigger
     after insert
-    on republichat.channels
+    on channels
     for each row
 BEGIN
     DECLARE NEW_ID_CHANNEL bigint;
     DECLARE NEW_ID_CHANNEL_MEMBER bigint;
-    DECLARE NEW_ID_CHANNEL_ROOM bigint;
 
     SET NEW_ID_CHANNEL = NEW.ID_CHANNEL;
 
@@ -17,11 +16,8 @@ BEGIN
     insert into channels_rooms(ID_CHANNEL, ID_CHANNEL_MEMBER, ROOM_NAME, TEXT_ROOM, AUTO_JOIN)
     values (NEW_ID_CHANNEL, NEW_ID_CHANNEL_MEMBER, 'Default', true, true);
 
-    SET NEW_ID_CHANNEL_ROOM = (SELECT ID_CHANNEL_ROOM FROM channels_rooms WHERE ID_CHANNEL = NEW_ID_CHANNEL);
-
-    insert into channels_rooms_members(id_channel_member, id_channel_room)
-    values (NEW_ID_CHANNEL_MEMBER, NEW_ID_CHANNEL_ROOM);
 END;
+
 
 create or replace definer = root@localhost trigger republichat.CHANNELS_MEMBERS_TRIGGER
     after insert
@@ -68,3 +64,21 @@ create or replace definer = root@localhost trigger republichat.settings_trigger
     on republichat.users
     for each row
     insert into settings(ID_USER) values (NEW.ID_USER);
+
+
+create definer = root@localhost trigger CHANNELS_ROOMS_TRIGGER
+    after insert
+    on channels_rooms
+    for each row
+BEGIN
+
+    IF (NEW.AUTO_JOIN = TRUE) THEN
+        INSERT INTO channels_rooms_members(ID_CHANNEL_MEMBER, ID_CHANNEL_ROOM)
+        SELECT ID_CHANNEL_MEMBER, NEW.ID_CHANNEL_ROOM
+        FROM channels_members
+        WHERE ID_CHANNEL = NEW.ID_CHANNEL;
+    ELSE
+        INSERT INTO channels_rooms_members(ID_CHANNEL_MEMBER, ID_CHANNEL_ROOM) VALUES (NEW.ID_CHANNEL_MEMBER, NEW.ID_CHANNEL_ROOM);
+    end if;
+
+END;

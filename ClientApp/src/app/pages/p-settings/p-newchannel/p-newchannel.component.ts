@@ -31,7 +31,7 @@ export class PNewChannelComponent {
     channelName: ['',
       [Validators.required, Validators.maxLength(30)]
     ],
-    channelCode: ['',
+    channelCode: ['0001',
       [Validators.required, Validators.maxLength(4),  Validators.minLength(4)]
     ]
   });
@@ -52,6 +52,7 @@ export class PNewChannelComponent {
       name: "Add channel",
       icon: "add",
       enabled: () => this.formAdd.valid,
+      type: "submit",
       background: "success",
       onClick: () => { this.addChannel(); }
     }
@@ -140,18 +141,19 @@ export class PNewChannelComponent {
                 }
               ]
             );
-          } else {
-            this._utils.showRequest(
-              "Channel not found",
-              `The channel "${channel.name}" was not found, are you sure the name and code is correct?`,
-              [
-                {
-                  name: "Close",
-                  icon: "close",
-                }
-              ]
-            );
           }
+
+        }).catch(() => {
+          this._utils.showRequest(
+            "Channel not found",
+            `The channel "${channel.name}" was not found, are you sure the name and code is correct?`,
+            [
+              {
+                name: "Close",
+                icon: "close",
+              }
+            ]
+          );
         });
 
   }
