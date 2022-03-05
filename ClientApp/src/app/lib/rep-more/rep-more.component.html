@@ -1,32 +1,16 @@
 <mat-icon (click)="openSubMenu($event)" class="more"
-    [ngStyle]="{
-        background: state ? '#24252a' : ''
-    }"
-    >more_vert</mat-icon>
-
+  [ngStyle]="{
+    background: state ? '#24252a' : ''
+  }"
+  [repContext]="subMenu"
+>
+more_vert</mat-icon>
 
 <rep-window
-    [subMenu]="subMenu"
-    [state]="state"
-    [uniqueID]="uniqueID"
+  *ngIf="state"
+  [style.left]="offsetX + 'px'"
+  [style.top]="offsetY + 'px'"
+  [subMenu]="subMenu"
+  [uniqueID]="uniqueID"
 >
-
 </rep-window>
-
-<!-- <div class="submenu" *ngIf="state" #submenu
-    [style.left]="offsetX + 'px'"
-    [style.top]="offsetY + 'px'">
-    <rep-button *ngFor="let section of subMenu" matRipple
-        (mouseenter)="section.highlighted = true"
-        (mouseleave)="section.highlighted = false"
-        [icon]="section.icon"
-        [visible]="section.visible"
-        [enabled]="section.enabled"
-        [uniqueID]="uniqueID"
-        [background]="section.highlighted ? (section.color ? section.color : '#434343') : 'transparent'"
-        [color]="section.highlighted ? '#FFFFFF' : (section.color ? section.color : '#FFFFFF')"
-        (onClick)="section.onClick(uniqueID); state = false; section.highlighted = false;">
-
-        {{section.name}}
-    </rep-button>
-</div> -->

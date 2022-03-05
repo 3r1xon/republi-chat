@@ -2,32 +2,21 @@
 
 
 .more {
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    @include flexCenter(row);
-    transition: 100ms;
-    cursor: pointer;
-    color: var(--WHITE);
-    user-select: none;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  @include flexCenter(row);
+  transition: 100ms;
+  cursor: pointer;
+  color: var(--WHITE);
+  user-select: none;
 
-    &:hover {
-        background: var(--LIGHT-DARK);
-    }
+  &:hover {
+      background: var(--LIGHT-DARK);
+  }
 }
 
-.submenu {
-    position: fixed;
-    background: var(--LIGHT-DARK);
-    @include flexCenter(column);
-    user-select: none;
-    z-index: 1;
-    border-radius: 5px;
-    -webkit-box-shadow: 5px 5px 15px 5px #00000080; 
-    box-shadow: 5px 5px 15px 5px #00000080;
-    padding: 5px;
-
-    rep-button {
-        width: 100%;
-    }
+rep-window {
+  position: fixed;
+  z-index: 1;
 }
