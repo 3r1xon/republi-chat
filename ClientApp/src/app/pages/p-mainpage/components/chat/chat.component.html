@@ -1,9 +1,9 @@
 <rep-chat
-    [messages]="_msService.messages"
-    [textboxEnabled]="_msService.roomPermissions?.sendMessages"
-    [chatName]="displayChatName()"
-    [msOptions]="msgOptions"
-    [chatOptions]="chatOptions"
-    [dateFormat]="_utils.settings.dateFormat"
-    (sendMessage)="sendChannelMessage($event)"
+  [messages]="_msService.messages"
+  [textboxEnabled]="_msService.roomPermissions?.sendMessages"
+  [chatName]="displayChatName()"
+  [msOptions]="msgOptions"
+  [chatOptions]="chatOptions"
+  [dateFormat]="_utils.settings.dateFormat"
+  (sendMessage)="sendChannelMessage($event)"
 ></rep-chat>

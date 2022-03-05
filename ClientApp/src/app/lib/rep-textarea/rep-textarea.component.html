@@ -1,20 +1,20 @@
 <div id="rep-textarea" [ngClass]="{
-        'grayed-out': !enabled,
-        'enabled': enabled
-    }">
+    'grayed-out': !enabled,
+    'enabled': enabled
+  }">
 
-    <textarea
-        [rows]="rows"
-        [cols]="cols"
-        [maxLength]="maxLength"
-        (keydown.enter)="submitHandler($event)"
-        name="text"
-        [(ngModel)]="text"
-        (ngModelChange)="onChange($event)"
-        [disabled]="!enabled"
-        [style.cursor]="enabled ? 'text' : 'not-allowed'"
-        [style.background]="background"
-        [placeholder]="enabled ? placeholder : ''"
-    ></textarea>
+  <textarea
+    [rows]="rows"
+    [cols]="cols"
+    [maxLength]="maxLength"
+    (keydown.enter)="submitHandler($event)"
+    name="text"
+    [(ngModel)]="text"
+    (ngModelChange)="onChange($event)"
+    [disabled]="!enabled"
+    [style.cursor]="enabled ? 'text' : 'not-allowed'"
+    [style.background]="background"
+    [placeholder]="enabled ? placeholder : ''"
+  ></textarea>
 
 </div>

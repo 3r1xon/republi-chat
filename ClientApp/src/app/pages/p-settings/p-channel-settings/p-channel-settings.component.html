@@ -1,9 +1,10 @@
 <div id="p-channelsettings">
 
-    <rep-message
-        *ngFor="let section of _msService.channels; let i = index"
-        [message]="section"
-        [options]="chOptions">
-    </rep-message>
+  <rep-message
+    *ngFor="let section of _msService.channels; let i = index"
+    [message]="section"
+    [options]="chOptions"
+  >
+  </rep-message>
 
 </div>

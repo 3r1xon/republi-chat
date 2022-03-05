@@ -1,45 +1,45 @@
 <nav id="rep-tabs">
 
-    <ul class="tabs">
+  <ul class="tabs">
 
-        <li role="tablist"
-            class="tab"
-            tabindex="0"
-            *ngFor="let tab of entries; let i = index;"
-            (keypress)="selectTab(i)"
-        >
-
-            <a role="tab"
-               (click)="selectTab(i)"
-               [ngClass]="{
-                    'normal': currentIndex != i,
-                    'hovered': currentIndex == i
-                }"
-            >
-                {{tab.tabname}}
-                <mat-icon *ngIf="tab.icon">{{tab.icon}}</mat-icon>
-            </a>
-
-        </li>
-
-    </ul>
-
-    <div class="sections">
-
-        <ng-content></ng-content>
-
-    </div>
-
-    <button
-        *ngIf="add"
-        class="new"
-        (click)="onNew.emit('onNew')"
-        matTooltip="Add new"
-        matRipple
+    <li role="tablist"
+      class="tab"
+      tabindex="0"
+      *ngFor="let tab of entries; let i = index;"
+      (keypress)="selectTab(i)"
     >
 
-        <mat-icon>add</mat-icon>
+      <a role="tab"
+        (click)="selectTab(i)"
+        [ngClass]="{
+            'normal': currentIndex != i,
+            'hovered': currentIndex == i
+        }"
+      >
+        {{tab.tabname}}
+        <mat-icon *ngIf="tab.icon">{{tab.icon}}</mat-icon>
+      </a>
 
-    </button>
+    </li>
+
+  </ul>
+
+  <div class="sections">
+
+    <ng-content></ng-content>
+
+  </div>
+
+  <button
+    *ngIf="add"
+    class="new"
+    (click)="onNew.emit('onNew')"
+    matTooltip="Add new"
+    matRipple
+  >
+
+    <mat-icon>add</mat-icon>
+
+  </button>
 
 </nav>

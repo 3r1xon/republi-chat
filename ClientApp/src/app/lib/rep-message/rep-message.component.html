@@ -4,43 +4,43 @@
     }"
     [style.animation]="highlighted ? 'highlight 2s' : ''">
 
-    <div class="cont" (click)="clickHandler()">
+  <div class="cont" (click)="clickHandler()">
 
-        <rep-profile-pic
-            [src]="message.picture"
-            [letter]="message.name[0]"
-            [color]="message.backgroundColor"
+      <rep-profile-pic
+        [src]="message.picture"
+        [letter]="message.name[0]"
+        [color]="message.backgroundColor"
+        (click)="onUserClick.emit('onUserClick')"
+      >
+      </rep-profile-pic>
+
+      <div class="message-info">
+
+        <span>
+          <p
+            class="username"
+            [style.color]="message.color"
             (click)="onUserClick.emit('onUserClick')"
-        >
-        </rep-profile-pic>
+          >
+          {{message.name}}
+          </p>
 
-        <div class="message-info">
+          <p class="time">{{message.date | date: dateFormat}}</p>
+        </span>
 
-            <span>
-                <p
-                    class="username"
-                    [style.color]="message.color"
-                    (click)="onUserClick.emit('onUserClick')"
-                >
-                {{message.name}}
-                </p>
+        <span class="content">
+          <p>{{message.message}}</p>
+        </span>
 
-                <p class="time">{{message.date | date: dateFormat}}</p>
-            </span>
+      </div>
 
-            <span class="content">
-                <p>{{message.message}}</p>
-            </span>
+  </div>
 
-        </div>
-
-    </div>
-
-    <rep-more
-        *ngIf="options"
-        [subMenu]="options"
-        [uniqueID]="uniqueID"
-        (open)="setToggle($event)"
-    ></rep-more>
+  <rep-more
+    *ngIf="options"
+    [subMenu]="options"
+    [uniqueID]="uniqueID"
+    (open)="setToggle($event)"
+  ></rep-more>
 
 </div>

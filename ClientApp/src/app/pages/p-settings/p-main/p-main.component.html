@@ -1,40 +1,40 @@
 <div id="settings">
 
-    <nav class="menu">
+  <nav class="menu">
 
-        <button *ngFor="let submenu of menus; let i = index" class="submenu" matRipple matRippleColor="#ffffff47"
-            (click)="changeRoute(i)"
-            [style.color]="submenu.color"
-            [style.background]="submenu.name == currentRoute ? '#434343' : ''"
-            >
-            <p>{{submenu.name}}</p>
-            <mat-icon>{{submenu.icon}}</mat-icon>
+    <button *ngFor="let submenu of menus; let i = index" class="submenu" matRipple matRippleColor="#ffffff47"
+      (click)="changeRoute(i)"
+      [style.color]="submenu.color"
+      [style.background]="submenu.name == currentRoute ? '#434343' : ''"
+      >
+      <p>{{submenu.name}}</p>
+      <mat-icon>{{submenu.icon}}</mat-icon>
+    </button>
+
+  </nav>
+
+  <div class="section">
+
+    <div class="navigator">
+
+      <div class="spacer">
+
+        <h1>{{currentRoute}}</h1>
+
+        <button class="back" routerLink="/mainpage">
+            <mat-icon>arrow_back</mat-icon>
         </button>
 
-    </nav>
-
-    <div class="section">
-
-        <div class="navigator">
-
-            <div class="spacer">
-
-                <h1>{{currentRoute}}</h1>
-
-                <button class="back" routerLink="/mainpage"> 
-                    <mat-icon>arrow_back</mat-icon>
-                </button>
-
-            </div>
-
-        </div>
-
-        <div class="router">
-
-            <router-outlet></router-outlet>
-
-        </div>
+      </div>
 
     </div>
+
+    <div class="router">
+
+      <router-outlet></router-outlet>
+
+    </div>
+
+  </div>
 
 </div>

@@ -1,24 +1,24 @@
 <div id="status-bar">
 
-    <div class="profile">
-        <rep-profile-pic routerLink="/settings/profile"
-            [src]="user.picture"
-            [letter]="user.name[0]"
-            [color]="user.backgroundColor"
-            width="40px"
-            height="40px"
-        >
-        </rep-profile-pic>
-        <p [style.color]="user.color">{{user.name}}</p>
-    </div>
+  <div class="profile">
+    <rep-profile-pic routerLink="/settings/profile"
+      [src]="user.picture"
+      [letter]="user.name[0]"
+      [color]="user.backgroundColor"
+      width="40px"
+      height="40px"
+    >
+    </rep-profile-pic>
+    <p [style.color]="user.color">{{user.name}}</p>
+  </div>
 
-    <div class="right">
-        <span class="connection" [ngClass]="{
-            'connected': _utils.wsConnected,
-            'disconnected': !_utils.wsConnected
-        }">
-        </span>
-        <rep-actions onlyIcons="true" [actions]="navigations"></rep-actions>
-    </div>
+  <div class="right">
+    <span class="connection" [ngClass]="{
+      'connected': _utils.wsConnected,
+      'disconnected': !_utils.wsConnected
+    }">
+    </span>
+    <rep-actions onlyIcons="true" [actions]="navigations"></rep-actions>
+  </div>
 
 </div>

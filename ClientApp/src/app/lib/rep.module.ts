@@ -27,10 +27,10 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatRippleModule } from '@angular/material/core';
 import { GlobalErrorHandler } from './error-handler';
-import { StopPropagationDirective } from './directives/stop-propagation.directive';
 import { REPTabsComponent } from './rep-tabs/rep-tabs.component';
 import { REPMoreComponent } from './rep-more/rep-more.component';
 import { REPContextDirective } from './directives/rep-context.directive';
+import { REPStopDirective } from './directives/rep-stop.directive';
 
 
 
@@ -59,7 +59,7 @@ import { REPContextDirective } from './directives/rep-context.directive';
     REPRoomComponent,
     REPMoreComponent,
 
-    StopPropagationDirective,
+    REPStopDirective,
     REPContextDirective,
   ],
   exports: [
@@ -86,7 +86,7 @@ import { REPContextDirective } from './directives/rep-context.directive';
     REPRoomComponent,
     REPMoreComponent,
 
-    StopPropagationDirective,
+    REPStopDirective,
     REPContextDirective,
   ],
   imports: [

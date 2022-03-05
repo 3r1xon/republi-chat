@@ -1,44 +1,47 @@
 <div id="login">
 
-    <div class="particle-container">
-        <span class="particle"
-        *ngFor="let emoji of emojis">{{emoji}}</span>
-    </div>
+  <div class="particle-container">
+    <span class="particle"
+    *ngFor="let emoji of emojis">{{emoji}}</span>
+  </div>
 
-    <div class="form">
+  <div class="form">
 
-        <div class="rect"></div>
+    <div class="rect"></div>
 
-        <form class="login-form" (ngSubmit)="logIn()" [formGroup]="form"
-            [style.animation]="alert ? 'shake 0.5s' : ''">
+    <form class="login-form"
+      (ngSubmit)="logIn()"
+      [formGroup]="form"
+      [style.animation]="alert ? 'shake 0.5s' : ''"
+    >
 
-            <h1>Log in</h1>
+      <h1>Log in</h1>
 
-            <rep-input
-                formControlName="email"
-                placeholder="Email"
-                maxLength="30"
-            ></rep-input>
+      <rep-input
+        formControlName="email"
+        placeholder="Email"
+        maxLength="30"
+      ></rep-input>
 
-            <rep-input
-                formControlName="password"
-                type="password"
-                placeholder="Password"
-                maxLength="255"
-            ></rep-input>
+      <rep-input
+        formControlName="password"
+        type="password"
+        placeholder="Password"
+        maxLength="255"
+      ></rep-input>
 
-            <rep-actions [actions]="actions"></rep-actions>
+      <rep-actions [actions]="actions"></rep-actions>
 
-            <div class="alert">
-                {{alert}}
-            </div>
+      <div class="alert">
+        {{alert}}
+      </div>
 
-            <a routerLink="">Forgot password?</a>
+      <a routerLink="">Forgot password?</a>
 
-        </form>
+    </form>
 
-    </div>
+  </div>
 
-    <rep-footer></rep-footer>
+  <rep-footer></rep-footer>
 
 </div>

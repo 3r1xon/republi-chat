@@ -2,28 +2,28 @@
         'reverse': reverse
     }">
 
-    <ng-container *ngFor="let button of actions">
-        <rep-button *ngIf="!onlyIcons"
-            [enabled]="button.enabled == undefined ? true : button.enabled"
-            [background]="button.background"
-            [tooltip]="button.tooltip"
-            [visible]="button.visible"
-            [icon]="button.icon"
-            [type]="button.type"
-            [outline]="button.outline"
-            (onClick)="button.onClick ? button.onClick() : ''"
-        >{{button.name}}
-        </rep-button>
+  <ng-container *ngFor="let button of actions">
+    <rep-button *ngIf="!onlyIcons"
+      [enabled]="button.enabled == undefined ? true : button.enabled"
+      [background]="button.background"
+      [tooltip]="button.tooltip"
+      [visible]="button.visible"
+      [icon]="button.icon"
+      [type]="button.type"
+      [outline]="button.outline"
+      (onClick)="button.onClick ? button.onClick() : ''"
+    >{{button.name}}
+    </rep-button>
 
-        <rep-icon-button *ngIf="onlyIcons"
-            [enabled]="button.enabled == undefined ? true : button.enabled"
-            [color]="button.background"
-            [visible]="button.visible"
-            [icon]="button.icon"
-            [tooltip]="button.tooltip"
-            (onClick)="button.onClick ? button.onClick() : ''"
-        >{{button.icon}}
-        </rep-icon-button>
-    </ng-container>
+    <rep-icon-button *ngIf="onlyIcons"
+      [enabled]="button.enabled == undefined ? true : button.enabled"
+      [color]="button.background"
+      [visible]="button.visible"
+      [icon]="button.icon"
+      [tooltip]="button.tooltip"
+      (onClick)="button.onClick ? button.onClick() : ''"
+    >{{button.icon}}
+    </rep-icon-button>
+  </ng-container>
 
 </div>

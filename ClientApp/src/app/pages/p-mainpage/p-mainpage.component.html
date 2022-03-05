@@ -1,15 +1,15 @@
 <div id="mainpage" [@.disabled]="!hasLoaded">
 
-    <status-bar [user]="_user.currentUser"></status-bar>
+  <status-bar [user]="_user.currentUser"></status-bar>
 
-    <div class="main">
+  <div class="main">
 
-        <channels *ngIf="_utils.settings.showChannels" @openLeft></channels>
+    <channels *ngIf="_utils.settings.showChannels" @openLeft></channels>
 
-        <chat></chat>
+    <chat></chat>
 
-        <channel-info *ngIf="_utils.settings.showServerGroup" @openRight></channel-info>
+    <channel-info *ngIf="_utils.settings.showServerGroup" @openRight></channel-info>
 
-    </div>
+  </div>
 
 </div>

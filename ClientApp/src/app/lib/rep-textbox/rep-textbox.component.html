@@ -1,32 +1,32 @@
 <form id="rep-textbox" [formGroup]="form">
 
-    <button
-        [disabled]="enabled"
-        (click)="uploadIMG()"
-        [style.opacity]="enabled ? '1' : '0.1'"
-        [style.cursor]="enabled ? 'pointer' : 'not-allowed'"
-    >
-        <mat-icon>upload</mat-icon>
-    </button>
+  <button
+    [disabled]="enabled"
+    (click)="uploadIMG()"
+    [style.opacity]="enabled ? '1' : '0.1'"
+    [style.cursor]="enabled ? 'pointer' : 'not-allowed'"
+  >
+    <mat-icon>upload</mat-icon>
+  </button>
 
-    <rep-textarea
-        formControlName="text"
-        (send)="send($event)"
-        [enabled]="enabled"
-        [maxLength]="msgMaxLength"
-        placeholder="Write anything..."
-        [style.animation]="trigger ? 'shake 200ms' : ''"
-        [style.opacity]="form.valid ? '1' : '0.5'"
-    >
-    </rep-textarea>
+  <rep-textarea
+    formControlName="text"
+    (send)="send($event)"
+    [enabled]="enabled"
+    [maxLength]="msgMaxLength"
+    placeholder="Write anything..."
+    [style.animation]="trigger ? 'shake 200ms' : ''"
+    [style.opacity]="form.valid ? '1' : '0.5'"
+  >
+  </rep-textarea>
 
-    <button
-        [disabled]="!enabled && !form.valid"
-        (click)="send($event)"
-        [style.cursor]="enabled && form.valid ? 'pointer' : 'not-allowed'"
-        [style.opacity]="form.valid ? '1' : '0.1'"
-    >
-        <mat-icon>send</mat-icon>
-    </button>
+  <button
+    [disabled]="!enabled && !form.valid"
+    (click)="send($event)"
+    [style.cursor]="enabled && form.valid ? 'pointer' : 'not-allowed'"
+    [style.opacity]="form.valid ? '1' : '0.1'"
+  >
+    <mat-icon>send</mat-icon>
+  </button>
 
 </form>

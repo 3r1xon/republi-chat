@@ -1,85 +1,85 @@
 <div id="profile">
 
-    <div class="banner">
+  <div class="banner">
 
-        <div class="profile-info">
+    <div class="profile-info">
 
-            <rep-img-upload [src]="_user.currentUser.picture" (image)="onChange($event)"></rep-img-upload>
+      <rep-img-upload [src]="_user.currentUser.picture" (image)="onChange($event)"></rep-img-upload>
 
-            <div class="banner-info">
+      <div class="banner-info">
 
-                <h2 [style.color]="_user.currentUser.color">{{_user.currentUser.name}}</h2>
+        <h2 [style.color]="_user.currentUser.color">{{_user.currentUser.name}}</h2>
 
-                <div style="display: flex;">
+        <div style="display: flex;">
 
-                    <p>{{_user.currentUser.code}}</p>
-                    <rep-info tooltip="This is your unique code, give this code to a friend in order to be added in his friend list"></rep-info>
-
-                </div>
-
-            </div>
+          <p>{{_user.currentUser.code}}</p>
+          <rep-info tooltip="This is your unique code, give this code to a friend in order to be added in his friend list"></rep-info>
 
         </div>
 
-        <rep-actions [actions]="topbarActions"></rep-actions>
+      </div>
 
     </div>
 
-    <div class="settings">
+    <rep-actions [actions]="topbarActions"></rep-actions>
 
-        <rep-message [message]="exampleMsg" [options]="exampleMsgOptions"></rep-message>
+  </div>
 
-        <rep-separator>Personal informations</rep-separator>
+  <div class="settings">
 
-        <form>
+    <rep-message [message]="exampleMsg" [options]="exampleMsgOptions"></rep-message>
 
-            <div class="aligned">
+    <rep-separator>Personal informations</rep-separator>
 
-                <rep-input
-                    [(text)]="user.name"
-                    [(text)]="exampleMsg.name"
-                    maxLength="30"
-                    required="true"
-                    [enabled]="editName"
-                    placeholder="Name"
-                >
-                </rep-input>
+    <form>
 
-                <rep-toggle [(checked)]="editName" iconOnTrue="lock_open" iconOnFalse="lock"></rep-toggle>
+      <div class="aligned">
 
-            </div>
+        <rep-input
+          [(text)]="user.name"
+          [(text)]="exampleMsg.name"
+          maxLength="30"
+          required="true"
+          [enabled]="editName"
+          placeholder="Name"
+        >
+        </rep-input>
 
-            <div class="aligned">
+        <rep-toggle [(checked)]="editName" iconOnTrue="lock_open" iconOnFalse="lock"></rep-toggle>
 
-                <rep-input
-                    [(text)]="user.email"
-                    placeholder="Email"
-                    required="true"
-                    [enabled]="editEmail"
-                ></rep-input>
+      </div>
 
-                <rep-toggle
-                    [(checked)]="editEmail"
-                    iconOnTrue="lock_open"
-                    iconOnFalse="lock"
-                ></rep-toggle>
+      <div class="aligned">
 
-            </div>
+        <rep-input
+          [(text)]="user.email"
+          placeholder="Email"
+          required="true"
+          [enabled]="editEmail"
+        ></rep-input>
 
-            <rep-textarea placeholder="Biography, max(200)"></rep-textarea>
+        <rep-toggle
+          [(checked)]="editEmail"
+          iconOnTrue="lock_open"
+          iconOnFalse="lock"
+        ></rep-toggle>
 
-        </form>
+      </div>
 
-        <rep-separator>Strict settings</rep-separator>
+      <rep-textarea placeholder="Biography, max(200)"></rep-textarea>
 
-        <!-- <input class="user-color"
-        [(ngModel)]="user.userColor"
-        [(ngModel)]="exampleMsg.userColor" type="color"> -->
+    </form>
 
-        <div class="strict">
-            <rep-actions [actions]="strictActions"></rep-actions>
-        </div>
+    <rep-separator>Strict settings</rep-separator>
 
+    <!-- <input class="user-color"
+    [(ngModel)]="user.userColor"
+    [(ngModel)]="exampleMsg.userColor" type="color"> -->
+
+    <div class="strict">
+      <rep-actions [actions]="strictActions"></rep-actions>
     </div>
+
+  </div>
 
 </div>

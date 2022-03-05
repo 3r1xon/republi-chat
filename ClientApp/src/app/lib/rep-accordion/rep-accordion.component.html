@@ -1,14 +1,14 @@
 <div id="rep-accordion">
 
-    <div class="header"
-        (click)="open = !open"
-    >
-        <ng-content select="[header]"></ng-content>
-    </div>
+  <div class="header"
+    (click)="open = !open"
+  >
+    <ng-content select="[header]"></ng-content>
+  </div>
 
 
-    <div class="body" [@expand]="open ? 'final' : 'initial'">
-        <ng-content select="[body]"></ng-content>
-    </div>
+  <div class="body" [@expand]="open ? 'final' : 'initial'">
+    <ng-content select="[body]"></ng-content>
+  </div>
 
 </div>
