@@ -1,22 +1,58 @@
-<span id="rep-room" [ngClass]="{
-    'hold': hold
-  }"
+<div id="rep-room"
   (contextmenu)="openContext($event)"
 >
 
-  <mat-icon>{{textRoom ? 'chat' : 'volume_up'}}</mat-icon>
+  <span class="row" [ngClass]="{
+      'hold': hold
+    }"
+    (click)="expanded = !expanded"
+  >
 
-  <p>{{roomName}}</p>
+    <mat-icon>{{textRoom ? 'chat' : 'volume_up'}}</mat-icon>
 
-  <ng-container *ngIf="!textRoom">
-    <rep-profile-pic
-      *ngFor="let member of members"
-      width="25px"
-      height="25px"
-      [matTooltip]="member.name"
-      [src]="member.picture"
-      [letter]="member.name"
-      [color]="member.backgroundColor"
-    ></rep-profile-pic>
-  </ng-container>
-</span>
+    <p>{{roomName}}</p>
+
+    <ng-container *ngIf="!textRoom && members?.length > 0">
+
+      <ng-container *ngIf="!expanded">
+        <rep-profile-pic
+          *ngFor="let member of members"
+          width="25px"
+          height="25px"
+          [matTooltip]="member.name"
+          [src]="member.picture"
+          [letter]="member.name"
+          [color]="member.backgroundColor"
+        ></rep-profile-pic>
+      </ng-container>
+
+      <mat-icon
+        repStop
+        class="expand"
+        (click)="expanded = !expanded"
+      >
+        {{!expanded ? 'expand_more' : 'expand_less'}}
+      </mat-icon>
+
+    </ng-container>
+
+  </span>
+
+  <ul [@expand]="!expanded ? 'initial' : 'final'">
+
+    <li *ngFor="let member of members">
+      <span>
+        <rep-profile-pic
+          width="25px"
+          height="25px"
+          [src]="member.picture"
+          [letter]="member.name"
+          [color]="member.backgroundColor"
+        ></rep-profile-pic>
+        <p>{{member.name}}</p>
+      </span>
+    </li>
+
+  </ul>
+
+</div>

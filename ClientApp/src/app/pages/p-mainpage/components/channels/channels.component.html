@@ -19,25 +19,29 @@
 
     <div class="rooms" body repStop>
 
-      <rep-separator *ngIf="_msService.currentChannel?.rooms?.text.length > 0">Text rooms</rep-separator>
+      <rep-separator *ngIf="_msService.currentChannel?.rooms?.text.length > 0">
+        Text rooms
+      </rep-separator>
 
       <rep-room
         *ngFor="let room of _msService.currentChannel?.rooms?.text"
         [roomName]="room.roomName"
         [textRoom]="room.textRoom"
-        [hold]="room.roomID == _msService.currentRoom?.roomID"
+        [hold]="_msService.isInRoom(room)"
         (click)="selectRoom(room)"
       >
       </rep-room>
 
-      <rep-separator *ngIf="_msService.currentChannel?.rooms?.vocal.length > 0">Vocal rooms</rep-separator>
+      <rep-separator *ngIf="_msService.currentChannel?.rooms?.vocal.length > 0">
+        Vocal rooms
+      </rep-separator>
 
       <rep-room
         *ngFor="let room of _msService.currentChannel?.rooms?.vocal"
         [roomName]="room.roomName"
         [textRoom]="room.textRoom"
         [members]="room.connected"
-        [hold]="room.roomID == _msService.currentVocalRoom?.roomID"
+        [hold]="_msService.isInRoom(room)"
         (click)="selectRoom(room)"
       >
       </rep-room>
@@ -46,6 +50,8 @@
 
   </rep-accordion>
 
-  <small *ngIf="channels[channelsTab]?.sections.length == 0">{{channels[channelsTab]?.tabname}} is empty</small>
+  <small *ngIf="channels[channelsTab]?.sections.length == 0">
+    {{channels[channelsTab]?.tabname}} is empty
+  </small>
 
 </rep-tabs>

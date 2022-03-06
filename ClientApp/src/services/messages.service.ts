@@ -166,6 +166,22 @@ export class MessagesService {
     return msg;
   }
 
+  public isInChannel(channel: Channel): boolean {
+    return this.currentChannel.id == channel.id;
+  }
+
+  public isInRoom(room: Room): boolean {
+    if (room.textRoom) {
+      if (room.roomID == this.currentRoom?.roomID)
+        return true;
+    } else {
+      if (room.roomID == this.currentVocalRoom?.roomID)
+        return true;
+    }
+
+    return false;
+  }
+
   private initRoomSockets() {
 
     this.destroyMsSubscriptions();

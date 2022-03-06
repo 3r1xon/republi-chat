@@ -1,39 +1,39 @@
 #channels {
+  width: 100%;
+  height: 100%;
+  position: relative;
+
+  rep-accordion {
     width: 100%;
-    height: 100%;
+    user-select: none;
 
-    rep-accordion {
-        width: 100%;
-        user-select: none;
-
-        rep-message {
-            cursor: pointer;
-        }
-
-        .rooms {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            background: var(--OBSCURE);
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding-bottom: 5px;
-
-            rep-room {
-                width: 95%;
-                height: 35px;
-                margin: 2px;
-            }
-
-            rep-separator {
-                width: 95%;
-                margin: 10px;
-            }
-        }
+    rep-message {
+      cursor: pointer;
     }
 
-    small {
-        margin-top: 10px;
+    .rooms {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      background: var(--OBSCURE);
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding-bottom: 5px;
+
+      rep-room {
+        width: 95%;
+        margin: 2px;
+      }
+
+      rep-separator {
+        width: 95%;
+        margin: 10px;
+      }
     }
+  }
+
+  small {
+    margin-top: 10px;
+  }
 }

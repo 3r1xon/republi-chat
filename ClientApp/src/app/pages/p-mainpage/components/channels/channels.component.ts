@@ -76,14 +76,9 @@ export class ChannelsComponent implements OnInit {
   }
 
   selectRoom(room: Room) {
-    if (room.textRoom) {
-      if (room.roomID == this._msService.currentRoom.roomID)
-        return;
-    } else {
-      if (room.roomID == this._msService.currentVocalRoom?.roomID)
-        return;
+    if (!this._msService.isInRoom(room)) {
+      this._msService.joinRoom(this._msService.currentChannel, room);
     }
-    this._msService.joinRoom(this._msService.currentChannel, room);
   }
 
   expandChannel(index: number) {

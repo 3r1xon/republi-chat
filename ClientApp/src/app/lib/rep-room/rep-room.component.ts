@@ -1,10 +1,14 @@
 import { Component, Input } from '@angular/core';
 import { Account } from 'src/interfaces/account.interface';
+import { expand } from '../animations';
 
 @Component({
   selector: 'rep-room',
   templateUrl: './rep-room.component.html',
-  styleUrls: ['./rep-room.component.scss']
+  styleUrls: ['./rep-room.component.scss'],
+  animations: [
+    expand("100ms")
+  ]
 })
 export class REPRoomComponent {
 
@@ -15,6 +19,8 @@ export class REPRoomComponent {
   @Input() hold: boolean = false;
 
   @Input() members: Array<Account>;
+
+  @Input() expanded: boolean = false;
 
   openContext(event) {
     console.log("context");
