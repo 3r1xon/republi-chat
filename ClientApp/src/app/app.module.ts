@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { ErrorHandler, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { PSignupComponent } from './pages/p-signup/p-signup.component';
@@ -26,6 +26,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MainpageModule } from './pages/p-mainpage/mainpage.module';
 import { REPModule } from './lib/rep.module';
 import { MatRippleModule } from '@angular/material/core';
+import { GlobalErrorHandler } from './lib/error-handler';
 
 
 
@@ -63,7 +64,11 @@ import { MatRippleModule } from '@angular/material/core';
     {
       provide: HTTP_INTERCEPTORS,
       useClass: InterceptorService,
-      multi: true 
+      multi: true
+    },
+    {
+      provide: ErrorHandler,
+      useClass: GlobalErrorHandler,
     },
     CookieService,
   ],

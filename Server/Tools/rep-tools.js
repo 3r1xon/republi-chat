@@ -54,13 +54,16 @@ class REPTools {
         return "#" + Math.floor(Math.random()*16777215).toString(16);
     }
 
-    static keysToBool(obj) {
-        Object.keys(obj)
-        .forEach((k) => {
-            if (obj[k] == 1 || obj[k] == 0)
-                obj[k] = !!obj[k];
-        });
-        return obj;
+    static keysToBool() {
+        const args = arguments;
+
+        for (let obj of args) {
+            Object.keys(obj)
+            .forEach((k) => {
+                if (obj[k] == 1 || obj[k] == 0)
+                    obj[k] = !!obj[k];
+            });
+        }
     }
 }
 

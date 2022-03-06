@@ -41,7 +41,8 @@ router.get('/getRoomMessages/:chID/:roomID/:limit', async (req, res) => {
                    CM.ID_CHANNEL_MEMBER         as author,
                    TO_BASE64(U.PROFILE_PICTURE) as picture,
                    CRM.MESSAGE                  as message,
-                   CRM.DATE                     as date
+                   CRM.DATE                     as date,
+                   CRM.HIGHLIGHTED              as highlighted
             FROM CHANNELS_ROOMS_MESSAGES CRM
                      LEFT JOIN channels_rooms_members CRMB ON CRMB.ID_CHANNEL_ROOM_MEMBER = CRM.ID_CHANNEL_ROOM_MEMBER
                      LEFT JOIN CHANNELS_MEMBERS CM ON CM.ID_CHANNEL_MEMBER = CRMB.ID_CHANNEL_MEMBER
@@ -108,6 +109,12 @@ io.on("connection", (socket) => {
   socket.on("deleteMessage", (msgID) => {
 
     user.deleteMessage(msgID);
+
+  });
+
+  socket.on("highlightMessage", (msgID) => {
+
+    user.highlightMessage(msgID);
 
   });
 

@@ -4,8 +4,19 @@
   (contextmenu)="openContext($event)"
 >
 
-  <mat-icon>{{textRoom ? 'tag' : 'volume_up'}}</mat-icon>
+  <mat-icon>{{textRoom ? 'chat' : 'volume_up'}}</mat-icon>
 
   <p>{{roomName}}</p>
 
+  <ng-container *ngIf="!textRoom">
+    <rep-profile-pic
+      *ngFor="let member of members"
+      width="25px"
+      height="25px"
+      [matTooltip]="member.name"
+      [src]="member.picture"
+      [letter]="member.name"
+      [color]="member.backgroundColor"
+    ></rep-profile-pic>
+  </ng-container>
 </span>

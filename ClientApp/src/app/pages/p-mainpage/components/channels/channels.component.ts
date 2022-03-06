@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { Channel } from 'src/interfaces/channel.interface';
+import { Channel, Room } from 'src/interfaces/channel.interface';
 import { Message } from 'src/interfaces/message.interface';
-import { Room } from 'src/interfaces/room.interface';
 import { MessagesService } from 'src/services/messages.service';
 import { UtilsService } from 'src/services/utils.service';
 
@@ -45,7 +44,7 @@ export class ChannelsComponent implements OnInit {
 
     const channel = this._msService.channels[0];
 
-    if (channel) {
+    if (channel && this._msService.currentChannel == undefined) {
       this._msService.joinChannel(channel);
     }
   }
@@ -70,14 +69,20 @@ export class ChannelsComponent implements OnInit {
   ];
 
   selectChannel(channel: Channel) {
-    if (channel.id == this._msService.currentChannel.id) return;
+    if (channel.id == this._msService.currentChannel.id)
+      return;
 
     this._msService.joinChannel(channel);
   }
 
   selectRoom(room: Room) {
-    if (room.roomID == this._msService.currentRoom.roomID) return;
-
+    if (room.textRoom) {
+      if (room.roomID == this._msService.currentRoom.roomID)
+        return;
+    } else {
+      if (room.roomID == this._msService.currentVocalRoom?.roomID)
+        return;
+    }
     this._msService.joinRoom(this._msService.currentChannel, room);
   }
 

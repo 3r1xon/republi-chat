@@ -1,6 +1,8 @@
 import {
   Component,
+  EventEmitter,
   Input,
+  Output,
 } from '@angular/core';
 import { REPButton } from 'src/interfaces/repbutton.interface';
 
@@ -16,5 +18,8 @@ export class REPWindowComponent {
 
   @Input()
   public uniqueID: number;
+
+  @Output()
+  public onSelection: EventEmitter<any> = new EventEmitter();
 
 }

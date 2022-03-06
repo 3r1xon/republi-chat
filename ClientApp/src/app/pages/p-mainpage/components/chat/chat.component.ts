@@ -31,7 +31,6 @@ export class ChatComponent {
       icon: "edit",
       visible: (msgIndex: number) => this._msService.messages[msgIndex].auth,
       onClick: (msgIndex: number) => {
-        console.log("EDIT");
       }
     },
     {
@@ -39,7 +38,13 @@ export class ChatComponent {
       icon: "flag",
       visible: (msgIndex: number) => !this._msService.messages[msgIndex].auth,
       onClick: (msgIndex: number) => {
-        console.log("REPORT");
+      }
+    },
+    {
+      name: "Highlight",
+      icon: "star",
+      onClick: (msgIndex: number) => {
+        this._msService.highlightMessage(this._msService.messages[msgIndex].id);
       }
     },
     {
@@ -51,7 +56,7 @@ export class ChatComponent {
           return true;
         }
 
-        return this._msService.roomPermissions.deleteMessage;
+        return this._msService.roomPermissions.deleteMessages;
       },
       onClick: (msgIndex: number) => {
         this._utils.showRequest("Delete message", "Are you sure you want to delete this message?", () => {
@@ -93,7 +98,7 @@ export class ChatComponent {
         const msg = this._msService.messages[msgIndex];
 
         this._utils.showRequest(
-          `Ban ${msg.name}`, 
+          `Ban ${msg.name}`,
           `Are you sure you want to ban ${msg.name}? He will NOT be able to rejoin later till his ban is revoked!`,
           () => {
             this._msService.banUser(this._msService.currentChannel, msg.author);
@@ -111,7 +116,7 @@ export class ChatComponent {
       background: "danger",
       visible: () => this.chat?.selections.length > 0,
       enabled: () => {
-        if (this._msService.roomPermissions.deleteMessage)
+        if (this._msService.roomPermissions.deleteMessages)
           return true;
         return !this.chat.selections.some((msg: Message) => msg.auth == false);
       },
@@ -139,6 +144,21 @@ export class ChatComponent {
       }
     }
   ];
+
+  textboxPermissionsHandler(): boolean {
+
+    if (this._msService.roomPermissions?.sendMessages == null) {
+
+      if (this._msService.chPermissions?.sendMessages == true)
+        return true;
+    } else {
+
+      if (this._msService.roomPermissions?.sendMessages == true)
+        return true;
+    }
+
+    return false;
+  }
 
   displayChatName() {
     if (!this._msService.currentChannel?.name)

@@ -328,9 +328,11 @@ router.get('/getSettings', Auth.HTTPAuthToken, async (req, res) => {
     WHERE ID_USER = ?
     `, [userID]);
 
+    REPTools.keysToBool(settings)
+
     res.status(201).send({
       success: true,
-      data: REPTools.keysToBool(settings)
+      data: settings
     });
 
   } catch(err) {

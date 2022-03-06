@@ -1,6 +1,6 @@
 export interface BugReport {
-    title: string;
-    callstack: string;
-    visible: boolean;
-    send: boolean;
+  title: string;
+  callstack: string;
+  visible: boolean;
+  send: boolean;
 }

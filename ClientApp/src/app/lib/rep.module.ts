@@ -1,5 +1,13 @@
 import { ErrorHandler, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatRippleModule } from '@angular/material/core';
+import { GlobalErrorHandler } from './error-handler';
+
 import { REPTextBoxComponent } from './rep-textbox/rep-textbox.component';
 import { REPMessageComponent } from './rep-message/rep-message.component';
 import { REPChatComponent } from './rep-chat/rep-chat.component';
@@ -20,17 +28,12 @@ import { REPIconButtonComponent } from './rep-icon-button/rep-icon-button.compon
 import { REPImgUploadComponent } from './rep-img-upload/rep-img-upload.component';
 import { REPAccordionComponent } from './rep-accordion/rep-accordion.component';
 import { REPRoomComponent } from './rep-room/rep-room.component';
-import { MatIconModule } from '@angular/material/icon';
-import { MatTooltipModule } from '@angular/material/tooltip';
-import { DragDropModule } from '@angular/cdk/drag-drop';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatRippleModule } from '@angular/material/core';
-import { GlobalErrorHandler } from './error-handler';
 import { REPTabsComponent } from './rep-tabs/rep-tabs.component';
 import { REPMoreComponent } from './rep-more/rep-more.component';
 import { REPContextDirective } from './directives/rep-context.directive';
 import { REPStopDirective } from './directives/rep-stop.directive';
+
+
 
 
 
@@ -98,12 +101,6 @@ import { REPStopDirective } from './directives/rep-stop.directive';
     ReactiveFormsModule,
     BrowserAnimationsModule,
     MatRippleModule
-  ],
-  providers: [
-    {
-      provide: ErrorHandler,
-      useClass: GlobalErrorHandler,
-    },
   ]
 })
 export class REPModule { }

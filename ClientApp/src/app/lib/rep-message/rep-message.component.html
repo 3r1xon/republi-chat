@@ -1,38 +1,39 @@
 <div id="message-box" [ngClass]="{
-        'active': active && !hold,
-        'hold': hold
-    }"
-    [style.animation]="highlighted ? 'highlight 2s' : ''">
+    'active': active && !hold,
+    'hold': hold
+  }"
+  [style.animation]="message.highlighted && !hold ? 'highlight 1s forwards' : ''"
+>
 
   <div class="cont" (click)="clickHandler()">
 
-      <rep-profile-pic
-        [src]="message.picture"
-        [letter]="message.name[0]"
-        [color]="message.backgroundColor"
-        (click)="onUserClick.emit('onUserClick')"
-      >
-      </rep-profile-pic>
+    <rep-profile-pic
+      [src]="message.picture"
+      [letter]="message.name[0]"
+      [color]="message.backgroundColor"
+      (click)="onUserClick.emit('onUserClick')"
+    >
+    </rep-profile-pic>
 
-      <div class="message-info">
+    <div class="message-info">
 
-        <span>
-          <p
-            class="username"
-            [style.color]="message.color"
-            (click)="onUserClick.emit('onUserClick')"
-          >
-          {{message.name}}
-          </p>
+      <span>
+        <p
+          class="username"
+          [style.color]="message.color"
+          (click)="onUserClick.emit('onUserClick')"
+        >
+        {{message.name}}
+        </p>
 
-          <p class="time">{{message.date | date: dateFormat}}</p>
-        </span>
+        <p class="time">{{message.date | date: dateFormat}}</p>
+      </span>
 
-        <span class="content">
-          <p>{{message.message}}</p>
-        </span>
+      <span class="content">
+        <p>{{message.message}}</p>
+      </span>
 
-      </div>
+    </div>
 
   </div>
 

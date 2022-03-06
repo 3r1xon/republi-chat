@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { Account } from 'src/interfaces/account.interface';
 
 @Component({
   selector: 'rep-room',
@@ -7,11 +8,13 @@ import { Component, Input } from '@angular/core';
 })
 export class REPRoomComponent {
 
-  @Input() roomName: string = "Name";
+  @Input() roomName: string = "";
 
   @Input() textRoom: boolean = true;
 
   @Input() hold: boolean = false;
+
+  @Input() members: Array<Account>;
 
   openContext(event) {
     console.log("context");

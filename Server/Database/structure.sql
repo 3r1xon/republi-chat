@@ -97,6 +97,7 @@ create or replace table republichat.channels_rooms_members
 )
     charset = utf8mb3;
 
+
 create or replace table republichat.channels_rooms_messages
 (
     ID_CHANNEL_ROOM_MESSAGE bigint auto_increment
@@ -105,6 +106,7 @@ create or replace table republichat.channels_rooms_messages
     ID_CHANNEL_ROOM_MEMBER  bigint                                   not null,
     MESSAGE                 varchar(2000) collate utf8mb4_unicode_ci null,
     DATE                    datetime                                 null,
+    HIGHLIGHTED             tinyint(1) default 0                     null,
     constraint FK_USERS
         foreign key (ID_CHANNEL_ROOM_MEMBER) references republichat.channels_rooms_members (ID_CHANNEL_ROOM_MEMBER)
             on update cascade on delete cascade,
@@ -118,9 +120,9 @@ create or replace table republichat.channels_rooms_permissions
 (
     ID_CHANNEL_ROOM_PERMISSION bigint auto_increment
         primary key,
-    ID_CHANNEL_ROOM_MEMBER     bigint               null,
-    SEND_MESSAGES              tinyint(1) default 1 null,
-    DELETE_MESSAGES            tinyint(1) default 0 null,
+    ID_CHANNEL_ROOM_MEMBER     bigint     null,
+    SEND_MESSAGES              tinyint(1) null,
+    DELETE_MESSAGES            tinyint(1) null,
     constraint FK_CRP_TO_CRM
         foreign key (ID_CHANNEL_ROOM_MEMBER) references republichat.channels_rooms_members (ID_CHANNEL_ROOM_MEMBER)
             on update cascade on delete cascade

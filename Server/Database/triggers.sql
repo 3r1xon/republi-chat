@@ -53,8 +53,8 @@ BEGIN
         INSERT INTO channels_rooms_permissions (ID_CHANNEL_ROOM_MEMBER, SEND_MESSAGES, DELETE_MESSAGES)
         VALUES (NEW.ID_CHANNEL_ROOM_MEMBER, true, true);
     ELSE
-        INSERT INTO channels_rooms_permissions (ID_CHANNEL_ROOM_MEMBER, SEND_MESSAGES, DELETE_MESSAGES)
-        VALUES (NEW.ID_CHANNEL_ROOM_MEMBER, true, false);
+        INSERT INTO channels_rooms_permissions (ID_CHANNEL_ROOM_MEMBER)
+        VALUES (NEW.ID_CHANNEL_ROOM_MEMBER);
     END IF;
 
 END;

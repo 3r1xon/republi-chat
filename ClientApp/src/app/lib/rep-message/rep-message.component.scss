@@ -1,90 +1,88 @@
 @import 'src/app/styles/mixins';
 
 #message-box {
-    min-height: 55px;
-    height: auto;
+  min-height: 55px;
+  height: auto;
+  display: flex;
+  position: relative;
+  transition: 150ms;
+
+  .cont {
+    width: 100%;
     display: flex;
-    position: relative;
-    transition: 150ms;
+    align-items: center;
 
-    .cont {
-        width: 100%;
-        display: flex;
-        align-items: center;
+    rep-profile-pic {
+      align-self: flex-start;
+    }
+  }
 
-        rep-profile-pic {
-            align-self: flex-start;
-        }
+  p {
+    color: var(--WHITE);
+    word-wrap: anywhere;
+  }
+
+  .message-info {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    top: 0;
+    left: 0;
+    word-break: normal;
+
+    span {
+      display: flex;
+    }
+
+    .username {
+      cursor: pointer;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+
+      &:hover {
+        text-decoration: underline;
+      }
     }
 
     p {
-        color: var(--WHITE);
-        word-wrap: anywhere;
+      margin-left: 5px;
+      margin-bottom: 5px;
     }
 
-    &:hover {
-        background: var(--VERY-DARK);
+    .time {
+      font-size: 14px;
+      align-self: flex-end;
+      color: var(--OBSCURE_SECONDARY);
+      white-space: nowrap;
     }
+  }
 
-    .message-info {
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        top: 0;
-        left: 0;
-        word-break: normal;
+  &:hover {
+    background: var(--VERY-DARK) !important;
+  }
 
-        span {
-            display: flex;
-        }
-
-        .username {
-            cursor: pointer;
-            white-space: nowrap;
-            text-overflow: ellipsis;
-            
-            &:hover {
-                text-decoration: underline;
-            }
-        }
-
-        p {
-            margin-left: 5px;
-            margin-bottom: 5px;
-        }
-
-        .time {
-            font-size: 14px;
-            align-self: flex-end;
-            color: var(--OBSCURE_SECONDARY);
-            white-space: nowrap;
-        }
-    }
-
-    rep-more {
-        margin: 10px;
-        align-self: flex-start;
-    }
+  rep-more {
+    margin: 10px;
+    align-self: flex-start;
+  }
 }
 
 .active {
-    background: var(--VERY-DARK);
+  background: var(--VERY-DARK);
 }
 
 .hold {
-    background: var(--OBSCURE);
+  background: var(--OBSCURE);
 }
 
 
 @keyframes highlight {
-    0% {
-        background: #49443c;
-        opacity: 0;
-    }
+  0% {
+    background: #49443c4f;
+  }
 
-    100% {
-        background: transparent;
-        opacity: 1;
-    }
+  100% {
+    background: #49443c;
+  }
 }

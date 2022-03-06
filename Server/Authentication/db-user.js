@@ -123,18 +123,20 @@ class DBUser {
       WHERE CRM.ID_CHANNEL_ROOM_MEMBER = ?
       `, [this.roomMemberID]);
 
-      REPTools.keysToBool(global);
+      REPTools.keysToBool(global, room);
 
-      REPTools.keysToBool(room);
+      if (room[permission] == null) {
 
-      if (!global[permission]) {
-        callback(new Error("User does not have the required permission!"), null);
-        return;
-      }
+        if (global[permission] == true) {
+          callback(null, this);
+          return;
+        }
+      } else {
 
-      if (room[permission]) {
-        callback(null, this);
-        return;
+        if (room[permission] == true) {
+          callback(null, this);
+          return;
+        }
       }
 
       callback(new Error("User does not have the required permission!"), null);
@@ -226,6 +228,36 @@ class DBUser {
 
 
 
+  async highlightMessage(msgID, callback = nocb) {
+
+    try {
+
+      await REPQuery.exec(
+      `
+      UPDATE CHANNELS_ROOMS_MESSAGES
+      SET HIGHLIGHTED = !HIGHLIGHTED
+      WHERE ID_CHANNEL_ROOM_MESSAGE = ?
+      `, [msgID]);
+
+      const state = await REPQuery.one(
+      `
+      SELECT HIGHLIGHTED as highlighted
+      FROM CHANNELS_ROOMS_MESSAGES
+      WHERE ID_CHANNEL_ROOM_MESSAGE = ?
+      `, [msgID]);
+
+      io.to(this.roomID).emit("highlightMessage", JSON.stringify({ msgID: msgID, state: state.highlighted }));
+
+      callback(null, this);
+
+    } catch(error) {
+      callback(error, null);
+    }
+
+  }
+
+
+
   async deleteMessage(msgID, callback = nocb) {
     this.msgBelong(msgID, (noAuth) => {
 
@@ -242,7 +274,7 @@ class DBUser {
 
           callback(null, this);
 
-        } catch (error) {
+        } catch(error) {
           callback(error, null);
         }
       }

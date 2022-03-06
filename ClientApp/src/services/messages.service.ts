@@ -5,8 +5,7 @@ import { UserService } from './user.service';
 import { server } from 'src/environments/server';
 import { ServerResponse } from 'src/interfaces/response.interface';
 import { FileUploadService } from './file-upload.service';
-import { Channel } from 'src/interfaces/channel.interface';
-import { Room } from 'src/interfaces/room.interface';
+import { Channel, Room } from 'src/interfaces/channel.interface';
 import { Subject, Subscription } from 'rxjs';
 import { ChannelPermissions, RoomPermissions } from 'src/interfaces/channel.interface';
 import { UtilsService } from './utils.service';
@@ -37,6 +36,8 @@ export class MessagesService {
   public currentChannel: Channel;
 
   public currentRoom: Room;
+
+  public currentVocalRoom: Room;
 
   public chPermissions: ChannelPermissions;
 
@@ -108,96 +109,128 @@ export class MessagesService {
               this.joinRoom(channel, this.currentChannel.rooms.text[0]);
           });
       }
-    ).catch(() => { 
+    ).catch(() => {
       this._utils.showBugReport("Server error!", "There has been an error while requesting the channels!", false);
     });
   }
 
   public joinRoom(channel: Channel, room: Room) {
 
-    this.API_getChRoomPermissions(channel, room)
-      .toPromise()
-      .then(
-        (resRoom: ServerResponse) => {
+    if (room.textRoom) {
 
-          this.currentRoom = room;
+      this.API_getChRoomPermissions(channel, room)
+        .toPromise()
+        .then(
+          (resRoom: ServerResponse) => {
 
-          this.roomPermissions = resRoom.data as RoomPermissions;
+            this.currentRoom = room;
 
-          this.API_getRoomMessages(channel, room, 50)
-          .toPromise()
-          .then(
-            (res: ServerResponse) => {
+            this.roomPermissions = resRoom.data as RoomPermissions;
 
-              if (res.success) {
+            this.API_getRoomMessages(channel, room, 50)
+            .toPromise()
+            .then(
+              (res: ServerResponse) => {
 
-                this.destroyMsSubscriptions();
+                if (res.success) {
 
-                const mapMsg = (msg: Message) => {
-                  msg.picture = this._fileUpload.sanitizeIMG(msg.picture);
-                  msg.date = new Date(msg.date);
-                  msg.auth = this.chPermissions.id === msg.author;
-                  return msg;
-                };
+                  this.messages = res.data?.map((msg: Message) => {
+                    return this.mapMsg(msg);
+                  });
 
-                this.messages = res.data?.map((msg: Message) => {
-                  return mapMsg(msg);
-                });
+                  this.messages$.next();
 
-                this.messages$.next();
-
-                this._webSocket.emit("joinRoom", {
-                  channel: channel.id,
-                  room: room.roomID,
-                  userID: this._user.currentUser.id
-                });
-
-                // Initializes all sockets
-                this.msSubscriptions
-                .push(
-                  this._webSocket.listen("message")
-                    .subscribe((message: string) => {
-                      const msg = JSON.parse(message) as Message;
-                      this.messages.push(mapMsg(msg));
-                    })
-                );
-
-                this.msSubscriptions
-                .push(
-                  this._webSocket.listen("deleteMessage")
-                    .subscribe((_id: number) => {
-                      const index = this.messages.findIndex(msg => msg.id == _id);
-                      this.messages.splice(index, 1);
-                    })
-                );
-
-                this.msSubscriptions
-                .push(
-                  this._webSocket.listen("connect")
-                    .subscribe(() => {
-                      const channel = this.currentChannel;
-
-                      if (this.currentRoom) {
-                        this.currentRoom = undefined;
-
-                        this.joinChannel(channel);
-                      }
-                    })
-                );
-
-                this.msSubscriptions
-                .push(
-                  this._webSocket.listen("disconnect")
-                    .subscribe(() => {
-                    })
-                );
+                  this.initRoomSockets();
+                }
               }
-            }
-          ).catch(() => {
-            this._utils.showBugReport("Server error!", "There has been an error while requesting the messages!", false);
-          });
-        }
-      );
+            ).catch(() => {
+              this._utils.showBugReport("Server error!", "There has been an error while requesting the messages!", false);
+            });
+          }
+        );
+    } else {
+      // TODO:
+      // Join a vocal room
+      this.currentVocalRoom = room;
+      // WIP!
+      this.currentChannel.rooms.vocal.find(room => room.roomID == this.currentVocalRoom.roomID).connected = [];
+
+      this.currentChannel.rooms.vocal.find(room => room.roomID == this.currentVocalRoom.roomID).connected.push(this._user.currentUser);
+    }
+  }
+
+  public mapMsg(msg: Message): Message {
+    msg.picture = this._fileUpload.sanitizeIMG(msg.picture);
+    msg.date = new Date(msg.date);
+    msg.auth = this.chPermissions.id === msg.author;
+    return msg;
+  }
+
+  private initRoomSockets() {
+
+    this.destroyMsSubscriptions();
+
+    const channel = this.currentChannel;
+
+    const room = this.currentRoom;
+
+    this._webSocket.emit("joinRoom", {
+      channel: channel.id,
+      room: room.roomID,
+      userID: this._user.currentUser.id
+    });
+
+    // Initializes all sockets
+    this.msSubscriptions
+    .push(
+      this._webSocket.listen("message")
+        .subscribe((message: string) => {
+          const msg = JSON.parse(message) as Message;
+          this.messages.push(this.mapMsg(msg));
+        })
+    );
+
+    this.msSubscriptions
+    .push(
+      this._webSocket.listen("deleteMessage")
+        .subscribe((_id: number) => {
+          const index = this.messages.findIndex(msg => msg.id == _id);
+          this.messages.splice(index, 1);
+        })
+    );
+
+    this.msSubscriptions
+    .push(
+      this._webSocket.listen("highlightMessage")
+        .subscribe((obj: string) => {
+
+          const state: { msgID: number, state: boolean } = JSON.parse(obj);
+
+          const index = this.messages.findIndex(msg => msg.id == state.msgID);
+          this.messages[index].highlighted = state.state;
+        })
+    );
+
+    this.msSubscriptions
+    .push(
+      this._webSocket.listen("connect")
+        .subscribe(() => {
+          const channel = this.currentChannel;
+
+          if (this.currentRoom) {
+            this.currentRoom = undefined;
+
+            this.joinChannel(channel);
+          }
+        })
+    );
+
+    this.msSubscriptions
+    .push(
+      this._webSocket.listen("disconnect")
+        .subscribe(() => {
+        })
+    );
   }
 
   public API_getChannels() {
@@ -246,7 +279,7 @@ export class MessagesService {
    * Ban a user in the current channel on a channel.
    *
    * @param room The ID of the channel.
-   * 
+   *
    * @param _id The ID of the user you want to ban.
    */
   public banUser(room: Channel, _id: number) {
@@ -260,7 +293,7 @@ export class MessagesService {
    * Ban a user in the current channel on a channel.
    *
    * @param room The ID of the channel.
-   * 
+   *
    * @param _id The ID of the user you want to kick.
    */
    public kickUser(room: Channel, _id: number) {
@@ -271,10 +304,19 @@ export class MessagesService {
   }
 
   /**
+   * Hightlight a message on the current room.
+   *
+   * @param _id The message ID you want to highlight.
+   */
+  public highlightMessage(_id: number) {
+    this._webSocket.emit("highlightMessage", _id);
+  }
+
+  /**
    * API that create a channel.
    *
    * @param channel The channel object you want to create.
-   * 
+   *
    * @returns An HTTP request
    *
    */
@@ -286,7 +328,7 @@ export class MessagesService {
    * API that add a channel to the cannels list.
    *
    * @param channel The channel object you want to add.
-   * 
+   *
    * @returns An HTTP request
    *
    */

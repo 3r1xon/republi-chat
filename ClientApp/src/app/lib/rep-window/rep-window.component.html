@@ -1,5 +1,6 @@
 <div class="submenu">
-  <rep-button *ngFor="let section of subMenu" matRipple
+  <rep-button
+    *ngFor="let section of subMenu" matRipple
     (mouseenter)="section.highlighted = true"
     (mouseleave)="section.highlighted = false"
     [icon]="section.icon"
@@ -8,7 +9,7 @@
     [uniqueID]="uniqueID"
     [background]="section.highlighted ? (section.color ? section.color : '#434343') : 'transparent'"
     [color]="section.highlighted ? '#FFFFFF' : (section.color ? section.color : '#FFFFFF')"
-    (onClick)="section.onClick(uniqueID); state = false; section.highlighted = false;"
+    (onClick)="section.onClick(uniqueID); onSelection.emit(); section.highlighted = false;"
   >
     {{section.name}}
   </rep-button>

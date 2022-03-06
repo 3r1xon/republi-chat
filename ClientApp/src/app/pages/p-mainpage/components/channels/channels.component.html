@@ -36,7 +36,8 @@
         *ngFor="let room of _msService.currentChannel?.rooms?.vocal"
         [roomName]="room.roomName"
         [textRoom]="room.textRoom"
-        [hold]="room.roomID == _msService.currentRoom?.roomID"
+        [members]="room.connected"
+        [hold]="room.roomID == _msService.currentVocalRoom?.roomID"
         (click)="selectRoom(room)"
       >
       </rep-room>
