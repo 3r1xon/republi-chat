@@ -81,7 +81,7 @@ io.on("connection", (socket) => {
     const rqRoom = obj.room;
     const rqChannel = obj.channel;
 
-    socket.leave(room);
+    socket.leave(`rm${room}`);
 
     if (user.roomMemberID)
       await user.unwatch();
@@ -96,7 +96,7 @@ io.on("connection", (socket) => {
             console.log(clc.yellow(roomErr));
           } else {
 
-            socket.join(rqRoom);
+            socket.join(`rm${rqRoom}`);
             room = rqRoom;
             user.watch();
           }

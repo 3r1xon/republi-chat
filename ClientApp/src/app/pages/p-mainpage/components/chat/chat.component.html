@@ -2,6 +2,7 @@
   [messages]="_msService.messages"
   [textboxEnabled]="textboxPermissionsHandler()"
   [chatName]="displayChatName()"
+  [unread]="_msService.currentRoom?.notifications"
   [msOptions]="msgOptions"
   [chatOptions]="chatOptions"
   [dateFormat]="_utils.settings.dateFormat"

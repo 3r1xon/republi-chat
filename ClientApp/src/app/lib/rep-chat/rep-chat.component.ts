@@ -70,6 +70,9 @@ export class REPChatComponent implements AfterViewInit, OnDestroy {
   @Input()
   public chatName: string;
 
+  @Input()
+  public unread: number = 1;
+
   private _dateFormat: string = "dd/MM/yyyy";
 
   @Input()
@@ -117,6 +120,7 @@ export class REPChatComponent implements AfterViewInit, OnDestroy {
 
   reset(): void {
     this.initialized = false;
+    this.unread = null;
     this.deselectAll();
   }
 

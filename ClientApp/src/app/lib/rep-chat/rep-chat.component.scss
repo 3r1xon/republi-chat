@@ -1,61 +1,65 @@
 #rep-chat {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: var(--DARK);
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+
+  .chat-options {
+    height: 25px;
+    position: relative;
+    display: flex;
+    align-items: center;
+
+    margin-top: 5px;
+    -webkit-box-shadow: 0px 25px 15px -5px #0f0e0e52;
+    box-shadow: 0px 25px 15px -5px #0f0e0e52;
+
+
+    p:nth-child(1) {
+      margin-left: 10px;
+      position: absolute;
+      left: 0;
+    }
+
+    p:nth-child(2) {
+      position: absolute;
+      text-align: center;
+      left: 0;
+      right: 0;
+    }
+
+    rep-actions {
+      position: absolute;
+      right: 0;
+    }
+  }
+
+  .messages {
     height: 100%;
     display: flex;
     flex-direction: column;
-    background: var(--DARK);
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
+    align-items: center;
+    overflow-y: auto;
+    overflow-x: hidden;
 
-    .chat-options {
-        height: 25px;
-        position: relative;
-        display: flex;
-        align-items: center;
-
-        margin-top: 5px;
-        -webkit-box-shadow: 0px 25px 15px -5px #0f0e0e52;
-        box-shadow: 0px 25px 15px -5px #0f0e0e52;
-
-
-        p:nth-child(1) {
-            margin-left: 10px;
-            position: absolute;
-            left: 0;
-        }
-
-        p:nth-child(2) {
-            position: absolute;
-            text-align: center;
-            left: 0;
-            right: 0;
-        }
-
-        rep-actions {
-            position: absolute;
-            right: 0;
-        }
+    rep-message {
+      width: 100%;
+      margin-top: 5px;
     }
 
-    .messages {
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        overflow-y: auto;
-        overflow-x: hidden;
-
-        rep-message {
-            width: 100%;
-            margin-top: 5px;
-        }
-
-        rep-separator {
-            width: 90%;
-            margin: 15px 0 10px 0;
-        }
+    .unread {
+      color: var(--DANGER);
     }
 
-    .textbox {
-        height: 100px;
+    rep-separator {
+      width: 90%;
+      margin: 15px 0 10px 0;
     }
+  }
+
+  .textbox {
+    height: 100px;
+  }
 }

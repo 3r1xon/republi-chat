@@ -213,7 +213,12 @@ class DBUser {
           WHERE CRM.ID_CHANNEL_ROOM_MESSAGE = ?
           `, [chMsg.ID_CHANNEL_ROOM_MESSAGE]);
 
-          io.to(this.roomID).emit("message", JSON.stringify(message));
+          io.to(`rm${this.roomID}`).emit("message", JSON.stringify(message));
+
+          io.to(`ch${this.channelID}`).emit("rmNotifications", JSON.stringify({
+            room: this.roomID,
+            type: "+"
+          }));
 
           callback(null, this);
         }
@@ -246,7 +251,7 @@ class DBUser {
       WHERE ID_CHANNEL_ROOM_MESSAGE = ?
       `, [msgID]);
 
-      io.to(this.roomID).emit("highlightMessage", JSON.stringify({ msgID: msgID, state: state.highlighted }));
+      io.to(`rm${this.roomID}`).emit("highlightMessage", JSON.stringify({ msgID: msgID, state: state.highlighted }));
 
       callback(null, this);
 
@@ -270,7 +275,12 @@ class DBUser {
           WHERE ID_CHANNEL_ROOM_MESSAGE = ?
           `, [msgID]);
 
-          io.to(this.roomID).emit("deleteMessage", `${msgID}`);
+          io.to(`rm${this.roomID}`).emit("deleteMessage", `${msgID}`);
+
+          io.to(`ch${this.channelID}`).emit("rmNotifications", JSON.stringify({
+            room: this.roomID,
+            type: "-"
+          }));
 
           callback(null, this);
 
@@ -322,7 +332,7 @@ class DBUser {
             WHERE ID_CHANNEL_MEMBER = ?
             `, [memberID]);
 
-            io.to(this.channelID).emit("ban", memberID);
+            io.to(`ch${this.channelID}`).emit("ban", memberID);
 
           } catch(error) {
             console.log(clc.red(error));
@@ -338,7 +348,9 @@ class DBUser {
 
   }
 
-  async watch() {
+
+
+  async watch(callback = nocb) {
     try {
       await REPQuery.exec(
       `
@@ -355,15 +367,17 @@ class DBUser {
       WHERE ID_CHANNEL_ROOM_MEMBER = ?
       `, [true, this.roomMemberID]);
 
-
-      io.to(this.roomID).emit("notifications", 0);
+      callback(null, this);
 
     } catch(error) {
 
+      callback(error, null);
     }
   }
-  
-  async unwatch() {
+
+
+
+  async unwatch(callback = nocb) {
     try {
       await REPQuery.exec(
       `
@@ -372,8 +386,11 @@ class DBUser {
       WHERE ID_CHANNEL_ROOM_MEMBER = ?
       `, [false, this.roomMemberID]);
 
+      callback(null, this);
+
     } catch(error) {
 
+      callback(error, null);
     }
   }
 }

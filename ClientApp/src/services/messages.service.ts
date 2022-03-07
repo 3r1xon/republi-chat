@@ -99,6 +99,12 @@ export class MessagesService {
 
         this.chPermissions = resChannel.data as ChannelPermissions;
 
+        this._webSocket.emit("joinChannel", {
+          channel: this.currentChannel.id,
+        });
+
+        this.initChannelSockets();
+
         this.API_getChRooms(channel)
           .toPromise()
           .then((res: ServerResponse) => {
@@ -126,6 +132,8 @@ export class MessagesService {
             this.currentRoom = room;
 
             this.roomPermissions = resRoom.data as RoomPermissions;
+
+            room.notifications = 0;
 
             this.API_getRoomMessages(channel, room, 50)
             .toPromise()
@@ -192,8 +200,7 @@ export class MessagesService {
 
     this._webSocket.emit("joinRoom", {
       channel: channel.id,
-      room: room.roomID,
-      userID: this._user.currentUser.id
+      room: room.roomID
     });
 
     // Initializes all sockets
@@ -251,7 +258,30 @@ export class MessagesService {
 
   private initChannelSockets() {
 
+    this.destroyChSubscriptions();
 
+    this.chSubscriptions
+    .push(
+      this._webSocket.listen("rmNotifications")
+        .subscribe((obj: string) => {
+          const notification = JSON.parse(obj);
+
+          if (notification.room != this.currentRoom.roomID) {
+
+            const ref = this.currentChannel.rooms.text
+              .find(room => room.roomID == notification.room);
+
+            if (notification.type == "+") {
+              ref.notifications++;
+            } else {
+              if (ref.notifications - 1 >= 0) {
+                ref.notifications--;
+              }
+            }
+
+          }
+        })
+    );
   }
 
   public API_getChannels() {

@@ -288,12 +288,19 @@ io.on("connection", (socket) => {
 
   const user = new DBUser(userID);
 
+  let channel;
+
   socket.on("joinChannel", (obj) => {
 
-    const rqChannel = obj.channel;
+    socket.leave(`ch${channel}`);
 
-    console.log(rqChannel);
+    channel = obj.channel;
+
+    socket.join(`ch${channel}`);
+
+    console.log(socket.rooms)
   });
+
   // socket.on("ban", (chInfo) => {
   //   const rqRoom = chInfo.room;
   //   const _memberID = chInfo._id;
