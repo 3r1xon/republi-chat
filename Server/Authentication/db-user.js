@@ -343,10 +343,18 @@ class DBUser {
       await REPQuery.exec(
       `
       UPDATE CHANNELS_ROOMS_MEMBERS
+      SET WATCHING = ?
+      WHERE ID_CHANNEL_MEMBER = ?
+      `, [false, this.channelMemberID]);
+
+      await REPQuery.exec(
+      `
+      UPDATE CHANNELS_ROOMS_MEMBERS
       SET WATCHING        = ?,
           UNREAD_MESSAGES = 0
       WHERE ID_CHANNEL_ROOM_MEMBER = ?
       `, [true, this.roomMemberID]);
+
 
       io.to(this.roomID).emit("notifications", 0);
 
