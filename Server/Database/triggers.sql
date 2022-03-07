@@ -82,3 +82,16 @@ BEGIN
     end if;
 
 END;
+
+create or replace definer = root@localhost trigger republichat.channels_rooms_messages
+    after insert
+    on republichat.channels_rooms_messages
+    for each row
+BEGIN
+
+    UPDATE channels_rooms_members
+        SET UNREAD_MESSAGES = UNREAD_MESSAGES + 1
+    WHERE ID_CHANNEL_ROOM = NEW.ID_CHANNEL_ROOM
+      AND WATCHING = FALSE;
+
+END;

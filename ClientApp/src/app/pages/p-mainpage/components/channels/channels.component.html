@@ -27,6 +27,7 @@
         *ngFor="let room of _msService.currentChannel?.rooms?.text"
         [roomName]="room.roomName"
         [textRoom]="room.textRoom"
+        [notifications]="room.notifications"
         [hold]="_msService.isInRoom(room)"
         (click)="selectRoom(room)"
       >

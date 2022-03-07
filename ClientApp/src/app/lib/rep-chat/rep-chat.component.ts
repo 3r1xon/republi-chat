@@ -165,7 +165,7 @@ export class REPChatComponent implements AfterViewInit, OnDestroy {
   @HostListener('document:keydown.shift.arrowdown', ['$event'])
   selectDown(): void {
     if (this.selections.length > 0) {
-      for (let i = this.messages.length-1; i > 0; i--) {
+      for (let i = this.messages.length-1; i >= 0; i--) {
         if (this.isInSelection(this.messages[i].id)) {
           if (this.messages[i+1] === undefined) return;
           this.selections.push(this.messages[i+1]);

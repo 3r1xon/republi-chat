@@ -76,12 +76,15 @@ io.on("connection", (socket) => {
 
   let room;
 
-  socket.on("joinRoom", (obj) => {
+  socket.on("joinRoom", async (obj) => {
 
     const rqRoom = obj.room;
     const rqChannel = obj.channel;
 
     socket.leave(room);
+
+    if (user.roomMemberID)
+      await user.unwatch();
 
     user.setChannel(rqChannel, (chErr) => {
       if (chErr) {
@@ -92,8 +95,10 @@ io.on("connection", (socket) => {
           if (roomErr) {
             console.log(clc.yellow(roomErr));
           } else {
+
             socket.join(rqRoom);
             room = rqRoom;
+            user.watch();
           }
         });
       }
@@ -116,6 +121,11 @@ io.on("connection", (socket) => {
 
     user.highlightMessage(msgID);
 
+  });
+
+  socket.on("disconnect", async () => {
+    if (user.roomMemberID)
+      await user.unwatch();
   });
 
 });

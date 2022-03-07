@@ -1,4 +1,4 @@
-import { ErrorHandler, NgModule } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -6,7 +6,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatRippleModule } from '@angular/material/core';
-import { GlobalErrorHandler } from './error-handler';
+import { MatBadgeModule } from '@angular/material/badge';
 
 import { REPTextBoxComponent } from './rep-textbox/rep-textbox.component';
 import { REPMessageComponent } from './rep-message/rep-message.component';
@@ -100,7 +100,8 @@ import { REPStopDirective } from './directives/rep-stop.directive';
     FormsModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,
-    MatRippleModule
+    MatRippleModule,
+    MatBadgeModule
   ]
 })
 export class REPModule { }

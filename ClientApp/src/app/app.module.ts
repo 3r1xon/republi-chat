@@ -58,7 +58,7 @@ import { GlobalErrorHandler } from './lib/error-handler';
     MatTooltipModule,
     MainpageModule,
     MatRippleModule,
-    REPModule
+    REPModule,
   ],
   providers: [
     {

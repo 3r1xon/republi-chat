@@ -22,6 +22,8 @@ export class REPRoomComponent {
 
   @Input() expanded: boolean = false;
 
+  @Input() notifications: number = 0;
+
   openContext(event) {
     console.log("context");
     event.preventDefault();

@@ -8,7 +8,13 @@
     (click)="expanded = !expanded"
   >
 
-    <mat-icon>{{textRoom ? 'chat' : 'volume_up'}}</mat-icon>
+    <mat-icon
+    [matBadge]="notifications"
+    matBadgeColor="accent"
+    matBadgePosition="before"
+    matBadgeSize="small"
+    [matBadgeHidden]="!textRoom || notifications == 0"
+    >{{textRoom ? 'chat' : 'volume_up'}}</mat-icon>
 
     <p>{{roomName}}</p>
 

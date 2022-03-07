@@ -337,6 +337,37 @@ class DBUser {
   async kickMember() {
 
   }
+
+  async watch() {
+    try {
+      await REPQuery.exec(
+      `
+      UPDATE CHANNELS_ROOMS_MEMBERS
+      SET WATCHING        = ?,
+          UNREAD_MESSAGES = 0
+      WHERE ID_CHANNEL_ROOM_MEMBER = ?
+      `, [true, this.roomMemberID]);
+
+      io.to(this.roomID).emit("notifications", 0);
+
+    } catch(error) {
+
+    }
+  }
+  
+  async unwatch() {
+    try {
+      await REPQuery.exec(
+      `
+      UPDATE CHANNELS_ROOMS_MEMBERS
+      SET WATCHING = ?
+      WHERE ID_CHANNEL_ROOM_MEMBER = ?
+      `, [false, this.roomMemberID]);
+
+    } catch(error) {
+
+    }
+  }
 }
 
 

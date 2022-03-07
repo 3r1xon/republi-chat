@@ -164,9 +164,10 @@ router.get('/getChannelRooms/:id', (req, res) => {
 
         const rooms = await REPQuery.load(
         `
-        SELECT CR.ID_CHANNEL_ROOM as roomID,
-               CR.ROOM_NAME       as roomName,
-               CR.TEXT_ROOM       as textRoom
+        SELECT CR.ID_CHANNEL_ROOM   as roomID,
+               CR.ROOM_NAME         as roomName,
+               CR.TEXT_ROOM         as textRoom,
+               CRMB.UNREAD_MESSAGES as notifications
         FROM CHANNELS_ROOMS CR
                 LEFT JOIN CHANNELS_ROOMS_MEMBERS CRMB ON CRMB.ID_CHANNEL_ROOM = CR.ID_CHANNEL_ROOM
                 LEFT JOIN CHANNELS_MEMBERS CM ON CM.ID_CHANNEL_MEMBER = CRMB.ID_CHANNEL_MEMBER
@@ -287,25 +288,31 @@ io.on("connection", (socket) => {
 
   const user = new DBUser(userID);
 
-  socket.on("ban", (chInfo) => {
-    const rqRoom = chInfo.room;
-    const _memberID = chInfo._id;
+  socket.on("joinChannel", (obj) => {
 
-    user.setChannel(rqRoom, (err) => {
-      if (err) {
-        console.log(clc.red(err));
-      } else {
+    const rqChannel = obj.channel;
 
-        user.banMember(_memberID);
-      }
-    });
-
+    console.log(rqChannel);
   });
+  // socket.on("ban", (chInfo) => {
+  //   const rqRoom = chInfo.room;
+  //   const _memberID = chInfo._id;
+
+  //   user.setChannel(rqRoom, (err) => {
+  //     if (err) {
+  //       console.log(clc.red(err));
+  //     } else {
+
+  //       user.banMember(_memberID);
+  //     }
+  //   });
+
+  // });
 
 
-  socket.on("kick", (chUserID) => {
+  // socket.on("kick", (chUserID) => {
 
-  });
+  // });
 })
 
 

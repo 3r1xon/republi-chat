@@ -61,20 +61,20 @@ export class MessagesService {
 
           this.destroyChSubscriptions();
 
-          this.chSubscriptions
-          .push(
-            this._webSocket.listen("ban")
-              .subscribe((banID) => {
-                if (banID == this.chPermissions.id) {
-                  this.messages = [];
+          // this.chSubscriptions
+          // .push(
+          //   this._webSocket.listen("ban")
+          //     .subscribe((banID) => {
+          //       if (banID == this.chPermissions.id) {
+          //         this.messages = [];
 
-                  this._utils.showRequest(
-                    "Banned",
-                    "You have been banned!"
-                  );
-                }
-              })
-          );
+          //         this._utils.showRequest(
+          //           "Banned",
+          //           "You have been banned!"
+          //         );
+          //       }
+          //     })
+          // );
 
           this.channels$.next();
         }
@@ -247,6 +247,11 @@ export class MessagesService {
         .subscribe(() => {
         })
     );
+  }
+
+  private initChannelSockets() {
+
+
   }
 
   public API_getChannels() {
