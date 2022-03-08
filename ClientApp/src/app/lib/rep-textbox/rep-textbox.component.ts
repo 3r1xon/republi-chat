@@ -17,7 +17,7 @@ export class REPTextBoxComponent {
     private fb: FormBuilder
   ) { }
 
-  @Input() 
+  @Input()
   public enabled: boolean = true;
 
   @Output()
@@ -26,10 +26,12 @@ export class REPTextBoxComponent {
   @Output()
   public upload = new EventEmitter();
 
-  @Input() 
+  @Input()
   public msgMaxLength: number;
 
   public trigger: boolean = false;
+
+  public text: string;
 
   public form: FormGroup = this.fb.group({
     text: ['',
@@ -41,7 +43,7 @@ export class REPTextBoxComponent {
   });
 
   public async send(event) {
-
+    console.log(this.text)
     if (this.form.valid && this.enabled) {
       const txt = this.form.value["text"].trim();
       this.sendMessage.emit(txt);

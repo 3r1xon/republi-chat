@@ -241,7 +241,7 @@ export class MessagesService {
           const channel = this.currentChannel;
 
           if (this.currentRoom) {
-            this.currentRoom = undefined;
+            this.currentRoom = null;
 
             this.joinChannel(channel);
           }

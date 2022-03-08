@@ -120,7 +120,7 @@ export class REPChatComponent implements AfterViewInit, OnDestroy {
 
   reset(): void {
     this.initialized = false;
-    this.unread = null;
+    // this.unread = null;
     this.deselectAll();
   }
 

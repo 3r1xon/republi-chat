@@ -2,78 +2,84 @@
 @import 'src/app/styles/fonts';
 
 #rep-tabs {
-    @include flexCenter(column);
+  @include flexCenter(column);
+  height: 100%;
+  background: var(--LIGHT-DARK);
+  overflow-x: hidden;
+
+  .tabs {
+    width: 100%;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid var(--GREY);
+  }
+
+  .tab {
+    width: 100%;
     height: 100%;
-    background: var(--LIGHT-DARK);
-    overflow-x: hidden;
+    display: flex;
+    align-items: center;
+    user-select: none;
 
-    .tabs {
-        width: 100%;
-        height: 40px;
-        display: flex;
-        align-items: center;
-        border-bottom: 1px solid var(--GREY);
-    }
+    a {
+      color: #FFFFFF;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-evenly;
+      border-top-left-radius: 10px;
+      border-top-right-radius: 10px;
+      font-size: 16px;
+      transition: 150ms;
+      cursor: pointer;
 
-    .tab {
-        width: 100%;
-        height: 100%;
-        display: flex;
-        align-items: center;
-        user-select: none;
-
-        a {
-            color: #FFFFFF;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: space-evenly;
-            border-top-left-radius: 10px;
-            border-top-right-radius: 10px;
-            font-size: 16px;
-            transition: 150ms;
-            cursor: pointer;
-
-            mat-icon {
-                @include flexCenter(row);
-                color: var(--OBSCURE_SECONDARY);
-            }
-
-            &:hover {
-                background: #454648;
-            }
-        }
-
-    }
-
-    .sections {
-        width: 100%;
-        height: 100%;
-        display: flex;
-        align-items: center;
-        flex-direction: column;
-        overflow-y: auto;
-        overflow-x: hidden;
-    }
-
-    .new {
-        width: 95%;
-        height: 25px;
-        margin: 5px;
-        border-radius: 10px;
-        background: var(--SUCCESS);
-        color: var(--WHITE);
-        border: none;
+      mat-icon {
         @include flexCenter(row);
-        cursor: pointer;
+        color: var(--OBSCURE_SECONDARY);
+      }
+
+      &:hover {
+        background: #454648;
+      }
     }
+
+  }
+
+  .sections {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+  .new {
+    width: 95%;
+    height: 25px;
+    margin: 5px;
+    border-radius: 10px;
+    background: var(--OBSCURE);
+    color: var(--SUCCESS);
+    border: none;
+    @include flexCenter(row);
+    cursor: pointer;
+    transition: 150ms;
+
+    &:hover {
+      background: var(--SUCCESS);
+      color: var(--WHITE);
+    }
+  }
 }
 
 .hovered {
-    background: #454648;
+  background: #454648;
 }
 
 .normal {
-    background: var(--LIGHT-DARK);
+  background: var(--LIGHT-DARK);
 }

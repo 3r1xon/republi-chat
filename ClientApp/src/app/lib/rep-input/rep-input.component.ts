@@ -118,7 +118,7 @@ export class REPInputComponent implements OnInit, ControlValueAccessor {
   onChange: any = () => {
     this.textChange.emit(this.text);
   };
-  
+
   onTouch: any = () => {};
 
   registerOnChange(fn: any): void {

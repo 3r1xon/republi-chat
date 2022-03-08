@@ -19,6 +19,7 @@ export interface Room {
   textRoom: boolean;
   connected?: Array<Account>
   notifications?: number;
+  draft?: string;
 }
 
 export interface ChannelPermissions {

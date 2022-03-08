@@ -14,7 +14,7 @@
 
       <rep-separator *ngIf="spreadDate(message.date, i)">{{message.date | date: dateFormat.split(" ")[0]}}</rep-separator>
 
-      <!-- <rep-separator *ngIf="i > unread" class="unread">Unread messages</rep-separator> -->
+      <rep-separator *ngIf="i == messages.length - unread" class="unread">Unread messages</rep-separator>
 
       <rep-message #msg
         [message]="message"

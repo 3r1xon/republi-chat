@@ -8,13 +8,11 @@
 
     <rep-img-upload></rep-img-upload>
 
-    <div class="aligned">
-      <rep-input formControlName="channelName" placeholder="Channel name" required="true"></rep-input>
+    <rep-input formControlName="channelName" placeholder="Channel name" required="true"></rep-input>
 
-      <rep-actions reverse="true" [actions]="newChannelActions"></rep-actions>
-    </div>
+    <rep-actions reverse="true" [actions]="newChannelActions"></rep-actions>
 
-    <p>You will be able to edit the channel and all its settings once you first created it.</p>
+    <p>You will be able to edit the channel settings after its creation.</p>
 
   </form>
 
@@ -23,7 +21,7 @@
 
   <h1>Add an existing channel</h1>
 
-  <form class="channel-info" [formGroup]="formAdd">
+  <form class="channel-info column" [formGroup]="formAdd">
 
     <div class="aligned">
 
@@ -32,9 +30,9 @@
       <rep-input formControlName="channelCode" maxLength="4" placeholder="Channel code" required="true" size="small"
       tooltip="Multiple channels can have the same name, but they cannot have the same code"></rep-input>
 
-      <rep-actions reverse="true" [actions]="existingChannelActions"></rep-actions>
-
     </div>
+
+    <rep-actions reverse="true" [actions]="existingChannelActions"></rep-actions>
 
   </form>
 
