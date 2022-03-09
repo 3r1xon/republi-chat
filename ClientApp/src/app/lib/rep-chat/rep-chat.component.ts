@@ -12,6 +12,7 @@ import {
 } from '@angular/core';
 import { Message } from 'src/interfaces/message.interface';
 import { REPButton } from 'src/interfaces/repbutton.interface';
+import { REPTextBoxComponent } from '../rep-textbox/rep-textbox.component';
 
 
 @Component({
@@ -54,6 +55,9 @@ export class REPChatComponent implements AfterViewInit, OnDestroy {
 
   @ViewChildren('msg')
   private msg: any;
+
+  @ViewChild(REPTextBoxComponent)
+  private textbox: REPTextBoxComponent;
 
   @Input()
   public textboxEnabled: boolean = true;
@@ -191,7 +195,6 @@ export class REPChatComponent implements AfterViewInit, OnDestroy {
     return this.selections.some(msg => msg.id === id);
   }
 
-
   spreadDate(date: Date, index: number): boolean {
 
     if (index == 0) return true;
@@ -208,5 +211,13 @@ export class REPChatComponent implements AfterViewInit, OnDestroy {
       return true;
 
     return false;
+  }
+
+  getText() {
+    return this.textbox.form.value["text"];
+  }
+
+  setText(text: string) {
+    this.textbox.setTextValue(text);
   }
 }

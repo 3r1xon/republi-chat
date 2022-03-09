@@ -27,11 +27,11 @@ export class MessagesService {
 
   public messages: Array<Message> = [];
 
-  public messages$: Subject<any> = new Subject<any>();
+  public roomChanges: Subject<any> = new Subject<any>();
 
   public channels: Array<Channel> = [];
 
-  public channels$: Subject<any> = new Subject<any>();
+  public channelChanges: Subject<any> = new Subject<any>();
 
   public currentChannel: Channel;
 
@@ -76,7 +76,7 @@ export class MessagesService {
           //     })
           // );
 
-          this.channels$.next();
+          this.channelChanges.next();
         }
       }
     ).catch(() => { });
@@ -146,7 +146,7 @@ export class MessagesService {
                     return this.mapMsg(msg);
                   });
 
-                  this.messages$.next();
+                  this.roomChanges.next();
 
                   this.initRoomSockets();
                 }

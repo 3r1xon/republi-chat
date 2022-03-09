@@ -1,6 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { REPChatComponent } from 'src/app/lib/rep-chat/rep-chat.component';
+import { Room } from 'src/interfaces/channel.interface';
 import { Message } from 'src/interfaces/message.interface';
 import { REPButton } from 'src/interfaces/repbutton.interface';
 import { MessagesService } from 'src/services/messages.service';
@@ -20,9 +21,21 @@ export class ChatComponent {
 
   @ViewChild(REPChatComponent) private chat: REPChatComponent;
 
-  protected readonly messageSubscription: Subscription = this._msService.messages$
+  private prevRoom: Room;
+
+  protected readonly messageSubscription: Subscription = this._msService.roomChanges
     .subscribe(() => {
-      this.chat.reset();
+
+      // if (this.prevRoom) {
+
+      //   this._msService.currentRoom.draft = this.chat.getText();
+
+      //   this.chat.setText(this._msService.currentRoom.draft);
+
+      //   this.chat.reset();
+      // }
+
+      // this.prevRoom = this._msService.currentRoom;
     });
 
   public readonly msgOptions: Array<REPButton> = [

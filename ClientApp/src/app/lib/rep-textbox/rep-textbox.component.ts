@@ -31,7 +31,9 @@ export class REPTextBoxComponent {
 
   public trigger: boolean = false;
 
-  public text: string;
+  public setTextValue(txt: string) {
+    this.form.setValue({ text: txt });
+  }
 
   public form: FormGroup = this.fb.group({
     text: ['',
@@ -42,8 +44,7 @@ export class REPTextBoxComponent {
     ]
   });
 
-  public async send(event) {
-    console.log(this.text)
+  public send(event) {
     if (this.form.valid && this.enabled) {
       const txt = this.form.value["text"].trim();
       this.sendMessage.emit(txt);

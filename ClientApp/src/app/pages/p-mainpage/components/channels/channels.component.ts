@@ -23,7 +23,7 @@ export class ChannelsComponent implements OnInit {
     this.fillSections();
   }
 
-  protected readonly channelSubscription: Subscription = this._msService.channels$
+  protected readonly channelSubscription: Subscription = this._msService.channelChanges
   .subscribe(() => {
     this.fillSections();
   });

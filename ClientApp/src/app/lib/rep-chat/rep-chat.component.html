@@ -32,7 +32,11 @@
 
   <div class="textbox">
 
-    <rep-textbox [msgMaxLength]="msgMaxLength" [enabled]="textboxEnabled" (sendMessage)="send($event)"></rep-textbox>
+    <rep-textbox
+      [msgMaxLength]="msgMaxLength"
+      [enabled]="textboxEnabled"
+      (sendMessage)="send($event)"
+    ></rep-textbox>
 
   </div>
 
