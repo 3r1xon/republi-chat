@@ -14,7 +14,7 @@ import { UtilsService } from 'src/services/utils.service';
 export class ChannelsComponent implements OnInit {
 
   constructor(
-    public _msService: MessagesService,
+    public _ms: MessagesService,
     public _utils: UtilsService,
     private router: Router,
   ) { }
@@ -23,7 +23,7 @@ export class ChannelsComponent implements OnInit {
     this.fillSections();
   }
 
-  protected readonly channelSubscription: Subscription = this._msService.channelChanges
+  protected readonly channelSubscription: Subscription = this._ms.channelChanges
   .subscribe(() => {
     this.fillSections();
   });
@@ -31,7 +31,7 @@ export class ChannelsComponent implements OnInit {
   private fillSections() {
     const channelsRef = this.channels.find(tab => tab.tabname == "Channels");
 
-    channelsRef.sections = this._msService.channels.map((ch) => {
+    channelsRef.sections = this._ms.channels.map((ch) => {
       return <Message>{
         id: ch.id,
         name: ch.name,
@@ -42,10 +42,10 @@ export class ChannelsComponent implements OnInit {
       };
     });
 
-    const channel = this._msService.channels[0];
+    const channel = this._ms.channels[0];
 
-    if (channel && this._msService.currentChannel == undefined) {
-      this._msService.joinChannel(channel);
+    if (channel && this._ms.currentChannel == undefined) {
+      this._ms.joinChannel(channel);
     }
   }
 
@@ -59,7 +59,7 @@ export class ChannelsComponent implements OnInit {
     {
       tabname: "Channels",
       icon: "list",
-      sections: this._msService.channels
+      sections: this._ms.channels
     },
     {
       tabname: "Friends",
@@ -69,15 +69,15 @@ export class ChannelsComponent implements OnInit {
   ];
 
   selectChannel(channel: Channel) {
-    if (channel.id == this._msService.currentChannel.id)
+    if (channel.id == this._ms.currentChannel.id)
       return;
 
-    this._msService.joinChannel(channel);
+    this._ms.joinChannel(channel);
   }
 
   selectRoom(room: Room) {
-    if (!this._msService.isInRoom(room)) {
-      this._msService.joinRoom(this._msService.currentChannel, room);
+    if (!this._ms.isInRoom(room)) {
+      this._ms.joinRoom(this._ms.currentChannel, room);
     }
   }
 

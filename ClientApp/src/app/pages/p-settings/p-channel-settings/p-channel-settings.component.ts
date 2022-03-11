@@ -10,7 +10,7 @@ import { UtilsService } from 'src/services/utils.service';
 export class PChannelSettingsComponent {
 
   constructor(
-    public _msService: MessagesService,
+    public _ms: MessagesService,
     private _utils: UtilsService
   ) { }
 

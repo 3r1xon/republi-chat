@@ -48,7 +48,7 @@ export class UserService implements CanActivate {
       .toPromise()
       .then(async (res) => {
         if (res.success) {
-          this.currentUser = <Account>res.data;
+          this.currentUser = res.data as Account;
           this.currentUser.picture = this._fileUpload.sanitizeIMG(this.currentUser.picture);
           this.userAuth = true;
           this.loadSettings();
@@ -91,7 +91,7 @@ export class UserService implements CanActivate {
     this.API_getSettings()
       .toPromise()
       .then((response) => {
-        this._utils.settings = <Settings>response.data;
+        this._utils.settings = response.data as Settings;
       });
   }
 

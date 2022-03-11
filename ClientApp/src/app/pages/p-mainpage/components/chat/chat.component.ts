@@ -1,6 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { REPChatComponent } from 'src/app/lib/rep-chat/rep-chat.component';
+import { Unsubscriber } from 'src/app/lib/rep-decorators';
 import { Room } from 'src/interfaces/channel.interface';
 import { Message } from 'src/interfaces/message.interface';
 import { REPButton } from 'src/interfaces/repbutton.interface';
@@ -12,10 +13,11 @@ import { UtilsService } from 'src/services/utils.service';
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.scss']
 })
+@Unsubscriber
 export class ChatComponent {
 
   constructor(
-    public _msService: MessagesService,
+    public _ms: MessagesService,
     public _utils: UtilsService
   ) { }
 
@@ -23,33 +25,38 @@ export class ChatComponent {
 
   private prevRoom: Room;
 
-  protected readonly messageSubscription: Subscription = this._msService.roomChanges
+  protected readonly messageSubscription: Subscription = this._ms.roomChanges
     .subscribe(() => {
 
-      // if (this.prevRoom) {
+      // Ensures each room chat maintains the text
+      // that is not sent yet
+      if (this.prevRoom) {
+        this.prevRoom.draft = this.chat.getText();
 
-      //   this._msService.currentRoom.draft = this.chat.getText();
+        if (this._ms.currentRoom.draft) {
+          this.chat.setText(this._ms.currentRoom.draft);
+        } else {
+          this.chat.setText(null);
+        }
+      }
 
-      //   this.chat.setText(this._msService.currentRoom.draft);
+      this.prevRoom = this._ms.currentRoom;
 
-      //   this.chat.reset();
-      // }
-
-      // this.prevRoom = this._msService.currentRoom;
+      this.chat.reset();
     });
 
   public readonly msgOptions: Array<REPButton> = [
     {
       name: "Edit",
       icon: "edit",
-      visible: (msgIndex: number) => this._msService.messages[msgIndex].auth,
+      visible: (msgIndex: number) => this._ms.messages[msgIndex].auth,
       onClick: (msgIndex: number) => {
       }
     },
     {
       name: "Report",
       icon: "flag",
-      visible: (msgIndex: number) => !this._msService.messages[msgIndex].auth,
+      visible: (msgIndex: number) => !this._ms.messages[msgIndex].auth,
       onClick: (msgIndex: number) => {
       }
     },
@@ -57,7 +64,7 @@ export class ChatComponent {
       name: "Highlight",
       icon: "star",
       onClick: (msgIndex: number) => {
-        this._msService.highlightMessage(this._msService.messages[msgIndex].id);
+        this._ms.highlightMessage(this._ms.messages[msgIndex].id);
       }
     },
     {
@@ -65,15 +72,15 @@ export class ChatComponent {
       icon: "delete",
       color: "danger",
       visible: (msgIndex: number) => {
-        if (this._msService.messages[msgIndex].auth) {
+        if (this._ms.messages[msgIndex].auth) {
           return true;
         }
 
-        return this._msService.roomPermissions.deleteMessages;
+        return this._ms.roomPermissions.deleteMessages;
       },
       onClick: (msgIndex: number) => {
         this._utils.showRequest("Delete message", "Are you sure you want to delete this message?", () => {
-          this._msService.deleteMessage(this._msService.messages[msgIndex].id);
+          this._ms.deleteMessage(this._ms.messages[msgIndex].id);
         });
       }
     },
@@ -82,14 +89,14 @@ export class ChatComponent {
       icon: "remove_circle_outline",
       color: "warning",
       visible: (msgIndex: number) => {
-        if (this._msService.messages[msgIndex].auth) {
+        if (this._ms.messages[msgIndex].auth) {
           return false;
         }
 
-        return this._msService.chPermissions.kickMembers;
+        return this._ms.chPermissions.kickMembers;
       },
       onClick: (msgIndex: number) => {
-        const msg = this._msService.messages[msgIndex];
+        const msg = this._ms.messages[msgIndex];
 
         this._utils.showRequest(`Kick ${msg.name}`, `Are you sure you want to kick out ${msg.name}? He will be able to rejoin later...`, () => {
 
@@ -101,20 +108,20 @@ export class ChatComponent {
       icon: "delete_forever",
       color: "danger",
       visible: (msgIndex: number) => {
-        if (this._msService.messages[msgIndex].auth) {
+        if (this._ms.messages[msgIndex].auth) {
           return false;
         }
 
-        return this._msService.chPermissions.banMembers;
+        return this._ms.chPermissions.banMembers;
       },
       onClick: (msgIndex: number) => {
-        const msg = this._msService.messages[msgIndex];
+        const msg = this._ms.messages[msgIndex];
 
         this._utils.showRequest(
           `Ban ${msg.name}`,
           `Are you sure you want to ban ${msg.name}? He will NOT be able to rejoin later till his ban is revoked!`,
           () => {
-            this._msService.banUser(this._msService.currentChannel, msg.author);
+            this._ms.banUser(this._ms.currentChannel, msg.author);
           }
         );
       }
@@ -129,7 +136,7 @@ export class ChatComponent {
       background: "danger",
       visible: () => this.chat?.selections.length > 0,
       enabled: () => {
-        if (this._msService.roomPermissions.deleteMessages)
+        if (this._ms.roomPermissions.deleteMessages)
           return true;
         return !this.chat.selections.some((msg: Message) => msg.auth == false);
       },
@@ -138,7 +145,7 @@ export class ChatComponent {
 
         const delSelected = () => {
           this.chat.selections.map((msg: Message) => {
-            this._msService.deleteMessage(msg.id);
+            this._ms.deleteMessage(msg.id);
           })
           this.chat.deselectAll();
         }
@@ -160,13 +167,13 @@ export class ChatComponent {
 
   textboxPermissionsHandler(): boolean {
 
-    if (this._msService.roomPermissions?.sendMessages == null) {
+    if (this._ms.roomPermissions?.sendMessages == null) {
 
-      if (this._msService.chPermissions?.sendMessages == true)
+      if (this._ms.chPermissions?.sendMessages == true)
         return true;
     } else {
 
-      if (this._msService.roomPermissions?.sendMessages == true)
+      if (this._ms.roomPermissions?.sendMessages == true)
         return true;
     }
 
@@ -174,14 +181,14 @@ export class ChatComponent {
   }
 
   displayChatName() {
-    if (!this._msService.currentChannel?.name)
+    if (!this._ms.currentChannel?.name)
       return '';
 
-    return this._msService.currentChannel?.name + " - " + this._msService.currentRoom?.roomName;
+    return this._ms.currentChannel?.name + " - " + this._ms.currentRoom?.roomName;
   }
 
   sendChannelMessage(message: string) {
-    this._msService.sendMessage(message);
+    this._ms.sendMessage(message);
   }
 
 }

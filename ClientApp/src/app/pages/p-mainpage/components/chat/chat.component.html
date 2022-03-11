@@ -1,8 +1,8 @@
 <rep-chat
-  [messages]="_msService.messages"
+  [messages]="_ms.messages"
   [textboxEnabled]="textboxPermissionsHandler()"
   [chatName]="displayChatName()"
-  [unread]="_msService.currentRoom?.notifications"
+  [unread]="_ms.currentRoom?.notifications"
   [msOptions]="msgOptions"
   [chatOptions]="chatOptions"
   [dateFormat]="_utils.settings.dateFormat"

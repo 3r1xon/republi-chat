@@ -14,7 +14,7 @@ import { UtilsService } from 'src/services/utils.service';
 export class PNewChannelComponent {
 
   constructor(
-    private _msService: MessagesService,
+    private _ms: MessagesService,
     private _utils: UtilsService,
     private router: Router,
     private fb: FormBuilder
@@ -65,14 +65,14 @@ export class PNewChannelComponent {
       picture: null
     };
 
-    this._msService.API_createChannel(channel)
+    this._ms.API_createChannel(channel)
       .toPromise()
       .then(
         (res: ServerResponse) => {
 
           if (res.success) {
 
-            this._msService.channels.push(res.data);
+            this._ms.channels.push(res.data);
 
             this.formCreation.setValue({ 
               channelName: '',
@@ -109,14 +109,14 @@ export class PNewChannelComponent {
       code: this.formAdd.value.channelCode
     };
 
-    this._msService.API_addChannel(channel)
+    this._ms.API_addChannel(channel)
       .toPromise()
       .then(
         (res: ServerResponse) => {
 
           if (res.success) {
 
-            this._msService.channels.push(res.data);
+            this._ms.channels.push(res.data);
 
             this.formAdd.setValue({
               channelName: '',

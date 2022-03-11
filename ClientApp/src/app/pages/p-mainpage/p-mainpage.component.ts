@@ -22,7 +22,7 @@ export class PMainpageComponent implements OnInit {
 
   constructor(
     public _user: UserService,
-    public _msService: MessagesService,
+    public _ms: MessagesService,
     public _utils: UtilsService
   ) { }
 
@@ -31,8 +31,8 @@ export class PMainpageComponent implements OnInit {
     // Should be called only one time
     // since getChannels invoke next
     // and other tasks will run
-    if (this._msService.channels.length == 0)
-      this._msService.getChannels();
+    if (this._ms.channels.length == 0)
+      this._ms.getChannels();
 
     Promise.resolve().then(() => {
       this.hasLoaded = true;
