@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'channel-info',
-  templateUrl: './channel-info.component.html',
-  styleUrls: ['./channel-info.component.scss']
+  selector: 'mtd-channel-info',
+  templateUrl: './mtd-channel-info.component.html',
+  styleUrls: ['./mtd-channel-info.component.scss']
 })
-export class ChannelInfoComponent {
+export class MTDChannelInfoComponent {
 
   public serverInfoTab: number = 0;
 

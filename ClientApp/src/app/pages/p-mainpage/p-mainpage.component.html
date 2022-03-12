@@ -1,14 +1,14 @@
 <div id="mainpage" [@.disabled]="!hasLoaded">
 
-  <status-bar [user]="_user.currentUser"></status-bar>
+  <mtd-status-bar [user]="_user.currentUser"></mtd-status-bar>
 
   <div class="main">
 
-    <channels *ngIf="_utils.settings.showChannels" @openLeft></channels>
+    <mtd-channels *ngIf="_utils.settings.showChannels" @openLeft></mtd-channels>
 
-    <chat></chat>
+    <mtd-chat></mtd-chat>
 
-    <channel-info *ngIf="_utils.settings.showServerGroup" @openRight></channel-info>
+    <mtd-channel-info *ngIf="_utils.settings.showServerGroup" @openRight></mtd-channel-info>
 
   </div>
 

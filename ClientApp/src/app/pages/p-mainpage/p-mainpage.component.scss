@@ -1,25 +1,25 @@
 #mainpage {
+  width: 100%;
+  height: 100vh;
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  background: var(--LIGHT-DARK);
+
+  .main {
     width: 100%;
-    height: 100vh;
-    position: fixed;
+    height: 100%;
     display: flex;
-    flex-direction: column;
-    background: var(--LIGHT-DARK);
+    overflow-x: hidden;
 
-    .main {
-        width: 100%;
-        height: 100%;
-        display: flex;
-        overflow-x: hidden;
-
-        channels, channel-info {
-            min-width: 250px;
-            max-width: 250px;
-        }
-
-        chat {
-            width: 100%;
-            height: 100%;
-        }
+    mtd-channels, mtd-channel-info {
+      min-width: 250px;
+      max-width: 250px;
     }
+
+    mtd-chat {
+      width: 100%;
+      height: 100%;
+    }
+  }
 }

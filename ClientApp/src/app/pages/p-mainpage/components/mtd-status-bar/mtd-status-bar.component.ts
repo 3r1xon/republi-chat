@@ -9,11 +9,11 @@ import { UtilsService } from 'src/services/utils.service';
 import { REPButton } from 'src/interfaces/repbutton.interface';
 
 @Component({
-  selector: 'status-bar',
-  templateUrl: './status-bar.component.html',
-  styleUrls: ['./status-bar.component.scss']
+  selector: 'mtd-status-bar',
+  templateUrl: './mtd-status-bar.component.html',
+  styleUrls: ['./mtd-status-bar.component.scss']
 })
-export class StatusBarComponent {
+export class MTDStatusBarComponent {
 
   constructor(
     public _utils: UtilsService,
@@ -35,7 +35,7 @@ export class StatusBarComponent {
       name: "Close Channels",
       icon: "list",
       tooltip: "Close/open left side-bar",
-      onClick: () => { 
+      onClick: () => {
         this._utils.settings.showChannels = !this._utils.settings.showChannels;
       }
     },
@@ -43,7 +43,7 @@ export class StatusBarComponent {
       name: "Close Group",
       icon: "group",
       tooltip: "Close/open right side-bar",
-      onClick: () => { 
+      onClick: () => {
         this._utils.settings.showServerGroup = !this._utils.settings.showServerGroup;
       }
     },

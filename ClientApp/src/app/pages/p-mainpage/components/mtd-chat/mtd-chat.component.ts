@@ -9,12 +9,12 @@ import { MessagesService } from 'src/services/messages.service';
 import { UtilsService } from 'src/services/utils.service';
 
 @Component({
-  selector: 'chat',
-  templateUrl: './chat.component.html',
-  styleUrls: ['./chat.component.scss']
+  selector: 'mtd-chat',
+  templateUrl: './mtd-chat.component.html',
+  styleUrls: ['./mtd-chat.component.scss']
 })
 @Unsubscriber
-export class ChatComponent {
+export class MTDChatComponent {
 
   constructor(
     public _ms: MessagesService,

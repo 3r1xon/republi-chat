@@ -7,11 +7,11 @@ import { MessagesService } from 'src/services/messages.service';
 import { UtilsService } from 'src/services/utils.service';
 
 @Component({
-  selector: 'channels',
-  templateUrl: './channels.component.html',
-  styleUrls: ['./channels.component.scss']
+  selector: 'mtd-channels',
+  templateUrl: './mtd-channels.component.html',
+  styleUrls: ['./mtd-channels.component.scss']
 })
-export class ChannelsComponent implements OnInit {
+export class MTDChannelsComponent implements OnInit {
 
   constructor(
     public _ms: MessagesService,
