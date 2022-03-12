@@ -298,7 +298,7 @@ io.on("connection", (socket) => {
 
     socket.join(`ch${channel}`);
 
-    console.log(socket.rooms)
+    // console.log(socket.rooms)
   });
 
   // socket.on("ban", (chInfo) => {
