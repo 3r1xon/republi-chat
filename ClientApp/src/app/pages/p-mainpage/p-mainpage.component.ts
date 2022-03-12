@@ -1,7 +1,6 @@
 import { MessagesService } from 'src/services/messages.service';
 import { UserService } from 'src/services/user.service';
 import { UtilsService } from 'src/services/utils.service';
-import { Unsubscriber } from 'src/app/lib/rep-decorators';
 import {
   Component,
   OnInit,
@@ -17,7 +16,6 @@ import { openLeft, openRight } from 'src/app/lib/animations';
     openRight("100ms", "-250px")
   ]
 })
-@Unsubscriber
 export class PMainpageComponent implements OnInit {
 
   constructor(

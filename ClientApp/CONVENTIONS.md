@@ -24,6 +24,22 @@ examples:
     <mtd-example></mtd-example>
     MTDExampleComponent
 
+
+## Pages
+
+Every component-page should start with the letter "p".
+
+Inside components should be in a folder called "components".
+
+examples:
+    p-login
+
+
+## APIs
+
+Every method that returns an API should start with "API_"
+
+
 ## Services
 
 Services starts with the _ and should not contain the "service" word in it.

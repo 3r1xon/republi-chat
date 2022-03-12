@@ -1,5 +1,11 @@
 import { Inject, Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
+import {
+  ActivatedRouteSnapshot,
+  CanActivate,
+  Router,
+  RouterStateSnapshot,
+  UrlTree
+} from '@angular/router';
 import { Observable } from 'rxjs';
 import { ServerResponse } from 'src/interfaces/response.interface';
 import { server } from 'src/environments/server';
@@ -46,7 +52,7 @@ export class UserService implements CanActivate {
 
     this.API_authorize({ BROWSER: browser })
       .toPromise()
-      .then(async (res) => {
+      .then(async (res: ServerResponse) => {
         if (res.success) {
           this.currentUser = res.data as Account;
           this.currentUser.picture = this._fileUpload.sanitizeIMG(this.currentUser.picture);
