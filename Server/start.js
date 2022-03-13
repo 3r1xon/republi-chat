@@ -1,13 +1,24 @@
-const dotenv         = require('dotenv').config();
-const express        = require('express');
-const cors           = require('cors');
-const app            = express();
-const cookieParser   = require('cookie-parser');
-const Auth           = require('./Authentication/auth');
-const port           = process.env.PORT;
-const server         = app.listen(port, () => {
+const dotenv       = require('dotenv').config();
+const https        = require('https');
+const express      = require('express');
+const cors         = require('cors');
+const fs           = require('fs');
+const app          = express();
+const cookieParser = require('cookie-parser');
+const Auth         = require('./Authentication/auth');
+const port         = process.env.PORT;
+
+const httpsOptions = {
+  key: fs.readFileSync(process.env.CERT_KEY_PATH),
+  cert: fs.readFileSync(process.env.CERT_PATH),
+  requestCert: false,
+  rejectUnauthorized: false
+};
+
+const server = https.createServer(httpsOptions, app).listen(port, () => {
   console.log(`Server listening at http://localhost:${port}`);
 });
+
 
 const corsOptions = {
   origin: process.env.CORS_ORIGIN,

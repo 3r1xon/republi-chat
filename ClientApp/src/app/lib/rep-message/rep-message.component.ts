@@ -21,10 +21,6 @@ export class REPMessageComponent {
     private eRef: ElementRef
   ) { }
 
-  public active: boolean = false;
-
-  public pictureError: boolean = false;
-
   @Input()
   public options: Array<REPButton>;
 
@@ -48,6 +44,10 @@ export class REPMessageComponent {
 
   @Output()
   public onClick = new EventEmitter();
+
+  public active: boolean = false;
+
+  public pictureError: boolean = false;
 
   clickHandler() {
     this.onClick.emit();
