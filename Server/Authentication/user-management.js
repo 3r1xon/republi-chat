@@ -5,6 +5,7 @@ const REPTools       = require('../Tools/rep-tools');
 const multer         = require('multer');
 const upload         = multer({});
 const REPQuery       = require('../Database/rep-query');
+const REPEmail       = require('./rep-email');
 const crypto         = require('crypto');
 const { io }         = require('../start');
 const model          = require('nanoid');
@@ -37,16 +38,41 @@ router.post('/signUp', async (req, res) => {
 
           const hash = crypto.createHash('sha256').update(user.password).digest('hex');
 
-          await REPQuery.exec(
+          const dbUser = await REPQuery.one(
           `
           INSERT INTO USERS
               (USER_CODE, PASSWORD, NAME, EMAIL, BACKGROUND_COLOR)
           VALUES (?, ?, ?, ?, ?)
+          RETURNING ID_USER as userID
           `, [code, hash, user.name, user.email, REPTools.randomHex()]);
 
           // SQL Trigger will take care of the rest
 
-          res.status(201).send({ success: true, message: 'User correctly signed up' });
+          const verification_code = model.nanoid(30);
+
+          await REPQuery.exec(
+          `
+          INSERT INTO USERS_VERIFICATIONS
+              (ID_USER, VERIFICATION_CODE)
+          VALUES (?, ?)
+          `, [dbUser.userID, verification_code]);
+
+          const email = new REPEmail();
+
+          email.sendMail(
+            user.email,
+            "RepubliChat email verification",
+            `
+            Welcome to RepubliChat! <br>
+            This is your verification link, if you didn't know about this you can just ignore this email. <br>
+            <a href="${process.env.ORIGIN}/verification/${verification_code}">Verify email here.</a>
+            `
+          );
+
+          res.status(201).send({
+            success: true,
+            message: `User correctly signed up. Check your email and verify your account otherwise you won't be able to log in.`
+          });
         } catch(error) {
 
           console.log(error);
@@ -59,6 +85,47 @@ router.post('/signUp', async (req, res) => {
       }
     });
   }
+});
+
+
+
+router.put('/verify/:verification_code', async (req, res) => {
+
+  const verification_code = req.params.verification_code;
+
+  try {
+
+    const verificationRef = REPQuery.one(
+    `
+    SELECT ID_USER as userID
+    FROM USERS_VERIFICATIONS
+    WHERE VERIFICATION_CODE = ?
+    `, [verification_code]);
+  
+    if (verificationRef) {
+
+      REPQuery.exec(
+      `
+      UPDATE USERS
+      SET VERIFIED = ?
+      WHERE ID_USER = ?
+      `, [true, verificationRef.userID]);
+
+      res.status(201).send({
+        success: true,
+        message: `User verified, you can now log in.`
+      });
+
+    } else {
+      res.status(400).send({ success: false, message: "Verification code invalid!" });
+    }
+
+  } catch(error) {
+    console.log(error);
+
+    res.status(500).send({ success: false, message: "Internal server error!" });
+  }
+
 });
 
 

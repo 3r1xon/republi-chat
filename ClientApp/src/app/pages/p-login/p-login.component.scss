@@ -2,115 +2,114 @@
 
 
 #login {
+  width: 100%;
+  height: 100vh;
+  background: var(--VERY-DARK);
+  position: fixed;
+  @include flexCenter(column);
+
+
+  .particle-container {
     width: 100%;
-    height: 100vh;
-    background: var(--VERY-DARK);
-    position: fixed;
-    @include flexCenter(column);
+    height: 100%;
+    animation: particlesSpawn 3s;
 
-
-    .particle-container {
-        width: 100%;
-        height: 100%;
-        animation: particlesSpawn 3s;
-
-        .particle {
-            position: fixed;
-            border-radius: 50%;
-        }
-
-        @for $i from 1 through 30 {
-            @keyframes particle-animation-#{$i} {
-                100% {
-                    transform: translate3d((random(90) * 1vw), (random(90) * 1vh), (random(100) * 1px));
-                }
-            }
-
-            .particle:nth-child(#{$i}){
-                animation: particle-animation-#{$i} 60s infinite;
-                $size: random(10) + 15 + px;
-                font-size: $size;
-                animation-delay: -$i * .2s;
-                transform: translate3d((random(90) * 1vw), (random(90) * 1vh), (random(100) * 1px));
-            }
-        }
+    .particle {
+      position: fixed;
+      border-radius: 50%;
     }
 
-    .form {
-        width: 100%;
-        height: 100%;
-        position: absolute;
-        @include flexCenter(row);
-
-
-        .rect {
-            width: 100%;
-            background: #1f1a24;
-            background: linear-gradient(120deg, #1f1a24d5 55%, #aaa3a380 100%);
-            animation: onOpenLogIn 1s forwards;
+    @for $i from 1 through 30 {
+      @keyframes particle-animation-#{$i} {
+        100% {
+          transform: translate3d((random(90) * 1vw), (random(90) * 1vh), (random(100) * 1px));
         }
+      }
 
-        .login-form {
-            position: absolute;
-            @include flexCenter(column);
-            z-index: 10;
-            animation: fadeIn 1s;
+      .particle:nth-child(#{$i}){
+        animation: particle-animation-#{$i} 60s infinite;
+        $size: random(10) + 15 + px;
+        font-size: $size;
+        animation-delay: -$i * .2s;
+        transform: translate3d((random(90) * 1vw), (random(90) * 1vh), (random(100) * 1px));
+      }
+    }
+  }
 
-            h1 {
-                font-size: 31px;
-                color: var(--WHITE);
-            }
+  .form {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    @include flexCenter(row);
 
-            rep-input {
-                margin: 15px;
-            }
 
-            rep-actions {
-                margin-top: 15px;
-            }
-
-            .alert {
-                width: 100%;
-                height: 15px;
-                position: relative;
-                display: grid;
-                place-items: center;
-                margin-top: 10px;
-                color: var(--DANGER);
-            }
-
-            a {
-                margin: 15px;
-            }
-        }
+    .rect {
+      width: 100%;
+      background: linear-gradient(120deg, #1f1a24d5 55%, #aaa3a380 100%);
+      animation: onOpenLogIn 1s forwards;
     }
 
+    .login-form {
+      position: absolute;
+      @include flexCenter(column);
+      z-index: 10;
+      animation: fadeIn 1s;
 
-    rep-footer {
+      h1 {
+        font-size: 31px;
+        color: var(--WHITE);
+      }
+
+      rep-input {
+        margin: 15px;
+      }
+
+      rep-actions {
+        margin-top: 15px;
+      }
+
+      .alert {
         width: 100%;
+        height: 15px;
+        position: relative;
+        display: grid;
+        place-items: center;
+        margin-top: 10px;
+        color: var(--DANGER);
+      }
+
+      a {
+        margin: 15px;
+      }
     }
+  }
+
+
+  rep-footer {
+    width: 100%;
+  }
 }
 
 
 @keyframes onOpenLogIn {
-    0% {
-        transform: skewY(-8deg);
-        height: 60vh;
-    }
+  0% {
+    transform: skewY(-8deg);
+    height: 60vh;
+  }
 
-    100% {
-        transform: skewY(8deg);
-        height: 45vh;
-    }
+  100% {
+    transform: skewY(8deg);
+    height: 45vh;
+  }
 }
 
 
 @keyframes particlesSpawn {
-    0% {
-        opacity: 0;
-    }
+  0% {
+    opacity: 0;
+  }
 
-    100% {
-        opacity: 1;
-    }
+  100% {
+    opacity: 1;
+  }
 }

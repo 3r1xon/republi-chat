@@ -1,18 +1,18 @@
 #rep-actions {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
+  height: 100%;
+
+  rep-button {
     height: 100%;
+    margin: 0 10px 0 10px;
+  }
 
-    rep-button {
-        height: 100%;
-        margin: 0 10px 0 10px;
-    }
-
-    rep-icon-button {
-        margin: 0 10px 0 10px;
-    }
+  rep-icon-button {
+    margin: 0 5px 0 5px;
+  }
 }
 
 .reverse {
-    flex-direction: row-reverse;
+  flex-direction: row-reverse;
 }

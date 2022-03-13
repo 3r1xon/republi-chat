@@ -23,12 +23,6 @@ class REPQuery {
     static exec = async (query, params) => {
         await db.query(query, params);
     }
-
-
-
-    static structurize = async () => {
-
-    }
 }
 
 

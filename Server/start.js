@@ -1,5 +1,6 @@
 const dotenv       = require('dotenv').config();
 const https        = require('https');
+const fs           = require('fs');
 const express      = require('express');
 const cors         = require('cors');
 const app          = express();
@@ -23,7 +24,7 @@ const server       = app.listen(port, () => {
 
 
 const corsOptions = {
-  origin: process.env.CORS_ORIGIN,
+  origin: process.env.ORIGIN,
   credentials: true,
   exposedHeaders: ['sid'],
 };

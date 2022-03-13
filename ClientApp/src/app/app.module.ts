@@ -27,6 +27,7 @@ import { MainpageModule } from './pages/p-mainpage/mainpage.module';
 import { REPModule } from './lib/rep.module';
 import { MatRippleModule } from '@angular/material/core';
 import { GlobalErrorHandler } from './lib/error-handler';
+import { PVerificationComponent } from './pages/p-verification/p-verification.component';
 
 
 
@@ -45,6 +46,7 @@ import { GlobalErrorHandler } from './lib/error-handler';
     PNewChannelComponent,
     PNotFoundComponent,
     PAppearanceComponent,
+    PVerificationComponent,
   ],
   imports: [
     BrowserModule,

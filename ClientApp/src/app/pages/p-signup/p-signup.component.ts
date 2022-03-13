@@ -106,9 +106,7 @@ export class PSignupComponent {
     this._user.API_signup(user)
       .toPromise()
       .then((response) => {
-        if (response.success) {
-          this.router.navigate(['login']);
-        }
+        this.alert = response.message;
       }).catch((response: HttpErrorResponse) => {
         this.alert = response.message;
       });

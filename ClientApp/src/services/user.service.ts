@@ -116,6 +116,10 @@ export class UserService implements CanActivate {
   public API_login(data) {
     return this.http.post<ServerResponse>(`${environment.BASE_URL}/authentication/logIn`, data);
   }
+
+  public API_verify(verification_code: string) {
+    return this.http.put<ServerResponse>(`${environment.BASE_URL}/authentication/verify/${verification_code}`, null);
+  }
   /**
    * API for deleting the user profile.
    *

@@ -13,14 +13,16 @@ import { PPrivacyComponent } from './pages/p-settings/p-privacy/p-privacy.compon
 import { PProfileComponent } from './pages/p-settings/p-profile/p-profile.component';
 import { PSignupComponent } from './pages/p-signup/p-signup.component';
 import { PUnauthorizedComponent } from './pages/p-unauthorized/p-unauthorized.component';
+import { PVerificationComponent } from './pages/p-verification/p-verification.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'signup', component: PSignupComponent, pathMatch: 'full' },
+  { path: 'verification/:verification_code', component: PVerificationComponent, pathMatch: 'full' },
   { path: 'login', component: PLoginComponent, pathMatch: 'full' },
   { path: 'mainpage', component: PMainpageComponent, pathMatch: 'full', canActivate: [UserService] },
   { path: 'unauthorized', component: PUnauthorizedComponent, pathMatch: 'full' },
-  { 
+  {
     path: 'settings',
     component: PSettingsComponent,
     children: [

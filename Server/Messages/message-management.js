@@ -30,7 +30,8 @@ router.get('/getRoomMessages/:chID/:roomID/:limit', async (req, res) => {
 
           try {
             // Ensures limit is a number
-            const limit = parseInt(req.params.limit);
+            //const limit = parseInt(req.params.limit);
+            const limit = 9999;
 
             const messages = await REPQuery.load(
             `
