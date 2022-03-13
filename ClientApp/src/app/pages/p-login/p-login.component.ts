@@ -55,7 +55,7 @@ export class PLoginComponent {
       name: "Sign Up",
       icon: "person_add",
       outline: true,
-      onClick: () => { 
+      onClick: () => {
         this.router.navigate(['signup']);
       }
     },
@@ -107,7 +107,7 @@ export class PLoginComponent {
 
       },
       () => {
-          this.alert = "Position is mandatory! Click 'Allow' and try again.";
+          this.alert = "Position is mandatory! Click 'Allow' and try again. Go check your browser settings if the pop-up is not shown.";
       });
 
   }

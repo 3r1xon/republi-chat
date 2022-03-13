@@ -1,7 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { server } from 'src/environments/server';
 import { Account } from 'src/interfaces/account.interface';
 import { Message } from 'src/interfaces/message.interface';
 import { ServerResponse } from 'src/interfaces/response.interface';
@@ -9,6 +8,7 @@ import { REPButton } from 'src/interfaces/repbutton.interface';
 import { FileUploadService } from 'src/services/file-upload.service';
 import { UserService } from 'src/services/user.service';
 import { UtilsService } from 'src/services/utils.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   templateUrl: './p-profile.component.html',
@@ -60,7 +60,7 @@ export class PProfileComponent {
       }
     }
   ];
-  
+
   public readonly topbarActions: Array<REPButton> = [
     {
       name: "Save",
@@ -86,7 +86,6 @@ export class PProfileComponent {
 
   async onChange(event) {
 
-    console.log("aaa")
     this.file = <File>event[0];
 
     const file = <File>event[0];
@@ -95,10 +94,10 @@ export class PProfileComponent {
     fd.append("image", file, file.name);
 
     const res = await this.http.put<ServerResponse>(
-    `${server.BASE_URL}/authentication/editProfile`, 
+    `${environment.BASE_URL}/authentication/editProfile`,
     fd
     ).toPromise();
-    
+
     if (res.success) {
       this._user.currentUser.picture = this._fileUpload.sanitizeIMG(res.data);
     }
@@ -115,7 +114,7 @@ export class PProfileComponent {
     // }
 
     // this.http.put<ServerResponse>(
-    // `${server.BASE_URL}/authentication/editProfile`, {
+    // `${environment.BASE_URL}/authentication/editProfile`, {
     //   body: {
     //     fd,
     //     user: this.user
@@ -135,7 +134,7 @@ export class PProfileComponent {
           .toPromise()
           .then(
             (res) => {
-              if (res.success) 
+              if (res.success)
                 this.router.navigate(['login']);
             }
           );

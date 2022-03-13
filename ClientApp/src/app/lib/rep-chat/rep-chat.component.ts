@@ -34,13 +34,14 @@ export class REPChatComponent implements AfterViewInit, OnDestroy {
         this.initialized = true;
       }
 
-      const scrollTop = this.content.nativeElement.scrollTop;
-      const scrollWidth = this.content.nativeElement.scrollWidth;
+      // const scrollTop = this.content.nativeElement.scrollTop;
+      // const scrollWidth = this.content.nativeElement.scrollWidth;
 
-      if (this.messages[this.messages?.length-1]?.auth) {
-        this.scrollToBottom();
+      // if (this.messages[this.messages?.length-1]?.auth) {
+      //   this.scrollToBottom();
+      // }
+      this.scrollToBottom();
 
-      }
     });
   }
 
@@ -104,7 +105,15 @@ export class REPChatComponent implements AfterViewInit, OnDestroy {
       onClick: () => {
 
       }
-    }
+    },
+    {
+      name: "Align",
+      icon: "vertical_align_bottom",
+      tooltip: "Scroll to bottom",
+      onClick: () => {
+        this.scrollToBottom();
+      }
+    },
   ];
 
   @Input()

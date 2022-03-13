@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
 import { Observable } from 'rxjs';
 import { io, Socket } from 'socket.io-client';
-import { server } from 'src/environments/server';
+import { environment } from 'src/environments/environment';
 import { UserService } from './user.service';
 import { UtilsService } from './utils.service';
 
@@ -25,7 +25,7 @@ export class WebSocketService {
     private _user: UserService,
     private cookieService: CookieService
   ) {
-    this.socket = io(server.WEB_SOCKET, socketOptions);
+    this.socket = io(environment.WEB_SOCKET, socketOptions);
 
     this.listen("connect")
       .subscribe(() => {

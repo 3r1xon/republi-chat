@@ -2,7 +2,6 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Message } from 'src/interfaces/message.interface';
 import { UserService } from './user.service';
-import { server } from 'src/environments/server';
 import { ServerResponse } from 'src/interfaces/response.interface';
 import { FileUploadService } from './file-upload.service';
 import { Channel, Room } from 'src/interfaces/channel.interface';
@@ -10,6 +9,7 @@ import { Subject, Subscription } from 'rxjs';
 import { ChannelPermissions, RoomPermissions } from 'src/interfaces/channel.interface';
 import { UtilsService } from './utils.service';
 import { WebSocketService } from './websocket.service';
+import { environment } from 'src/environments/environment';
 
 
 @Injectable({
@@ -285,23 +285,23 @@ export class MessagesService {
   }
 
   public API_getChannels() {
-    return this.http.get<ServerResponse>(`${server.BASE_URL}/channels/getChannels`);
+    return this.http.get<ServerResponse>(`${environment.BASE_URL}/channels/getChannels`);
   }
 
   public API_getRoomMessages(channel: Channel, room: Room, limit: number = 50) {
-    return this.http.get<ServerResponse>(`${server.BASE_URL}/messages/getRoomMessages/${channel.id}/${room.roomID}/${limit}`);
+    return this.http.get<ServerResponse>(`${environment.BASE_URL}/messages/getRoomMessages/${channel.id}/${room.roomID}/${limit}`);
   }
 
   public API_getChRooms(channel: Channel) {
-    return this.http.get<ServerResponse>(`${server.BASE_URL}/channels/getChannelRooms/${channel.id}`);
+    return this.http.get<ServerResponse>(`${environment.BASE_URL}/channels/getChannelRooms/${channel.id}`);
   }
 
   public API_getChPermissions(channel: Channel) {
-    return this.http.get<ServerResponse>(`${server.BASE_URL}/channels/getChannelPermissions/${channel.id}`);
+    return this.http.get<ServerResponse>(`${environment.BASE_URL}/channels/getChannelPermissions/${channel.id}`);
   }
 
   public API_getChRoomPermissions(channel: Channel, room: Room) {
-    return this.http.get<ServerResponse>(`${server.BASE_URL}/channels/getChRoomPermissions/${channel.id}/${room.roomID}`);
+    return this.http.get<ServerResponse>(`${environment.BASE_URL}/channels/getChRoomPermissions/${channel.id}/${room.roomID}`);
   }
 
   public leaveChannel(room: number) {
@@ -372,7 +372,7 @@ export class MessagesService {
    *
    */
   public API_createChannel(channel: Channel) {
-    return this.http.post<ServerResponse>(`${server.BASE_URL}/channels/createChannel`, channel);
+    return this.http.post<ServerResponse>(`${environment.BASE_URL}/channels/createChannel`, channel);
   }
 
   /**
@@ -384,7 +384,7 @@ export class MessagesService {
    *
    */
   public API_addChannel(channel: Channel) {
-    return this.http.post<ServerResponse>(`${server.BASE_URL}/channels/addChannel`, channel);
+    return this.http.post<ServerResponse>(`${environment.BASE_URL}/channels/addChannel`, channel);
   }
 
   /**

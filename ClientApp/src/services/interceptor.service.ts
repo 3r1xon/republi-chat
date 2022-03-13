@@ -11,7 +11,7 @@ import { Observable } from 'rxjs';
 import { UtilsService } from './utils.service';
 import { tap } from 'rxjs/operators';
 import { UserService } from './user.service';
-import { server } from 'src/environments/server';
+import { environment } from 'src/environments/environment';
 
 
 @Injectable({
@@ -25,10 +25,10 @@ export class InterceptorService implements HttpInterceptor {
   ) { }
 
   private readonly loadingBlackList: Array<string> = [
-    `${server.BASE_URL}/channels/getChannels`,
-    `${server.BASE_URL}/messages/getChannelMessages`,
-    `${server.BASE_URL}/authentication/getSettings`,
-    `${server.BASE_URL}/messages/getChannelPermissions`
+    `${environment.BASE_URL}/channels/getChannels`,
+    `${environment.BASE_URL}/messages/getChannelMessages`,
+    `${environment.BASE_URL}/authentication/getSettings`,
+    `${environment.BASE_URL}/messages/getChannelPermissions`
   ];
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
@@ -53,7 +53,7 @@ export class InterceptorService implements HttpInterceptor {
       this._utils.loading = false;
 
       // Loop warning, AND operator is mandatory!
-      if (err.status == 401 && this._user.userAuth) { 
+      if (err.status == 401 && this._user.userAuth) {
         this._user.logOut(true);
       }
     }));

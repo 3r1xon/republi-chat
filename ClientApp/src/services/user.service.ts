@@ -8,7 +8,6 @@ import {
 } from '@angular/router';
 import { Observable } from 'rxjs';
 import { ServerResponse } from 'src/interfaces/response.interface';
-import { server } from 'src/environments/server';
 import { Account } from 'src/interfaces/account.interface';
 import { HttpClient } from '@angular/common/http';
 import { CookieService } from 'ngx-cookie-service';
@@ -16,6 +15,7 @@ import { FileUploadService } from './file-upload.service';
 import { UtilsService } from './utils.service';
 import { DOCUMENT } from '@angular/common';
 import { Settings } from 'src/interfaces/settings.interface';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -102,19 +102,19 @@ export class UserService implements CanActivate {
   }
 
   public API_signup(user) {
-    return this.http.post<ServerResponse>(`${server.BASE_URL}/authentication/signUp`, user);
+    return this.http.post<ServerResponse>(`${environment.BASE_URL}/authentication/signUp`, user);
   }
 
   public API_logout() {
-    return this.http.delete(`${server.BASE_URL}/authentication/logout`);
+    return this.http.delete(`${environment.BASE_URL}/authentication/logout`);
   }
 
   public API_authorize(data) {
-    return this.http.post<ServerResponse>(`${server.BASE_URL}/authentication/authorize`, data);
+    return this.http.post<ServerResponse>(`${environment.BASE_URL}/authentication/authorize`, data);
   }
 
   public API_login(data) {
-    return this.http.post<ServerResponse>(`${server.BASE_URL}/authentication/logIn`, data);
+    return this.http.post<ServerResponse>(`${environment.BASE_URL}/authentication/logIn`, data);
   }
   /**
    * API for deleting the user profile.
@@ -123,7 +123,7 @@ export class UserService implements CanActivate {
    *
    */
   public API_deleteProfile() {
-    return this.http.delete<ServerResponse>(`${server.BASE_URL}/authentication/deleteProfile`);
+    return this.http.delete<ServerResponse>(`${environment.BASE_URL}/authentication/deleteProfile`);
   }
 
   /**
@@ -133,7 +133,7 @@ export class UserService implements CanActivate {
    *
    */
   public API_getDevices() {
-    return this.http.get<ServerResponse>(`${server.BASE_URL}/authentication/getDevices`);
+    return this.http.get<ServerResponse>(`${environment.BASE_URL}/authentication/getDevices`);
   }
 
   /**
@@ -145,7 +145,7 @@ export class UserService implements CanActivate {
    *
    */
   public API_disconnectDevice(deviceID: number) {
-    return this.http.delete<ServerResponse>(`${server.BASE_URL}/authentication/disconnectDevice/${deviceID}`);
+    return this.http.delete<ServerResponse>(`${environment.BASE_URL}/authentication/disconnectDevice/${deviceID}`);
   }
 
   /**
@@ -155,6 +155,6 @@ export class UserService implements CanActivate {
    *
    */
   public API_getSettings() {
-    return this.http.get<ServerResponse>(`${server.BASE_URL}/authentication/getSettings`);
+    return this.http.get<ServerResponse>(`${environment.BASE_URL}/authentication/getSettings`);
   }
 }
