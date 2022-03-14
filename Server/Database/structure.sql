@@ -10,6 +10,7 @@ create or replace table republichat.users
     COLOR            varchar(7) default '#ffffff' null,
     BACKGROUND_COLOR varchar(7)                   null,
     BIOGRAPHY        varchar(200)                 null,
+    VERIFIED         tinyint(1) default 0         null,
     constraint USERS_EMAIL_uindex
         unique (EMAIL)
 )
@@ -279,3 +280,15 @@ create or replace definer = root@localhost trigger republichat.settings_trigger
     for each row
     insert into settings(ID_USER) values (NEW.ID_USER);
 
+create or replace table republichat.users_verifications
+(
+    ID_USER_VERIFICATION bigint auto_increment
+        primary key,
+    ID_USER              bigint      not null,
+    VERIFICATION_CODE    varchar(30) not null,
+    constraint users_verifications_VERIFICATION_CODE_uindex
+        unique (VERIFICATION_CODE),
+    constraint users_verifications_users_ID_USER_fk
+        foreign key (ID_USER) references republichat.users (ID_USER)
+            on update cascade on delete cascade
+);
