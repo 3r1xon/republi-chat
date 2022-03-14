@@ -94,17 +94,16 @@ router.put('/verify/:verification_code', async (req, res) => {
   const verification_code = req.params.verification_code;
 
   try {
-
-    const verificationRef = REPQuery.one(
+    const verificationRef = await REPQuery.one(
     `
     SELECT ID_USER as userID
     FROM USERS_VERIFICATIONS
     WHERE VERIFICATION_CODE = ?
     `, [verification_code]);
-  
+
     if (verificationRef) {
 
-      REPQuery.exec(
+      await REPQuery.exec(
       `
       UPDATE USERS
       SET VERIFIED = ?
@@ -117,11 +116,11 @@ router.put('/verify/:verification_code', async (req, res) => {
       });
 
     } else {
-      res.status(400).send({ success: false, message: "Verification code invalid!" });
+      res.status(400).send({ success: false, message: "Verification code is invalid!" });
     }
 
   } catch(error) {
-    console.log(error);
+    console.log(clc.red(error));
 
     res.status(500).send({ success: false, message: "Internal server error!" });
   }
@@ -179,7 +178,8 @@ router.post('/logIn', async (req, res) => {
            U.COLOR                      as color,
            U.BACKGROUND_COLOR           as backgroundColor,
            U.EMAIL                      as email,
-           TO_BASE64(U.PROFILE_PICTURE) as picture
+           TO_BASE64(U.PROFILE_PICTURE) as picture,
+           U.VERIFIED                   as verified
     FROM USERS U
     WHERE EMAIL = ?
       AND PASSWORD = ?
@@ -187,6 +187,16 @@ router.post('/logIn', async (req, res) => {
 
 
     if (dbUser) {
+
+      if (!dbUser.verified) {
+
+        res.status(400).send({
+          success: false,
+          message: "User is not verified, please check your email and verify your account!"
+        });
+
+        return;
+      }
 
       const sid = model.nanoid(process.env.SID_SIZE);
 

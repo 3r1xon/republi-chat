@@ -110,6 +110,7 @@ export class REPChatComponent implements AfterViewInit, OnDestroy {
       name: "Align",
       icon: "vertical_align_bottom",
       tooltip: "Scroll to bottom",
+      enabled: () => this.messages.length > 0,
       onClick: () => {
         this.scrollToBottom();
       }

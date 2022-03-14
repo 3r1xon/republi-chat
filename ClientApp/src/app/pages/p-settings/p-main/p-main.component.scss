@@ -2,98 +2,98 @@
 
 
 #settings {
+  width: 100%;
+  height: 100vh;
+  user-select: none;
+  background: var(--DARK);
+  display: flex;
+  overflow-x: hidden;
+  // animation: zoom-in-out 160ms ease;
+
+
+  .menu {
+    min-width: 250px;
+    height: 100%;
+    background: var(--LIGHT-DARK);
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+
+
+    .submenu {
+      width: 90%;
+      height: 35px;
+      padding: 5px;
+      margin: 5px;
+      color: #FFFFFF;
+      background: transparent;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      border: 1px solid var(--GREY);
+      border-radius: 5px;
+      font-size: 16px;
+    }
+  }
+
+  .section {
     width: 100%;
     height: 100vh;
-    user-select: none;
-    background: var(--DARK);
     display: flex;
-    overflow-x: hidden;
-    animation: zoom-in-out 160ms ease;
+    flex-direction: column;
+    align-items: center;
+    overflow: hidden;
 
 
-    .menu {
-        min-width: 250px;
+    .navigator {
+      width: 100%;
+      min-height: 10vh;
+      @include flexCenter(row);
+      color: var(--WHITE);
+
+      .spacer {
+        width: 50%;
         height: 100%;
-        background: var(--LIGHT-DARK);
+        margin: 10px;
         display: flex;
+        justify-content: space-between;
+        position: relative;
         align-items: center;
-        flex-direction: column;
 
-
-        .submenu {
-            width: 90%;
-            height: 35px;
-            padding: 5px;
-            margin: 5px;
-            color: #FFFFFF;
-            background: transparent;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            cursor: pointer;
-            border: 1px solid var(--GREY);
-            border-radius: 5px;
-            font-size: 16px;
+        h1 {
+          color: var(--OBSCURE_SECONDARY);
         }
+
+        .back {
+          width: 40px;
+          height: 40px;
+          margin: 10px;
+          color: var(--WHITE);
+          border-radius: 50%;
+          @include flexCenter(row);
+          background: transparent;
+          position: absolute;
+          right: 0;
+          border: 1px solid var(--GREY);
+          cursor: pointer;
+          transition: 100ms;
+
+          &:hover, &:focus {
+            background: lighten($color: #1e1e1e, $amount: 15);
+          }
+        }
+      }
     }
 
-    .section {
-        width: 100%;
-        height: 100vh;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        overflow: hidden;
-
-
-        .navigator {
-            width: 100%;
-            min-height: 10vh;
-            @include flexCenter(row);
-            color: var(--WHITE);
-
-            .spacer {
-                width: 50%;
-                height: 100%;
-                margin: 10px;
-                display: flex;
-                justify-content: space-between;
-                position: relative;
-                align-items: center;
-
-                h1 {
-                    color: var(--OBSCURE_SECONDARY);
-                }
-
-                .back {
-                    width: 40px;
-                    height: 40px;
-                    margin: 10px;
-                    color: var(--WHITE);
-                    border-radius: 50%;
-                    @include flexCenter(row);
-                    background: transparent;
-                    position: absolute;
-                    right: 0;
-                    border: 1px solid var(--GREY);
-                    cursor: pointer;
-                    transition: 100ms;
-
-                    &:hover, &:focus {
-                        background: lighten($color: #1e1e1e, $amount: 15);
-                    }
-                }
-            }
-        }
-
-        .router {
-            width: 90%;
-            height: 90vh;
-            margin: 10px;
-            overflow-y: auto;
-            overflow-x: hidden;
-        }
+    .router {
+      width: 90%;
+      height: 90vh;
+      margin: 10px;
+      overflow-y: auto;
+      overflow-x: hidden;
     }
+  }
 }
 
 @keyframes zoom-in-out {

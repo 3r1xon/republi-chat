@@ -8,32 +8,9 @@
   position: fixed;
   @include flexCenter(column);
 
-
-  .particle-container {
+  mtd-emoji-background {
     width: 100%;
     height: 100%;
-    animation: particlesSpawn 3s;
-
-    .particle {
-      position: fixed;
-      border-radius: 50%;
-    }
-
-    @for $i from 1 through 30 {
-      @keyframes particle-animation-#{$i} {
-        100% {
-          transform: translate3d((random(90) * 1vw), (random(90) * 1vh), (random(100) * 1px));
-        }
-      }
-
-      .particle:nth-child(#{$i}){
-        animation: particle-animation-#{$i} 60s infinite;
-        $size: random(10) + 15 + px;
-        font-size: $size;
-        animation-delay: -$i * .2s;
-        transform: translate3d((random(90) * 1vw), (random(90) * 1vh), (random(100) * 1px));
-      }
-    }
   }
 
   .form {
@@ -56,7 +33,7 @@
       animation: fadeIn 1s;
 
       h1 {
-        font-size: 31px;
+        font-size: 28px;
         color: var(--WHITE);
       }
 
@@ -100,16 +77,5 @@
   100% {
     transform: skewY(8deg);
     height: 45vh;
-  }
-}
-
-
-@keyframes particlesSpawn {
-  0% {
-    opacity: 0;
-  }
-
-  100% {
-    opacity: 1;
   }
 }

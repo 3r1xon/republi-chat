@@ -17,32 +17,6 @@ export class PSignupComponent {
     private fb: FormBuilder
   ) { }
 
-  public particleNumber: Array<any> = [];
-
-  public emojis: Array<string> = [
-    "😀",
-    "🍕",
-    "🎳",
-    "👽",
-    "👀",
-    "😈",
-    "💀",
-    "🤡",
-    "🍉",
-    "👾",
-    "⚾",
-    "😍",
-    "🎩",
-    "👁️",
-    "☠️",
-    "🥝",
-    "🤖",
-    "🌴",
-    "🌮",
-    "🎃",
-    "🔥"
-  ];
-
   public actions: Array<REPButton> = [
     {
       name: "Log in",
@@ -107,6 +81,7 @@ export class PSignupComponent {
       .toPromise()
       .then((response) => {
         this.alert = response.message;
+        this.form.reset();
       }).catch((response: HttpErrorResponse) => {
         this.alert = response.message;
       });

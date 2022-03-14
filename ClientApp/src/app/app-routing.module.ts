@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { UserService } from 'src/services/user.service';
 
-import { PLoginComponent } from './pages/p-login/p-login.component';
+import { PLoginComponent } from './pages/p-pre-login/p-login/p-login.component';
 import { PMainpageComponent } from './pages/p-mainpage/p-mainpage.component';
 import { PNotFoundComponent } from './pages/p-not-found/p-not-found.component';
 import { PAppearanceComponent } from './pages/p-settings/p-appearance/p-appearance.component';
@@ -11,9 +11,9 @@ import { PSettingsComponent } from './pages/p-settings/p-main/p-main.component';
 import { PNewChannelComponent } from './pages/p-settings/p-newchannel/p-newchannel.component';
 import { PPrivacyComponent } from './pages/p-settings/p-privacy/p-privacy.component';
 import { PProfileComponent } from './pages/p-settings/p-profile/p-profile.component';
-import { PSignupComponent } from './pages/p-signup/p-signup.component';
+import { PSignupComponent } from './pages/p-pre-login/p-signup/p-signup.component';
 import { PUnauthorizedComponent } from './pages/p-unauthorized/p-unauthorized.component';
-import { PVerificationComponent } from './pages/p-verification/p-verification.component';
+import { PVerificationComponent } from './pages/p-pre-login/p-verification/p-verification.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },

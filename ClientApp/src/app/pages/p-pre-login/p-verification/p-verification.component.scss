@@ -1,0 +1,52 @@
+@import 'src/app/styles/mixins';
+
+
+#p-verification {
+  width: 100%;
+  height: 100vh;
+  background: var(--VERY-DARK);
+  position: fixed;
+  @include flexCenter(column);
+
+  mtd-emoji-background {
+    width: 100%;
+    height: 100%;
+  }
+
+  .state {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    @include flexCenter(column);
+
+    mat-icon {
+      font-size: 48px;
+      margin: 10px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    h1, p {
+      margin: 10px;
+    }
+
+    rep-button {
+      margin: 15px;
+    }
+  }
+
+  rep-footer {
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+  }
+}
+
+.success {
+  color: var(--SUCCESS);
+}
+
+.fail {
+  color: var(--DANGER);
+}

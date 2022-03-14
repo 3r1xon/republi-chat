@@ -1,0 +1,27 @@
+<div id="p-verification">
+
+  <mtd-emoji-background></mtd-emoji-background>
+
+  <div class="state">
+
+    <mat-icon
+      *ngIf="verified != undefined"
+      [ngClass]="{
+        'success': verified,
+        'fail': !verified
+      }"
+    >
+      {{verified ? 'verified' : 'sentiment_dissatisfied'}}
+    </mat-icon>
+
+    <h1>{{title}}</h1>
+
+    <p>{{response}}</p>
+
+    <rep-button routerLink="/login">Log In</rep-button>
+
+  </div>
+
+  <rep-footer></rep-footer>
+
+</div>

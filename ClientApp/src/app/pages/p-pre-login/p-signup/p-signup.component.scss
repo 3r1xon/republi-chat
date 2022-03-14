@@ -1,0 +1,78 @@
+@import 'src/app/styles/mixins';
+
+
+#signup {
+    width: 100%;
+    height: 100vh;
+    position: fixed;
+    background: var(--VERY-DARK);
+    @include flexCenter(column);
+
+    mtd-emoji-background {
+      width: 100%;
+      height: 100%;
+    }
+
+    .form {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        @include flexCenter(row);
+
+        .rect {
+          width: 100%;
+          background: #1f1a24;
+          background: linear-gradient(120deg, #1f1a24d5 55%, #aaa3a380 100%);
+          animation: onOpenSignUp 1s forwards;
+        }
+
+        .signup-form {
+          height: 80vh;
+          position: absolute;
+          @include flexCenter(column);
+          z-index: 10;
+          animation: fadeIn 1s;
+
+          h1 {
+            font-size: 28px;
+            color: var(--WHITE);
+          }
+
+          rep-input {
+            margin: 25px 0 10px 0;
+          }
+
+          rep-actions {
+            margin-top: 15px;
+          }
+
+          .alert {
+            width: 100%;
+            height: 15px;
+            position: relative;
+            display: grid;
+            place-items: center;
+            margin-top: 15px;
+            color: var(--DANGER);
+          }
+        }
+    }
+
+    rep-footer {
+      width: 100%;
+    }
+}
+
+
+
+@keyframes onOpenSignUp {
+  0% {
+    transform: skewY(8deg);
+    height: 45vh;
+  }
+
+  100% {
+    transform: skewY(-8deg);
+    height: 60vh;
+  }
+}

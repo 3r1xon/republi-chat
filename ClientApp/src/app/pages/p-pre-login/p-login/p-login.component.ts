@@ -25,31 +25,6 @@ export class PLoginComponent {
 
   public alert: string;
 
-  public emojis: Array<string> = [
-    "😀",
-    "🍕",
-    "😃",
-    "🤡",
-    "😅",
-    "👽",
-    "😇",
-    "😈",
-    "😉",
-    "🍉",
-    "😋",
-    "😌",
-    "😍",
-    "🤬",
-    "😏",
-    "🤾",
-    "🥝",
-    "😒",
-    "🥕",
-    "🌮",
-    "🎃",
-    "🔥"
-  ];
-
   public actions: Array<REPButton> = [
     {
       name: "Sign Up",
