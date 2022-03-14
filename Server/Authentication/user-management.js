@@ -96,7 +96,8 @@ router.put('/verify/:verification_code', async (req, res) => {
   try {
     const verificationRef = await REPQuery.one(
     `
-    SELECT ID_USER as userID
+    SELECT ID_USER_VERIFICATION as verificationID
+           ID_USER              as userID
     FROM USERS_VERIFICATIONS
     WHERE VERIFICATION_CODE = ?
     `, [verification_code]);
@@ -109,6 +110,13 @@ router.put('/verify/:verification_code', async (req, res) => {
       SET VERIFIED = ?
       WHERE ID_USER = ?
       `, [true, verificationRef.userID]);
+
+      await REPQuery.exec(
+      `
+      DELETE
+      FROM USERS_VERIFICATIONS
+      WHERE ID_USER_VERIFICATION = ?
+      `, [verificationRef.verificationID]);
 
       res.status(201).send({
         success: true,
