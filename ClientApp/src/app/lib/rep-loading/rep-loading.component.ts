@@ -1,5 +1,4 @@
-import { Component } from '@angular/core';
-import { UtilsService } from 'src/services/utils.service';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'rep-loading',
@@ -8,5 +7,6 @@ import { UtilsService } from 'src/services/utils.service';
 })
 export class REPLoadingComponent {
 
-  constructor(public _utils: UtilsService) { }
+  @Input()
+  public loading: boolean = false;
 }

@@ -30,12 +30,13 @@ export class PSignupComponent {
       name: "Sign Up",
       icon: "person_add",
       type: "submit",
-      enabled: () => this.form.valid,
-      onClick: () => { }
+      enabled: () => this.form.valid
     }
   ];
 
   public alert: string;
+
+  public success: boolean;
 
   public form: FormGroup = this.fb.group({
     name: ['',
@@ -80,10 +81,12 @@ export class PSignupComponent {
     this._user.API_signup(user)
       .toPromise()
       .then((response) => {
+        this.success = true;
         this.alert = response.message;
         this.form.reset();
       }).catch((response: HttpErrorResponse) => {
-        this.alert = response.message;
+        this.alert = response.error.message;
+        this.success = false;
       });
   }
 

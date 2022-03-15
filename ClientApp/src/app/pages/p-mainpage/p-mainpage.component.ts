@@ -5,7 +5,7 @@ import {
   Component,
   OnInit,
 } from '@angular/core';
-import { openLeft, openRight } from 'src/app/lib/animations';
+import { openLeft, openRight } from 'src/app/lib/rep-animations';
 
 
 @Component({

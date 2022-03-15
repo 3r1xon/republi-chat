@@ -12,15 +12,20 @@ export class GlobalErrorHandler implements ErrorHandler {
 
   handleError(error: any) {
     if (
-      error instanceof HttpErrorResponse || 
+      error instanceof HttpErrorResponse ||
       error instanceof HttpResponse ||
       error.rejection?.name == "HttpErrorResponse"
     ) return;
 
     console.error(error);
 
-    this.zone.run(() => { 
-      this._utils.showBugReport(error.rejection, error); 
+    this.zone.run(() => {
+
+      error.rejection ??= "";
+
+      this._utils.showBugReport(error.rejection, error);
+
+      this._utils.API_sendReport(error.rejection, error.toString()).toPromise();
     });
   }
 }

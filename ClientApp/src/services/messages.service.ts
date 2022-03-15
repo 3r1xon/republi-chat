@@ -10,7 +10,6 @@ import { ChannelPermissions, RoomPermissions } from 'src/interfaces/channel.inte
 import { UtilsService } from './utils.service';
 import { WebSocketService } from './websocket.service';
 import { environment } from 'src/environments/environment';
-import { Title } from '@angular/platform-browser';
 
 
 @Injectable({
@@ -23,8 +22,7 @@ export class MessagesService {
     private _fileUpload: FileUploadService,
     private _utils: UtilsService,
     private _webSocket: WebSocketService,
-    private http: HttpClient,
-    private title: Title
+    private http: HttpClient
   ) { }
 
   public messages: Array<Message> = [];
@@ -63,24 +61,12 @@ export class MessagesService {
 
           this.destroyChSubscriptions();
 
-          // this.chSubscriptions
-          // .push(
-          //   this._webSocket.listen("ban")
-          //     .subscribe((banID) => {
-          //       if (banID == this.chPermissions.id) {
-          //         this.messages = [];
-
-          //         this._utils.showRequest(
-          //           "Banned",
-          //           "You have been banned!"
-          //         );
-          //       }
-          //     })
-          // );
           this.channelChanges.next();
         }
       }
-    ).catch(() => { });
+    ).catch(() => {
+      this._utils.showBugReport("Server error!", "There has been an error while fetching the channels!");
+    });
   }
 
   /**
@@ -108,16 +94,20 @@ export class MessagesService {
 
         this.API_getChRooms(channel)
           .toPromise()
-          .then((res: ServerResponse) => {
+          .then((resRoom: ServerResponse) => {
 
-            this.currentChannel.rooms = res.data;
+            this.currentChannel.rooms = resRoom.data;
 
-            if (this.currentChannel.rooms.text.length > 0)
+            const lastJoinedRoom = this.getRoomByID(this._user.currentUser.lastJoinedRoom);
+
+            if (lastJoinedRoom) {
+              this.joinRoom(channel, lastJoinedRoom);
+            } else if (this.currentChannel.rooms.text.length > 0)
               this.joinRoom(channel, this.currentChannel.rooms.text[0]);
           });
       }
     ).catch(() => {
-      this._utils.showBugReport("Server error!", "There has been an error while requesting the channels!", false);
+      this._utils.showBugReport("Server error!", "There has been an error while joining the channel!");
     });
   }
 
@@ -153,7 +143,7 @@ export class MessagesService {
                 }
               }
             ).catch(() => {
-              this._utils.showBugReport("Server error!", "There has been an error while requesting the messages!", false);
+              this._utils.showBugReport("Server error!", "There has been an error while requesting the messages!");
             });
           }
         );

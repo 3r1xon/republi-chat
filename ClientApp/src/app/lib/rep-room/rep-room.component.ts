@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { Account } from 'src/interfaces/account.interface';
-import { expand } from '../animations';
+import { expand } from '../rep-animations';
 
 @Component({
   selector: 'rep-room',
