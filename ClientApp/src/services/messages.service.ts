@@ -10,6 +10,7 @@ import { ChannelPermissions, RoomPermissions } from 'src/interfaces/channel.inte
 import { UtilsService } from './utils.service';
 import { WebSocketService } from './websocket.service';
 import { environment } from 'src/environments/environment';
+import { Title } from '@angular/platform-browser';
 
 
 @Injectable({
@@ -22,7 +23,8 @@ export class MessagesService {
     private _fileUpload: FileUploadService,
     private _utils: UtilsService,
     private _webSocket: WebSocketService,
-    private http: HttpClient
+    private http: HttpClient,
+    private title: Title
   ) { }
 
   public messages: Array<Message> = [];
@@ -75,7 +77,6 @@ export class MessagesService {
           //       }
           //     })
           // );
-
           this.channelChanges.next();
         }
       }
@@ -282,6 +283,15 @@ export class MessagesService {
           }
         })
     );
+  }
+
+  public getChannelByID(channelID: number): Channel {
+    return this.channels.find(ch => ch.id == channelID);
+  }
+
+  public getRoomByID(roomID: number): Room {
+    const allRooms = [...this.currentChannel.rooms.text, ...this.currentChannel.rooms.vocal];
+    return allRooms.find(room => room.roomID == roomID);
   }
 
   public API_getChannels() {

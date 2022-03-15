@@ -6,4 +6,6 @@ export interface Account {
   backgroundColor?: string;
   name: string;
   email: string;
+  lastJoinedChannel: number;
+  lastJoinedRoom: number;
 }

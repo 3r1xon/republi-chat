@@ -28,7 +28,7 @@ import { MainpageModule } from './pages/p-mainpage/mainpage.module';
 import { REPModule } from './lib/rep.module';
 import { MatRippleModule } from '@angular/material/core';
 import { GlobalErrorHandler } from './lib/error-handler';
-import { MTDEmojiBackgroundComponent } from './pages/p-pre-login/components/emoji-background/mtd-emoji-background.component';
+import { MTDEmojiBackgroundComponent } from './pages/p-pre-login/components/mtd-emoji-background/mtd-emoji-background.component';
 
 
 

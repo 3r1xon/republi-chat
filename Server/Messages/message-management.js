@@ -92,6 +92,8 @@ io.on("connection", (socket) => {
         console.log(clc.yellow(chErr));
       } else {
 
+        user.setLastJoinedChannel();
+
         user.setRoom(rqRoom, async (roomErr) => {
           if (roomErr) {
             console.log(clc.yellow(roomErr));
@@ -100,6 +102,7 @@ io.on("connection", (socket) => {
             socket.join(`rm${rqRoom}`);
             room = rqRoom;
             user.watch();
+            user.setLastJoinedRoom();
           }
         });
       }
