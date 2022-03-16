@@ -2,18 +2,19 @@
 
   <ul class="tabs">
 
-    <li role="tablist"
+    <li
+      *ngFor="let tab of entries; let i = index;"
+      role="tablist"
       class="tab"
       tabindex="0"
-      *ngFor="let tab of entries; let i = index;"
       (keypress)="selectTab(i)"
     >
 
       <a role="tab"
         (click)="selectTab(i)"
         [ngClass]="{
-            'normal': currentIndex != i,
-            'hovered': currentIndex == i
+          'normal': currentIndex != i,
+          'hovered': currentIndex == i
         }"
       >
         {{tab.tabname}}

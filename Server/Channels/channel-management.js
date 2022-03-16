@@ -8,7 +8,6 @@ const upload   = multer({});
 const fm       = require('date-fns');
 const clc      = require('cli-color');
 const DBUser   = require('../Authentication/db-user');
-const { io }   = require('../start');
 const { channelSchema } = require('../Tools/schemas');
 
 
@@ -289,47 +288,6 @@ router.get('/getChRoomPermissions/:chID/:roomID', (req, res) => {
 
 });
 
-
-
-io.on("connection", (socket) => { 
-
-  const userID = socket.auth._id;
-
-  const user = new DBUser(userID);
-
-  let channel;
-
-  socket.on("joinChannel", (obj) => {
-
-    socket.leave(`ch${channel}`);
-
-    channel = obj.channel;
-
-    socket.join(`ch${channel}`);
-
-    // console.log(socket.rooms)
-  });
-
-  // socket.on("ban", (chInfo) => {
-  //   const rqRoom = chInfo.room;
-  //   const _memberID = chInfo._id;
-
-  //   user.setChannel(rqRoom, (err) => {
-  //     if (err) {
-  //       console.log(clc.red(err));
-  //     } else {
-
-  //       user.banMember(_memberID);
-  //     }
-  //   });
-
-  // });
-
-
-  // socket.on("kick", (chUserID) => {
-
-  // });
-})
 
 
 module.exports = router;

@@ -86,10 +86,6 @@ export class MessagesService {
 
         this.chPermissions = resChannel.data as ChannelPermissions;
 
-        this._webSocket.emit("joinChannel", {
-          channel: this.currentChannel.id,
-        });
-
         this.initChannelSockets();
 
         this.API_getChRooms(channel)

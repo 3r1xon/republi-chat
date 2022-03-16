@@ -51,6 +51,9 @@ app.use('/messages', require('./Messages/message-management'));
 app.use('/channels', require('./Channels/channel-management'));
 app.use('/utils', require('./Utils/utils-management'));
 
+app.use('/sockets', require('./Sockets/sockets-management'));
+
+
 
 app.get('/', (req, res) => {
   res.send('Server is working!');
