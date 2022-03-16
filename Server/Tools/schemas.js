@@ -18,6 +18,15 @@ module.exports = {
 
   }),
 
+  channelSchema: Joi.object({
+    name: Joi.string()
+      .min(3)
+      .max(30),
+
+    picture: Joi.string()
+      .allow(null)
+  }),
+
   msgSchema: Joi.object({
     message: Joi.string()
       .required()

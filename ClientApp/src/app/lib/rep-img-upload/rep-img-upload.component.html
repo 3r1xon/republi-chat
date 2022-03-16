@@ -1,15 +1,16 @@
 <div id="rep-img-upload">
 
-  <ng-container *ngIf="src != null">
-    <label for="file-input">
-        <img [src]="src" class="picture"/>
-    </label>
-
-    <input class="file-input" type="file" (change)="onChange($event.target.files)" />
-  </ng-container>
-
-  <ng-container *ngIf="src == null">
-    <input type="file" (change)="onChange($event.target.files)" />
-  </ng-container>
+  <label for="file-input">
+    <img *ngIf="src != null" [src]="src" class="picture"/>
+    <rep-profile-pic
+      *ngIf="src == null"
+      [letter]="letter"
+      [color]="backgroundColor"
+      width="75px"
+      height="75px"
+    ></rep-profile-pic>
+  </label>
+  <input id="file-input" type="file" (change)="onChange($event.target.files)" />
+  <mat-icon>file_upload</mat-icon>
 
 </div>

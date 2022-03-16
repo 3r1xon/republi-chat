@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -23,7 +24,7 @@ export class PNewChannelComponent {
   public formCreation: FormGroup = this.fb.group({
     channelImage: [null],
     channelName: ['',
-      [Validators.required, Validators.maxLength(30)]
+      [Validators.minLength(3), Validators.maxLength(30)]
     ]
   });
 
@@ -74,14 +75,14 @@ export class PNewChannelComponent {
 
             this._ms.channels.push(res.data);
 
-            this.formCreation.setValue({ 
+            this.formCreation.setValue({
               channelName: '',
               channelImage: null
             });
 
             this._utils.showRequest(
-              "Channel created successfully", 
-              `The channel "${channel.name}" has been created successfully, you can now find it at the main page!`, 
+              "Channel created successfully",
+              `The channel "${channel.name}" has been created successfully, you can now find it at the main page!`,
               [
                 {
                   name: "Mainpage",
@@ -98,6 +99,8 @@ export class PNewChannelComponent {
               ]
             );
           }
+      }).catch((res: HttpErrorResponse) => {
+        this._utils.showRequest("Error while creating the channel", res.error.message);
       });
 
   }

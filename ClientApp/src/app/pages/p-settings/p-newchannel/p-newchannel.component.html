@@ -6,7 +6,7 @@
 
   <form class="channel-info column" [formGroup]="formCreation">
 
-    <rep-img-upload></rep-img-upload>
+    <rep-img-upload [letter]="formCreation.value.channelName"></rep-img-upload>
 
     <rep-input formControlName="channelName" placeholder="Channel name" required="true"></rep-input>
 
@@ -18,6 +18,7 @@
 
 
   <rep-separator>Add channel</rep-separator>
+
 
   <h1>Add an existing channel</h1>
 

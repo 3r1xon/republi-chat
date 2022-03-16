@@ -9,6 +9,7 @@ const fm       = require('date-fns');
 const clc      = require('cli-color');
 const DBUser   = require('../Authentication/db-user');
 const { io }   = require('../start');
+const { channelSchema } = require('../Tools/schemas');
 
 
 router.use(Auth.HTTPAuthToken);
@@ -21,6 +22,14 @@ router.post('/createChannel', upload.single("image"), async (req, res) => {
     name: req.body.name,
     picture: req.body.picture
   };
+
+  const { error } = channelSchema.validate(channel);
+
+  if (error) {
+    res.status(400).send({ success: false, message: `Invalid payload, schema error!` });
+
+    return;
+  }
 
   const creationDate = fm.format(new Date(), 'yyyy-MM-dd HH:mm');
 
@@ -62,7 +71,7 @@ router.post('/addChannel', async (req, res) => {
 
   const { name, code } = req.body;
   const userID         = res.locals._id;
-
+ 
   try {
 
     // Name and channel code are not selected

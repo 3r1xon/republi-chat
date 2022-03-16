@@ -13,11 +13,12 @@
   </div>
 
   <div class="right">
-    <span class="connection" [ngClass]="{
+    <mat-icon class="connection" [ngClass]="{
       'connected': _utils.wsConnected,
       'disconnected': !_utils.wsConnected
-    }">
-    </span>
+    }" matTooltip="Connection">
+    settings_ethernet
+    </mat-icon>
     <rep-actions onlyIcons="true" [actions]="navigations"></rep-actions>
   </div>
 
