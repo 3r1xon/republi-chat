@@ -10,7 +10,7 @@
     <rep-profile-pic
       repStop
       [src]="message.picture"
-      [letter]="message.name[0]"
+      [letter]="message.name"
       [color]="message.backgroundColor"
       (click)="onUserClick.emit('onUserClick')"
     >
@@ -24,7 +24,7 @@
           [style.color]="message.color"
           (click)="onUserClick.emit('onUserClick')"
         >
-        {{message.name}}
+          {{message.name}}
         </p>
 
         <p class="time">{{message.date | date: dateFormat}}</p>

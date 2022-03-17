@@ -59,15 +59,15 @@ router.post('/signUp', async (req, res) => {
 
           const email = new REPEmail();
 
-          email.sendMail(
-            user.email,
-            "RepubliChat email verification",
-            `
-            Welcome to RepubliChat! <br>
-            This is your verification link, if you didn't know about this you can just ignore this email. <br>
-            <a href="${process.env.ORIGIN}/verification/${verification_code}">Verify email here.</a>
-            `
-          );
+          // email.sendMail(
+          //   user.email,
+          //   "RepubliChat email verification",
+          //   `
+          //   Welcome to RepubliChat! <br>
+          //   This is your verification link, if you didn't know about this you can just ignore this email. <br>
+          //   <a href="${process.env.ORIGIN}/verification/${verification_code}">Verify email here.</a>
+          //   `
+          // );
 
           res.status(201).send({
             success: true,
@@ -142,7 +142,7 @@ router.post('/authorize', Auth.HTTPAuthToken, async (req, res) => {
 
   try {
 
-    const _id = res.locals._id;
+    const userID = res.locals._id;
 
     const dbUser = await REPQuery.one(
     `
@@ -157,7 +157,8 @@ router.post('/authorize', Auth.HTTPAuthToken, async (req, res) => {
            U.LAST_JOINED_ROOM           as lastJoinedRoom
     FROM USERS U
     WHERE U.ID_USER = ?
-    `, [_id]);
+      AND U.DELETED IS NOT TRUE
+    `, [userID]);
 
     if (dbUser) return res.status(200).send({ success: true, data: dbUser });
 
@@ -194,10 +195,10 @@ router.post('/logIn', async (req, res) => {
            U.LAST_JOINED_CHANNEL        as lastJoinedChannel,
            U.LAST_JOINED_ROOM           as lastJoinedRoom
     FROM USERS U
-    WHERE EMAIL = ?
-      AND PASSWORD = ?
+    WHERE U.EMAIL = ?
+      AND U.PASSWORD = ?
+      AND U.DELETED IS NOT TRUE
     `, [user.email, user.password]);
-
 
     if (dbUser) {
 
@@ -310,19 +311,40 @@ router.delete('/deleteProfile', Auth.HTTPAuthToken, async (req, res) => {
 
   try {
 
-    const _id = res.locals._id;
+    const userID = res.locals._id;
 
     res.clearCookie("sid");
 
+    const rand = model.nanoid(30);
+
     await REPQuery.exec(
     `
-    DELETE
-    FROM USERS
+    UPDATE USERS
+    SET USER_CODE           = ?,
+        EMAIL               = ?,
+        PASSWORD            = ?,
+        NAME                = ?,
+        PROFILE_PICTURE     = ?,
+        BIOGRAPHY           = ?,
+        VERIFIED            = ?,
+        LAST_JOINED_CHANNEL = ?,
+        LAST_JOINED_ROOM    = ?
     WHERE ID_USER = ?
-    `, [_id]);
+    `, [
+      "****",
+      `Deleted ${rand}`,
+      rand,
+      rand,
+      null,
+      null,
+      false,
+      null,
+      null,
+      userID
+    ]);
 
-    res.status(201).send({ 
-      success: true,
+    res.status(201).send({
+      success: true
     });
 
   } catch(err) {

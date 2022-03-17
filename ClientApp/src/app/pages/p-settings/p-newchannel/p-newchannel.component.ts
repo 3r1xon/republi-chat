@@ -146,10 +146,10 @@ export class PNewChannelComponent {
             );
           }
 
-        }).catch(() => {
+        }).catch((response: HttpErrorResponse) => {
           this._utils.showRequest(
-            "Channel not found",
-            `The channel "${channel.name}" was not found, are you sure the name and code is correct?`,
+            "Error",
+            response.error.message,
             [
               {
                 name: "Close",

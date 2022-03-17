@@ -52,6 +52,8 @@ router.get('/getRoomMessages/:chID/:roomID/:limit', async (req, res) => {
             LIMIT ${limit}
             `, [roomID, chUser.roomJoinDate]);
 
+            console.log(messages);
+
             res.status(200).send({ success: true, data: messages });
           }
           catch (error) {

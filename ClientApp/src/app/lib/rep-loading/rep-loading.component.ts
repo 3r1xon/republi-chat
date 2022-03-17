@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'rep-loading',
@@ -7,6 +7,4 @@ import { Component, Input } from '@angular/core';
 })
 export class REPLoadingComponent {
 
-  @Input()
-  public loading: boolean = false;
 }

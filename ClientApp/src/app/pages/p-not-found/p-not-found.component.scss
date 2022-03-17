@@ -1,0 +1,32 @@
+@import 'src/app/styles/mixins';
+
+
+#p-not-found {
+  width: 100%;
+  height: 100vh;
+  position: fixed;
+  @include flexCenter(row);
+
+  mtd-emoji-background {
+    width: 100%;
+    height: 100%;
+  }
+
+  rep-button {
+    margin: 15px;
+  }
+
+  .not-found {
+    width: 30%;
+    height: 30%;
+    position: absolute;
+    @include flexCenter(column);
+    text-align: center;
+  }
+
+  mtd-footer {
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+  }
+}

@@ -10,7 +10,8 @@ module.exports = {
       .pattern(new RegExp(/^([a-zA-Z0-9]+\s)*[a-zA-Z0-9]+$/)),
 
     email: Joi.string()
-      .email(),
+      .email()
+      .max(320),
 
     password: Joi.string()
       .min(8)

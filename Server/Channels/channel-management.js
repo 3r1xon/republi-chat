@@ -70,7 +70,7 @@ router.post('/addChannel', async (req, res) => {
 
   const { name, code } = req.body;
   const userID         = res.locals._id;
- 
+
   try {
 
     // Name and channel code are not selected
@@ -85,7 +85,7 @@ router.post('/addChannel', async (req, res) => {
     WHERE NAME = ?
       AND CHANNEL_CODE = ?
     `, [name, code]);
-
+    console.log(name, code)
     if (channel) {
 
       const channelID = channel.id;

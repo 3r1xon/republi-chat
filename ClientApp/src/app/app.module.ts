@@ -33,6 +33,7 @@ import { MTDEmojiBackgroundComponent } from './pages/components/mtd-emoji-backgr
 import { MTDErrorComponent } from './pages/components/mtd-error/mtd-error.component';
 import { MTDFooterComponent } from './pages/components/mtd-footer/mtd-footer.component';
 import { MTDRequestComponent } from './pages/components/mtd-request/mtd-request.component';
+import { MTDLoadingComponent } from './pages/components/mtd-loading/mtd-loading.component';
 
 
 
@@ -56,7 +57,8 @@ import { MTDRequestComponent } from './pages/components/mtd-request/mtd-request.
     MTDEmojiBackgroundComponent,
     MTDErrorComponent,
     MTDFooterComponent,
-    MTDRequestComponent
+    MTDRequestComponent,
+    MTDLoadingComponent
   ],
   imports: [
     BrowserModule,
