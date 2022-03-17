@@ -328,20 +328,28 @@ router.delete('/deleteProfile', Auth.HTTPAuthToken, async (req, res) => {
         BIOGRAPHY           = ?,
         VERIFIED            = ?,
         LAST_JOINED_CHANNEL = ?,
-        LAST_JOINED_ROOM    = ?
+        LAST_JOINED_ROOM    = ?,
+        DELETED = ?
     WHERE ID_USER = ?
     `, [
       "****",
       `Deleted ${rand}`,
       rand,
-      rand,
+      `Deleted user ${model.nanoid(10)}`,
       null,
       null,
       false,
       null,
       null,
+      true,
       userID
     ]);
+
+    await REPQuery.exec(
+    `
+    DELETE FROM SESSIONS
+    WHERE ID_USER = ?
+    `, [userID]);
 
     res.status(201).send({
       success: true

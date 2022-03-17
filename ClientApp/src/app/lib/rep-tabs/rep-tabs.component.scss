@@ -23,17 +23,15 @@
     user-select: none;
 
     a {
-      color: #FFFFFF;
       width: 100%;
       height: 100%;
       display: flex;
       align-items: center;
       justify-content: space-evenly;
-      border-top-left-radius: 10px;
-      border-top-right-radius: 10px;
+      color: #FFFFFF;
       font-size: 16px;
-      transition: 150ms;
       cursor: pointer;
+      transition: 150ms;
 
       mat-icon {
         @include flexCenter(row);
@@ -41,7 +39,7 @@
       }
 
       &:hover {
-        background: #454648;
+        opacity: 0.5;
       }
     }
 
@@ -77,9 +75,9 @@
 }
 
 .hovered {
-  background: #454648;
+  border-bottom: 2px solid hotpink;
 }
 
 .normal {
-  background: var(--LIGHT-DARK);
+  border-bottom: 2px solid transparent;
 }
