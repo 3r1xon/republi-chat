@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { expand } from '../animations';
+import { expand } from '../rep-animations';
 
 @Component({
   selector: 'rep-accordion',

@@ -1,42 +1,39 @@
 @import 'src/app/styles/fonts';
 
 #status-bar {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--LIGHT-DARK);
+
+
+  .profile {
     height: 100%;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    background: var(--LIGHT-DARK);
 
-
-    .profile {
-        height: 100%;
-        display: flex;
-        align-items: center;
-
-        p {
-            margin-top: 5px;
-            align-self: flex-start;
-        }
+    p {
+      margin-top: 5px;
+      align-self: flex-start;
     }
+  }
 
-    .right {
-        display: flex;
-        align-items: center;
-        margin-right: 15px;
+  .right {
+    display: flex;
+    align-items: center;
+    margin-right: 15px;
 
-        .connection {
-            width: 5px;
-            height: 5px;
-            border-radius: 50%;
-            margin: 10px;
-        }
+    .connection {
+      margin: 10px;
     }
+  }
 }
 
 .connected {
-    background: var(--SUCCESS);
+  color: var(--SUCCESS);
 }
 
 .disconnected {
-    background: var(--DANGER);
+  color: var(--DANGER);
 }

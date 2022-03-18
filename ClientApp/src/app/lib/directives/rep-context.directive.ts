@@ -1,6 +1,7 @@
 import {
   ComponentFactoryResolver,
   Directive,
+  ElementRef,
   HostListener,
   Input,
   ViewContainerRef
@@ -14,33 +15,47 @@ import { REPWindowComponent } from '../rep-window/rep-window.component';
 export class REPContextDirective {
 
   constructor(
+    private elRef: ElementRef,
     private viewContainer: ViewContainerRef,
-    private componentFactory: ComponentFactoryResolver
+    private componentFactory: ComponentFactoryResolver,
   ) { }
+
+  private static instances: Array<ViewContainerRef> = [];
 
   @HostListener("contextmenu", ["$event"])
   public onContext(event: any): void
   {
-    console.log(event.pageX)
-    // const winWidth = this.submenu.nativeElement.offsetWidth;
-    // const winHeight = this.submenu.nativeElement.offsetHeight;
+    event.preventDefault();
 
-    // if (event.clientX + winWidth > window.innerWidth) {
-    //   this.offsetX = event.pageX - winWidth;
-    // } else {
-    //   this.offsetX = event.pageX;
-    // }
+    this.closeAllWindows();
 
-    // if (event.clientY + winHeight > window.innerHeight) {
-    //   this.offsetY = event.pageY - winHeight;
-    // } else {
-    //   this.offsetY = event.pageY;
-    // }
+    const component = this.componentFactory.resolveComponentFactory(REPWindowComponent);
+    const compRef = this.viewContainer.createComponent(component);
 
-    // const component = this.componentFactory.resolveComponentFactory(REPWindowComponent);
-    // const compRef = this.viewContainer.createComponent(component);
-    // compRef.instance.uniqueID = this.uniqueID;
-    // compRef.instance.subMenu = this.menu;
+    compRef.instance.uniqueID = this.uniqueID;
+    compRef.instance.subMenu = this.menu;
+
+    compRef.location.nativeElement.style.position = "fixed";
+    compRef.location.nativeElement.style.zIndex = "1";
+
+    const winWidth = compRef.location.nativeElement.style.width;
+    const winHeight = compRef.location.nativeElement.style.height;
+
+    if (event.clientX + winWidth > window.innerWidth) {
+      compRef.location.nativeElement.style.left = `${event.pageX - winWidth}px`;
+    } else {
+      compRef.location.nativeElement.style.left = `${event.pageX}px`;
+    }
+
+    if (event.clientY + winHeight > window.innerHeight) {
+      compRef.location.nativeElement.style.top = `${event.pageY - winHeight}px`;
+    } else {
+      compRef.location.nativeElement.style.top = `${event.pageY}px`;
+    }
+
+    this.elRef.nativeElement.style.background = "#9595951a";
+
+    REPContextDirective.instances.push(this.viewContainer);
   }
 
   @Input('repContext')
@@ -48,4 +63,21 @@ export class REPContextDirective {
 
   @Input('repUniqueID')
   public uniqueID: number;
+
+  @HostListener('window:resize', ['$event'])
+  @HostListener('document:click', ['$event'])
+  closeAllWindows() {
+
+    if (REPContextDirective.instances.length > 0) {
+
+      REPContextDirective.instances
+        .forEach((instance) => {
+          instance.clear();
+          instance.element.nativeElement.style.background = null;
+        });
+
+      REPContextDirective.instances = [];
+    }
+
+  }
 }

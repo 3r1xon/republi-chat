@@ -393,6 +393,49 @@ class DBUser {
       callback(error, null);
     }
   }
+
+
+
+  async setLastJoinedChannel(callback = nocb) {
+
+    try {
+
+      await REPQuery.exec(
+      `
+      UPDATE USERS
+      SET LAST_JOINED_CHANNEL = ?
+      WHERE ID_USER = ?
+      `, [this.channelID, this.userID]);
+
+      callback(null, this);
+
+    } catch(error) {
+
+      callback(error, null);
+
+    }
+  }
+
+
+
+  async setLastJoinedRoom(callback = nocb) {
+
+    try {
+
+      await REPQuery.exec(
+      `
+      UPDATE USERS
+      SET LAST_JOINED_ROOM = ?
+      WHERE ID_USER = ?
+      `, [this.roomID, this.userID]);
+
+      callback(null, this);
+
+    } catch(error) {
+
+      callback(error, null);
+    }
+  }
 }
 
 

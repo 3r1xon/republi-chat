@@ -3,11 +3,11 @@ import { REPButton } from 'src/interfaces/repbutton.interface';
 import { UtilsService } from 'src/services/utils.service';
 
 @Component({
-  selector: 'rep-error',
-  templateUrl: './rep-error.component.html',
-  styleUrls: ['./rep-error.component.scss']
+  selector: 'mtd-error',
+  templateUrl: './mtd-error.component.html',
+  styleUrls: ['./mtd-error.component.scss']
 })
-export class REPErrorComponent implements OnInit {
+export class MTDErrorComponent implements OnInit {
 
   constructor(
     public _utils: UtilsService
@@ -25,15 +25,6 @@ export class REPErrorComponent implements OnInit {
   }
 
   public readonly errorActions: Array<REPButton> = [
-    {
-      name: "Send report",
-      background: "warning",
-      icon: "report_problem",
-      visible: () => this._utils.bugReport.send,
-      onClick: () => {
-        console.log("Report unavailable");
-      }
-    },
     {
       name: "Close",
       background: "royalblue",

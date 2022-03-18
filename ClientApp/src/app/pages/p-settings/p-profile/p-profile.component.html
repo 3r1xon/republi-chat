@@ -4,7 +4,12 @@
 
     <div class="profile-info">
 
-      <rep-img-upload [src]="_user.currentUser.picture" (image)="onChange($event)"></rep-img-upload>
+      <rep-img-upload
+        [src]="_user.currentUser.picture"
+        [letter]="_user.currentUser.name"
+        [backgroundColor]="_user.currentUser.backgroundColor"
+        (image)="onChange($event)"
+      ></rep-img-upload>
 
       <div class="banner-info">
 

@@ -61,25 +61,12 @@ export class MessagesService {
 
           this.destroyChSubscriptions();
 
-          // this.chSubscriptions
-          // .push(
-          //   this._webSocket.listen("ban")
-          //     .subscribe((banID) => {
-          //       if (banID == this.chPermissions.id) {
-          //         this.messages = [];
-
-          //         this._utils.showRequest(
-          //           "Banned",
-          //           "You have been banned!"
-          //         );
-          //       }
-          //     })
-          // );
-
           this.channelChanges.next();
         }
       }
-    ).catch(() => { });
+    ).catch(() => {
+      this._utils.showBugReport("Server error!", "There has been an error while fetching the channels!");
+    });
   }
 
   /**
@@ -99,24 +86,24 @@ export class MessagesService {
 
         this.chPermissions = resChannel.data as ChannelPermissions;
 
-        this._webSocket.emit("joinChannel", {
-          channel: this.currentChannel.id,
-        });
-
         this.initChannelSockets();
 
         this.API_getChRooms(channel)
           .toPromise()
-          .then((res: ServerResponse) => {
+          .then((resRoom: ServerResponse) => {
 
-            this.currentChannel.rooms = res.data;
+            this.currentChannel.rooms = resRoom.data;
 
-            if (this.currentChannel.rooms.text.length > 0)
+            const lastJoinedRoom = this.getRoomByID(this._user.currentUser.lastJoinedRoom);
+
+            if (lastJoinedRoom) {
+              this.joinRoom(channel, lastJoinedRoom);
+            } else if (this.currentChannel.rooms.text.length > 0)
               this.joinRoom(channel, this.currentChannel.rooms.text[0]);
           });
       }
     ).catch(() => {
-      this._utils.showBugReport("Server error!", "There has been an error while requesting the channels!", false);
+      this._utils.showBugReport("Server error!", "There has been an error while joining the channel!");
     });
   }
 
@@ -152,7 +139,7 @@ export class MessagesService {
                 }
               }
             ).catch(() => {
-              this._utils.showBugReport("Server error!", "There has been an error while requesting the messages!", false);
+              this._utils.showBugReport("Server error!", "There has been an error while requesting the messages!");
             });
           }
         );
@@ -282,6 +269,15 @@ export class MessagesService {
           }
         })
     );
+  }
+
+  public getChannelByID(channelID: number): Channel {
+    return this.channels.find(ch => ch.id == channelID);
+  }
+
+  public getRoomByID(roomID: number): Room {
+    const allRooms = [...this.currentChannel.rooms.text, ...this.currentChannel.rooms.vocal];
+    return allRooms.find(room => room.roomID == roomID);
   }
 
   public API_getChannels() {

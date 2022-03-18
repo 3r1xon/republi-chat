@@ -4,6 +4,8 @@ import { REPButton } from 'src/interfaces/repbutton.interface';
 import { BugReport } from 'src/interfaces/bugreport.interface';
 import { UAParser } from 'ua-parser-js';
 import { Settings } from 'src/interfaces/settings.interface';
+import { HttpClient } from '@angular/common/http';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -11,9 +13,10 @@ import { Settings } from 'src/interfaces/settings.interface';
 export class UtilsService {
 
   constructor(
+    private http: HttpClient
   ) { }
 
-  // Every HTTP Request, except black listed ones, will set 
+  // Every HTTP Request, except black listed ones, will set
   // this variable to true till a response has been received
   // and then the variable will be set to false again.
   public loading: boolean = false;
@@ -24,11 +27,11 @@ export class UtilsService {
 
   /**
    * Default settings
-   * 
+   *
    */
   public settings: Settings = {
     showChannels: true,
-    showServerGroup: true,
+    showServerGroup: false,
     animations: true,
     dateFormat: "dd/MM/yyyy HH:mm:ss"
   };
@@ -39,9 +42,9 @@ export class UtilsService {
    * @param title The title in the header of the request.
    *
    * @param message The message you want to show to the user
-   * 
+   *
    * @param actions The list of buttons that appears in the bottom of the request
-   * 
+   *
    */
   public showRequest(title: string, message: string, actions?: Function | Array<REPButton>): void {
 
@@ -102,17 +105,16 @@ export class UtilsService {
    * @param title The name of the error.
    *
    * @param callstack The error callstack.
-   * 
+   *
    * @param send If the send report button must be shown.
-   * 
+   *
    */
-  public showBugReport(title: string, callstack: string, send = true) {
+  public showBugReport(title: string, callstack: string) {
 
     this.bugReport = {
       title: title,
       callstack: callstack,
-      visible: true,
-      send: send,
+      visible: true
     };
 
   }
@@ -121,12 +123,16 @@ export class UtilsService {
    * Detect the current browser.
    *
    * @returns An object with all the browser informations.
-   * 
+   *
    */
   public detectBrowser(): UAParser {
     const parser = new UAParser();
     const result = parser.getResult();
 
     return result.browser;
+  }
+
+  public API_sendReport(title: string, callstack: string) {
+    return this.http.post(`${environment.BASE_URL}/utils/sendReport`, { title: title, callstack: callstack });
   }
 }

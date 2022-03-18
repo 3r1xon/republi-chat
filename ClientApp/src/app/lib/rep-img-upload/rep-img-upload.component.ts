@@ -8,7 +8,13 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 export class REPImgUploadComponent {
 
   @Input()
-  public src: any = "/assets/upload.png";
+  public src: string;
+
+  @Input()
+  public letter: string;
+
+  @Input()
+  public backgroundColor: string;
 
   @Output()
   public image: EventEmitter<any> = new EventEmitter();

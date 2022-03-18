@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { UtilsService } from 'src/services/utils.service';
 
 @Component({
   selector: 'rep-loading',
@@ -8,5 +7,4 @@ import { UtilsService } from 'src/services/utils.service';
 })
 export class REPLoadingComponent {
 
-  constructor(public _utils: UtilsService) { }
 }

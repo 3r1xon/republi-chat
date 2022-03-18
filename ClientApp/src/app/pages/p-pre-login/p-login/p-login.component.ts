@@ -45,8 +45,7 @@ export class PLoginComponent {
   public form: FormGroup = this.fb.group({
     email: ['', // Default value
       [
-        Validators.required,
-        Validators.maxLength(30),
+        Validators.maxLength(320),
         Validators.email
       ]
     ],

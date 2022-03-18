@@ -8,7 +8,7 @@ import { Component, Input } from '@angular/core';
 export class REPProfilePicComponent {
 
   @Input()
-  public letter: string = "";
+  public letter: string;
 
   @Input()
   public src: string;

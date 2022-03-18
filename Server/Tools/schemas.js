@@ -10,12 +10,22 @@ module.exports = {
       .pattern(new RegExp(/^([a-zA-Z0-9]+\s)*[a-zA-Z0-9]+$/)),
 
     email: Joi.string()
-      .email(),
+      .email()
+      .max(320),
 
     password: Joi.string()
       .min(8)
       .max(255),
 
+  }),
+
+  channelSchema: Joi.object({
+    name: Joi.string()
+      .min(3)
+      .max(30),
+
+    picture: Joi.string()
+      .allow(null)
   }),
 
   msgSchema: Joi.object({

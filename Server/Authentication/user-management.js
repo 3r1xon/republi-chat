@@ -46,7 +46,7 @@ router.post('/signUp', async (req, res) => {
           RETURNING ID_USER as userID
           `, [code, hash, user.name, user.email, REPTools.randomHex()]);
 
-          // SQL Trigger will take care of the rest
+          // SQL Triggers will take care of the rest
 
           const verification_code = model.nanoid(30);
 
@@ -59,15 +59,15 @@ router.post('/signUp', async (req, res) => {
 
           const email = new REPEmail();
 
-          email.sendMail(
-            user.email,
-            "RepubliChat email verification",
-            `
-            Welcome to RepubliChat! <br>
-            This is your verification link, if you didn't know about this you can just ignore this email. <br>
-            <a href="${process.env.ORIGIN}/verification/${verification_code}">Verify email here.</a>
-            `
-          );
+          // email.sendMail(
+          //   user.email,
+          //   "RepubliChat email verification",
+          //   `
+          //   Welcome to RepubliChat! <br>
+          //   This is your verification link, if you didn't know about this you can just ignore this email. <br>
+          //   <a href="${process.env.ORIGIN}/verification/${verification_code}">Verify email here.</a>
+          //   `
+          // );
 
           res.status(201).send({
             success: true,
@@ -91,12 +91,14 @@ router.post('/signUp', async (req, res) => {
 
 router.put('/verify/:verification_code', async (req, res) => {
 
-  const verification_code = req.params.verification_code;
-
   try {
+
+    const verification_code = req.params.verification_code;
+
     const verificationRef = await REPQuery.one(
     `
-    SELECT ID_USER as userID
+    SELECT ID_USER_VERIFICATION as verificationID,
+           ID_USER              as userID
     FROM USERS_VERIFICATIONS
     WHERE VERIFICATION_CODE = ?
     `, [verification_code]);
@@ -109,6 +111,13 @@ router.put('/verify/:verification_code', async (req, res) => {
       SET VERIFIED = ?
       WHERE ID_USER = ?
       `, [true, verificationRef.userID]);
+
+      await REPQuery.exec(
+      `
+      DELETE
+      FROM USERS_VERIFICATIONS
+      WHERE ID_USER_VERIFICATION = ?
+      `, [verificationRef.verificationID]);
 
       res.status(201).send({
         success: true,
@@ -133,7 +142,7 @@ router.post('/authorize', Auth.HTTPAuthToken, async (req, res) => {
 
   try {
 
-    const _id = res.locals._id;
+    const userID = res.locals._id;
 
     const dbUser = await REPQuery.one(
     `
@@ -143,10 +152,13 @@ router.post('/authorize', Auth.HTTPAuthToken, async (req, res) => {
            U.COLOR                      as color,
            U.BACKGROUND_COLOR           as backgroundColor,
            U.EMAIL                      as email,
-           TO_BASE64(U.PROFILE_PICTURE) as picture
+           TO_BASE64(U.PROFILE_PICTURE) as picture,
+           U.LAST_JOINED_CHANNEL        as lastJoinedChannel,
+           U.LAST_JOINED_ROOM           as lastJoinedRoom
     FROM USERS U
     WHERE U.ID_USER = ?
-    `, [_id]);
+      AND U.DELETED IS NOT TRUE
+    `, [userID]);
 
     if (dbUser) return res.status(200).send({ success: true, data: dbUser });
 
@@ -161,14 +173,14 @@ router.post('/authorize', Auth.HTTPAuthToken, async (req, res) => {
 
 router.post('/logIn', async (req, res) => {
 
-  const user = {
-    email: req.body.email,
-    password: crypto.createHash('sha256').update(req.body.password).digest('hex'),
-  };
-
-  const { BROWSER } = req.body;
-
   try {
+
+    const user = {
+      email: req.body.email,
+      password: crypto.createHash('sha256').update(req.body.password).digest('hex'),
+    };
+
+    const { BROWSER } = req.body;
 
     const dbUser = await REPQuery.one(
     `
@@ -179,12 +191,14 @@ router.post('/logIn', async (req, res) => {
            U.BACKGROUND_COLOR           as backgroundColor,
            U.EMAIL                      as email,
            TO_BASE64(U.PROFILE_PICTURE) as picture,
-           U.VERIFIED                   as verified
+           U.VERIFIED                   as verified,
+           U.LAST_JOINED_CHANNEL        as lastJoinedChannel,
+           U.LAST_JOINED_ROOM           as lastJoinedRoom
     FROM USERS U
-    WHERE EMAIL = ?
-      AND PASSWORD = ?
+    WHERE U.EMAIL = ?
+      AND U.PASSWORD = ?
+      AND U.DELETED IS NOT TRUE
     `, [user.email, user.password]);
-
 
     if (dbUser) {
 
@@ -236,10 +250,11 @@ router.post('/logIn', async (req, res) => {
 
 router.delete('/logout', Auth.HTTPAuthToken, async (req, res) => {
 
-  const userID     = res.locals._id;
-  const sid        = res.locals.sid;
-
   try {
+
+    const userID     = res.locals._id;
+    const sid        = res.locals.sid;
+
     await REPQuery.exec(
     `
     DELETE
@@ -262,13 +277,13 @@ router.delete('/logout', Auth.HTTPAuthToken, async (req, res) => {
 
 router.put('/editProfile', [Auth.HTTPAuthToken, upload.single("image")], async (req, res) => {
 
-  const file = req.file.buffer;
-
-  const user = {};
-
-  const userID = res.locals._id;
-
   try {
+
+    const file = req.file.buffer;
+
+    const user = {};
+
+    const userID = res.locals._id;
 
     await REPQuery.exec(
     `
@@ -295,20 +310,49 @@ router.put('/editProfile', [Auth.HTTPAuthToken, upload.single("image")], async (
 router.delete('/deleteProfile', Auth.HTTPAuthToken, async (req, res) => {
 
   try {
-    
-    const _id = res.locals._id;
+
+    const userID = res.locals._id;
 
     res.clearCookie("sid");
 
+    const rand = model.nanoid(30);
+
     await REPQuery.exec(
     `
-    DELETE
-    FROM USERS
+    UPDATE USERS
+    SET USER_CODE           = ?,
+        EMAIL               = ?,
+        PASSWORD            = ?,
+        NAME                = ?,
+        PROFILE_PICTURE     = ?,
+        BIOGRAPHY           = ?,
+        VERIFIED            = ?,
+        LAST_JOINED_CHANNEL = ?,
+        LAST_JOINED_ROOM    = ?,
+        DELETED = ?
     WHERE ID_USER = ?
-    `, [_id]);
+    `, [
+      "****",
+      `Deleted ${rand}`,
+      rand,
+      `Deleted user ${model.nanoid(10)}`,
+      null,
+      null,
+      false,
+      null,
+      null,
+      true,
+      userID
+    ]);
 
-    res.status(201).send({ 
-      success: true,
+    await REPQuery.exec(
+    `
+    DELETE FROM SESSIONS
+    WHERE ID_USER = ?
+    `, [userID]);
+
+    res.status(201).send({
+      success: true
     });
 
   } catch(err) {
@@ -322,9 +366,8 @@ router.delete('/deleteProfile', Auth.HTTPAuthToken, async (req, res) => {
 
 router.get('/getDevices', Auth.HTTPAuthToken, async (req, res) => {
 
-  const userID = res.locals._id;
-
   try {
+    const userID = res.locals._id;
 
     const devices = await REPQuery.load(
     `
@@ -391,9 +434,8 @@ router.delete('/disconnectDevice/:id', Auth.HTTPAuthToken, async (req, res) => {
 
 router.get('/getSettings', Auth.HTTPAuthToken, async (req, res) => {
 
-  const userID = res.locals._id;
-
   try {
+    const userID = res.locals._id;
 
     const settings = await REPQuery.one(
     `

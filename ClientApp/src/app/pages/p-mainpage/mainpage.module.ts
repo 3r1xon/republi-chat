@@ -6,6 +6,8 @@ import { MTDChatComponent } from './components/mtd-chat/mtd-chat.component';
 import { MTDChannelsComponent } from './components/mtd-channels/mtd-channels.component';
 import { MTDChannelInfoComponent } from './components/mtd-channel-info/mtd-channel-info.component';
 import { MTDStatusBarComponent } from './components/mtd-status-bar/mtd-status-bar.component';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 
 
@@ -25,7 +27,9 @@ import { MTDStatusBarComponent } from './components/mtd-status-bar/mtd-status-ba
   imports: [
     CommonModule,
     AppRoutingModule,
-    REPModule
+    REPModule,
+    MatIconModule,
+    MatTooltipModule,
   ]
 })
 export class MainpageModule { }

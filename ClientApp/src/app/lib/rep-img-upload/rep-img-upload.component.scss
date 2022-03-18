@@ -4,10 +4,14 @@
   border-radius: 50%;
   margin: 15px 0 15px 0;
   border: 2px solid var(--LIGHT-DARK);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
 
   .picture {
-    width: 75px;
-    height: 75px;
+    width: 100%;
+    height: 100%;
     cursor: pointer;
     border-radius: 50%;
     transition: 100ms;
@@ -18,7 +22,29 @@
     }
   }
 
-  .file-input {
+  mat-icon {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    font-size: 72px;
+    display: grid;
+    place-items: center;
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, 0);
+    transition: 150ms;
+    pointer-events: none;
+    color: transparent;
+  }
+
+  &:hover {
+    mat-icon {
+      color: var(--VERY-DARK);
+    }
+  }
+
+
+  #file-input {
     display: none;
     visibility: hidden;
     width: 0;

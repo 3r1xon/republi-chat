@@ -27,8 +27,13 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MainpageModule } from './pages/p-mainpage/mainpage.module';
 import { REPModule } from './lib/rep.module';
 import { MatRippleModule } from '@angular/material/core';
-import { GlobalErrorHandler } from './lib/error-handler';
-import { MTDEmojiBackgroundComponent } from './pages/p-pre-login/components/emoji-background/mtd-emoji-background.component';
+import { GlobalErrorHandler } from './pages/error-handler';
+
+import { MTDEmojiBackgroundComponent } from './pages/components/mtd-emoji-background/mtd-emoji-background.component';
+import { MTDErrorComponent } from './pages/components/mtd-error/mtd-error.component';
+import { MTDFooterComponent } from './pages/components/mtd-footer/mtd-footer.component';
+import { MTDRequestComponent } from './pages/components/mtd-request/mtd-request.component';
+import { MTDLoadingComponent } from './pages/components/mtd-loading/mtd-loading.component';
 
 
 
@@ -48,7 +53,12 @@ import { MTDEmojiBackgroundComponent } from './pages/p-pre-login/components/emoj
     PNotFoundComponent,
     PAppearanceComponent,
     PVerificationComponent,
+
     MTDEmojiBackgroundComponent,
+    MTDErrorComponent,
+    MTDFooterComponent,
+    MTDRequestComponent,
+    MTDLoadingComponent
   ],
   imports: [
     BrowserModule,

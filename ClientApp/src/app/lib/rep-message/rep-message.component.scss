@@ -60,11 +60,28 @@
 
   &:hover {
     background: var(--VERY-DARK) !important;
+
+    .more {
+      visibility: visible;
+    }
   }
 
-  rep-more {
+  .more {
+    min-width: 30px;
+    min-height: 30px;
+    border-radius: 50%;
     margin: 10px;
+    @include flexCenter(row);
     align-self: flex-start;
+    transition: 100ms;
+    cursor: pointer;
+    color: var(--WHITE);
+    user-select: none;
+    visibility: hidden;
+
+    &:hover {
+      background: var(--LIGHT-DARK);
+    }
   }
 }
 

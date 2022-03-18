@@ -8,7 +8,7 @@ const upload   = multer({});
 const fm       = require('date-fns');
 const clc      = require('cli-color');
 const DBUser   = require('../Authentication/db-user');
-const { io }   = require('../start');
+const { channelSchema } = require('../Tools/schemas');
 
 
 router.use(Auth.HTTPAuthToken);
@@ -21,6 +21,14 @@ router.post('/createChannel', upload.single("image"), async (req, res) => {
     name: req.body.name,
     picture: req.body.picture
   };
+
+  const { error } = channelSchema.validate(channel);
+
+  if (error) {
+    res.status(400).send({ success: false, message: `Invalid payload, schema error!` });
+
+    return;
+  }
 
   const creationDate = fm.format(new Date(), 'yyyy-MM-dd HH:mm');
 
@@ -77,7 +85,7 @@ router.post('/addChannel', async (req, res) => {
     WHERE NAME = ?
       AND CHANNEL_CODE = ?
     `, [name, code]);
-
+    console.log(name, code)
     if (channel) {
 
       const channelID = channel.id;
@@ -280,47 +288,6 @@ router.get('/getChRoomPermissions/:chID/:roomID', (req, res) => {
 
 });
 
-
-
-io.on("connection", (socket) => { 
-
-  const userID = socket.auth._id;
-
-  const user = new DBUser(userID);
-
-  let channel;
-
-  socket.on("joinChannel", (obj) => {
-
-    socket.leave(`ch${channel}`);
-
-    channel = obj.channel;
-
-    socket.join(`ch${channel}`);
-
-    // console.log(socket.rooms)
-  });
-
-  // socket.on("ban", (chInfo) => {
-  //   const rqRoom = chInfo.room;
-  //   const _memberID = chInfo._id;
-
-  //   user.setChannel(rqRoom, (err) => {
-  //     if (err) {
-  //       console.log(clc.red(err));
-  //     } else {
-
-  //       user.banMember(_memberID);
-  //     }
-  //   });
-
-  // });
-
-
-  // socket.on("kick", (chUserID) => {
-
-  // });
-})
 
 
 module.exports = router;

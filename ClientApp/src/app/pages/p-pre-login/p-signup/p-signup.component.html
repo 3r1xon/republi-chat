@@ -7,7 +7,7 @@
     <div class="rect"></div>
 
     <form class="signup-form" (ngSubmit)="signUp()" [formGroup]="form"
-      [style.animation]="alert ? 'shake 0.5s' : ''"
+      [style.animation]="success == false ? 'shake 0.5s' : ''"
     >
 
       <h1>Sign up</h1>
@@ -46,14 +46,17 @@
 
       <rep-actions [actions]="actions"></rep-actions>
 
-      <div class="alert">
+      <span class="alert" [ngClass]="{
+        'success': success,
+        'fail': !success
+      }">
         {{alert}}
-      </div>
+    </span>
 
     </form>
 
   </div>
 
-  <rep-footer></rep-footer>
+  <mtd-footer></mtd-footer>
 
 </div>

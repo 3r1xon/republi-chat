@@ -2,11 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { UtilsService } from 'src/services/utils.service';
 
 @Component({
-  selector: 'rep-request',
-  templateUrl: './rep-request.component.html',
-  styleUrls: ['./rep-request.component.scss']
+  selector: 'mtd-request',
+  templateUrl: './mtd-request.component.html',
+  styleUrls: ['./mtd-request.component.scss']
 })
-export class REPRequestComponent implements OnInit {
+export class MTDRequestComponent implements OnInit {
 
   constructor(
     public _utils: UtilsService

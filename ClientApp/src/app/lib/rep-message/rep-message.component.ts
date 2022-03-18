@@ -3,8 +3,6 @@ import {
   Input,
   Output,
   EventEmitter,
-  HostListener,
-  ElementRef
 } from '@angular/core';
 import { Message } from 'src/interfaces/message.interface';
 import { REPButton } from 'src/interfaces/repbutton.interface';
@@ -16,10 +14,6 @@ import { REPButton } from 'src/interfaces/repbutton.interface';
   styleUrls: ['./rep-message.component.scss'],
 })
 export class REPMessageComponent {
-
-  constructor(
-    private eRef: ElementRef
-  ) { }
 
   @Input()
   public options: Array<REPButton>;
@@ -51,17 +45,6 @@ export class REPMessageComponent {
 
   clickHandler() {
     this.onClick.emit();
-  }
-
-  setToggle(event) {
-    this.active = event;
-  }
-
-  @HostListener('document:click', ['$event'])
-  clickout(event: any) {
-    if (!this.eRef.nativeElement.contains(event.target)) {
-      this.active = false;
-    }
   }
 
 }

@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs';
 import { Channel, Room } from 'src/interfaces/channel.interface';
 import { Message } from 'src/interfaces/message.interface';
 import { MessagesService } from 'src/services/messages.service';
+import { UserService } from 'src/services/user.service';
 import { UtilsService } from 'src/services/utils.service';
 
 @Component({
@@ -16,6 +17,7 @@ export class MTDChannelsComponent implements OnInit {
   constructor(
     public _ms: MessagesService,
     public _utils: UtilsService,
+    private _user: UserService,
     private router: Router,
   ) { }
 
@@ -42,10 +44,17 @@ export class MTDChannelsComponent implements OnInit {
       };
     });
 
-    const channel = this._ms.channels[0];
+    const lastJoinedChannel = this._ms.getChannelByID(this._user.currentUser.lastJoinedChannel);
 
-    if (channel && this._ms.currentChannel == undefined) {
-      this._ms.joinChannel(channel);
+    if (lastJoinedChannel) {
+      this._ms.joinChannel(lastJoinedChannel);
+    } else {
+
+      const channel = this._ms.channels[0];
+
+      if (channel && this._ms.currentChannel == undefined) {
+        this._ms.joinChannel(channel);
+      }
     }
   }
 

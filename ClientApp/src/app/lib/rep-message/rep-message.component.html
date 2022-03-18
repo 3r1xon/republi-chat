@@ -5,12 +5,15 @@
   [style.animation]="message.highlighted && !hold ? 'highlight 1s forwards' : ''"
 >
 
-  <div class="cont" (click)="clickHandler()">
+  <div
+    class="cont"
+    (click)="clickHandler()"
+  >
 
     <rep-profile-pic
       repStop
       [src]="message.picture"
-      [letter]="message.name[0]"
+      [letter]="message.name"
       [color]="message.backgroundColor"
       (click)="onUserClick.emit('onUserClick')"
     >
@@ -24,7 +27,7 @@
           [style.color]="message.color"
           (click)="onUserClick.emit('onUserClick')"
         >
-        {{message.name}}
+          {{message.name}}
         </p>
 
         <p class="time">{{message.date | date: dateFormat}}</p>
@@ -38,11 +41,16 @@
 
   </div>
 
-  <rep-more
+  <mat-icon
     *ngIf="options"
-    [subMenu]="options"
-    [uniqueID]="uniqueID"
-    (open)="setToggle($event)"
-  ></rep-more>
+    class="more"
+    [ngStyle]="{
+      background: state ? '#24252a' : ''
+    }"
+    [repContext]="options"
+    [repUniqueID]="uniqueID"
+  >
+    more_vert
+  </mat-icon>
 
 </div>

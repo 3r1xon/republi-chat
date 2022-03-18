@@ -30,17 +30,17 @@ export class PSignupComponent {
       name: "Sign Up",
       icon: "person_add",
       type: "submit",
-      enabled: () => this.form.valid,
-      onClick: () => { }
+      enabled: () => this.form.valid
     }
   ];
 
   public alert: string;
 
+  public success: boolean;
+
   public form: FormGroup = this.fb.group({
     name: ['',
       [
-        Validators.required,
         Validators.maxLength(30),
         Validators.minLength(3),
         // No more than one white space allowed before each word
@@ -49,12 +49,12 @@ export class PSignupComponent {
     ],
     email: ['',
       [
-        Validators.email
+        Validators.email,
+        Validators.maxLength(320)
       ]
     ],
     password: ['',
       [
-        Validators.required,
         Validators.maxLength(255),
         Validators.minLength(8),
       ]
@@ -80,10 +80,12 @@ export class PSignupComponent {
     this._user.API_signup(user)
       .toPromise()
       .then((response) => {
+        this.success = true;
         this.alert = response.message;
         this.form.reset();
       }).catch((response: HttpErrorResponse) => {
-        this.alert = response.message;
+        this.alert = response.error.message;
+        this.success = false;
       });
   }
 
