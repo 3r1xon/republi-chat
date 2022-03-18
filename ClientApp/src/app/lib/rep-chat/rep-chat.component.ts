@@ -40,6 +40,7 @@ export class REPChatComponent implements AfterViewInit, OnDestroy {
       // if (this.messages[this.messages?.length-1]?.auth) {
       //   this.scrollToBottom();
       // }
+
       this.scrollToBottom();
 
     });
@@ -76,7 +77,7 @@ export class REPChatComponent implements AfterViewInit, OnDestroy {
   public chatName: string;
 
   @Input()
-  public unread: number = 1;
+  public unread: number;
 
   private _dateFormat: string = "dd/MM/yyyy";
 
@@ -134,7 +135,7 @@ export class REPChatComponent implements AfterViewInit, OnDestroy {
 
   reset(): void {
     this.initialized = false;
-    // this.unread = null;
+    this.unread = null;
     this.deselectAll();
   }
 

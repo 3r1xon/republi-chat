@@ -5,7 +5,12 @@
   [style.animation]="message.highlighted && !hold ? 'highlight 1s forwards' : ''"
 >
 
-  <div class="cont" (click)="clickHandler()">
+  <div
+    class="cont"
+    (click)="clickHandler()"
+    [repContext]="options"
+    [repUniqueID]="uniqueID"
+  >
 
     <rep-profile-pic
       repStop
@@ -38,11 +43,16 @@
 
   </div>
 
-  <rep-more
+  <mat-icon
     *ngIf="options"
-    [subMenu]="options"
-    [uniqueID]="uniqueID"
-    (open)="setToggle($event)"
-  ></rep-more>
+    class="more"
+    [ngStyle]="{
+      background: state ? '#24252a' : ''
+    }"
+    [repContext]="options"
+    [repUniqueID]="uniqueID"
+  >
+    more_vert
+  </mat-icon>
 
 </div>

@@ -26,7 +26,6 @@ import { REPImgUploadComponent } from './rep-img-upload/rep-img-upload.component
 import { REPAccordionComponent } from './rep-accordion/rep-accordion.component';
 import { REPRoomComponent } from './rep-room/rep-room.component';
 import { REPTabsComponent } from './rep-tabs/rep-tabs.component';
-import { REPMoreComponent } from './rep-more/rep-more.component';
 import { REPContextDirective } from './directives/rep-context.directive';
 import { REPStopDirective } from './directives/rep-stop.directive';
 
@@ -54,7 +53,6 @@ import { REPStopDirective } from './directives/rep-stop.directive';
     REPImgUploadComponent,
     REPAccordionComponent,
     REPRoomComponent,
-    REPMoreComponent,
 
     REPStopDirective,
     REPContextDirective,
@@ -78,7 +76,6 @@ import { REPStopDirective } from './directives/rep-stop.directive';
     REPImgUploadComponent,
     REPAccordionComponent,
     REPRoomComponent,
-    REPMoreComponent,
 
     REPStopDirective,
     REPContextDirective,

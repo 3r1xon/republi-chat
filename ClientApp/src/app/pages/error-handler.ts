@@ -6,9 +6,11 @@ import { UtilsService } from "src/services/utils.service";
 export class GlobalErrorHandler implements ErrorHandler {
 
   constructor(
-      private _utils: UtilsService,
-      private zone: NgZone
-    ) {}
+    private _utils: UtilsService,
+    private zone: NgZone
+  ) {}
+
+  private nReportSent: number = 0;
 
   handleError(error: any) {
     if (
@@ -25,7 +27,12 @@ export class GlobalErrorHandler implements ErrorHandler {
 
       this._utils.showBugReport(error.rejection, error);
 
-      this._utils.API_sendReport(error.rejection, error.toString()).toPromise();
+      if (this.nReportSent < 5) {
+
+        this._utils.API_sendReport(error.rejection, error.toString()).toPromise();
+
+        this.nReportSent++;
+      }
     });
   }
 }
