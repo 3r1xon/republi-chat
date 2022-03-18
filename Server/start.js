@@ -11,19 +11,22 @@ const Auth         = require('./Authentication/auth');
 const port         = process.env.PORT;
 
 
-const httpsOptions = {
-  key: fs.readFileSync(process.env.CERT_KEY_PATH),
-  cert: fs.readFileSync(process.env.CERT_PATH),
-  requestCert: false,
-  rejectUnauthorized: false
-};
 
 const server = (() => {
-  
-  if (process.env.NODE_ENV)
+
+  if (process.env.NODE_ENV) {
+
+    const httpsOptions = {
+      key: fs.readFileSync(process.env.CERT_KEY_PATH),
+      cert: fs.readFileSync(process.env.CERT_PATH),
+      requestCert: false,
+      rejectUnauthorized: false
+    };
+
     return https.createServer(httpsOptions, app).listen(port, () =>
       console.log(`Server listening at http://localhost:${port}`));
-  
+  }
+
   return app.listen(port, () =>
     console.log(`Server listening at http://localhost:${port}`));
 

@@ -36,7 +36,7 @@ export class REPContextDirective {
     compRef.instance.subMenu = this.menu;
 
     compRef.location.nativeElement.style.position = "fixed";
-    compRef.location.nativeElement.style.zIndex = "1";
+    compRef.location.nativeElement.style.zIndex = `${REPContextDirective.instances.length + 1}`;
 
     const winWidth = compRef.location.nativeElement.style.width;
     const winHeight = compRef.location.nativeElement.style.height;
