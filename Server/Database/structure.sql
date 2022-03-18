@@ -10,9 +10,10 @@ create or replace table republichat.users
 (
     ID_USER             bigint auto_increment
         primary key,
+    DELETED             tinyint(1)                   null,
     USER_CODE           varchar(4)                   not null,
     EMAIL               varchar(320)                 not null,
-    PASSWORD            varchar(64)                  not null,
+    PASSWORD            varchar(255)                 not null,
     NAME                varchar(30)                  null,
     PROFILE_PICTURE     mediumblob                   null,
     COLOR               varchar(7) default '#ffffff' null,
