@@ -17,17 +17,17 @@ export class REPContextDirective {
   constructor(
     private elRef: ElementRef,
     private viewContainer: ViewContainerRef,
-    private componentFactory: ComponentFactoryResolver
+    private componentFactory: ComponentFactoryResolver,
   ) { }
 
-  private static instances: Array<any> = [];
+  private static instances: Array<ViewContainerRef> = [];
 
   @HostListener("contextmenu", ["$event"])
   public onContext(event: any): void
   {
-    this.closeAllWindows();
-
     event.preventDefault();
+
+    this.closeAllWindows();
 
     const component = this.componentFactory.resolveComponentFactory(REPWindowComponent);
     const compRef = this.viewContainer.createComponent(component);
@@ -38,10 +38,8 @@ export class REPContextDirective {
     compRef.location.nativeElement.style.position = "fixed";
     compRef.location.nativeElement.style.zIndex = "1";
 
-    const winWidth = compRef.location.nativeElement.innerWidth;
-    const winHeight = compRef.location.nativeElement.innerHeight;
-    // console.log(compRef);
-    // console.log(winHeight);
+    const winWidth = compRef.location.nativeElement.style.width;
+    const winHeight = compRef.location.nativeElement.style.height;
 
     if (event.clientX + winWidth > window.innerWidth) {
       compRef.location.nativeElement.style.left = `${event.pageX - winWidth}px`;
@@ -55,7 +53,7 @@ export class REPContextDirective {
       compRef.location.nativeElement.style.top = `${event.pageY}px`;
     }
 
-    // this.elRef.nativeElement.style.background = "#9595951a";
+    this.elRef.nativeElement.style.background = "#9595951a";
 
     REPContextDirective.instances.push(this.viewContainer);
   }
@@ -69,12 +67,17 @@ export class REPContextDirective {
   @HostListener('window:resize', ['$event'])
   @HostListener('document:click', ['$event'])
   closeAllWindows() {
-    REPContextDirective.instances
-      .forEach((instance) => {
-        instance.clear();
-        console.log(instance)
-      });
 
-    REPContextDirective.instances = [];
+    if (REPContextDirective.instances.length > 0) {
+
+      REPContextDirective.instances
+        .forEach((instance) => {
+          instance.clear();
+          instance.element.nativeElement.style.background = null;
+        });
+
+      REPContextDirective.instances = [];
+    }
+
   }
 }

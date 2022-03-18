@@ -20,6 +20,8 @@
         [message]="message"
         [options]="msOptions"
         [uniqueID]="i"
+        [repContext]="msOptions"
+        [repUniqueID]="i"
         [dateFormat]="dateFormat"
         [hold]="isInSelection(message.id)"
         (click)="select(i, $event)"
