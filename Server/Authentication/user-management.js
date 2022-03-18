@@ -59,15 +59,15 @@ router.post('/signUp', async (req, res) => {
 
           const email = new REPEmail();
 
-          // email.sendMail(
-          //   user.email,
-          //   "RepubliChat email verification",
-          //   `
-          //   Welcome to RepubliChat! <br>
-          //   This is your verification link, if you didn't know about this you can just ignore this email. <br>
-          //   <a href="${process.env.ORIGIN}/verification/${verification_code}">Verify email here.</a>
-          //   `
-          // );
+          email.sendMail(
+            user.email,
+            "RepubliChat email verification",
+            `
+            Welcome to RepubliChat! <br>
+            This is your verification link, if you didn't know about this you can just ignore this email. <br>
+            <a href="${process.env.ORIGIN}/verification/${verification_code}">Verify email here.</a>
+            `
+          );
 
           res.status(201).send({
             success: true,
