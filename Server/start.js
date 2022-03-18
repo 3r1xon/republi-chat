@@ -1,4 +1,6 @@
-const dotenv       = require('dotenv').config();
+require('dotenv')
+  .config(process.env.NODE_ENV == 'production' ? { path: '.env.prod' } : null);
+
 const https        = require('https');
 const fs           = require('fs');
 const express      = require('express');
@@ -7,21 +9,25 @@ const app          = express();
 const cookieParser = require('cookie-parser');
 const Auth         = require('./Authentication/auth');
 const port         = process.env.PORT;
-const server       = app.listen(port, () => {
-  console.log(`Server listening at http://localhost:${port}`);
-});
 
-// const httpsOptions = {
-//   // key: fs.readFileSync(process.env.CERT_KEY_PATH),
-//   // cert: fs.readFileSync(process.env.CERT_PATH),
-//   requestCert: false,
-//   rejectUnauthorized: false
-// };
 
-// const server = https.createServer(httpsOptions, app).listen(port, () => {
-//   console.log(`Server listening at http://localhost:${port}`);
-// });
+const httpsOptions = {
+  key: fs.readFileSync(process.env.CERT_KEY_PATH),
+  cert: fs.readFileSync(process.env.CERT_PATH),
+  requestCert: false,
+  rejectUnauthorized: false
+};
 
+const server = (() => {
+  
+  if (process.env.NODE_ENV)
+    return https.createServer(httpsOptions, app).listen(port, () =>
+      console.log(`Server listening at http://localhost:${port}`));
+  
+  return app.listen(port, () =>
+    console.log(`Server listening at http://localhost:${port}`));
+
+})();
 
 const corsOptions = {
   origin: process.env.ORIGIN,
