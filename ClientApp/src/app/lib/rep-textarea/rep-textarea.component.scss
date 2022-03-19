@@ -1,27 +1,27 @@
-#rep-textarea {
-    height: 100%;
-    display: flex;
-    border-radius: 5px;
+.rep-textarea {
+  height: 100%;
+  display: flex;
+  border-radius: 5px;
 
-    textarea {
-        width: 100%;
-        color: var(--WHITE);
-        border-radius: 5px;
-        padding: 5px;
-        outline: none;
-        resize: none;
-        border: none;
-        transition: 150ms;
-    }
+  textarea {
+    width: 100%;
+    color: var(--WHITE);
+    border-radius: 5px;
+    padding: 5px;
+    outline: none;
+    resize: none;
+    border: none;
+    transition: 150ms;
+  }
 }
 
 .grayed-out {
-    background: var(--GREY);
+  background: var(--GREY);
 }
 
 .enabled {
 
-    &:hover {
-        background: #1f1a24;
-    }
+  &:hover {
+    background: #1f1a24;
+  }
 }

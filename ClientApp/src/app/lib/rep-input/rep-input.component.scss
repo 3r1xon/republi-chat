@@ -1,68 +1,68 @@
-#master {
+.master {
+  position: relative;
+
+  .flat-input {
     position: relative;
+    border-radius: 5px;
+    margin: 2px;
 
-    .flat-input {
-        position: relative;
-        border-radius: 5px;
-        margin: 2px;
-
-        .placeholder {
-            position: absolute;
-            top: 50%;
-            left: 10px;
-            font-family: roboto;
-            font-size: 17px;
-            transform: translate(0, -50%);
-            pointer-events: none;
-        }
-
-
-        .main-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-
-            input {
-                padding: 0 10px 0 10px;
-                height: 50px;
-                width: 100%;
-                text-decoration: none;
-                outline: none;
-                font-size: 20px;
-                background: transparent;
-                border: none;
-                color: #FFFFFF;
-                font-size: 16px;
-                font-family: roboto;
-            }
-            
-            rep-info {
-                padding: 0 10px 0 0px;
-                user-select: none;
-            }
-        }
-        
+    .placeholder {
+      position: absolute;
+      top: 50%;
+      left: 10px;
+      font-family: roboto;
+      font-size: 17px;
+      transform: translate(0, -50%);
+      pointer-events: none;
     }
 
-    .required {
-        padding: 1px;
-        font-size: 14px;
-        position: absolute;
-        left: 0;
-        right: 0;
-        text-align: center;
+
+    .main-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      input {
+        padding: 0 10px 0 10px;
+        height: 50px;
+        width: 100%;
+        text-decoration: none;
+        outline: none;
+        font-size: 20px;
+        background: transparent;
+        border: none;
+        color: #FFFFFF;
+        font-size: 16px;
+        font-family: roboto;
+      }
+
+      rep-info {
+        padding: 0 10px 0 0px;
+        user-select: none;
+      }
     }
 
-    .small {
-        width: 150px;
-    }
+  }
 
-    .medium {
-        width: 200px;
-    }
+  .required {
+    padding: 1px;
+    font-size: 14px;
+    position: absolute;
+    left: 0;
+    right: 0;
+    text-align: center;
+  }
 
-    .big {
-        width: 300px;
-    }
+  .small {
+    width: 150px;
+  }
+
+  .medium {
+    width: 200px;
+  }
+
+  .big {
+    width: 300px;
+  }
 
 }

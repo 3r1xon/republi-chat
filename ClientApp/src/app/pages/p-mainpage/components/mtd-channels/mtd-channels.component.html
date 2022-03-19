@@ -1,69 +1,70 @@
 <rep-tabs
-  id="channels"
+  class="channels"
   [entries]="channels"
   (onNew)="addNew()"
   (onTab)="channelsTab = $event"
 >
 
-  <div cdkDropListGroup class="list-group">
+  <div
+    cdkDropList
+    [cdkDropListData]="channels[channelsTab].sections"
+    class="list"
+    (cdkDropListDropped)="orderChannel($event)"
+  >
 
-    <div
-      cdkDropList
-      [cdkDropListData]="channels[channelsTab].sections"
-      class="list"
-      (cdkDropListDropped)="orderChannel($event)"
+    <rep-accordion
+      *ngFor="let section of channels[channelsTab].sections; let i = index"
+      [open]="channels[channelsTab]?.sections[i]?.open || section?.id == _ms.currentChannel?.id"
+      (click)="selectChannel(section); expandChannel(i)"
+      (drag)="expandChannel(i)"
+      cdkDrag
+      cdkDragLockAxis="y"
+      cdkDragBoundary=".channels"
+      (cdkDropListEntered)="expandChannel(i)"
     >
 
-      <rep-accordion
-        *ngFor="let section of channels[channelsTab].sections; let i = index"
-        [open]="channels[channelsTab]?.sections[i]?.open || section?.id == _ms.currentChannel?.id"
-        (click)="selectChannel(section); expandChannel(i)"
-        cdkDrag
-        cdkDragLockAxis="y"
+      <rep-message header
+        [message]="section"
+        [hold]="_ms.currentChannel?.id == section.id"
+        backgroundColor="#202124"
       >
-        <rep-message header
-          [message]="section"
-          [hold]="_ms.currentChannel?.id == section.id"
+      </rep-message>
+
+      <div class="rooms" body repStop>
+
+        <rep-separator *ngIf="_ms.currentChannel?.rooms?.text.length > 0">
+          Text rooms
+        </rep-separator>
+
+        <rep-room
+          *ngFor="let room of _ms.currentChannel?.rooms?.text"
+          [roomName]="room.roomName"
+          [textRoom]="room.textRoom"
+          [notifications]="room.notifications"
+          [hold]="_ms.isInRoom(room)"
+          (click)="selectRoom(room)"
         >
-        </rep-message>
+        </rep-room>
 
-        <div class="rooms" body repStop>
+        <rep-separator *ngIf="_ms.currentChannel?.rooms?.vocal.length > 0">
+          Vocal rooms
+        </rep-separator>
 
-          <rep-separator *ngIf="_ms.currentChannel?.rooms?.text.length > 0">
-            Text rooms
-          </rep-separator>
+        <rep-room
+          *ngFor="let room of _ms.currentChannel?.rooms?.vocal"
+          [roomName]="room.roomName"
+          [textRoom]="room.textRoom"
+          [members]="room.connected"
+          [hold]="_ms.isInRoom(room)"
+          (click)="selectRoom(room)"
+        >
+        </rep-room>
 
-          <rep-room
-            *ngFor="let room of _ms.currentChannel?.rooms?.text"
-            [roomName]="room.roomName"
-            [textRoom]="room.textRoom"
-            [notifications]="room.notifications"
-            [hold]="_ms.isInRoom(room)"
-            (click)="selectRoom(room)"
-          >
-          </rep-room>
+      </div>
 
-          <rep-separator *ngIf="_ms.currentChannel?.rooms?.vocal.length > 0">
-            Vocal rooms
-          </rep-separator>
-
-          <rep-room
-            *ngFor="let room of _ms.currentChannel?.rooms?.vocal"
-            [roomName]="room.roomName"
-            [textRoom]="room.textRoom"
-            [members]="room.connected"
-            [hold]="_ms.isInRoom(room)"
-            (click)="selectRoom(room)"
-          >
-          </rep-room>
-
-        </div>
-
-      </rep-accordion>
-
-    </div>
-
+    </rep-accordion>
   </div>
+
 
   <small *ngIf="channels[channelsTab]?.sections.length == 0">
     {{channels[channelsTab]?.tabname}} is empty.

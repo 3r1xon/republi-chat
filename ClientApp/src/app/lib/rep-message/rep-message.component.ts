@@ -11,7 +11,7 @@ import { REPButton } from 'src/interfaces/repbutton.interface';
 @Component({
   selector: 'rep-message',
   templateUrl: './rep-message.component.html',
-  styleUrls: ['./rep-message.component.scss'],
+  styleUrls: ['./rep-message.component.scss']
 })
 export class REPMessageComponent {
 
@@ -32,6 +32,9 @@ export class REPMessageComponent {
 
   @Input()
   public hold: boolean = false;
+
+  @Input()
+  public backgroundColor: string;
 
   @Output()
   public onUserClick = new EventEmitter<string>();

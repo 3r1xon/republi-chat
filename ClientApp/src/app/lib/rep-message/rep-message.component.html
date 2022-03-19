@@ -1,8 +1,9 @@
-<div id="message-box" [ngClass]="{
+<div class="rep-message" [ngClass]="{
     'active': active && !hold,
     'hold': hold
   }"
   [style.animation]="message.highlighted && !hold ? 'highlight 1s forwards' : ''"
+  [style.background]="backgroundColor"
 >
 
   <div

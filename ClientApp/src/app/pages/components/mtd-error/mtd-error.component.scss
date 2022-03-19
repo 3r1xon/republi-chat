@@ -1,6 +1,6 @@
 @import 'src/app/styles/mixins';
 
-#obscure {
+.obscure {
     width: 100%;
     height: 100%;
     @include flexCenter(row);

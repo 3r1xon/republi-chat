@@ -1,7 +1,7 @@
 @import 'src/app/styles/mixins';
 @import 'src/app/styles/fonts';
 
-#rep-tabs {
+.rep-tabs {
   @include flexCenter(column);
   height: 100%;
   background: var(--LIGHT-DARK);

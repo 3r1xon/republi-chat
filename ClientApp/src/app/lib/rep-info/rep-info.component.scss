@@ -1,5 +1,5 @@
 @import 'src/app/styles/mixins';
 
-#rep-info {
-    @include flexCenter(row);
+.rep-info {
+  @include flexCenter(row);
 }

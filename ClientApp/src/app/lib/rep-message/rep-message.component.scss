@@ -1,6 +1,6 @@
 @import 'src/app/styles/mixins';
 
-#message-box {
+.rep-message {
   min-height: 55px;
   height: auto;
   display: flex;
@@ -63,7 +63,7 @@
   }
 
   &:hover {
-    background: var(--VERY-DARK);
+    background: var(--VERY-DARK) !important;
 
     .more {
       opacity: 1;
@@ -94,7 +94,7 @@
 }
 
 .hold {
-  background: var(--OBSCURE);
+  background: var(--LIGHT-GREY) !important;
 }
 
 

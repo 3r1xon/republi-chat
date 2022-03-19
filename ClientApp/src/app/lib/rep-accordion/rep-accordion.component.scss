@@ -1,11 +1,10 @@
 @import 'src/app/styles/mixins';
 
 
-#rep-accordion {
+.rep-accordion {
   width: 100%;
   height: 100%;
   @include flexCenter(column);
-
 
   .header {
     width: 100%;

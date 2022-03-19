@@ -8,8 +8,7 @@ import { UserService } from 'src/services/user.service';
 import { UtilsService } from 'src/services/utils.service';
 import {
   CdkDragDrop,
-  moveItemInArray,
-  transferArrayItem
+  moveItemInArray
 } from '@angular/cdk/drag-drop';
 
 @Component({
@@ -96,6 +95,7 @@ export class MTDChannelsComponent implements OnInit {
   }
 
   expandChannel(index: number) {
+    console.log("exp")
     this.channels[this.channelsTab].sections.map((ch: any) => {
       ch.open = false;
     });
@@ -104,16 +104,7 @@ export class MTDChannelsComponent implements OnInit {
   }
 
   orderChannel(event: CdkDragDrop<string[]>) {
-    if (event.previousContainer === event.container) {
-      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
-    } else {
-      transferArrayItem(
-        event.previousContainer.data,
-        event.container.data,
-        event.previousIndex,
-        event.currentIndex,
-      );
-    }
+    moveItemInArray(this.channels[this.channelsTab].sections, event.previousIndex, event.currentIndex);
   }
 
   async addNew() {
