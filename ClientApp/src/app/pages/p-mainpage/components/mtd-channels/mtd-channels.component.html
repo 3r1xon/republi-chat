@@ -5,14 +5,14 @@
   (onTab)="channelsTab = $event"
 >
 
-
-  <div cdkDropListGroup class="list">
+  <div cdkDropListGroup class="list-group">
 
     <div
       cdkDropList
       [cdkDropListData]="channels[channelsTab].sections"
-      class="example-list"
-      (cdkDropListDropped)="orderChannel($event)">
+      class="list"
+      (cdkDropListDropped)="orderChannel($event)"
+    >
 
       <rep-accordion
         *ngFor="let section of channels[channelsTab].sections; let i = index"
