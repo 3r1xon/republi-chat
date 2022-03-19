@@ -50,6 +50,10 @@
       margin-bottom: 5px;
     }
 
+    .content {
+      font-weight: 100;
+    }
+
     .time {
       font-size: 14px;
       align-self: flex-end;
@@ -59,10 +63,10 @@
   }
 
   &:hover {
-    background: var(--VERY-DARK) !important;
+    background: var(--VERY-DARK);
 
     .more {
-      visibility: visible;
+      opacity: 1;
     }
   }
 
@@ -73,11 +77,11 @@
     margin: 10px;
     @include flexCenter(row);
     align-self: flex-start;
-    transition: 100ms;
+    transition: 200ms;
     cursor: pointer;
     color: var(--WHITE);
     user-select: none;
-    visibility: hidden;
+    opacity: 0;
 
     &:hover {
       background: var(--LIGHT-DARK);

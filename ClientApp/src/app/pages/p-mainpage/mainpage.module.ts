@@ -8,6 +8,7 @@ import { MTDChannelInfoComponent } from './components/mtd-channel-info/mtd-chann
 import { MTDStatusBarComponent } from './components/mtd-status-bar/mtd-status-bar.component';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 
 
@@ -30,6 +31,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     REPModule,
     MatIconModule,
     MatTooltipModule,
+    DragDropModule
   ]
 })
 export class MainpageModule { }

@@ -79,7 +79,7 @@
           cursor: pointer;
           transition: 100ms;
 
-          &:hover, &:focus {
+          &:hover {
             background: lighten($color: #1e1e1e, $amount: 15);
           }
         }

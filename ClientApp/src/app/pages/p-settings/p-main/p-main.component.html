@@ -2,7 +2,10 @@
 
   <nav class="menu">
 
-    <button *ngFor="let submenu of menus; let i = index" class="submenu" matRipple matRippleColor="#ffffff47"
+    <button
+      *ngFor="let submenu of menus; let i = index"
+      class="submenu"
+      matRipple matRippleColor="#ffffff47"
       (click)="changeRoute(i)"
       [style.color]="submenu.color"
       [style.background]="submenu.name == currentRoute ? '#434343' : ''"
