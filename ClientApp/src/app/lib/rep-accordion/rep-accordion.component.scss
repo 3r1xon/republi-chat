@@ -1,12 +1,17 @@
+@import 'src/app/styles/mixins';
+
+
 #rep-accordion {
-    height: 100%;
+  width: 100%;
+  height: 100%;
+  @include flexCenter(column);
 
 
-    .header {
-        width: 100%;
-    }
+  .header {
+    width: 100%;
+  }
 
-    .body {
-        width: 100%;
-    }
+  .body {
+    width: 100%;
+  }
 }

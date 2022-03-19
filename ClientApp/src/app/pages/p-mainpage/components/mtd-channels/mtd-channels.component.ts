@@ -6,6 +6,11 @@ import { Message } from 'src/interfaces/message.interface';
 import { MessagesService } from 'src/services/messages.service';
 import { UserService } from 'src/services/user.service';
 import { UtilsService } from 'src/services/utils.service';
+import {
+  CdkDragDrop,
+  moveItemInArray,
+  transferArrayItem
+} from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'mtd-channels',
@@ -96,6 +101,19 @@ export class MTDChannelsComponent implements OnInit {
     });
 
     (this.channels[this.channelsTab].sections[index] as any).open = true;
+  }
+
+  orderChannel(event: CdkDragDrop<string[]>) {
+    if (event.previousContainer === event.container) {
+      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+    } else {
+      transferArrayItem(
+        event.previousContainer.data,
+        event.container.data,
+        event.previousIndex,
+        event.currentIndex,
+      );
+    }
   }
 
   async addNew() {

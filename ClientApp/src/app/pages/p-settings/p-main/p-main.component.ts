@@ -41,11 +41,11 @@ export class PSettingsComponent {
       icon: "tune",
       route: '/settings/appearance',
     },
-    {
-      name: "Hot Keys",
-      icon: "keyboard",
-      route: '/settings/newchannel',
-    },
+    // {
+    //   name: "Hot Keys",
+    //   icon: "keyboard",
+    //   route: '/settings/newchannel',
+    // },
     {
       name: "Log out",
       color: "#ff0000",
