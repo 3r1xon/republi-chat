@@ -94,17 +94,11 @@ export class MTDChannelsComponent implements OnInit {
     }
   }
 
-  expandChannel(index: number) {
-    console.log("exp")
-    this.channels[this.channelsTab].sections.map((ch: any) => {
-      ch.open = false;
-    });
-
-    (this.channels[this.channelsTab].sections[index] as any).open = true;
-  }
-
   orderChannel(event: CdkDragDrop<string[]>) {
-    moveItemInArray(this.channels[this.channelsTab].sections, event.previousIndex, event.currentIndex);
+    moveItemInArray(
+      this.channels[this.channelsTab].sections,
+      event.previousIndex, event.currentIndex
+    );
   }
 
   async addNew() {

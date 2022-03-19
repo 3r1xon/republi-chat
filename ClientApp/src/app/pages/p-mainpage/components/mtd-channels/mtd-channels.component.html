@@ -15,15 +15,14 @@
     <rep-accordion
       *ngFor="let section of channels[channelsTab].sections; let i = index"
       [open]="channels[channelsTab]?.sections[i]?.open || section?.id == _ms.currentChannel?.id"
-      (click)="selectChannel(section); expandChannel(i)"
-      (drag)="expandChannel(i)"
+      (click)="selectChannel(section)"
       cdkDrag
       cdkDragLockAxis="y"
       cdkDragBoundary=".channels"
-      (cdkDropListEntered)="expandChannel(i)"
     >
 
       <rep-message header
+        cdkDragHandle
         [message]="section"
         [hold]="_ms.currentChannel?.id == section.id"
         backgroundColor="#202124"
