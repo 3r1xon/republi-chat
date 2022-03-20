@@ -2,7 +2,7 @@ import {
   ComponentFactoryResolver,
   Directive,
   ElementRef,
-  HostListener,
+  Inject,
   Input,
   OnInit,
   Renderer2,
@@ -29,14 +29,11 @@ export class REPContextDirective implements OnInit {
     });
   }
 
-  private static instances: Array<ViewContainerRef> = [];
-
   public onEvent(event: any): void
   {
     // TODO: Test this line
     event.preventDefault();
-
-    this.closeAllWindows();
+    event.stopPropagation();
 
     const component = this.componentFactory.resolveComponentFactory(REPWindowComponent);
     const compRef = this.viewContainer.createComponent(component);
@@ -53,7 +50,7 @@ export class REPContextDirective implements OnInit {
     this.renderer.setStyle(
       compRef.location.nativeElement,
       "z-index",
-      `${REPContextDirective.instances.length + 1}`
+      "1"
     );
 
     compRef.changeDetectorRef.detectChanges();
@@ -84,7 +81,33 @@ export class REPContextDirective implements OnInit {
       "#9595951a"
     );
 
-    REPContextDirective.instances.push(this.viewContainer);
+    const closeWindow = () => {
+      compRef.destroy();
+
+      this.renderer.setStyle(
+        this.elRef.nativeElement,
+        "background",
+        null
+      );
+    };
+
+    const unregister = [];
+
+    [
+      "click",
+      "resize",
+      "contextmenu"
+    ].forEach((eventName) => {
+        unregister.push(this.renderer.listen(document, eventName, () => {
+          closeWindow();
+        }));
+
+        unregister.push(this.renderer.listen(this.elRef.nativeElement, eventName, () => {
+          closeWindow();
+        }));
+    });
+
+    compRef.onDestroy(() => unregister.forEach(_ => _()));
   }
 
   @Input('repContext')
@@ -95,20 +118,4 @@ export class REPContextDirective implements OnInit {
 
   @Input('repMode')
   public mode: string = "contextmenu" || "click";
-
-  @HostListener('window:resize', ['$event'])
-  closeAllWindows() {
-
-    if (REPContextDirective.instances.length > 0) {
-
-      REPContextDirective.instances
-        .forEach((instance) => {
-          instance.clear();
-          instance.element.nativeElement.style.background = null;
-        });
-
-      REPContextDirective.instances = [];
-    }
-
-  }
 }

@@ -5,6 +5,10 @@
   (onTab)="channelsTab = $event"
 >
 
+  <small *ngIf="channels[channelsTab]?.sections.length == 0">
+    {{channels[channelsTab]?.tabname}} is empty.
+  </small>
+
   <div
     cdkDropList
     [cdkDropListData]="channels[channelsTab].sections"
@@ -63,10 +67,5 @@
 
     </rep-accordion>
   </div>
-
-
-  <small *ngIf="channels[channelsTab]?.sections.length == 0">
-    {{channels[channelsTab]?.tabname}} is empty.
-  </small>
 
 </rep-tabs>
