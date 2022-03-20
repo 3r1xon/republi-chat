@@ -142,6 +142,7 @@ router.get('/getChannels', async (req, res) => {
     WHERE CM.ID_USER = ?
       AND CM.BANNED = ?
       AND CM.KICKED = ?
+    ORDER BY CM.ORDER
     `, [userID, false, false]);
 
     res.status(200).send({ success: true, data: channels });
@@ -288,6 +289,36 @@ router.get('/getChRoomPermissions/:chID/:roomID', (req, res) => {
 
 });
 
+
+
+router.put('/changeChOrder', async (req, res) => {
+
+  try {
+
+    const channels = req.body;
+    const userID = res.locals._id;
+
+    let i = 0;
+    for (const channel of channels) {
+      await REPQuery.exec(
+      `
+      UPDATE CHANNELS_MEMBERS CM
+      SET CM.ORDER = ?
+      WHERE CM.ID_USER = ?
+        AND CM.ID_CHANNEL = ?
+      `, [i, userID, channel.id]);
+      i++;
+    }
+
+    res.status(200).send({ success: true });
+
+  }
+  catch(error) {
+    console.log(clc.red(error));
+
+    res.status(500).send({ success: false, message: "Internal server error!" });
+  }
+});
 
 
 module.exports = router;

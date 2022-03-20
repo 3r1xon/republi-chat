@@ -24,9 +24,4 @@ export class REPRoomComponent {
 
   @Input() notifications: number = 0;
 
-  openContext(event) {
-    console.log("context");
-    event.preventDefault();
-  }
-
 }

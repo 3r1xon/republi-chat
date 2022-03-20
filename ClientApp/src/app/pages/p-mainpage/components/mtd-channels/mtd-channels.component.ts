@@ -94,11 +94,14 @@ export class MTDChannelsComponent implements OnInit {
     }
   }
 
-  orderChannel(event: CdkDragDrop<string[]>) {
+  orderChannel(event: CdkDragDrop<Array<string>>) {
     moveItemInArray(
       this.channels[this.channelsTab].sections,
-      event.previousIndex, event.currentIndex
+      event.previousIndex,
+      event.currentIndex
     );
+
+    this._ms.API_changeChOrder(this.channels[this.channelsTab].sections).toPromise();
   }
 
   async addNew() {

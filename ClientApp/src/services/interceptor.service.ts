@@ -26,6 +26,7 @@ export class InterceptorService implements HttpInterceptor {
 
   private readonly loadingBlackList: Array<string> = [
     `${environment.BASE_URL}/channels/getChannels`,
+    `${environment.BASE_URL}/channels/changeChOrder`,
     `${environment.BASE_URL}/messages/getChannelMessages`,
     `${environment.BASE_URL}/authentication/getSettings`,
     `${environment.BASE_URL}/messages/getChannelPermissions`

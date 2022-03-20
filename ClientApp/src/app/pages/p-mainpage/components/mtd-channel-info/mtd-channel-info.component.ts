@@ -16,7 +16,7 @@ export class MTDChannelInfoComponent {
   }> = [
     {
       tabname: "Members",
-      icon: "public",
+      icon: "groups",
       sections: []
     },
     {

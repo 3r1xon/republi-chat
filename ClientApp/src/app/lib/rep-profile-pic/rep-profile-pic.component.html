@@ -10,6 +10,7 @@
 
 <span
   *ngIf="src == null"
+  #span
   class="user-image absent-image"
   matRipple
   [style.minWidth]="width"
@@ -18,5 +19,5 @@
   [style.minHeight]="height"
   [style.maxHeight]="height"
 >
-  <ng-container *ngIf="letter">{{letter[0]}}</ng-container>
+  <span *ngIf="letter" [style.fontSize]="span.offsetWidth / 1.5 + 'px'">{{letter[0]}}</span>
 </span>

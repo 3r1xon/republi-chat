@@ -79,16 +79,8 @@ export class REPChatComponent implements AfterViewInit, OnDestroy {
   @Input()
   public unread: number;
 
-  private _dateFormat: string = "dd/MM/yyyy";
-
   @Input()
-  public set dateFormat(format: string) {
-    this._dateFormat = format.replace(":ss", "");
-  };
-
-  public get dateFormat() {
-    return this._dateFormat;
-  }
+  public dateFormat: string = "longDate";
 
   @Output()
   public sendMessage = new EventEmitter();

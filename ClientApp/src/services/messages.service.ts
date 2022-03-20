@@ -280,26 +280,6 @@ export class MessagesService {
     return allRooms.find(room => room.roomID == roomID);
   }
 
-  public API_getChannels() {
-    return this.http.get<ServerResponse>(`${environment.BASE_URL}/channels/getChannels`);
-  }
-
-  public API_getRoomMessages(channel: Channel, room: Room, limit: number = 50) {
-    return this.http.get<ServerResponse>(`${environment.BASE_URL}/messages/getRoomMessages/${channel.id}/${room.roomID}/${limit}`);
-  }
-
-  public API_getChRooms(channel: Channel) {
-    return this.http.get<ServerResponse>(`${environment.BASE_URL}/channels/getChannelRooms/${channel.id}`);
-  }
-
-  public API_getChPermissions(channel: Channel) {
-    return this.http.get<ServerResponse>(`${environment.BASE_URL}/channels/getChannelPermissions/${channel.id}`);
-  }
-
-  public API_getChRoomPermissions(channel: Channel, room: Room) {
-    return this.http.get<ServerResponse>(`${environment.BASE_URL}/channels/getChRoomPermissions/${channel.id}/${room.roomID}`);
-  }
-
   public leaveChannel(room: number) {
 
   }
@@ -381,6 +361,30 @@ export class MessagesService {
    */
   public API_addChannel(channel: Channel) {
     return this.http.post<ServerResponse>(`${environment.BASE_URL}/channels/addChannel`, channel);
+  }
+
+  public API_getChannels() {
+    return this.http.get<ServerResponse>(`${environment.BASE_URL}/channels/getChannels`);
+  }
+
+  public API_getRoomMessages(channel: Channel, room: Room, limit: number = 50) {
+    return this.http.get<ServerResponse>(`${environment.BASE_URL}/messages/getRoomMessages/${channel.id}/${room.roomID}/${limit}`);
+  }
+
+  public API_getChRooms(channel: Channel) {
+    return this.http.get<ServerResponse>(`${environment.BASE_URL}/channels/getChannelRooms/${channel.id}`);
+  }
+
+  public API_getChPermissions(channel: Channel) {
+    return this.http.get<ServerResponse>(`${environment.BASE_URL}/channels/getChannelPermissions/${channel.id}`);
+  }
+
+  public API_getChRoomPermissions(channel: Channel, room: Room) {
+    return this.http.get<ServerResponse>(`${environment.BASE_URL}/channels/getChRoomPermissions/${channel.id}/${room.roomID}`);
+  }
+
+  public API_changeChOrder(channels: Array<Channel>) {
+    return this.http.put<ServerResponse>(`${environment.BASE_URL}/channels/changeChOrder`, channels);
   }
 
   /**

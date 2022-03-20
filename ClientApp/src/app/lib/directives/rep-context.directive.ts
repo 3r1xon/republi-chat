@@ -4,6 +4,8 @@ import {
   ElementRef,
   HostListener,
   Input,
+  OnInit,
+  Renderer2,
   ViewContainerRef
 } from '@angular/core';
 import { REPButton } from 'src/interfaces/repbutton.interface';
@@ -12,19 +14,26 @@ import { REPWindowComponent } from '../rep-window/rep-window.component';
 @Directive({
   selector: '[repContext]',
 })
-export class REPContextDirective {
+export class REPContextDirective implements OnInit {
 
   constructor(
     private elRef: ElementRef,
     private viewContainer: ViewContainerRef,
     private componentFactory: ComponentFactoryResolver,
+    private renderer: Renderer2
   ) { }
+
+  ngOnInit(): void {
+    this.renderer.listen(this.elRef.nativeElement, this.mode, (event) => {
+      this.onEvent(event);
+    });
+  }
 
   private static instances: Array<ViewContainerRef> = [];
 
-  @HostListener("contextmenu", ["$event"])
-  public onContext(event: any): void
+  public onEvent(event: any): void
   {
+    // TODO: Test this line
     event.preventDefault();
 
     this.closeAllWindows();
@@ -35,25 +44,45 @@ export class REPContextDirective {
     compRef.instance.uniqueID = this.uniqueID;
     compRef.instance.subMenu = this.menu;
 
-    compRef.location.nativeElement.style.position = "fixed";
-    compRef.location.nativeElement.style.zIndex = `${REPContextDirective.instances.length + 1}`;
+    this.renderer.setStyle(
+      compRef.location.nativeElement,
+      "position",
+      "fixed"
+    );
 
-    const winWidth = compRef.location.nativeElement.style.width;
-    const winHeight = compRef.location.nativeElement.style.height;
+    this.renderer.setStyle(
+      compRef.location.nativeElement,
+      "z-index",
+      `${REPContextDirective.instances.length + 1}`
+    );
 
-    if (event.clientX + winWidth > window.innerWidth) {
-      compRef.location.nativeElement.style.left = `${event.pageX - winWidth}px`;
-    } else {
-      compRef.location.nativeElement.style.left = `${event.pageX}px`;
-    }
+    compRef.changeDetectorRef.detectChanges();
 
-    if (event.clientY + winHeight > window.innerHeight) {
-      compRef.location.nativeElement.style.top = `${event.pageY - winHeight}px`;
-    } else {
-      compRef.location.nativeElement.style.top = `${event.pageY}px`;
-    }
+    const { offsetWidth, offsetHeight } = compRef.location.nativeElement;
 
-    this.elRef.nativeElement.style.background = "#9595951a";
+    this.renderer.setStyle(
+      compRef.location.nativeElement,
+      "left",
+      event.clientX + offsetWidth > window.innerWidth ?
+        `${event.pageX - offsetWidth}px`
+      :
+        `${event.pageX}px`
+    );
+
+    this.renderer.setStyle(
+      compRef.location.nativeElement,
+      "top",
+      event.clientY + offsetHeight > window.innerHeight ?
+        `${event.pageY - offsetHeight}px`
+      :
+        `${event.pageY}px`
+    );
+
+    this.renderer.setStyle(
+      this.elRef.nativeElement,
+      "background",
+      "#9595951a"
+    );
 
     REPContextDirective.instances.push(this.viewContainer);
   }
@@ -64,8 +93,10 @@ export class REPContextDirective {
   @Input('repUniqueID')
   public uniqueID: number;
 
+  @Input('repMode')
+  public mode: string = "contextmenu" || "click";
+
   @HostListener('window:resize', ['$event'])
-  @HostListener('document:click', ['$event'])
   closeAllWindows() {
 
     if (REPContextDirective.instances.length > 0) {
