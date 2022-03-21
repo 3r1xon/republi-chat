@@ -8,8 +8,8 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 export class REPTabsComponent {
 
   @Input()
-  public entries: Array<{ 
-    tabname: string, 
+  public entries: Array<{
+    tabname: string,
     icon: string
   }>;
 

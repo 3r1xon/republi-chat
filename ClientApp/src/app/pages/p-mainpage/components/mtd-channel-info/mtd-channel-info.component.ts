@@ -1,11 +1,46 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { Unsubscriber } from 'src/app/lib/rep-decorators';
+import { Message } from 'src/interfaces/message.interface';
+import { MessagesService } from 'src/services/messages.service';
 
 @Component({
   selector: 'mtd-channel-info',
   templateUrl: './mtd-channel-info.component.html',
   styleUrls: ['./mtd-channel-info.component.scss']
 })
-export class MTDChannelInfoComponent {
+@Unsubscriber
+export class MTDChannelInfoComponent implements OnInit {
+
+  constructor(
+    private _ms: MessagesService
+  ) { }
+
+  ngOnInit(): void {
+    this.fillSections();
+  }
+
+  protected readonly onRoomJoin: Subscription = this._ms.onRoomChange
+    .subscribe(() => {
+      this.fillSections();
+    });
+
+  private fillSections() {
+    const channelsRef = this.serverInfo.find(tab => tab.tabname == "Members");
+
+    if (this._ms.currentRoom) {
+
+      channelsRef.sections = this._ms.currentRoom.members.map((ch) => {
+        return <Message>{
+          id: ch.id,
+          name: ch.name,
+          picture: ch.picture,
+          color: ch.color,
+          backgroundColor: ch.backgroundColor
+        };
+      });
+    }
+  }
 
   public serverInfoTab: number = 0;
 

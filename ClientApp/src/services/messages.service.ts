@@ -27,11 +27,7 @@ export class MessagesService {
 
   public messages: Array<Message> = [];
 
-  public roomChanges: Subject<any> = new Subject<any>();
-
   public channels: Array<Channel> = [];
-
-  public channelChanges: Subject<any> = new Subject<any>();
 
   public currentChannel: Channel;
 
@@ -46,6 +42,14 @@ export class MessagesService {
   private msSubscriptions: Array<Subscription> = [];
 
   private chSubscriptions: Array<Subscription> = [];
+
+  public onRoomChange: Subject<any> = new Subject<any>();
+
+  public onChannelChange: Subject<any> = new Subject<any>();
+
+  public channelChanges: Subject<any> = new Subject<any>();
+
+  public roomChanges: Subject<any> = new Subject<any>();
 
   /**
    * Get the current user channels.
@@ -86,6 +90,8 @@ export class MessagesService {
 
         this.chPermissions = resChannel.data as ChannelPermissions;
 
+        this.onChannelChange.next();
+
         this.initChannelSockets();
 
         this.API_getChRooms(channel)
@@ -100,6 +106,8 @@ export class MessagesService {
               this.joinRoom(channel, lastJoinedRoom);
             } else if (this.currentChannel.rooms.text.length > 0)
               this.joinRoom(channel, this.currentChannel.rooms.text[0]);
+
+            this.roomChanges.next();
           });
       }
     ).catch(() => {
@@ -111,14 +119,16 @@ export class MessagesService {
 
     if (room.textRoom) {
 
-      this.API_getChRoomPermissions(channel, room)
+      this.API_getChRoomInfo(channel, room)
         .toPromise()
         .then(
           (resRoom: ServerResponse) => {
 
             this.currentRoom = room;
 
-            this.roomPermissions = resRoom.data as RoomPermissions;
+            this.roomPermissions = resRoom.data.permissions as RoomPermissions;
+
+            this.currentRoom.members = resRoom.data.members;
 
             room.notifications = 0;
 
@@ -133,7 +143,7 @@ export class MessagesService {
                     return this.mapMsg(msg);
                   });
 
-                  this.roomChanges.next();
+                  this.onRoomChange.next();
 
                   this.initRoomSockets();
                 }
@@ -218,6 +228,16 @@ export class MessagesService {
 
           const index = this.messages.findIndex(msg => msg.id == state.msgID);
           this.messages[index].highlighted = state.state;
+        })
+    );
+
+    this.msSubscriptions
+    .push(
+      this._webSocket.listen("members")
+        .subscribe(() => {
+
+          console.log("new Member");
+
         })
     );
 
@@ -379,8 +399,8 @@ export class MessagesService {
     return this.http.get<ServerResponse>(`${environment.BASE_URL}/channels/getChannelPermissions/${channel.id}`);
   }
 
-  public API_getChRoomPermissions(channel: Channel, room: Room) {
-    return this.http.get<ServerResponse>(`${environment.BASE_URL}/channels/getChRoomPermissions/${channel.id}/${room.roomID}`);
+  public API_getChRoomInfo(channel: Channel, room: Room) {
+    return this.http.get<ServerResponse>(`${environment.BASE_URL}/channels/getChRoomInfo/${channel.id}/${room.roomID}`);
   }
 
   public API_changeChOrder(channels: Array<Channel>) {

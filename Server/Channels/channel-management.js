@@ -85,7 +85,7 @@ router.post('/addChannel', async (req, res) => {
     WHERE NAME = ?
       AND CHANNEL_CODE = ?
     `, [name, code]);
-    console.log(name, code)
+
     if (channel) {
 
       const channelID = channel.id;
@@ -241,7 +241,7 @@ router.get("/getChannelPermissions/:id", async (req, res) => {
 
 
 
-router.get('/getChRoomPermissions/:chID/:roomID', (req, res) => {
+router.get('/getChRoomInfo/:chID/:roomID', (req, res) => {
 
   try {
 
@@ -271,11 +271,32 @@ router.get('/getChRoomPermissions/:chID/:roomID', (req, res) => {
             WHERE ID_CHANNEL_ROOM_MEMBER = ?
             `, user.roomMemberID);
 
+            const members = await REPQuery.load(
+            `
+            SELECT CRMB.ID_CHANNEL_ROOM_MEMBER  as author,
+                   U.USER_CODE                  as code,
+                   U.COLOR                      as color,
+                   U.BACKGROUND_COLOR           as backgroundColor,
+                   U.NAME                       as name,
+                   TO_BASE64(U.PROFILE_PICTURE) as picture
+            FROM CHANNELS_ROOMS_MEMBERS CRMB
+                     LEFT JOIN CHANNELS_MEMBERS CM ON CM.ID_CHANNEL_MEMBER = CRMB.ID_CHANNEL_MEMBER
+                     LEFT JOIN USERS U ON U.ID_USER = CM.ID_USER
+            WHERE CRMB.ID_CHANNEL_ROOM = ?
+            `, [roomID]);
+
             REPTools.keysToBool(permissions);
 
             permissions.id = user.roomMemberID;
 
-            res.status(200).send({ success: true, data: permissions });
+            res.status(200).send(
+              {
+                success: true,
+                data: {
+                  permissions: permissions,
+                  members: members
+                }
+              });
           }
         });
 
@@ -284,7 +305,8 @@ router.get('/getChRoomPermissions/:chID/:roomID', (req, res) => {
 
   } catch (error) {
     console.log(clc.red(error));
-    res.status(500).send({ success: false, message: `Internal server error!!` });
+
+    res.status(500).send({ success: false, message: `Internal server error!` });
   }
 
 });

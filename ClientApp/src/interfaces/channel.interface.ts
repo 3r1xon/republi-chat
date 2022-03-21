@@ -17,7 +17,8 @@ export interface Room {
   roomID: number;
   roomName: string;
   textRoom: boolean;
-  connected?: Array<Account>
+  connected?: Array<Account>;
+  members: Array<Account>;
   notifications?: number;
   draft?: string;
 }

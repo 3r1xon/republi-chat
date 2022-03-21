@@ -10,12 +10,14 @@ import {
   CdkDragDrop,
   moveItemInArray
 } from '@angular/cdk/drag-drop';
+import { Unsubscriber } from 'src/app/lib/rep-decorators';
 
 @Component({
   selector: 'mtd-channels',
   templateUrl: './mtd-channels.component.html',
   styleUrls: ['./mtd-channels.component.scss']
 })
+@Unsubscriber
 export class MTDChannelsComponent implements OnInit {
 
   constructor(
@@ -30,9 +32,9 @@ export class MTDChannelsComponent implements OnInit {
   }
 
   protected readonly channelSubscription: Subscription = this._ms.channelChanges
-  .subscribe(() => {
-    this.fillSections();
-  });
+    .subscribe(() => {
+      this.fillSections();
+    });
 
   private fillSections() {
     const channelsRef = this.channels.find(tab => tab.tabname == "Channels");

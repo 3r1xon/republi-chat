@@ -207,7 +207,7 @@ class DBUser {
                  CRM.MESSAGE                  as message,
                  CRM.DATE                     as date
           FROM CHANNELS_ROOMS_MESSAGES CRM
-                   LEFT JOIN channels_rooms_members CRMB ON CRMB.ID_CHANNEL_ROOM_MEMBER = CRM.ID_CHANNEL_ROOM_MEMBER
+                   LEFT JOIN CHANNELS_ROOMS_MEMBERS CRMB ON CRMB.ID_CHANNEL_ROOM_MEMBER = CRM.ID_CHANNEL_ROOM_MEMBER
                    LEFT JOIN CHANNELS_MEMBERS CM ON CM.ID_CHANNEL_MEMBER = CRMB.ID_CHANNEL_MEMBER
                    LEFT JOIN USERS U ON U.ID_USER = CM.ID_USER
           WHERE CRM.ID_CHANNEL_ROOM_MESSAGE = ?
