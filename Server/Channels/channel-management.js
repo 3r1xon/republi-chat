@@ -156,7 +156,7 @@ router.get('/getChannels', async (req, res) => {
 
 
 
-router.get('/getChannelRooms/:id', (req, res) => {
+router.get('/getChannelInfo/:id', (req, res) => {
 
   try {
 
@@ -184,42 +184,12 @@ router.get('/getChannelRooms/:id', (req, res) => {
           AND CM.ID_USER = ?
         `, [channelID, userID]);
 
-        res.status(200).send({ success: true, data: {
-            text: rooms?.filter(obj => obj.textRoom),
-            vocal: rooms.filter(obj => !obj.textRoom)
-          }
-        });
-      }
-    })
-
-  } catch (error) {
-    console.log(clc.red(error));
-    res.status(500).send({ success: false, message: `Internal server error!!` });
-  }
-
-});
-
-
-
-router.get("/getChannelPermissions/:id", async (req, res) => {
-
-  const _id        = res.locals._id;
-  const _channelID = req.params.id;
-  const user       = new DBUser(_id);
-
-  user.setChannel(_channelID, async (err, user) => {
-    if (err) {
-      res.status(401).send({ success: false, message: "User not in channel!" });
-    } else {
-
-      try {
-
         const permissions = await REPQuery.one(
         `
-        SELECT DELETE_MESSAGES   as deleteMessage,
-               KICK_MEMBERS      as kickMembers,
-               BAN_MEMBERS       as banMembers,
-               SEND_MESSAGES     as sendMessages
+        SELECT DELETE_MESSAGES as deleteMessage,
+               KICK_MEMBERS    as kickMembers,
+               BAN_MEMBERS     as banMembers,
+               SEND_MESSAGES   as sendMessages
         FROM CHANNELS_PERMISSIONS
         WHERE ID_CHANNEL_MEMBER = ?
         `, [user.channelMemberID]);
@@ -228,15 +198,25 @@ router.get("/getChannelPermissions/:id", async (req, res) => {
 
         permissions.id = user.channelMemberID;
 
-        res.status(200).send({ success: true, data: permissions });
+        res.status(200).send({
+          success: true,
+          data: {
+            rooms: {
+              text: rooms?.filter(obj => obj.textRoom),
+              vocal: rooms.filter(obj => !obj.textRoom)
+            },
+            permissions: permissions
+          }
+        });
       }
-      catch (error) {
-        console.log(clc.red(error));
+    })
 
-        res.status(500).send({ success: false, message: "Internal server error!" });
-      }
-    }
-  });
+  } catch (error) {
+    console.log(clc.red(error));
+
+    res.status(500).send({ success: false, message: `Internal server error!!` });
+  }
+
 });
 
 

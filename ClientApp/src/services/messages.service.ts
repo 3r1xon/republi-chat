@@ -81,38 +81,32 @@ export class MessagesService {
    */
   public joinChannel(channel: Channel) {
 
-    this.API_getChPermissions(channel)
-    .toPromise()
-    .then(
-      (resChannel: ServerResponse) => {
+    this.API_getChannelInfo(channel)
+      .toPromise()
+      .then((resChannel: ServerResponse) => {
 
         this.currentChannel = channel;
 
-        this.chPermissions = resChannel.data as ChannelPermissions;
+        this.chPermissions = resChannel.data.permissions as ChannelPermissions;
 
         this.onChannelChange.next();
 
         this.initChannelSockets();
 
-        this.API_getChRooms(channel)
-          .toPromise()
-          .then((resRoom: ServerResponse) => {
+        this.currentChannel.rooms = resChannel.data.rooms;
 
-            this.currentChannel.rooms = resRoom.data;
+        const lastJoinedRoom = this.getRoomByID(this._user.currentUser.lastJoinedRoom);
 
-            const lastJoinedRoom = this.getRoomByID(this._user.currentUser.lastJoinedRoom);
+        if (lastJoinedRoom) {
+          this.joinRoom(channel, lastJoinedRoom);
+        } else if (this.currentChannel.rooms.text.length > 0)
+          this.joinRoom(channel, this.currentChannel.rooms.text[0]);
 
-            if (lastJoinedRoom) {
-              this.joinRoom(channel, lastJoinedRoom);
-            } else if (this.currentChannel.rooms.text.length > 0)
-              this.joinRoom(channel, this.currentChannel.rooms.text[0]);
-
-            this.roomChanges.next();
-          });
-      }
-    ).catch(() => {
-      this._utils.showBugReport("Server error!", "There has been an error while joining the channel!");
-    });
+        this.roomChanges.next();
+      })
+      .catch(() => {
+        this._utils.showBugReport("Server error!", "There has been an error while joining the channel!");
+      });
   }
 
   public joinRoom(channel: Channel, room: Room) {
@@ -121,38 +115,35 @@ export class MessagesService {
 
       this.API_getChRoomInfo(channel, room)
         .toPromise()
-        .then(
-          (resRoom: ServerResponse) => {
+        .then((resRoom: ServerResponse) => {
 
-            this.currentRoom = room;
+          this.currentRoom = room;
 
-            this.roomPermissions = resRoom.data.permissions as RoomPermissions;
+          this.roomPermissions = resRoom.data.permissions as RoomPermissions;
 
-            this.currentRoom.members = resRoom.data.members;
+          this.currentRoom.members = resRoom.data.members;
 
-            room.notifications = 0;
+          room.notifications = 0;
 
-            this.API_getRoomMessages(channel, room, 50)
+          this.API_getRoomMessages(channel, room, 50)
             .toPromise()
-            .then(
-              (res: ServerResponse) => {
+            .then((res: ServerResponse) => {
 
-                if (res.success) {
+              if (res.success) {
 
-                  this.messages = res.data?.map((msg: Message) => {
-                    return this.mapMsg(msg);
-                  });
+                this.messages = res.data?.map((msg: Message) => {
+                  return this.mapMsg(msg);
+                });
 
-                  this.onRoomChange.next();
+                this.onRoomChange.next();
 
-                  this.initRoomSockets();
-                }
+                this.initRoomSockets();
               }
-            ).catch(() => {
+            })
+            .catch(() => {
               this._utils.showBugReport("Server error!", "There has been an error while requesting the messages!");
             });
-          }
-        );
+        });
     } else {
       // TODO:
       // Join a vocal room
@@ -187,7 +178,7 @@ export class MessagesService {
     return false;
   }
 
-  private initRoomSockets() {
+  private initRoomSockets(): void {
 
     this.destroyMsSubscriptions();
 
@@ -263,7 +254,7 @@ export class MessagesService {
     );
   }
 
-  private initChannelSockets() {
+  private initChannelSockets(): void {
 
     this.destroyChSubscriptions();
 
@@ -300,7 +291,7 @@ export class MessagesService {
     return allRooms.find(room => room.roomID == roomID);
   }
 
-  public leaveChannel(room: number) {
+  public leaveChannel(channel: Channel) {
 
   }
 
@@ -391,12 +382,8 @@ export class MessagesService {
     return this.http.get<ServerResponse>(`${environment.BASE_URL}/messages/getRoomMessages/${channel.id}/${room.roomID}/${limit}`);
   }
 
-  public API_getChRooms(channel: Channel) {
-    return this.http.get<ServerResponse>(`${environment.BASE_URL}/channels/getChannelRooms/${channel.id}`);
-  }
-
-  public API_getChPermissions(channel: Channel) {
-    return this.http.get<ServerResponse>(`${environment.BASE_URL}/channels/getChannelPermissions/${channel.id}`);
+  public API_getChannelInfo(channel: Channel) {
+    return this.http.get<ServerResponse>(`${environment.BASE_URL}/channels/getChannelInfo/${channel.id}`);
   }
 
   public API_getChRoomInfo(channel: Channel, room: Room) {
