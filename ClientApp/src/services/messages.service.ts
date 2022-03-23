@@ -379,7 +379,7 @@ export class MessagesService {
   }
 
   public API_getRoomMessages(channel: Channel, room: Room, limit: number = 50) {
-    return this.http.get<ServerResponse>(`${environment.BASE_URL}/messages/getRoomMessages/${channel.id}/${room.roomID}/${limit}`);
+    return this.http.get<ServerResponse>(`${environment.BASE_URL}/channels/getRoomMessages/${channel.id}/${room.roomID}/${limit}`);
   }
 
   public API_getChannelInfo(channel: Channel) {

@@ -1,9 +1,10 @@
-import { Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 @Component({
   selector: 'rep-profile-pic',
   templateUrl: './rep-profile-pic.component.html',
-  styleUrls: ['./rep-profile-pic.component.scss']
+  styleUrls: ['./rep-profile-pic.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class REPProfilePicComponent {
 

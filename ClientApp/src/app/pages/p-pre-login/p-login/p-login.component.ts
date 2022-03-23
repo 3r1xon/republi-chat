@@ -1,5 +1,5 @@
 import { DOCUMENT } from '@angular/common';
-import { Component, Inject } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Account } from 'src/interfaces/account.interface';
@@ -10,7 +10,8 @@ import { UtilsService } from 'src/services/utils.service';
 
 @Component({
   templateUrl: './p-login.component.html',
-  styleUrls: ['./p-login.component.scss']
+  styleUrls: ['./p-login.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PLoginComponent {
 
@@ -20,6 +21,7 @@ export class PLoginComponent {
     private _fileUpload: FileUploadService,
     private router: Router,
     private fb: FormBuilder,
+    private cd: ChangeDetectorRef,
     @Inject(DOCUMENT) private document: Document
   ) { }
 
@@ -77,6 +79,9 @@ export class PLoginComponent {
           })
           .catch((response) => {
             this.alert = response.error.message;
+          })
+          .finally(() => {
+            this.cd.markForCheck();
           });
 
       },

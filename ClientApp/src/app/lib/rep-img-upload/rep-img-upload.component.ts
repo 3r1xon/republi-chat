@@ -1,9 +1,10 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'rep-img-upload',
   templateUrl: './rep-img-upload.component.html',
-  styleUrls: ['./rep-img-upload.component.scss']
+  styleUrls: ['./rep-img-upload.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class REPImgUploadComponent {
 

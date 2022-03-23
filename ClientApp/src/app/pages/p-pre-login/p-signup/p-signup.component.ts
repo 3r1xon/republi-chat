@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { REPButton } from 'src/interfaces/repbutton.interface';
@@ -7,14 +7,16 @@ import { UserService } from 'src/services/user.service';
 
 @Component({
   templateUrl: './p-signup.component.html',
-  styleUrls: ['./p-signup.component.scss']
+  styleUrls: ['./p-signup.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PSignupComponent {
 
   constructor(
     private _user: UserService,
     private router: Router,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private cd: ChangeDetectorRef
   ) { }
 
   public actions: Array<REPButton> = [
@@ -83,9 +85,13 @@ export class PSignupComponent {
         this.success = true;
         this.alert = response.message;
         this.form.reset();
-      }).catch((response: HttpErrorResponse) => {
+      })
+      .catch((response: HttpErrorResponse) => {
         this.alert = response.error.message;
         this.success = false;
+      })
+      .finally(() => {
+        this.cd.markForCheck();
       });
   }
 

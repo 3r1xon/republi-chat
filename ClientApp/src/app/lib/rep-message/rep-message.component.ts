@@ -11,7 +11,7 @@ import { REPButton } from 'src/interfaces/repbutton.interface';
 @Component({
   selector: 'rep-message',
   templateUrl: './rep-message.component.html',
-  styleUrls: ['./rep-message.component.scss']
+  styleUrls: ['./rep-message.component.scss'],
 })
 export class REPMessageComponent {
 

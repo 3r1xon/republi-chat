@@ -56,7 +56,6 @@ app.use(cookieParser());
 
 
 app.use('/authentication', require('./Authentication/user-management'));
-app.use('/messages', require('./Messages/message-management'));
 app.use('/channels', require('./Channels/channel-management'));
 app.use('/utils', require('./Utils/utils-management'));
 

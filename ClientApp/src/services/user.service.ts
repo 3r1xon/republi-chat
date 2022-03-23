@@ -79,7 +79,6 @@ export class UserService implements CanActivate {
         this.router.navigate(['unauthorized']);
       else {
         await this.router.navigate(['login']);
-        this.document.defaultView.location.reload();
       }
     }
 
@@ -90,6 +89,9 @@ export class UserService implements CanActivate {
       )
       .catch(() => {
         del();
+      })
+      .finally(() => {
+        this.document.defaultView.location.reload();
       });
   }
 

@@ -1,4 +1,5 @@
 import {
+  ChangeDetectionStrategy,
   Component,
   EventEmitter,
   Input,
@@ -9,7 +10,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 @Component({
   selector: 'rep-textbox',
   templateUrl: './rep-textbox.component.html',
-  styleUrls: ['./rep-textbox.component.scss']
+  styleUrls: ['./rep-textbox.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class REPTextBoxComponent {
 

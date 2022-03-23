@@ -1,16 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { REPButton } from 'src/interfaces/repbutton.interface';
 import { UtilsService } from 'src/services/utils.service';
 
 @Component({
   selector: 'mtd-error',
   templateUrl: './mtd-error.component.html',
-  styleUrls: ['./mtd-error.component.scss']
+  styleUrls: ['./mtd-error.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MTDErrorComponent implements OnInit {
 
   constructor(
-    public _utils: UtilsService
+    public _utils: UtilsService,
   ) { }
 
   ngOnInit(): void {

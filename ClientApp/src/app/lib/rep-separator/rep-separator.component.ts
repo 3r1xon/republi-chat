@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 
 @Component({
   selector: 'rep-separator',
@@ -7,4 +7,9 @@ import { Component } from '@angular/core';
 })
 export class REPSeparatorComponent {
 
+  constructor(
+    private cd: ChangeDetectorRef
+  ) {
+    this.cd.detach();
+  }
 }

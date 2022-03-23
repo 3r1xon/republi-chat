@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { UtilsService } from 'src/services/utils.service';
 
 @Component({
   selector: 'mtd-request',
   templateUrl: './mtd-request.component.html',
-  styleUrls: ['./mtd-request.component.scss']
+  styleUrls: ['./mtd-request.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MTDRequestComponent implements OnInit {
 

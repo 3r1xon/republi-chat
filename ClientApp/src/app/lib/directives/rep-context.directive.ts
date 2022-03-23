@@ -2,8 +2,8 @@ import {
   ComponentFactoryResolver,
   Directive,
   ElementRef,
-  Inject,
   Input,
+  NgZone,
   OnInit,
   Renderer2,
   ViewContainerRef
@@ -20,7 +20,8 @@ export class REPContextDirective implements OnInit {
     private elRef: ElementRef,
     private viewContainer: ViewContainerRef,
     private componentFactory: ComponentFactoryResolver,
-    private renderer: Renderer2
+    private renderer: Renderer2,
+    private ngZone: NgZone
   ) { }
 
   ngOnInit(): void {
@@ -33,7 +34,6 @@ export class REPContextDirective implements OnInit {
   {
     // TODO: Test this line
     event.preventDefault();
-    event.stopPropagation();
 
     const component = this.componentFactory.resolveComponentFactory(REPWindowComponent);
     const compRef = this.viewContainer.createComponent(component);
@@ -91,23 +91,20 @@ export class REPContextDirective implements OnInit {
       );
     };
 
-    const unregister = [];
+    setTimeout(() => {
 
-    [
-      "click",
-      "resize",
-      "contextmenu"
-    ].forEach((eventName) => {
-        unregister.push(this.renderer.listen(document, eventName, () => {
-          closeWindow();
-        }));
+      const clickReg = this.renderer.listen(document, "click", () => {
+        closeWindow();
+        clickReg();
+      });
 
-        unregister.push(this.renderer.listen(this.elRef.nativeElement, eventName, () => {
-          closeWindow();
-        }));
+      const contextReg = this.renderer.listen(document, "contextmenu", () => {
+        closeWindow();
+        contextReg();
+      });
     });
-
-    compRef.onDestroy(() => unregister.forEach(_ => _()));
+    // this.ngZone.runOutsideAngular(() => {
+    // });
   }
 
   @Input('repContext')

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 
 @Component({
   selector: 'rep-loading',
@@ -6,5 +6,11 @@ import { Component } from '@angular/core';
   styleUrls: ['./rep-loading.component.scss']
 })
 export class REPLoadingComponent {
+
+  constructor(
+    private cd: ChangeDetectorRef
+  ) {
+    this.cd.detach();
+  }
 
 }

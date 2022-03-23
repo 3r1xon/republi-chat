@@ -1,10 +1,11 @@
-import { Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { expand } from '../rep-animations';
 
 @Component({
   selector: 'rep-accordion',
   templateUrl: './rep-accordion.component.html',
   styleUrls: ['./rep-accordion.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     'role': 'button'
   },
