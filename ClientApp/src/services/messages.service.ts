@@ -157,7 +157,7 @@ export class MessagesService {
 
   public mapMsg(msg: Message): Message {
     msg.picture = this._fileUpload.sanitizeIMG(msg.picture);
-    msg.date = new Date(msg.date);
+    msg.date = msg.date ? new Date(msg.date) : null;
     msg.auth = this.chPermissions.id === msg.author;
     return msg;
   }

@@ -139,6 +139,10 @@ export class REPChatComponent implements AfterViewInit, OnDestroy {
     this.selections = [];
   }
 
+  trackByID(index: number, message: Message) {
+    return message.id;
+  }
+
   select(index: number, event: KeyboardEvent, surpassCtrl: boolean = false): void {
     const ctrlKey = event.ctrlKey;
 

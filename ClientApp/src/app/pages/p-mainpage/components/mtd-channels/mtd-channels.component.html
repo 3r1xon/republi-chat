@@ -27,6 +27,7 @@
 
       <rep-message header
         cdkDragHandle
+        [repContext]="channelContext"
         [message]="section"
         [hold]="_ms.currentChannel?.id == section.id"
         backgroundColor="#202124"

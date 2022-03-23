@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Unsubscriber } from 'src/app/lib/rep-decorators';
-import { Message } from 'src/interfaces/message.interface';
 import { MessagesService } from 'src/services/messages.service';
 
 @Component({
@@ -30,15 +29,10 @@ export class MTDChannelInfoComponent implements OnInit {
 
     if (this._ms.currentRoom) {
 
-      channelsRef.sections = this._ms.currentRoom.members.map((ch) => {
-        return <Message>{
-          id: ch.id,
-          name: ch.name,
-          picture: ch.picture,
-          color: ch.color,
-          backgroundColor: ch.backgroundColor
-        };
+      channelsRef.sections = this._ms.currentRoom.members.map((ch: any) => {
+        return this._ms.mapMsg(ch);
       });
+
     }
   }
 

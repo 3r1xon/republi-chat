@@ -11,6 +11,7 @@ import {
   moveItemInArray
 } from '@angular/cdk/drag-drop';
 import { Unsubscriber } from 'src/app/lib/rep-decorators';
+import { REPButton } from 'src/interfaces/repbutton.interface';
 
 @Component({
   selector: 'mtd-channels',
@@ -80,6 +81,16 @@ export class MTDChannelsComponent implements OnInit {
       tabname: "Friends",
       icon: "people",
       sections: []
+    }
+  ];
+
+  public channelContext: Array<REPButton> = [
+    {
+      name: "Add room",
+      icon: "add",
+      onClick: () => {
+
+      }
     }
   ];
 

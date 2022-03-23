@@ -64,10 +64,6 @@
 
   &:hover {
     background: var(--VERY-DARK) !important;
-
-    .more {
-      opacity: 1;
-    }
   }
 
   .more {
@@ -81,7 +77,6 @@
     cursor: pointer;
     color: var(--WHITE);
     user-select: none;
-    opacity: 0;
 
     &:hover {
       background: var(--LIGHT-DARK);

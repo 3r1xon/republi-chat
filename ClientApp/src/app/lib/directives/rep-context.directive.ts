@@ -2,9 +2,11 @@ import {
   ComponentFactoryResolver,
   Directive,
   ElementRef,
+  EventEmitter,
   Input,
   NgZone,
   OnInit,
+  Output,
   Renderer2,
   ViewContainerRef
 } from '@angular/core';
@@ -20,8 +22,7 @@ export class REPContextDirective implements OnInit {
     private elRef: ElementRef,
     private viewContainer: ViewContainerRef,
     private componentFactory: ComponentFactoryResolver,
-    private renderer: Renderer2,
-    private ngZone: NgZone
+    private renderer: Renderer2
   ) { }
 
   ngOnInit(): void {
@@ -40,6 +41,8 @@ export class REPContextDirective implements OnInit {
 
     compRef.instance.uniqueID = this.uniqueID;
     compRef.instance.subMenu = this.menu;
+
+    this.repState.emit(true);
 
     this.renderer.setStyle(
       compRef.location.nativeElement,
@@ -75,36 +78,37 @@ export class REPContextDirective implements OnInit {
         `${event.pageY}px`
     );
 
-    this.renderer.setStyle(
+    this.renderer.setAttribute(
       this.elRef.nativeElement,
-      "background",
-      "#9595951a"
+      "style",
+      "background: #9595951a !important"
     );
-
-    const closeWindow = () => {
-      compRef.destroy();
-
-      this.renderer.setStyle(
-        this.elRef.nativeElement,
-        "background",
-        null
-      );
-    };
 
     setTimeout(() => {
 
-      const clickReg = this.renderer.listen(document, "click", () => {
-        closeWindow();
-        clickReg();
-      });
+      const eventNames = ["click", "contextmenu"];
 
-      const contextReg = this.renderer.listen(document, "contextmenu", () => {
-        closeWindow();
-        contextReg();
+      eventNames.forEach((eName) => {
+        const unsub = this.renderer.listen(document, eName, (e) => {
+
+          compRef.destroy();
+
+          this.repState.emit(false);
+
+          unsub();
+
+          if (this.elRef.nativeElement.contains(e.target))
+            return;
+
+          this.renderer.setStyle(
+            this.elRef.nativeElement,
+            "background",
+            null
+          );
+
+        });
       });
     });
-    // this.ngZone.runOutsideAngular(() => {
-    // });
   }
 
   @Input('repContext')
@@ -115,4 +119,7 @@ export class REPContextDirective implements OnInit {
 
   @Input('repMode')
   public mode: string = "contextmenu" || "click";
+
+  @Output()
+  public repState: EventEmitter<boolean> = new EventEmitter();
 }

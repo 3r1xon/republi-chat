@@ -7,11 +7,11 @@
   >
 
     <mat-icon
-    [matBadge]="notifications"
-    matBadgeColor="accent"
-    matBadgePosition="before"
-    matBadgeSize="small"
-    [matBadgeHidden]="!textRoom || notifications == 0"
+      [matBadge]="notifications"
+      matBadgeColor="accent"
+      matBadgePosition="before"
+      matBadgeSize="small"
+      [matBadgeHidden]="!textRoom || notifications == 0"
     >{{textRoom ? 'chat' : 'volume_up'}}</mat-icon>
 
     <p>{{roomName}}</p>

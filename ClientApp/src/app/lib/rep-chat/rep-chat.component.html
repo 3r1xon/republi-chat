@@ -10,7 +10,7 @@
 
   <div class="messages" #content>
 
-    <ng-container *ngFor="let message of messages; let i = index;">
+    <ng-container *ngFor="let message of messages; trackBy: trackByID; let i = index;">
 
       <rep-separator *ngIf="spreadDate(message.date, i)">{{message.date | date: longDate}}</rep-separator>
 

@@ -9,8 +9,5 @@
   cursor: pointer;
   align-self: flex-start;
   font-weight: bold;
-}
-
-.absent-image {
   @include flexCenter(row);
 }

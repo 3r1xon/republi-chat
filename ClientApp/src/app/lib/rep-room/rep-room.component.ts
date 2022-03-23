@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Account } from 'src/interfaces/account.interface';
 import { expand } from '../rep-animations';
 
@@ -18,7 +18,7 @@ export class REPRoomComponent {
 
   @Input() hold: boolean = false;
 
-  @Input() members: Array<Account>;
+  @Input() members: Array<Account> = [];
 
   @Input() expanded: boolean = false;
 
