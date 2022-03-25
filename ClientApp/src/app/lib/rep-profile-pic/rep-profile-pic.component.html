@@ -1,23 +1,32 @@
-<img
-  *ngIf="src != null"
-  class="user-image"
-  [src]="src"
-  [style.minWidth]="width"
-  [style.maxWidth]="width"
-  [style.minHeight]="height"
-  [style.maxHeight]="height"
->
+<div class="rep-profile-pic">
 
-<span
-  *ngIf="src == null"
-  #span
-  class="user-image"
-  matRipple
-  [style.minWidth]="width"
-  [style.minHeight]="height"
-  [style.background]="color"
-  [style.minHeight]="height"
-  [style.maxHeight]="height"
->
-  <span *ngIf="letter" [style.fontSize]="span.offsetWidth / 1.5 + 'px'">{{letter[0]}}</span>
-</span>
+  <img
+    *ngIf="src != null"
+    class="user-image"
+    [src]="src"
+    [style.minWidth]="width"
+    [style.maxWidth]="width"
+    [style.minHeight]="height"
+    [style.maxHeight]="height"
+  >
+
+  <span
+    *ngIf="src == null"
+    #span
+    class="user-image"
+    matRipple
+    [style.minWidth]="width"
+    [style.minHeight]="height"
+    [style.background]="color"
+    [style.minHeight]="height"
+    [style.maxHeight]="height"
+    >
+    <span *ngIf="letter" [style.fontSize]="span.offsetWidth / 1.5 + 'px'">{{letter[0]}}</span>
+  </span>
+
+  <span class="user-status" [ngClass]="{
+    'online': status == 1,
+    'offline': status == 0
+  }"></span>
+
+</div>

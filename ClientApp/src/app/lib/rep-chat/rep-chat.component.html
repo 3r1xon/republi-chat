@@ -16,7 +16,7 @@
 
       <rep-separator *ngIf="i == messages.length - unread" class="unread">Unread messages</rep-separator>
 
-      <rep-message #msg
+      <rep-namebox #msg
         [message]="message"
         [options]="msOptions"
         [uniqueID]="i"
@@ -26,7 +26,7 @@
         [hold]="isInSelection(message.id)"
         (click)="select(i, $event)"
         [style.cursor]="selections.length > 0 ? 'pointer' : ''"
-      ></rep-message>
+      ></rep-namebox>
 
     </ng-container>
 

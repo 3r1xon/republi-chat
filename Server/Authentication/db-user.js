@@ -28,6 +28,7 @@ class DBUser {
   roomMemberID;
   roomJoinDate;
 
+
   async setChannel(channel, callback = nocb) {
 
     try {
@@ -462,10 +463,13 @@ class DBUser {
     WHERE ID_USER = ?
     `, [userStatus.online, this.userID]);
 
-    const joinedChannels = await this.getJoinedChannels();
+    this.joinedChannels = await this.getJoinedChannels();
 
-    joinedChannels.forEach((ch) => {
-      io.to("ch" + ch.channelID).emit("members", userStatus.online);
+    this.joinedChannels.forEach((ch) => {
+      io.to(`ch${ch.channelID}`).emit("members", {
+        userID: this.userID,
+        status: userStatus.online
+      });
     });
 
   }
@@ -480,6 +484,15 @@ class DBUser {
     SET USER_STATUS = ?
     WHERE ID_USER = ?
     `, [userStatus.offline, this.userID]);
+
+    this.joinedChannels = await this.getJoinedChannels();
+
+    this.joinedChannels.forEach((ch) => {
+      io.to(`ch${ch.channelID}`).emit("members", {
+        userID: this.userID,
+        status: userStatus.offline
+      });
+    });
 
   }
 }

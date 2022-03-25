@@ -224,16 +224,6 @@ export class MessagesService {
 
     this.msSubscriptions
     .push(
-      this._webSocket.listen("members")
-        .subscribe(() => {
-
-          console.log("new Member");
-
-        })
-    );
-
-    this.msSubscriptions
-    .push(
       this._webSocket.listen("connect")
         .subscribe(() => {
           const channel = this.currentChannel;
@@ -284,8 +274,10 @@ export class MessagesService {
     this.chSubscriptions
         .push(
           this._webSocket.listen("members")
-            .subscribe(() => {
-
+            .subscribe((obj: any) => {
+              this.currentRoom.members
+                .find(mrmb => mrmb.id == obj.userID)
+                .userStatus = obj.status;
             })
         );
   }

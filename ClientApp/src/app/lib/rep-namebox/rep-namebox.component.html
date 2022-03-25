@@ -1,4 +1,4 @@
-<div class="rep-message" [ngClass]="{
+<div class="rep-namebox" [ngClass]="{
     'active': active && !hold,
     'hold': hold
   }"
@@ -13,6 +13,7 @@
 
     <rep-profile-pic
       repStop
+      [status]="status"
       [src]="message.picture"
       [letter]="message.name"
       [color]="message.backgroundColor"
@@ -20,7 +21,7 @@
     >
     </rep-profile-pic>
 
-    <div class="message-info">
+    <div class="descr-info">
 
       <span>
         <p

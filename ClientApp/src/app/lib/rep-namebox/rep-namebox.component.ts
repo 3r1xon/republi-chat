@@ -4,16 +4,17 @@ import {
   Output,
   EventEmitter,
 } from '@angular/core';
+import { UserStatus } from 'src/interfaces/account.interface';
 import { Message } from 'src/interfaces/message.interface';
 import { REPButton } from 'src/interfaces/repbutton.interface';
 
 
 @Component({
-  selector: 'rep-message',
-  templateUrl: './rep-message.component.html',
-  styleUrls: ['./rep-message.component.scss'],
+  selector: 'rep-namebox',
+  templateUrl: './rep-namebox.component.html',
+  styleUrls: ['./rep-namebox.component.scss'],
 })
-export class REPMessageComponent {
+export class REPNameBoxComponent {
 
   @Input()
   public options: Array<REPButton>;
@@ -35,6 +36,9 @@ export class REPMessageComponent {
 
   @Input()
   public backgroundColor: string;
+
+  @Input()
+  public status: UserStatus;
 
   @Output()
   public onUserClick = new EventEmitter<string>();

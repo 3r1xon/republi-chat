@@ -1,6 +1,6 @@
 @import 'src/app/styles/mixins';
 
-.rep-message {
+.rep-namebox {
   min-height: 55px;
   height: auto;
   display: flex;
@@ -22,7 +22,7 @@
     word-wrap: anywhere;
   }
 
-  .message-info {
+  .descr-info {
     width: 100%;
     display: flex;
     flex-direction: column;

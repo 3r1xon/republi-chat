@@ -28,12 +28,7 @@ import { MainpageModule } from './pages/p-mainpage/mainpage.module';
 import { REPModule } from './lib/rep.module';
 import { MatRippleModule } from '@angular/material/core';
 import { GlobalErrorHandler } from './pages/error-handler';
-
-import { MTDEmojiBackgroundComponent } from './pages/components/mtd-emoji-background/mtd-emoji-background.component';
-import { MTDErrorComponent } from './pages/components/mtd-error/mtd-error.component';
-import { MTDFooterComponent } from './pages/components/mtd-footer/mtd-footer.component';
-import { MTDRequestComponent } from './pages/components/mtd-request/mtd-request.component';
-import { MTDLoadingComponent } from './pages/components/mtd-loading/mtd-loading.component';
+import { MTDModule } from './pages/components/mtd-module.module';
 
 
 
@@ -53,12 +48,6 @@ import { MTDLoadingComponent } from './pages/components/mtd-loading/mtd-loading.
     PNotFoundComponent,
     PAppearanceComponent,
     PVerificationComponent,
-
-    MTDEmojiBackgroundComponent,
-    MTDErrorComponent,
-    MTDFooterComponent,
-    MTDRequestComponent,
-    MTDLoadingComponent
   ],
   imports: [
     BrowserModule,
@@ -73,6 +62,7 @@ import { MTDLoadingComponent } from './pages/components/mtd-loading/mtd-loading.
     MainpageModule,
     MatRippleModule,
     REPModule,
+    MTDModule
   ],
   providers: [
     {

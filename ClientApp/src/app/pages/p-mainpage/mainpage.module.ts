@@ -9,6 +9,7 @@ import { MTDStatusBarComponent } from './components/mtd-status-bar/mtd-status-ba
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { MTDModule } from '../components/mtd-module.module';
 
 
 
@@ -17,13 +18,13 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
     MTDChatComponent,
     MTDChannelsComponent,
     MTDChannelInfoComponent,
-    MTDStatusBarComponent
+    MTDStatusBarComponent,
   ],
   exports: [
     MTDChatComponent,
     MTDChannelsComponent,
     MTDChannelInfoComponent,
-    MTDStatusBarComponent
+    MTDStatusBarComponent,
   ],
   imports: [
     CommonModule,
@@ -31,7 +32,8 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
     REPModule,
     MatIconModule,
     MatTooltipModule,
-    DragDropModule
+    DragDropModule,
+    MTDModule
   ]
 })
 export class MainpageModule { }

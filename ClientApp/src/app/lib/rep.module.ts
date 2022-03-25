@@ -9,7 +9,7 @@ import { MatRippleModule } from '@angular/material/core';
 import { MatBadgeModule } from '@angular/material/badge';
 
 import { REPTextBoxComponent } from './rep-textbox/rep-textbox.component';
-import { REPMessageComponent } from './rep-message/rep-message.component';
+import { REPNameBoxComponent } from './rep-namebox/rep-namebox.component';
 import { REPChatComponent } from './rep-chat/rep-chat.component';
 import { REPInputComponent } from './rep-input/rep-input.component';
 import { REPButtonComponent } from './rep-button/rep-button.component';
@@ -37,7 +37,7 @@ import { REPEntriesComponent } from './rep-entries/rep-entries.component';
 @NgModule({
   declarations: [
     REPTextBoxComponent,
-    REPMessageComponent,
+    REPNameBoxComponent,
     REPChatComponent,
     REPInputComponent,
     REPButtonComponent,
@@ -61,7 +61,7 @@ import { REPEntriesComponent } from './rep-entries/rep-entries.component';
   ],
   exports: [
     REPTextBoxComponent,
-    REPMessageComponent,
+    REPNameBoxComponent,
     REPChatComponent,
     REPInputComponent,
     REPButtonComponent,

@@ -253,12 +253,13 @@ router.get('/getChRoomInfo/:chID/:roomID', (req, res) => {
 
             const members = await REPQuery.load(
             `
-            SELECT CRMB.ID_CHANNEL_ROOM_MEMBER  as author,
+            SELECT U.ID_USER                    as id,
                    U.USER_CODE                  as code,
                    U.COLOR                      as color,
                    U.BACKGROUND_COLOR           as backgroundColor,
                    U.NAME                       as name,
-                   TO_BASE64(U.PROFILE_PICTURE) as picture
+                   TO_BASE64(U.PROFILE_PICTURE) as picture,
+                   U.USER_STATUS                as userStatus
             FROM CHANNELS_ROOMS_MEMBERS CRMB
                      LEFT JOIN CHANNELS_MEMBERS CM ON CM.ID_CHANNEL_MEMBER = CRMB.ID_CHANNEL_MEMBER
                      LEFT JOIN USERS U ON U.ID_USER = CM.ID_USER

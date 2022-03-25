@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { UserStatus } from 'src/interfaces/account.interface';
 
 @Component({
   selector: 'rep-profile-pic',
@@ -27,6 +28,9 @@ export class REPProfilePicComponent {
     cl ??= "royalblue";
     this._color = cl;
   }
+
+  @Input()
+  public status: UserStatus;
 
   public get color() {
     return this._color;

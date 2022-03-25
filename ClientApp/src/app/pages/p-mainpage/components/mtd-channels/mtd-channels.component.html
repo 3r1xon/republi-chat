@@ -25,14 +25,14 @@
       cdkDragBoundary=".list"
     >
 
-      <rep-message header
+      <rep-namebox header
         cdkDragHandle
         [repContext]="channelContext"
         [message]="section"
         [hold]="_ms.currentChannel?.id == section.id"
         backgroundColor="#202124"
       >
-      </rep-message>
+      </rep-namebox>
 
       <div class="rooms" body repStop>
 

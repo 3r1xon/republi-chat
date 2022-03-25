@@ -7,10 +7,11 @@
 
   <small *ngIf="serverInfo[serverInfoTab]?.sections.length == 0">{{serverInfo[serverInfoTab]?.tabname}} is Empty.</small>
 
-  <rep-message
+  <rep-namebox
     *ngFor="let member of serverInfo[serverInfoTab]?.sections"
+    [status]="member.userStatus"
     [message]="member"
   >
-  </rep-message>
+  </rep-namebox>
 
 </rep-tabs>
