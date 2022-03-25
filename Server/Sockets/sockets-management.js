@@ -6,73 +6,77 @@ const router  = express.Router();
 
 io.on("connection", (socket) => {
 
-    const userID = socket.auth._id;
+  const userID = socket.auth._id;
 
-    const user = new DBUser(userID);
+  const user = new DBUser(userID);
 
-    let room;
+  user.setOnline();
 
-    let channel;
+  let room;
 
-    socket.on("joinRoom", async (obj) => {
+  let channel;
 
-      const rqRoom = obj.room;
-      const rqChannel = obj.channel;
+  socket.on("joinRoom", async (obj) => {
 
-      socket.leave(`rm${room}`);
+    const rqRoom = obj.room;
+    const rqChannel = obj.channel;
 
-      if (user.roomMemberID)
-        await user.unwatch();
+    socket.leave(`rm${room}`);
 
-      user.setChannel(rqChannel, (chErr) => {
-        if (chErr) {
-          console.log(clc.yellow(chErr));
-        } else {
-          socket.leave(`ch${channel}`);
+    if (user.roomMemberID)
+      await user.unwatch();
 
-          socket.join(`ch${rqChannel}`);
-          user.setLastJoinedChannel();
+    user.setChannel(rqChannel, (chErr) => {
+      if (chErr) {
+        console.log(clc.yellow(chErr));
+      } else {
+        socket.leave(`ch${channel}`);
 
-          user.setRoom(rqRoom, async (roomErr) => {
-            if (roomErr) {
-              console.log(clc.yellow(roomErr));
-            } else {
+        socket.join(`ch${rqChannel}`);
+        user.setLastJoinedChannel();
 
-              socket.join(`rm${rqRoom}`);
-              room = rqRoom;
-              user.watch();
-              user.setLastJoinedRoom();
-              // console.log(socket.rooms);
-            }
-          });
-        }
-      });
+        user.setRoom(rqRoom, async (roomErr) => {
+          if (roomErr) {
+            console.log(clc.yellow(roomErr));
+          } else {
+
+            socket.join(`rm${rqRoom}`);
+            room = rqRoom;
+            user.watch();
+            user.setLastJoinedRoom();
+            // console.log(socket.rooms);
+          }
+        });
+      }
     });
+  });
 
-    socket.on("message", (msg) => {
+  socket.on("message", (msg) => {
 
-      user.sendMessage(msg);
-
-    });
-
-    socket.on("deleteMessage", (msgID) => {
-
-      user.deleteMessage(msgID);
-
-    });
-
-    socket.on("highlightMessage", (msgID) => {
-
-      user.highlightMessage(msgID);
-
-    });
-
-    socket.on("disconnect", async () => {
-      if (user.roomMemberID)
-        await user.unwatch();
-    });
+    user.sendMessage(msg);
 
   });
+
+  socket.on("deleteMessage", (msgID) => {
+
+    user.deleteMessage(msgID);
+
+  });
+
+  socket.on("highlightMessage", (msgID) => {
+
+    user.highlightMessage(msgID);
+
+  });
+
+  socket.on("disconnect", async () => {
+    if (user.roomMemberID)
+      await user.unwatch();
+
+    user.setOffline();
+  });
+
+});
 
 
 module.exports = router;

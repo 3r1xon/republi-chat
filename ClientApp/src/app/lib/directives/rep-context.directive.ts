@@ -33,6 +33,8 @@ export class REPContextDirective implements OnInit {
 
   public onEvent(event: any): void
   {
+    if (!this.enabled) return;
+
     // TODO: Test this line
     event.preventDefault();
 
@@ -119,6 +121,9 @@ export class REPContextDirective implements OnInit {
 
   @Input('repMode')
   public mode: string = "contextmenu" || "click";
+
+  @Input('repEnabled')
+  public enabled: boolean = true;
 
   @Output()
   public repState: EventEmitter<boolean> = new EventEmitter();

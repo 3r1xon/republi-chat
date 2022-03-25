@@ -259,27 +259,35 @@ export class MessagesService {
     this.destroyChSubscriptions();
 
     this.chSubscriptions
-    .push(
-      this._webSocket.listen("rmNotifications")
-        .subscribe((obj: string) => {
-          const notification = JSON.parse(obj);
+      .push(
+        this._webSocket.listen("rmNotifications")
+          .subscribe((obj: string) => {
+            const notification = JSON.parse(obj);
 
-          if (notification.room != this.currentRoom.roomID) {
+            if (notification.room != this.currentRoom.roomID) {
 
-            const ref = this.currentChannel.rooms.text
-              .find(room => room.roomID == notification.room);
+              const ref = this.currentChannel.rooms.text
+                .find(room => room.roomID == notification.room);
 
-            if (notification.type == "+") {
-              ref.notifications++;
-            } else {
-              if (ref.notifications - 1 >= 0) {
-                ref.notifications--;
+              if (notification.type == "+") {
+                ref.notifications++;
+              } else {
+                if (ref.notifications - 1 >= 0) {
+                  ref.notifications--;
+                }
               }
-            }
 
-          }
-        })
-    );
+            }
+          })
+      );
+
+    this.chSubscriptions
+        .push(
+          this._webSocket.listen("members")
+            .subscribe(() => {
+
+            })
+        );
   }
 
   public getChannelByID(channelID: number): Channel {

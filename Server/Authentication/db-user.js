@@ -1,6 +1,7 @@
 const REPQuery      = require('../Database/rep-query');
 const REPTools      = require('../Tools/rep-tools');
-const permissions   = require('../Authentication/permissions');
+const permissions   = require('./permissions');
+const userStatus    = require('./user-status');
 const { msgSchema } = require('../Tools/schemas');
 const { io }        = require('../start');
 
@@ -435,6 +436,51 @@ class DBUser {
 
       callback(error, null);
     }
+  }
+
+
+  async getJoinedChannels() {
+
+    return await REPQuery.load(
+    `
+    SELECT CM.ID_CHANNEL as channelID
+    FROM CHANNELS_MEMBERS CM
+    WHERE CM.ID_USER = ?
+      AND CM.BANNED = ?
+      AND CM.KICKED = ?
+    `, [this.userID, false, false]);
+  }
+
+
+
+  async setOnline() {
+
+    await REPQuery.exec(
+    `
+    UPDATE USERS
+    SET USER_STATUS = ?
+    WHERE ID_USER = ?
+    `, [userStatus.online, this.userID]);
+
+    const joinedChannels = await this.getJoinedChannels();
+
+    joinedChannels.forEach((ch) => {
+      io.to("ch" + ch.channelID).emit("members", userStatus.online);
+    });
+
+  }
+
+
+
+  async setOffline() {
+
+    await REPQuery.exec(
+    `
+    UPDATE USERS
+    SET USER_STATUS = ?
+    WHERE ID_USER = ?
+    `, [userStatus.offline, this.userID]);
+
   }
 }
 

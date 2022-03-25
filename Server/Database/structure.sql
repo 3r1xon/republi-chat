@@ -1,9 +1,10 @@
 create or replace table republichat.reports
 (
-    ID_REPORT bigint auto_increment
+    ID_REPORT   bigint auto_increment
         primary key,
-    TITLE     varchar(255)  null,
-    CALLSTACK varchar(2000) null
+    TITLE       varchar(255)                         null,
+    CALLSTACK   varchar(2000)                        null,
+    REPORT_DATE datetime default current_timestamp() null
 );
 
 create or replace table republichat.users
@@ -19,6 +20,7 @@ create or replace table republichat.users
     COLOR               varchar(7) default '#ffffff' null,
     BACKGROUND_COLOR    varchar(7)                   null,
     BIOGRAPHY           varchar(200)                 null,
+    USER_STATUS         int                          null,
     VERIFIED            tinyint(1) default 0         null,
     LAST_JOINED_CHANNEL bigint                       null,
     LAST_JOINED_ROOM    bigint                       null,
@@ -73,6 +75,7 @@ create or replace table republichat.channels_members
     BANNED            tinyint(1) default 0         null,
     KICKED            tinyint(1) default 0         null,
     JOIN_DATE         datetime   default curdate() not null,
+    `ORDER`           bigint                       null,
     constraint CHANNELS_MEMBERS_CHANNELS_ID_CHANNEL_fk
         foreign key (ID_CHANNEL) references republichat.channels (ID_CHANNEL)
             on update cascade on delete cascade
