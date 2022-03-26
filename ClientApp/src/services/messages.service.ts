@@ -10,6 +10,7 @@ import { ChannelPermissions, RoomPermissions } from 'src/interfaces/channel.inte
 import { UtilsService } from './utils.service';
 import { WebSocketService } from './websocket.service';
 import { environment } from 'src/environments/environment';
+import { UserStatus } from 'src/interfaces/account.interface';
 
 
 @Injectable({
@@ -274,10 +275,13 @@ export class MessagesService {
     this.chSubscriptions
         .push(
           this._webSocket.listen("members")
-            .subscribe((obj: any) => {
-              this.currentRoom.members
-                .find(mrmb => mrmb.id == obj.userID)
-                .userStatus = obj.status;
+            .subscribe((obj: { userID: number, status: UserStatus }) => {
+              const mrmbRef = this.currentRoom.members
+                .find(mrmb => mrmb.id == obj.userID);
+
+              if (mrmbRef) {
+                mrmbRef.userStatus = obj.status;
+              }
             })
         );
   }
