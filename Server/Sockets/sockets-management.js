@@ -44,7 +44,6 @@ io.on("connection", (socket) => {
             room = rqRoom;
             user.watch();
             user.setLastJoinedRoom();
-            // console.log(socket.rooms);
           }
         });
       }

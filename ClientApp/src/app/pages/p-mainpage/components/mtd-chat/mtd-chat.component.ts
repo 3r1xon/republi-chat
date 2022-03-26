@@ -25,7 +25,7 @@ export class MTDChatComponent {
 
   private prevRoom: Room;
 
-  protected readonly messageSubscription: Subscription = this._ms.roomChanges
+  protected readonly roomChanges: Subscription = this._ms.onRoomChange
     .subscribe(() => {
 
       // Ensures each room chat maintains the text
@@ -38,6 +38,7 @@ export class MTDChatComponent {
         } else {
           this.chat.setText(null);
         }
+
       }
 
       this.prevRoom = this._ms.currentRoom;

@@ -110,6 +110,8 @@ export class MessagesService {
       });
   }
 
+
+
   public joinRoom(channel: Channel, room: Room) {
 
     if (room.textRoom) {
@@ -156,6 +158,8 @@ export class MessagesService {
     }
   }
 
+
+
   public mapMsg(msg: Message): Message {
     msg.picture = this._fileUpload.sanitizeIMG(msg.picture);
     msg.date = msg.date ? new Date(msg.date) : null;
@@ -163,9 +167,13 @@ export class MessagesService {
     return msg;
   }
 
+
+
   public isInChannel(channel: Channel): boolean {
     return this.currentChannel.id == channel.id;
   }
+
+
 
   public isInRoom(room: Room): boolean {
     if (room.textRoom) {
@@ -178,6 +186,8 @@ export class MessagesService {
 
     return false;
   }
+
+
 
   private initRoomSockets(): void {
 
@@ -245,6 +255,8 @@ export class MessagesService {
     );
   }
 
+
+
   private initChannelSockets(): void {
 
     this.destroyChSubscriptions();
@@ -260,11 +272,14 @@ export class MessagesService {
               const ref = this.currentChannel.rooms.text
                 .find(room => room.roomID == notification.room);
 
-              if (notification.type == "+") {
-                ref.notifications++;
-              } else {
-                if (ref.notifications - 1 >= 0) {
-                  ref.notifications--;
+              if (ref) {
+
+                if (notification.type == "+") {
+                  ref.notifications++;
+                } else {
+                  if (ref.notifications - 1 >= 0) {
+                    ref.notifications--;
+                  }
                 }
               }
 
@@ -286,14 +301,20 @@ export class MessagesService {
         );
   }
 
+
+
   public getChannelByID(channelID: number): Channel {
     return this.channels.find(ch => ch.id == channelID);
   }
+
+
 
   public getRoomByID(roomID: number): Room {
     const allRooms = [...this.currentChannel.rooms.text, ...this.currentChannel.rooms.vocal];
     return allRooms.find(room => room.roomID == roomID);
   }
+
+
 
   public leaveChannel(channel: Channel) {
 

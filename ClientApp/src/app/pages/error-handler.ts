@@ -23,13 +23,11 @@ export class GlobalErrorHandler implements ErrorHandler {
 
     this.zone.run(() => {
 
-      error.rejection ??= "";
-
-      this._utils.showBugReport(error.rejection, error);
+      this._utils.showBugReport(error.name, error.stack);
 
       if (this.nReportSent < 5) {
 
-        this._utils.API_sendReport(error.rejection, error.toString()).toPromise();
+        this._utils.API_sendReport(error.name, error.stack.toString()).toPromise();
 
         this.nReportSent++;
       }
