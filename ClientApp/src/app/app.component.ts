@@ -23,9 +23,5 @@ export class AppComponent implements OnInit {
   async ngOnInit() {
     if (this.cookieService.get("sid"))
       await this._user.authorize();
-
-      const a = undefined;
-
-      a.sess
   }
 }
