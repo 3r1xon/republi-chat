@@ -7,15 +7,12 @@
 
   <small *ngIf="serverInfo[serverInfoTab]?.sections.length == 0">{{serverInfo[serverInfoTab]?.tabname}} is Empty.</small>
 
+  <rep-separator>Online</rep-separator>
+
   <ng-container
     *ngFor="let member of serverInfo[serverInfoTab]?.sections; let i = index;"
   >
 
-    <rep-separator
-      *ngIf="member.userStatus == 1 && i == 0"
-    >
-      Online
-    </rep-separator>
 
     <rep-separator
       *ngIf="

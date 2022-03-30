@@ -34,14 +34,14 @@
       >
       </rep-namebox>
 
-      <div class="rooms" body repStop>
+      <div class="rooms" body repStop *ngIf="_ms.currentChannel?.id == section.id">
 
-        <rep-separator *ngIf="_ms.currentChannel?.rooms?.text.length > 0">
+        <rep-separator *ngIf="_ms.currentChannel.rooms?.text.length > 0">
           Text rooms
         </rep-separator>
 
         <rep-room
-          *ngFor="let room of _ms.currentChannel?.rooms?.text"
+          *ngFor="let room of _ms.currentChannel.rooms?.text"
           [roomName]="room.roomName"
           [textRoom]="room.textRoom"
           [notifications]="room.notifications"
@@ -50,12 +50,12 @@
         >
         </rep-room>
 
-        <rep-separator *ngIf="_ms.currentChannel?.rooms?.vocal.length > 0">
+        <rep-separator *ngIf="_ms.currentChannel.rooms?.vocal.length > 0">
           Vocal rooms
         </rep-separator>
 
         <rep-room
-          *ngFor="let room of _ms.currentChannel?.rooms?.vocal"
+          *ngFor="let room of _ms.currentChannel.rooms?.vocal"
           [roomName]="room.roomName"
           [textRoom]="room.textRoom"
           [members]="room.connected"

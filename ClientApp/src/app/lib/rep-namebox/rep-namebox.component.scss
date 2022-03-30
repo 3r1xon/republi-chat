@@ -52,6 +52,10 @@
 
     .content {
       margin-left: 5px;
+      margin-right: 5px;
+      display: inline-block;
+      white-space: pre-line;
+      word-break: break-word;
     }
 
     .time {
