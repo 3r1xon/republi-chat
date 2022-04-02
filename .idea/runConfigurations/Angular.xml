@@ -1,0 +1,7 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Angular" type="CompoundRunConfigurationType">
+    <toRun name="angular_browser-debug" type="JavascriptDebugType" />
+    <toRun name="angular_npm-start" type="js.build_tools.npm" />
+    <method v="2" />
+  </configuration>
+</component>

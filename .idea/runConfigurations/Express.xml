@@ -1,0 +1,7 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Express" type="CompoundRunConfigurationType">
+    <toRun name="Express_node-debug" type="NodeJSConfigurationType" />
+    <toRun name="Express_npm-start" type="js.build_tools.npm" />
+    <method v="2" />
+  </configuration>
+</component>
