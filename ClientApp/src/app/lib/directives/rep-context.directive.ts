@@ -4,7 +4,6 @@ import {
   ElementRef,
   EventEmitter,
   Input,
-  NgZone,
   OnInit,
   Output,
   Renderer2,
@@ -109,6 +108,21 @@ export class REPContextDirective implements OnInit {
           );
 
         });
+
+      });
+
+      const resize = this.renderer.listen("window", "resize", () => {
+        compRef.destroy();
+
+        this.repState.emit(false);
+
+        resize();
+
+        this.renderer.setStyle(
+          this.elRef.nativeElement,
+          "background",
+          null
+        );
       });
     });
   }

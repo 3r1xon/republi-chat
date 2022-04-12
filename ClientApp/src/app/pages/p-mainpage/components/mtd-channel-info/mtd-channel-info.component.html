@@ -7,22 +7,12 @@
 
   <small *ngIf="serverInfo[serverInfoTab]?.sections.length == 0">{{serverInfo[serverInfoTab]?.tabname}} is Empty.</small>
 
-  <rep-separator>Online</rep-separator>
 
   <ng-container
-    *ngFor="let member of serverInfo[serverInfoTab]?.sections; let i = index;"
+    *ngFor="let member of getOnlineMembers(); let i = index;"
   >
 
-
-    <rep-separator
-      *ngIf="
-        serverInfo[serverInfoTab]?.sections[i]?.userStatus == 0
-        &&
-        serverInfo[serverInfoTab]?.sections[i-1]?.userStatus == 1
-      "
-    >
-      Offline
-    </rep-separator>
+    <rep-separator *ngIf="i == 0">Online</rep-separator>
 
     <rep-namebox
       [status]="member.userStatus"
@@ -30,7 +20,22 @@
     >
     </rep-namebox>
 
+  </ng-container>
+
+
+  <ng-container
+    *ngFor="let member of getOfflineMembers(); let i = index;"
+  >
+
+    <rep-separator *ngIf="i == 0">Offline</rep-separator>
+
+    <rep-namebox
+      [status]="member.userStatus"
+      [message]="member"
+    >
+    </rep-namebox>
 
   </ng-container>
+
 
 </rep-tabs>

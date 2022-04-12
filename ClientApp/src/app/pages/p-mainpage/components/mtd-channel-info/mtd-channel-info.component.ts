@@ -1,18 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Unsubscriber } from 'src/app/lib/rep-decorators';
+import { UserStatus } from 'src/interfaces/account.interface';
 import { MessagesService } from 'src/services/messages.service';
 
 @Component({
   selector: 'mtd-channel-info',
   templateUrl: './mtd-channel-info.component.html',
-  styleUrls: ['./mtd-channel-info.component.scss']
+  styleUrls: ['./mtd-channel-info.component.scss'],
 })
 @Unsubscriber
 export class MTDChannelInfoComponent implements OnInit {
 
   constructor(
-    private _ms: MessagesService
+    private _ms: MessagesService,
   ) { }
 
   ngOnInit(): void {
@@ -34,6 +35,14 @@ export class MTDChannelInfoComponent implements OnInit {
       });
 
     }
+  }
+
+  getOnlineMembers() {
+    return this.serverInfo[this.serverInfoTab].sections.filter(user => user.userStatus == UserStatus.online);
+  }
+
+  getOfflineMembers() {
+    return this.serverInfo[this.serverInfoTab].sections.filter(user => user.userStatus == UserStatus.offline);
   }
 
   public serverInfoTab: number = 0;

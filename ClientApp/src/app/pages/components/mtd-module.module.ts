@@ -7,6 +7,7 @@ import { MTDRequestComponent } from './mtd-request/mtd-request.component';
 import { MTDLoadingComponent } from './mtd-loading/mtd-loading.component';
 import { REPModule } from 'src/app/lib/rep.module';
 import { MatIconModule } from '@angular/material/icon';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 
 
@@ -29,6 +30,7 @@ import { MatIconModule } from '@angular/material/icon';
     CommonModule,
     REPModule,
     MatIconModule,
+    DragDropModule,
   ]
 })
 export class MTDModule { }

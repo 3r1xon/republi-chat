@@ -1,5 +1,40 @@
+@import 'src/app/styles/mixins';
+
+
 .rep-entries {
   width: 100%;
   height: 100%;
-  background: red;
+  border-radius: 5px;
+  background: var(--VERY-DARK);
+
+
+  .bar {
+    width: 100%;
+    height: 40px;
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    background: var(--LIGHT-DARK);
+    cursor: move;
+
+    .back {
+      width: 30px;
+      height: 30px;
+      margin: 10px;
+      color: var(--WHITE);
+      border-radius: 50%;
+      @include flexCenter(row);
+      background: transparent;
+      right: 0;
+      border: 1px solid var(--GREY);
+      cursor: pointer;
+      transition: 100ms;
+
+      &:hover {
+        background: lighten($color: #1e1e1e, $amount: 15);
+      }
+    }
+  }
 }
