@@ -1,0 +1,5 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Express_node-debug" type="NodeJSConfigurationType" path-to-js-file="Server/start.js" working-dir="$PROJECT_DIR$">
+    <method v="2" />
+  </configuration>
+</component>

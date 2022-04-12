@@ -1,0 +1,7 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="republi-chat" type="CompoundRunConfigurationType">
+    <toRun name="Angular" type="CompoundRunConfigurationType" />
+    <toRun name="Express" type="CompoundRunConfigurationType" />
+    <method v="2" />
+  </configuration>
+</component>
