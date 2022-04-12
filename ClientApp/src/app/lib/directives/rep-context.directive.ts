@@ -34,6 +34,10 @@ export class REPContextDirective implements OnInit {
   {
     if (!this.enabled) return;
 
+    const selectedText = window.getSelection().toString();
+
+    if (selectedText) return;
+
     // TODO: Test this line
     event.preventDefault();
 
