@@ -3,7 +3,6 @@ import {
   Input,
   Output,
   EventEmitter,
-  ComponentFactoryResolver,
   Renderer2,
   ElementRef,
   OnInit,
@@ -23,7 +22,6 @@ import { REPButton } from 'src/interfaces/repbutton.interface';
 export class REPNameBoxComponent implements AfterViewInit {
 
   constructor(
-    private componentFactory: ComponentFactoryResolver,
     private renderer: Renderer2
   ) { }
 
@@ -83,7 +81,7 @@ export class REPNameBoxComponent implements AfterViewInit {
       if (word.match(URL_REG)) {
         const a = this.renderer.createElement('a');
 
-        a.innerText = word;
+        a.innerText = " " + word;
         a.href = word;
         a.target = "_blank";
 
