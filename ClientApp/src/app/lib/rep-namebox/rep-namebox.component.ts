@@ -3,6 +3,12 @@ import {
   Input,
   Output,
   EventEmitter,
+  ComponentFactoryResolver,
+  Renderer2,
+  ElementRef,
+  OnInit,
+  ViewChild,
+  AfterViewInit
 } from '@angular/core';
 import { UserStatus } from 'src/interfaces/account.interface';
 import { Message } from 'src/interfaces/message.interface';
@@ -14,7 +20,18 @@ import { REPButton } from 'src/interfaces/repbutton.interface';
   templateUrl: './rep-namebox.component.html',
   styleUrls: ['./rep-namebox.component.scss'],
 })
-export class REPNameBoxComponent {
+export class REPNameBoxComponent implements AfterViewInit {
+
+  constructor(
+    private componentFactory: ComponentFactoryResolver,
+    private renderer: Renderer2
+  ) { }
+
+  ngAfterViewInit(): void {
+    this.msgHTMLParser();
+  }
+
+  @ViewChild('content') content: ElementRef;
 
   @Input()
   public options: Array<REPButton>;
@@ -52,6 +69,31 @@ export class REPNameBoxComponent {
 
   clickHandler() {
     this.onClick.emit();
+  }
+
+  msgHTMLParser(): void {
+    const msg = this.message.message ??= "";
+
+    const words = msg.split(" ");
+
+    words.forEach((word) => {
+
+      const URL_REG = /(https?:\/\/[^\s]+)/g;
+
+      if (word.match(URL_REG)) {
+        const a = this.renderer.createElement('a');
+
+        a.innerText = word;
+        a.href = word;
+        a.target = "_blank";
+
+        this.renderer.appendChild(this.content.nativeElement, a);
+
+        return;
+      }
+
+      this.content.nativeElement.innerText += " " + word;
+    });
   }
 
 }
