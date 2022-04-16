@@ -228,8 +228,11 @@ export class MessagesService {
 
           const state: { msgID: number, state: boolean } = JSON.parse(obj);
 
-          const index = this.messages.findIndex(msg => msg.id == state.msgID);
-          this.messages[index].highlighted = state.state;
+          const msg = this.messages.find(msg => msg.id == state.msgID);
+
+          if (msg) {
+            msg.highlighted = state.state;
+          }
         })
     );
 
