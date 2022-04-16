@@ -44,6 +44,10 @@ export class REPChatComponent implements AfterViewInit, OnDestroy {
       this.scrollToBottom();
 
     });
+
+    Promise.resolve().then(() => {
+      this.scrollToBottom();
+    });
   }
 
   ngOnDestroy(): void {
