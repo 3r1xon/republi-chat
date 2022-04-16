@@ -63,10 +63,105 @@ router.post('/signUp', async (req, res) => {
             user.email,
             "RepubliChat email verification",
             `
-            <div style="text-align: center;">
-              Welcome to RepubliChat! <br>
-              This is your verification link, if you didn't know about this you can just ignore this email. <br>
-              <a style="color: hotpink;" href="${process.env.ORIGIN}/verification/${verification_code}">Verify email here.</a>
+            <style>
+
+                * {
+                    margin: 0;
+                    padding: 0;
+                }
+
+                .master {
+                    color: white;
+                    justify-content: center;
+                    align-items: center;
+                    font-family: roboto;
+                }
+
+                .header {
+                    width: 100%;
+                    height: 150px;
+                    background: #46a35e;
+                    line-height: 150px;
+                    text-align: center;
+                    border-top-left-radius: 5px;
+                    border-top-right-radius: 5px;
+                }
+
+                .content {
+                    width: 100%;
+                    height: 250px;
+                    background: #202124;
+                    display: grid;
+                    place-items: center;
+                    text-align: center;
+                    line-height: 2.5rem;
+                }
+
+                .footer {
+                    width: 100%;
+                    height: 100px;
+                    background: #121212;
+                    line-height: 100px;
+                    text-align: center;
+                    border-bottom-left-radius: 5px;
+                    border-bottom-right-radius: 5px;
+                }
+
+                .btn {
+                  width: 150px;
+                  height: 50px;
+                  border-radius: 5px;
+                  display: inline-block;
+                  line-height: 50px;
+                  color: white;
+                  font-size: 18px;
+                  border: none;
+                  background: royalblue;
+              }
+
+                a {
+                    color: hotpink;
+                    text-decoration: none;
+                }
+
+                .center {
+                    width: 50%;
+                    margin: auto;
+                    text-align: center;
+                }
+
+            </style>
+
+
+            <div class="master">
+
+                <div class="header">
+                  <h1>Welcome to RepubliChat! 😉</h1>
+                </div>
+
+                <div class="content">
+                  <p>
+                  Hi ${user.name}, thank you for registering to RepubliChat! ❤️
+                  <br>
+                  We are glad to have you as a new user, please quickly confirm your email by simply clicking the button below.
+                  </p>
+
+                  <div class="center">
+                    <a class="btn" href="${process.env.ORIGIN}/verification/${verification_code}">
+                      Confirm email
+                    </a>
+                  </div>
+
+                  <p>If you did not register anywhere just ignore this email.</p>
+
+                </div>
+
+                <div class="footer">
+
+                    <a href="${process.env.ORIGIN}">RepubliChat</a>
+
+                </div>
+
             </div>
             `
           );

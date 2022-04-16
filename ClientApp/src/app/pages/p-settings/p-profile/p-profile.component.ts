@@ -20,8 +20,7 @@ export class PProfileComponent {
     public _user: UserService,
     public _fileUpload: FileUploadService,
     private _utils: UtilsService,
-    private http: HttpClient,
-    private router: Router
+    private http: HttpClient
   ) { }
 
   public user: Account = { ...this._user.currentUser };
@@ -135,7 +134,7 @@ export class PProfileComponent {
           .then(
             (res) => {
               if (res.success)
-                this.router.navigate(['login']);
+                this._user.logOut();
             }
           );
 

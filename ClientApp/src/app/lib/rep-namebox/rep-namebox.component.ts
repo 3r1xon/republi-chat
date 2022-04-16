@@ -70,7 +70,7 @@ export class REPNameBoxComponent implements AfterViewInit {
   }
 
   msgHTMLParser(): void {
-    const msg = this.message.message ??= "";
+    let msg = this.message.message ??= "";
 
     const words = msg.split(" ");
 
@@ -90,7 +90,10 @@ export class REPNameBoxComponent implements AfterViewInit {
         return;
       }
 
-      this.content.nativeElement.innerText += " " + word;
+      const d = this.renderer.createElement('d');
+      d.innerText = " " + word;
+
+      this.renderer.appendChild(this.content.nativeElement, d);
     });
   }
 
