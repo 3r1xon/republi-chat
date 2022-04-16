@@ -6,6 +6,7 @@ import { UAParser } from 'ua-parser-js';
 import { Settings } from 'src/interfaces/settings.interface';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
+import { MediaMatcher } from '@angular/cdk/layout';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +14,8 @@ import { environment } from 'src/environments/environment';
 export class UtilsService {
 
   constructor(
-    private http: HttpClient
+    private http: HttpClient,
+    private media: MediaMatcher
   ) { }
 
   // Every HTTP Request, except black listed ones, will set
@@ -24,6 +26,10 @@ export class UtilsService {
   public wsConnected: boolean = false;
 
   public rqsBody: Request;
+
+  public get isMobile() {
+    return this.media.matchMedia('(max-width: 400px)').matches;
+  }
 
   /**
    * Default settings

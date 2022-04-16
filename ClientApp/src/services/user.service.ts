@@ -100,6 +100,11 @@ export class UserService implements CanActivate {
       .toPromise()
       .then((response) => {
         this._utils.settings = response.data as Settings;
+
+        if (this._utils.isMobile) {
+          this._utils.settings.showServerGroup = false;
+          this._utils.settings.showChannels = false;
+        }
       });
   }
 

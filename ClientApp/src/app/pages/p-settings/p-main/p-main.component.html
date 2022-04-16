@@ -1,6 +1,8 @@
 <div id="settings">
 
-  <nav class="menu">
+  <nav class="menu"
+    [@openClose]="navOpen"
+  >
 
     <button
       *ngFor="let submenu of menus; let i = index"
@@ -13,6 +15,10 @@
       <p>{{submenu.name}}</p>
       <mat-icon>{{submenu.icon}}</mat-icon>
     </button>
+
+    <span (click)="navOpen = !navOpen">
+      <mat-icon>menu</mat-icon>
+    </span>
 
   </nav>
 

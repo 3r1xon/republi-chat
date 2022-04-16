@@ -13,7 +13,7 @@ import { MessagesService } from 'src/services/messages.service';
 export class MTDChannelInfoComponent implements OnInit {
 
   constructor(
-    private _ms: MessagesService,
+    private _ms: MessagesService
   ) { }
 
   ngOnInit(): void {

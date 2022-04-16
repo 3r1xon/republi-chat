@@ -1,18 +1,32 @@
-import { Component, HostListener } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { REPButton } from 'src/interfaces/repbutton.interface';
 import { UserService } from 'src/services/user.service';
+import { openLeftNoDestroy } from 'src/app/lib/rep-animations';
+import { UtilsService } from 'src/services/utils.service';
 
 @Component({
   templateUrl: './p-main.component.html',
-  styleUrls: ['./p-main.component.scss']
+  styleUrls: ['./p-main.component.scss'],
+  animations: [
+    openLeftNoDestroy("250px", "100ms")
+  ]
 })
-export class PSettingsComponent {
+export class PSettingsComponent implements OnInit {
 
   constructor(
     private _user: UserService,
+    private _utils: UtilsService,
     private router: Router
   ) { }
+
+  ngOnInit(): void {
+    if (this._utils.isMobile) {
+      this.navOpen = false;
+    }
+  }
+
+  public navOpen: boolean = true;
 
   public menus: Array<REPButton> = [
     {

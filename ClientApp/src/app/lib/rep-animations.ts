@@ -73,6 +73,20 @@ export const openLeft = (timings, margin) => {
     );
 };
 
+
+export const openLeftNoDestroy = (width, timings) => {
+  return trigger('openClose', [
+    state('true', style({
+      marginLeft: '*',
+    })),
+    state('false', style({
+      marginLeft: `-${width}`,
+    })),
+    transition('true <=> false', animate(timings)),
+  ]);
+};
+
+
 export const expand = (timings) => {
   return trigger('expand', [
     state('initial', style({
@@ -86,7 +100,7 @@ export const expand = (timings) => {
     })),
     transition('initial <=> final', animate(timings))
   ]);
-}
+};
 
 // export const expand = (timings) => {
 //   return trigger('expand', [

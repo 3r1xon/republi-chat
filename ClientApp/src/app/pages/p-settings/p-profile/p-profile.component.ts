@@ -66,7 +66,7 @@ export class PProfileComponent {
       icon: "save",
       enabled: () => false,
       background: "success",
-      onClick: () => { this.save() }
+      onClick: () => { this.save(); }
     }
   ];
 
@@ -77,7 +77,7 @@ export class PProfileComponent {
       tooltip: "Delete all your data",
       background: "danger",
       outline: true,
-      onClick: () => { this.deleteProfile() }
+      onClick: () => { this.deleteProfile(); }
     }
   ];
 

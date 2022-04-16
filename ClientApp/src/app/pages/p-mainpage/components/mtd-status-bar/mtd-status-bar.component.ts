@@ -17,7 +17,7 @@ export class MTDStatusBarComponent {
 
   constructor(
     public _utils: UtilsService,
-    private router: Router,
+    private router: Router
   ) { }
 
   @Input()
@@ -36,6 +36,11 @@ export class MTDStatusBarComponent {
       icon: "list",
       tooltip: "Close/open left side-bar",
       onClick: () => {
+
+        if (this._utils.isMobile) {
+          this._utils.settings.showServerGroup = false;
+        }
+
         this._utils.settings.showChannels = !this._utils.settings.showChannels;
       }
     },
@@ -44,6 +49,11 @@ export class MTDStatusBarComponent {
       icon: "group",
       tooltip: "Close/open right side-bar",
       onClick: () => {
+
+        if (this._utils.isMobile) {
+          this._utils.settings.showChannels = false;
+        }
+
         this._utils.settings.showServerGroup = !this._utils.settings.showServerGroup;
       }
     },

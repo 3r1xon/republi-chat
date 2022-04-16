@@ -59,6 +59,7 @@
     }
 
     .time {
+      @extend p;
       font-size: 14px;
       align-self: flex-end;
       color: var(--OBSCURE_SECONDARY);
