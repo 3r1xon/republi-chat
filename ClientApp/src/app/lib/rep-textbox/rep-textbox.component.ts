@@ -3,9 +3,11 @@ import {
   Component,
   EventEmitter,
   Input,
-  Output
+  Output,
+  ViewChild
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { REPTextareaComponent } from '../rep-textarea/rep-textarea.component';
 
 @Component({
   selector: 'rep-textbox',
@@ -31,6 +33,8 @@ export class REPTextBoxComponent {
   @Input()
   public msgMaxLength: number;
 
+  @ViewChild(REPTextareaComponent) REPTextArea: REPTextareaComponent;
+
   public trigger: boolean = false;
 
   public setTextValue(txt: string) {
@@ -49,10 +53,15 @@ export class REPTextBoxComponent {
   public send(event) {
     if (this.form.valid && this.enabled) {
       const txt = this.form.value["text"].trim();
-      this.addToHistory(this.form.value["text"]);
+
       this.historyIndex = this.textHistory.length;
+
+      this.addToHistory(this.form.value["text"]);
+
       this.sendMessage.emit(txt);
+
       this.form.reset();
+
       this.trigger = false;
     } else this.trigger = true;
   }
@@ -88,6 +97,10 @@ export class REPTextBoxComponent {
         this.addToHistory(this.form.value["text"]);
 
       this.setTextValue(this.textHistory[this.historyIndex]);
+
+      setTimeout(() => {
+        this.REPTextArea.setCaretPosition(this.form.value["text"].length);
+      });
     }
   }
 
@@ -95,12 +108,16 @@ export class REPTextBoxComponent {
     if (this.textHistory.length == 0 || this.historyIndex == null)
       return;
 
-    if (this.historyIndex + 1 != this.textHistory.length)
+    if (this.textHistory[this.historyIndex + 1] != null)
       this.historyIndex++;
 
     if (this.form.value["text"] != null && this.form.value["text"] != "")
       this.addToHistory(this.form.value["text"]);
 
     this.setTextValue(this.textHistory[this.historyIndex]);
+
+    setTimeout(() => {
+      this.REPTextArea.setCaretPosition(this.form.value["text"].length);
+    });
   }
 }

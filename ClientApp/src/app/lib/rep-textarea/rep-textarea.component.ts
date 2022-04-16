@@ -5,7 +5,9 @@ import {
   EventEmitter,
   forwardRef,
   OnInit,
-  ChangeDetectionStrategy
+  ChangeDetectionStrategy,
+  ViewChild,
+  ElementRef
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
@@ -29,6 +31,8 @@ export class REPTextareaComponent implements OnInit, ControlValueAccessor {
   }
 
   private prevValue: string;
+
+  @ViewChild('textarea') textarea: ElementRef;
 
   @Input()
   public enabled: boolean = true;
@@ -81,6 +85,10 @@ export class REPTextareaComponent implements OnInit, ControlValueAccessor {
 
   writeValue(text: string) {
     this.text = text;
+  }
+
+  setCaretPosition(index: number) {
+    this.textarea.nativeElement.setSelectionRange(index, index);
   }
 
 }
