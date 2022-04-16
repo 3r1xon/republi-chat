@@ -17,6 +17,8 @@
     placeholder="Write anything..."
     [style.animation]="trigger ? 'shake 200ms' : ''"
     [style.opacity]="form.valid ? '1' : '0.5'"
+    (keydown.ArrowUp)="setPreviousText()"
+    (keydown.ArrowDown)="setNextText()"
   >
   </rep-textarea>
 
