@@ -324,28 +324,21 @@ router.put('/editProfile', [Auth.HTTPAuthToken, /*upload.single("image")*/], asy
 
     const userID = res.locals._id;
 
+    const managedSQL = REPQuery.manageUpdateSQL("USERS", equivalentFields, user);
+
     const SQL_UPDATE =
     `
-    UPDATE
-        USERS
+    ${managedSQL.SQL}
+    WHERE ID_USER = ?
     `;
 
-    const orderedValues = [];
+    managedSQL.orderedValues.push(userID);
 
-    for (const key in user) {
-      SQL_UPDATE += `SET ${equivalentFields[key]}} = ${user[key]}`;
-
-      orderedValues.push(user[key]);
-    }
-
-    SQL_UPDATE += `WHERE ID_USER = ?`;
-
-    orderedValues.push(userID);
-
-    await REPQuery.exec(SQL_UPDATE, orderedValues);
+    await REPQuery.exec(SQL_UPDATE, managedSQL.orderedValues);
 
     res.status(201).send({
       success: true,
+      data: user
       // data: file.toString("base64")
     });
 

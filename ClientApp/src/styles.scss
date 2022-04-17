@@ -22,6 +22,7 @@ $RepubliChat-theme: mat.define-light-theme((
   margin: 0;
   padding: 0;
   font-family: roboto;
+  -webkit-tap-highlight-color: transparent;
 }
 
 :root {

@@ -23,6 +23,29 @@ class REPQuery {
     static exec = async (query, params) => {
         await db.query(query, params);
     }
+
+
+
+    static manageUpdateSQL = (TABLE_NAME, equivalentFields, values) => {
+        let SQL_UPDATE =
+        `
+        UPDATE
+          ${TABLE_NAME}
+        `;
+
+        const orderedValues = [];
+
+        for (const key in values) {
+            SQL_UPDATE += `SET ${equivalentFields[key]} = ?`;
+
+            orderedValues.push(values[key]);
+        }
+
+        return {
+            SQL: SQL_UPDATE,
+            orderedValues: orderedValues
+        };
+    }
 }
 
 

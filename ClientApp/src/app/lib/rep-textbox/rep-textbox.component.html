@@ -3,10 +3,13 @@
   <button
     [disabled]="enabled"
     (click)="uploadIMG()"
-    [style.opacity]="enabled ? '1' : '0.1'"
     [style.cursor]="enabled ? 'pointer' : 'not-allowed'"
   >
-    <mat-icon>attach_file</mat-icon>
+    <mat-icon
+      [style.opacity]="enabled ? '1' : '0.1'"
+    >
+      attach_file
+    </mat-icon>
   </button>
 
   <rep-textarea
@@ -26,9 +29,12 @@
     [disabled]="!enabled && !form.valid"
     (click)="send($event)"
     [style.cursor]="enabled && form.valid ? 'pointer' : 'not-allowed'"
-    [style.opacity]="form.valid ? '1' : '0.1'"
   >
-    <mat-icon>send</mat-icon>
+    <mat-icon
+      [style.opacity]="form.valid ? '1' : '0.1'"
+    >
+      send
+    </mat-icon>
   </button>
 
 </form>

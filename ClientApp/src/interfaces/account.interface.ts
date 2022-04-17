@@ -5,6 +5,7 @@ export interface Account {
   color?: string;
   backgroundColor?: string;
   userStatus?: UserStatus;
+  biography?: string;
   name: string;
   email: string;
   lastJoinedChannel: number;

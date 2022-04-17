@@ -36,13 +36,13 @@
 
     <rep-separator>Personal informations</rep-separator>
 
-    <form>
+    <form [formGroup]="form">
 
       <div class="aligned">
 
         <rep-input
-          [(text)]="user.name"
-          [(text)]="exampleMsg.name"
+          formControlName="name"
+          size="medium"
           maxLength="30"
           required="true"
           [enabled]="editName"
@@ -57,17 +57,10 @@
       <div class="aligned">
 
         <rep-input
-          [(text)]="user.email"
           placeholder="Email"
-          required="true"
-          [enabled]="editEmail"
+          [(text)]="_user.currentUser.email"
+          [enabled]="false"
         ></rep-input>
-
-        <rep-toggle
-          [(checked)]="editEmail"
-          iconOnTrue="lock_open"
-          iconOnFalse="lock"
-        ></rep-toggle>
 
       </div>
 

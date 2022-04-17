@@ -11,15 +11,30 @@
     height: 100%;
     display: flex;
     overflow-x: hidden;
+    position: relative;
 
     mtd-channels, mtd-channel-info {
       min-width: 250px;
       max-width: 250px;
+      z-index: 1;
+      height: 100%;
     }
 
     mtd-chat {
       width: 100%;
       height: 100%;
+    }
+
+    @media only screen and (max-width: 400px) {
+      mtd-channels {
+        position: absolute;
+        left: 0;
+      }
+
+      mtd-channel-info {
+        position: absolute;
+        right: 0;
+      }
     }
   }
 }

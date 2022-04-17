@@ -58,7 +58,7 @@ export class REPContextDirective implements OnInit {
     this.renderer.setStyle(
       compRef.location.nativeElement,
       "z-index",
-      "1"
+      "999"
     );
 
     compRef.changeDetectorRef.detectChanges();

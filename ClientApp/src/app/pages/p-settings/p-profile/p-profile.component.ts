@@ -1,6 +1,5 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { Account } from 'src/interfaces/account.interface';
 import { Message } from 'src/interfaces/message.interface';
 import { ServerResponse } from 'src/interfaces/response.interface';
 import { REPButton } from 'src/interfaces/repbutton.interface';
@@ -8,7 +7,8 @@ import { FileUploadService } from 'src/services/file-upload.service';
 import { UserService } from 'src/services/user.service';
 import { UtilsService } from 'src/services/utils.service';
 import { environment } from 'src/environments/environment';
-import { REPManager } from 'src/app/lib/manager';
+import { REPManager } from 'src/app/lib/rep-manager';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   templateUrl: './p-profile.component.html',
@@ -19,30 +19,47 @@ export class PProfileComponent extends REPManager implements OnInit {
   constructor(
     public _user: UserService,
     public _fileUpload: FileUploadService,
+    public http: HttpClient,
     private _utils: UtilsService,
-    public http: HttpClient
+    private fb: FormBuilder,
   ) {
     super(http);
   }
 
   ngOnInit(): void {
-    this.setValues(this.user);
+    this.setValues(this.form);
 
     this.setSaveAPI("PUT", `${environment.BASE_URL}/authentication/editProfile`);
+
+    this.valueChanges.subscribe((change) => {
+      this.exampleMsg.name = change.name;
+    });
   }
 
-  public user: Account = { ...this._user.currentUser };
+  public form: FormGroup = this.fb.group({
+    name: [this._user.currentUser.name,
+      [
+        Validators.maxLength(30),
+        Validators.minLength(3),
+        // No more than one white space allowed before each word
+        Validators.pattern(/^([a-zA-Z0-9]+\s)*[a-zA-Z0-9]+$/)
+      ]
+    ],
+    biography: [this._user.currentUser.biography,
+      [
+        Validators.maxLength(200)
+      ]
+    ]
+  });
 
   public editName: boolean = false;
 
-  public editEmail: boolean = false;
-
   public exampleMsg: Message = {
-    name: this.user.name,
+    name: this._user.currentUser.name,
     message: "Hey, how are you doing?",
-    color: this.user.color,
-    backgroundColor: this.user.backgroundColor,
-    picture: this.user.picture,
+    color: this._user.currentUser.color,
+    backgroundColor: this._user.currentUser.backgroundColor,
+    picture: this._user.currentUser.picture,
     date: new Date(),
     auth: false
   };
@@ -51,9 +68,19 @@ export class PProfileComponent extends REPManager implements OnInit {
     {
       name: "Save",
       icon: "save",
-      enabled: () => this.isAnyDirty(),
+      enabled: () => this.canSave(),
       background: "success",
-      onClick: () => { this.save(); }
+      onClick: () => {
+        this.save().then((response) => {
+          const newValues = response.data;
+
+          for (const key in newValues) {
+            this._user.currentUser[key] = newValues[key];
+          }
+
+          this.reset();
+        });
+      }
     }
   ];
 
@@ -68,11 +95,7 @@ export class PProfileComponent extends REPManager implements OnInit {
     }
   ];
 
-  private file;
-
   async onChange(event) {
-
-    this.file = <File>event[0];
 
     const file = <File>event[0];
 

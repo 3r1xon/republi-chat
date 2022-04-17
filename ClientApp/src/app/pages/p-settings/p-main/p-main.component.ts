@@ -79,6 +79,9 @@ export class PSettingsComponent implements OnInit {
       this.menus[index].onClick();
 
     this.currentRoute = this.menus[index].name;
+
+    if (this._utils.isMobile)
+      this.navOpen = false;
   }
 
   @HostListener('document:keydown.escape', ['$event'])
