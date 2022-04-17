@@ -17,6 +17,9 @@ module.exports = {
       .min(8)
       .max(255),
 
+    picture: Joi.string()
+      .optional()
+
   }),
 
   channelSchema: Joi.object({

@@ -5,15 +5,15 @@ import {
   Component,
   OnInit,
 } from '@angular/core';
-import { openLeft, openRight } from 'src/app/lib/rep-animations';
+import { openLeftNoDestroy, openRightNoDestroy } from 'src/app/lib/rep-animations';
 
 
 @Component({
   templateUrl: './p-mainpage.component.html',
   styleUrls: ['./p-mainpage.component.scss'],
   animations: [
-    openLeft("100ms", "-250px"),
-    openRight("100ms", "-250px")
+    openLeftNoDestroy("250px", "100ms"),
+    openRightNoDestroy("250px", "100ms")
   ]
 })
 export class PMainpageComponent implements OnInit {

@@ -74,8 +74,9 @@ export const openLeft = (timings, margin) => {
 };
 
 
+
 export const openLeftNoDestroy = (width, timings) => {
-  return trigger('openClose', [
+  return trigger('openLeftNoDestroy', [
     state('true', style({
       marginLeft: '*',
     })),
@@ -85,6 +86,21 @@ export const openLeftNoDestroy = (width, timings) => {
     transition('true <=> false', animate(timings)),
   ]);
 };
+
+
+
+export const openRightNoDestroy = (width, timings) => {
+  return trigger('openRightNoDestroy', [
+    state('true', style({
+      marginRight: '*',
+    })),
+    state('false', style({
+      marginRight: `-${width}`,
+    })),
+    transition('true <=> false', animate(timings)),
+  ]);
+};
+
 
 
 export const expand = (timings) => {

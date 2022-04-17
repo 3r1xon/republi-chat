@@ -54,7 +54,7 @@ export class REPTextBoxComponent {
     if (this.form.valid && this.enabled) {
       const txt = this.form.value["text"].trim();
 
-      this.historyIndex = this.textHistory.length;
+      this.historyIndex = null;
 
       this.addToHistory(this.form.value["text"]);
 

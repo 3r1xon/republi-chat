@@ -1,6 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
 import { Account } from 'src/interfaces/account.interface';
 import { Message } from 'src/interfaces/message.interface';
 import { ServerResponse } from 'src/interfaces/response.interface';
@@ -9,19 +8,28 @@ import { FileUploadService } from 'src/services/file-upload.service';
 import { UserService } from 'src/services/user.service';
 import { UtilsService } from 'src/services/utils.service';
 import { environment } from 'src/environments/environment';
+import { REPManager } from 'src/app/lib/manager';
 
 @Component({
   templateUrl: './p-profile.component.html',
   styleUrls: ['./p-profile.component.scss']
 })
-export class PProfileComponent {
+export class PProfileComponent extends REPManager implements OnInit {
 
   constructor(
     public _user: UserService,
     public _fileUpload: FileUploadService,
     private _utils: UtilsService,
-    private http: HttpClient
-  ) { }
+    public http: HttpClient
+  ) {
+    super(http);
+  }
+
+  ngOnInit(): void {
+    this.setValues(this.user);
+
+    this.setSaveAPI("PUT", `${environment.BASE_URL}/authentication/editProfile`);
+  }
 
   public user: Account = { ...this._user.currentUser };
 
@@ -39,32 +47,11 @@ export class PProfileComponent {
     auth: false
   };
 
-  public exampleMsgOptions: Array<REPButton> = [
-    {
-      name: "Example",
-      icon: "info_outline",
-      onClick: () => {
-
-        const messages = [
-          "Hey, how are you doing?",
-          "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-          "I'm waiting, waiting, waiting, sittin' up, waiting, waiting, waiting, contemplating, my heart racing.",
-          "Help me make the most of freedom and of pleasure, nothing ever lasts forever..."
-        ];
-
-        let i = messages.findIndex(msg => msg == this.exampleMsg.message);
-        i++;
-        i == messages.length ? i = 0 : i = i;
-        this.exampleMsg.message = messages[i];
-      }
-    }
-  ];
-
   public readonly topbarActions: Array<REPButton> = [
     {
       name: "Save",
       icon: "save",
-      enabled: () => false,
+      enabled: () => this.isAnyDirty(),
       background: "success",
       onClick: () => { this.save(); }
     }
@@ -100,27 +87,6 @@ export class PProfileComponent {
     if (res.success) {
       this._user.currentUser.picture = this._fileUpload.sanitizeIMG(res.data);
     }
-  }
-
-  save() {
-
-    // let fd;
-    // if (this.file) {
-    //   fd = new FormData();
-    //   fd.append("image", this.file, this.file.name);
-    // } else {
-    //   this.user.picture = null;
-    // }
-
-    // this.http.put<ServerResponse>(
-    // `${environment.BASE_URL}/authentication/editProfile`, {
-    //   body: {
-    //     fd,
-    //     user: this.user
-    //   }
-    // })
-    //   .pipe(first())
-    //   .subscribe();
   }
 
   deleteProfile() {

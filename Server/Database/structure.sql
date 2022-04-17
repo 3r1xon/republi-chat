@@ -1,10 +1,9 @@
 create or replace table republichat.reports
 (
-    ID_REPORT   bigint auto_increment
+    ID_REPORT bigint auto_increment
         primary key,
-    TITLE       varchar(255)                         null,
-    CALLSTACK   varchar(2000)                        null,
-    REPORT_DATE datetime default current_timestamp() null
+    TITLE     varchar(255)  null,
+    CALLSTACK varchar(2000) null
 );
 
 create or replace table republichat.users
@@ -277,7 +276,7 @@ create or replace table republichat.settings
         primary key,
     ID_USER           bigint                                    not null,
     SHOW_CHANNELS     tinyint(1)  default 1                     null,
-    SHOW_SERVER_GROUP tinyint(1)  default 0                     null,
+    SHOW_SERVER_GROUP tinyint(1)  default 1                     null,
     ANIMATIONS        tinyint(1)  default 1                     null,
     DATE_FORMAT       varchar(30) default 'dd/MM/yyyy HH:mm:ss' null,
     constraint settings_ID_USER_uindex

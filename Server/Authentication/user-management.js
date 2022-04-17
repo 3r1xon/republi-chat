@@ -302,27 +302,51 @@ router.delete('/logout', Auth.HTTPAuthToken, async (req, res) => {
 
 
 
-router.put('/editProfile', [Auth.HTTPAuthToken, upload.single("image")], async (req, res) => {
+router.put('/editProfile', [Auth.HTTPAuthToken, /*upload.single("image")*/], async (req, res) => {
 
   try {
 
-    const file = req.file.buffer;
+    // const file = req.file.buffer;
 
-    const user = {};
+    const user = req.body;
+
+    const { error } = userSchema.validate(user);
+
+    if (error) {
+      return res.status(400).send({ success: false, message: 'Invalid fields!' });
+    }
+
+    const equivalentFields = {
+      name: "NAME",
+      email: "EMAIL",
+      picture: "PROFILE_PICTURE",
+    };
 
     const userID = res.locals._id;
 
-    await REPQuery.exec(
+    const SQL_UPDATE =
     `
     UPDATE
         USERS
-    SET PROFILE_PICTURE = ?
-    WHERE ID_USER = ?
-    `, [file, userID]);
+    `;
 
-    res.status(201).send({ 
+    const orderedValues = [];
+
+    for (const key in user) {
+      SQL_UPDATE += `SET ${equivalentFields[key]}} = ${user[key]}`;
+
+      orderedValues.push(user[key]);
+    }
+
+    SQL_UPDATE += `WHERE ID_USER = ?`;
+
+    orderedValues.push(userID);
+
+    await REPQuery.exec(SQL_UPDATE, orderedValues);
+
+    res.status(201).send({
       success: true,
-      data: file.toString("base64")
+      // data: file.toString("base64")
     });
 
   } catch(err) {
