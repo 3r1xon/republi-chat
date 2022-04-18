@@ -4,7 +4,7 @@
 
   <div class="main">
 
-    <mtd-channels [@openLeftNoDestroy]="_utils.settings.showChannels"></mtd-channels>
+    <mtd-channels *ngIf="_utils.settings.showChannels" @openLeft></mtd-channels>
 
     <div
       *ngIf="_utils.settings.showChannels || _utils.settings.showServerGroup"
@@ -17,7 +17,7 @@
 
     <mtd-chat></mtd-chat>
 
-    <mtd-channel-info [@openRightNoDestroy]="_utils.settings.showServerGroup"></mtd-channel-info>
+    <mtd-channel-info *ngIf="_utils.settings.showServerGroup" @openRight></mtd-channel-info>
 
   </div>
 
