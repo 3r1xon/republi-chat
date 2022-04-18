@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Message } from 'src/interfaces/message.interface';
 import { ServerResponse } from 'src/interfaces/response.interface';
@@ -71,15 +71,23 @@ export class PProfileComponent extends REPManager implements OnInit {
       enabled: () => this.canSave(),
       background: "success",
       onClick: () => {
-        this.save().then((response) => {
-          const newValues = response.data;
+        this.save()
+            .then((response: ServerResponse) => {
+            const newValues = response.data;
 
-          for (const key in newValues) {
-            this._user.currentUser[key] = newValues[key];
-          }
+            for (const key in newValues) {
+              this._user.currentUser[key] = newValues[key];
+            }
 
-          this.reset();
-        });
+            this.reset();
+          })
+          .catch((response: HttpErrorResponse) => {
+            console.log(response)
+            this._utils.showRequest(
+              "Error!",
+              response.error.message
+            );
+          });
       }
     }
   ];

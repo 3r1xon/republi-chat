@@ -31,14 +31,23 @@ class REPQuery {
         `
         UPDATE
           ${TABLE_NAME}
+        SET
         `;
 
         const orderedValues = [];
 
+        const last = Object.keys(values).length;
+
+        let i = 0;
         for (const key in values) {
-            SQL_UPDATE += `SET ${equivalentFields[key]} = ?`;
+            SQL_UPDATE += `${equivalentFields[key]} = ?`;
+
+            if (i + 1 != last) {
+                SQL_UPDATE += ",\n";
+            }
 
             orderedValues.push(values[key]);
+            i++;
         }
 
         return {

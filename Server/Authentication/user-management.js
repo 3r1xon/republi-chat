@@ -320,9 +320,23 @@ router.put('/editProfile', [Auth.HTTPAuthToken, /*upload.single("image")*/], asy
       name: "NAME",
       email: "EMAIL",
       picture: "PROFILE_PICTURE",
+      code: "USER_CODE"
     };
 
     const userID = res.locals._id;
+
+    if (user.name != undefined) {
+      await REPTools.generateCode(user.name, "USERS", "USER_CODE", async (err, code) => {
+        if (err) {
+          return res.status(409).send({
+            success: false,
+            message: `Too many users are using the name "${user.name}". Try another name.`
+          });
+        } else {
+          user.code = code;
+        }
+      });
+    }
 
     const managedSQL = REPQuery.manageUpdateSQL("USERS", equivalentFields, user);
 
