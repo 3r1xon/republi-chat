@@ -53,14 +53,17 @@ export class MTDChannelsComponent implements OnInit {
 
     const lastJoinedChannel = this._ms.getChannelByID(this._user.currentUser.lastJoinedChannel);
 
-    if (lastJoinedChannel) {
-      this._ms.joinChannel(lastJoinedChannel);
-    } else {
+    if (this._ms.currentChannel == undefined) {
 
-      const channel = this._ms.channels[0];
+      if (lastJoinedChannel) {
+        this._ms.joinChannel(lastJoinedChannel);
+      } else {
 
-      if (channel && this._ms.currentChannel == undefined) {
-        this._ms.joinChannel(channel);
+        const channel = this._ms.channels[0];
+
+        if (channel && this._ms.currentChannel == undefined) {
+          this._ms.joinChannel(channel);
+        }
       }
     }
   }

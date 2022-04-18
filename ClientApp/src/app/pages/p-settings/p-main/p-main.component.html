@@ -31,12 +31,13 @@
         <h1>{{currentRoute}}</h1>
 
         <button class="back" routerLink="/mainpage">
-            <mat-icon>arrow_back</mat-icon>
+          <mat-icon>arrow_back</mat-icon>
         </button>
 
       </div>
 
     </div>
+
     <div
       *ngIf="navOpen"
       class="obscure"
@@ -44,7 +45,6 @@
     ></div>
 
     <div class="router">
-
 
       <router-outlet></router-outlet>
 
