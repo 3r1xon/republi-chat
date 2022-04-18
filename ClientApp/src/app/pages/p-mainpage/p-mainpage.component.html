@@ -6,6 +6,15 @@
 
     <mtd-channels [@openLeftNoDestroy]="_utils.settings.showChannels"></mtd-channels>
 
+    <div
+      *ngIf="_utils.settings.showChannels || _utils.settings.showServerGroup"
+      class="obscure"
+      (click)="
+        _utils.settings.showChannels = false;
+        _utils.settings.showServerGroup = false;
+      "
+    ></div>
+
     <mtd-chat></mtd-chat>
 
     <mtd-channel-info [@openRightNoDestroy]="_utils.settings.showServerGroup"></mtd-channel-info>

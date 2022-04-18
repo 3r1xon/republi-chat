@@ -467,6 +467,7 @@ class DBUser {
 
     this.joinedChannels.forEach((ch) => {
       io.to(`ch${ch.channelID}`).emit("members", {
+        emitType: "MEMBER_STATUS",
         userID: this.userID,
         status: userStatus.online
       });
@@ -489,6 +490,7 @@ class DBUser {
 
     this.joinedChannels.forEach((ch) => {
       io.to(`ch${ch.channelID}`).emit("members", {
+        emitType: "MEMBER_STATUS",
         userID: this.userID,
         status: userStatus.offline
       });

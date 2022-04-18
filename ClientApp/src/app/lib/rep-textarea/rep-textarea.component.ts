@@ -5,7 +5,6 @@ import {
   EventEmitter,
   forwardRef,
   OnInit,
-  ChangeDetectionStrategy,
   ViewChild,
   ElementRef
 } from '@angular/core';
@@ -15,7 +14,6 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
   selector: 'rep-textarea',
   templateUrl: './rep-textarea.component.html',
   styleUrls: ['./rep-textarea.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,

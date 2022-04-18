@@ -37,8 +37,14 @@
       </div>
 
     </div>
+    <div
+      *ngIf="navOpen"
+      class="obscure"
+      (click)="navOpen = false;"
+    ></div>
 
     <div class="router">
+
 
       <router-outlet></router-outlet>
 

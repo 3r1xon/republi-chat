@@ -293,13 +293,25 @@ export class MessagesService {
     this.chSubscriptions
         .push(
           this._webSocket.listen("members")
-            .subscribe((obj: { userID: number, status: UserStatus }) => {
-              const mrmbRef = this.currentRoom.members
-                .find(mrmb => mrmb.id == obj.userID);
+            .subscribe((obj: any) => {
 
-              if (mrmbRef) {
-                mrmbRef.userStatus = obj.status;
+              switch(obj.emitType) {
+
+                case "MEMBER_STATUS": {
+                  const mrmbRef = this.currentRoom.members
+                    .find(mrmb => mrmb.id == obj.userID);
+
+                  if (mrmbRef) {
+                    mrmbRef.userStatus = obj.status;
+                  }
+
+                } break;
+
+                case "NEW_MEMBER": {
+
+                } break;
               }
+
             })
         );
   }
