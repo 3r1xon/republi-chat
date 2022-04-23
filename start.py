@@ -1,4 +1,4 @@
-import os, threading, time, sys, shutil
+import os, threading, time, shutil, argparse
 
 
 client_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "ClientApp")
@@ -7,52 +7,59 @@ server_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "Server"
 
 class Start:
     def __init__(self):
-        for param in sys.argv:
+        parser = argparse.ArgumentParser()
+        parser.add_argument(
+            '--install',
+            dest = 'install',
+            nargs = '?',
+            const = True,
+            default = False,
+            help = 'Install node modules in both Client and Server.'
+        )
 
-            param = param.lower()
+        parser.add_argument(
+            '--delete',
+            dest = 'delete',
+            nargs = '?',
+            const = True,
+            default = False,
+            help = 'Delete node modules in both Client and Server.'
+        )
 
-            if param == "-d":
+        args = parser.parse_args()
 
-                print("Removing ClientApp node modules...")
-                shutil.rmtree(client_path + "\\node_modules")
-                print("ClientApp node modules removed.\n")
+        if args.install:
+            print("Installing node modules...")
+            os.chdir(client_path)
+            self.checkNodeModules()
 
-                print("Removing Server node modules...")
-                shutil.rmtree(server_path + "\\node_modules")
-                print("Server node modules removed.\n")
-                return
+            os.chdir(server_path)
+            self.checkNodeModules()
 
-            if param == "-i":
-                print("Installing node modules...")
-                os.chdir(client_path)
-                self.checkNodeModules()
+            return
 
-                os.chdir(server_path)
-                self.checkNodeModules()
-                return
 
-            if param == "-help":
-                print("""
-Parameters:
-    -d:
-        Deletes all node_modules.
-    -i:
-        Install all node_modules.
-                """)
-                return
-        
-        if len(sys.argv) > 1:
-            raise Exception("Unknown parameters, -help for a list of all availables command")
+
+        if args.delete:
+            print("Removing ClientApp node modules...")
+            shutil.rmtree(client_path + "\\node_modules")
+            print("ClientApp node modules removed.\n")
+
+            print("Removing Server node modules...")
+            shutil.rmtree(server_path + "\\node_modules")
+            print("Server node modules removed.\n")
+
+            return
 
         print("""
-  _____                  _     _ _  _____ _           _
- |  __ \                | |   | (_)/ ____| |         | |
- | |__) |___ _ __  _   _| |__ | |_| |    | |__   __ _| |_
- |  _  // _ \ '_ \| | | | '_ \| | | |    | '_ \ / _` | __|
- | | \ \  __/ |_) | |_| | |_) | | | |____| | | | (_| | |_
- |_|  \_\___| .__/ \__,_|_.__/|_|_|\_____|_| |_|\__,_|\__|
-            | |
-            |_| Starting App...
+     _____                  _     _ _  _____ _           _
+    |  __ \                | |   | (_)/ ____| |         | |
+    | |__) |___ _ __  _   _| |__ | |_| |    | |__   __ _| |_
+    |  _  // _ \ '_ \| | | | '_ \| | | |    | '_ \ / _` | __|
+    | | \ \  __/ |_) | |_| | |_) | | | |____| | | | (_| | |_
+    |_|  \_\___| .__/ \__,_|_.__/|_|_|\_____|_| |_|\__,_|\__|
+                | |
+                |_| Starting App...
         """)
 
         TD_C = threading.Thread(target=self.startClient, args=())
@@ -90,9 +97,6 @@ Parameters:
         os.system("nodemon start.js")
 
 
-
-    def startMariaDB(self):
-        pass
 
 if __name__ == "__main__":
     Start()
