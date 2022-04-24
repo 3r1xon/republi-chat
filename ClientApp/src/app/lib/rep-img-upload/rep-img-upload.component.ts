@@ -35,15 +35,11 @@ export class REPImgUploadComponent implements ControlValueAccessor {
   @Output()
   public image: EventEmitter<any> = new EventEmitter();
 
-  // onChange(event: any) {
-  //   this.image.emit(event);
-  // }
+  private base64textString = [];
 
-  onChange: any = () => {
-    this.image.emit(event);
-  };
+  onChange: any = () => { };
 
-  onTouch: any = () => {};
+  onTouch: any = () => { };
 
   registerOnChange(fn: any): void {
     this.onChange = fn;
@@ -53,7 +49,29 @@ export class REPImgUploadComponent implements ControlValueAccessor {
 
   }
 
-  writeValue(text: string) {
+  writeValue(file: any) {
+    if (file) {
 
+      this.src = file;
+
+      file = file[0];
+
+      if (file) {
+        const reader = new FileReader();
+
+        reader.onload = this.handleReaderLoaded.bind(this);
+        reader.readAsBinaryString(file);
+
+        console.log(file)
+
+
+        this.image.emit(this.base64textString);
+      }
+
+    }
+  }
+
+  handleReaderLoaded(e) {
+    this.base64textString.push('data:image/png;base64,' + btoa(e.target.result));
   }
 }

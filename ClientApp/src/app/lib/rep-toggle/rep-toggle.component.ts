@@ -12,10 +12,10 @@ export class REPToggleComponent {
   public checked: boolean = false;
 
   @Input()
-  public iconOnTrue: string = "";
+  public iconOnTrue: string;
 
   @Input()
-  public iconOnFalse: string = "";
+  public iconOnFalse: string;
 
   @Output()
   public checkedChange: EventEmitter<boolean> = new EventEmitter();

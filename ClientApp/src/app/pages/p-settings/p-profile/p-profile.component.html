@@ -1,83 +1,84 @@
 <div id="profile">
 
-  <div class="banner">
+  <form [formGroup]="form">
 
-    <div class="profile-info">
+    <div class="banner">
 
-      <rep-img-upload
-        [src]="_user.currentUser.picture"
-        [letter]="_user.currentUser.name"
-        [backgroundColor]="_user.currentUser.backgroundColor"
-        (image)="onChange($event)"
-      ></rep-img-upload>
+      <div class="profile-info">
 
-      <div class="banner-info">
+        <rep-img-upload
+          formControlName="picture"
+          [letter]="_user.currentUser.name"
+          [backgroundColor]="_user.currentUser.backgroundColor"
+          (image)="onChange($event)"
+        ></rep-img-upload>
 
-        <h2 [style.color]="_user.currentUser.color">{{_user.currentUser.name}}</h2>
+        <div class="banner-info">
 
-        <div style="display: flex;">
+          <h2 [style.color]="_user.currentUser.color">{{_user.currentUser.name}}</h2>
 
-          <p>{{_user.currentUser.code}}</p>
-          <rep-info tooltip="This is your unique code, give this code to a friend in order to be added in his friend list"></rep-info>
+          <div style="display: flex;">
+
+            <p>{{_user.currentUser.code}}</p>
+            <rep-info tooltip="This is your unique code, give this code to a friend in order to be added in his friend list"></rep-info>
+
+          </div>
 
         </div>
 
       </div>
 
+      <rep-actions [actions]="topbarActions"></rep-actions>
+
     </div>
 
-    <rep-actions [actions]="topbarActions"></rep-actions>
+    <div class="settings">
 
-  </div>
+      <rep-namebox [message]="exampleMsg"></rep-namebox>
 
-  <div class="settings">
+      <rep-separator>Personal informations</rep-separator>
 
-    <rep-namebox [message]="exampleMsg"></rep-namebox>
+        <div class="aligned">
 
-    <rep-separator>Personal informations</rep-separator>
+          <rep-input
+            formControlName="name"
+            size="medium"
+            maxLength="30"
+            required="true"
+            [enabled]="editName"
+            placeholder="Name"
+          >
+          </rep-input>
 
-    <form [formGroup]="form">
+          <rep-toggle [(checked)]="editName" iconOnTrue="lock_open" iconOnFalse="lock"></rep-toggle>
 
-      <div class="aligned">
+        </div>
 
-        <rep-input
-          formControlName="name"
-          size="medium"
-          maxLength="30"
-          required="true"
-          [enabled]="editName"
-          placeholder="Name"
-        >
-        </rep-input>
+        <div class="aligned">
 
-        <rep-toggle [(checked)]="editName" iconOnTrue="lock_open" iconOnFalse="lock"></rep-toggle>
+          <rep-input
+            placeholder="Email"
+            [(text)]="_user.currentUser.email"
+            [enabled]="false"
+          ></rep-input>
 
+        </div>
+
+        <rep-textarea placeholder="Biography, max(200)"></rep-textarea>
+
+      <rep-separator>Strict settings</rep-separator>
+
+      <!-- <input class="user-color"
+      [(ngModel)]="user.userColor"
+      [(ngModel)]="exampleMsg.userColor" type="color"> -->
+
+      <div class="strict">
+        <rep-actions [actions]="strictActions"></rep-actions>
       </div>
 
-      <div class="aligned">
-
-        <rep-input
-          placeholder="Email"
-          [(text)]="_user.currentUser.email"
-          [enabled]="false"
-        ></rep-input>
-
-      </div>
-
-      <rep-textarea placeholder="Biography, max(200)"></rep-textarea>
-
-    </form>
-
-    <rep-separator>Strict settings</rep-separator>
-
-    <!-- <input class="user-color"
-    [(ngModel)]="user.userColor"
-    [(ngModel)]="exampleMsg.userColor" type="color"> -->
-
-    <div class="strict">
-      <rep-actions [actions]="strictActions"></rep-actions>
     </div>
 
-  </div>
+  </form>
+
 
 </div>

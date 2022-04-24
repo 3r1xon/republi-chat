@@ -1,101 +1,91 @@
 #profile {
+  width: 100%;
+  color: var(--WHITE);
+  display: flex;
+  flex-direction: column;
+  user-select: none;
+  animation: fadeIn 250ms;
+
+
+  .banner {
     width: 100%;
-    color: var(--WHITE);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--GREY);
+
+    .profile-info {
+      display: flex;
+      align-items: center;
+      height: 100%;
+
+      .banner-info {
+        height: 100%;
+
+        h2, p {
+          margin-left: 10px;
+        }
+
+        .info {
+          color: var(--GREY);
+        }
+      }
+    }
+
+    rep-actions {
+      height: 30px;
+    }
+
+  }
+
+  rep-toggle {
+    margin: 10px;
+  }
+
+  rep-input {
+    margin: 10px 10px 25px 0;
+  }
+
+  rep-textarea {
+    width: 500px;
+    height: 75px;
+  }
+
+  @media only screen and (max-width: 400px) {
+    rep-textarea {
+      width: 300px;
+    }
+  }
+
+  .settings {
+    width: 100%;
     display: flex;
     flex-direction: column;
-    user-select: none;
-    animation: fadeIn 250ms;
 
-
-    .banner {
-        width: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        border-bottom: 1px solid var(--GREY);
-
-        .profile-info {
-            display: flex;
-            align-items: center;
-            height: 100%;
-
-            .banner-info {
-                height: 100%;
-
-                h2, p {
-                    margin-left: 10px;
-                }
-
-                .info {
-                    color: var(--GREY);
-                }
-            }
-        }
-
-        rep-actions {
-            height: 30px;
-        }
+    rep-namebox {
+      width: 100%;
     }
 
-    rep-toggle {
-        margin: 10px;
+    .strict {
+      width: 100%;
+      height: 55px;
+      display: flex;
+      align-items: center;
+      background: var(--LIGHT-DARK);
+      border-radius: 10px;
     }
 
-    rep-input {
-        margin: 10px 10px 10px 0;
-    }
-
-    .settings {
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-
-        rep-namebox {
-          width: 100%;
-        }
-
-
-        form {
-            width: 100%;
-            height: 90%;
-            display: flex;
-            flex-direction: column;
-            border-radius: 10px;
-
-
-            rep-textarea {
-                width: 500px;
-                height: 85px;
-            }
-
-            @media only screen and (max-width: 400px) {
-              rep-textarea {
-                width: 300px;
-              }
-            }
-        }
-
-        .strict {
-            width: 100%;
-            height: 60px;
-            display: flex;
-            align-items: center;
-            background: var(--LIGHT-DARK);
-            border-radius: 10px;
-        }
-
-    }
+  }
 }
 
 
 .aligned {
-    width: 100%;
-    margin-bottom: 15px;
-    display: flex;
-    align-items: center;
+  width: 100%;
+  display: flex;
+  align-items: center;
 }
 
 rep-separator {
-    width: 100%;
-    margin: 20px 0 20px 0;
+  width: 100%;
+  margin: 20px 0 20px 0;
 }

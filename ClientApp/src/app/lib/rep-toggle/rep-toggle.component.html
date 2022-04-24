@@ -10,8 +10,11 @@
     <span class="slider"></span>
   </label>
 
-  <mat-icon *ngIf="!checked">{{iconOnFalse}}</mat-icon>
+  <ng-container *ngIf="iconOnFalse || iconOnTrue">
+    <mat-icon *ngIf="!checked">{{iconOnFalse}}</mat-icon>
 
-  <mat-icon *ngIf="checked">{{iconOnTrue}}</mat-icon>
+    <mat-icon *ngIf="checked">{{iconOnTrue}}</mat-icon>
+  </ng-container>
+
 
 </div>

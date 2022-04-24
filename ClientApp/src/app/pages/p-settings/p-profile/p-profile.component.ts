@@ -49,6 +49,9 @@ export class PProfileComponent extends REPManager implements OnInit {
       [
         Validators.maxLength(200)
       ]
+    ],
+    picture: [this._user.currentUser.picture
+
     ]
   });
 
@@ -105,19 +108,19 @@ export class PProfileComponent extends REPManager implements OnInit {
 
   async onChange(event) {
 
-    const file = <File>event[0];
+    // const file = <File>event[0];
 
-    const fd = new FormData();
-    fd.append("image", file, file.name);
+    // const fd = new FormData();
+    // fd.append("image", file, file.name);
 
-    const res = await this.http.put<ServerResponse>(
-    `${environment.BASE_URL}/authentication/editProfile`,
-    fd
-    ).toPromise();
+    // const res = await this.http.put<ServerResponse>(
+    // `${environment.BASE_URL}/authentication/editProfile`,
+    // fd
+    // ).toPromise();
 
-    if (res.success) {
-      this._user.currentUser.picture = this._fileUpload.sanitizeIMG(res.data);
-    }
+    // if (res.success) {
+    //   this._user.currentUser.picture = this._fileUpload.sanitizeIMG(res.data);
+    // }
   }
 
   deleteProfile() {
