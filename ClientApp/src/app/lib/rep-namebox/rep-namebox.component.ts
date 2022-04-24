@@ -72,30 +72,29 @@ export class REPNameBoxComponent implements AfterViewInit {
   msgHTMLParser(): void {
     let msg = this.message.message ??= "";
 
-    this.content.nativeElement.innerHTML = msg;
-    // const words = msg.split(" ");
+    const words = msg.split(" ");
 
-    // words.forEach((word) => {
+    words.forEach((word) => {
 
-    //   const URL_REG = /(https?:\/\/[^\s]+)/g;
+      const URL_REG = /(https?:\/\/[^\s]+)/g;
 
-    //   if (word.match(URL_REG)) {
-    //     const a = this.renderer.createElement('a');
+      if (word.match(URL_REG)) {
+        const a = this.renderer.createElement('a');
 
-    //     a.innerText = " " + word;
-    //     a.href = word;
-    //     a.target = "_blank";
+        a.innerText = " " + word;
+        a.href = word;
+        a.target = "_blank";
 
-    //     this.renderer.appendChild(this.content.nativeElement, a);
+        this.renderer.appendChild(this.content.nativeElement, a);
 
-    //     return;
-    //   }
+        return;
+      }
 
-    //   const d = this.renderer.createElement('d');
-    //   d.innerText = " " + word;
+      const d = this.renderer.createElement('d');
+      d.innerText = " " + word;
 
-    //   this.renderer.appendChild(this.content.nativeElement, d);
-    // });
+      this.renderer.appendChild(this.content.nativeElement, d);
+    });
   }
 
 }
