@@ -327,10 +327,10 @@ router.get('/getRoomMessages/:chID/:roomID/:limit', async (req, res) => {
                    CRM.DATE                     as date,
                    CRM.HIGHLIGHTED              as highlighted
             FROM CHANNELS_ROOMS_MESSAGES CRM
-                     INNER JOIN CHANNELS_ROOMS_MEMBERS CRMB ON CRMB.ID_CHANNEL_ROOM_MEMBER = CRM.ID_CHANNEL_ROOM_MEMBER
-                     INNER JOIN CHANNELS_MEMBERS CM ON CM.ID_CHANNEL_MEMBER = CRMB.ID_CHANNEL_MEMBER
-                     INNER JOIN CHANNELS C ON C.ID_CHANNEL = CM.ID_CHANNEL
-                     INNER JOIN USERS U ON U.ID_USER = CM.ID_USER
+                     LEFT JOIN CHANNELS_ROOMS_MEMBERS CRMB ON CRMB.ID_CHANNEL_ROOM_MEMBER = CRM.ID_CHANNEL_ROOM_MEMBER
+                     LEFT JOIN CHANNELS_MEMBERS CM ON CM.ID_CHANNEL_MEMBER = CRMB.ID_CHANNEL_MEMBER
+                     LEFT JOIN CHANNELS C ON C.ID_CHANNEL = CM.ID_CHANNEL
+                     LEFT JOIN USERS U ON U.ID_USER = CM.ID_USER
             WHERE CRM.ID_CHANNEL_ROOM = ?
               AND CRM.DATE >= ?
             LIMIT ${limit}
