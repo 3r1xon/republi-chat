@@ -138,7 +138,7 @@ router.get('/getChannels', async (req, res) => {
            C.COLOR            as color,
            C.BACKGROUND_COLOR as backgroundColor
     FROM CHANNELS C
-             LEFT JOIN CHANNELS_MEMBERS CM ON CM.ID_CHANNEL = C.ID_CHANNEL
+             INNER JOIN CHANNELS_MEMBERS CM ON CM.ID_CHANNEL = C.ID_CHANNEL
     WHERE CM.ID_USER = ?
       AND CM.BANNED = ?
       AND CM.KICKED = ?
@@ -178,8 +178,8 @@ router.get('/getChannelInfo/:id', (req, res) => {
                CR.TEXT_ROOM         as textRoom,
                CRMB.UNREAD_MESSAGES as notifications
         FROM CHANNELS_ROOMS CR
-                LEFT JOIN CHANNELS_ROOMS_MEMBERS CRMB ON CRMB.ID_CHANNEL_ROOM = CR.ID_CHANNEL_ROOM
-                LEFT JOIN CHANNELS_MEMBERS CM ON CM.ID_CHANNEL_MEMBER = CRMB.ID_CHANNEL_MEMBER
+                INNER JOIN CHANNELS_ROOMS_MEMBERS CRMB ON CRMB.ID_CHANNEL_ROOM = CR.ID_CHANNEL_ROOM
+                INNER JOIN CHANNELS_MEMBERS CM ON CM.ID_CHANNEL_MEMBER = CRMB.ID_CHANNEL_MEMBER
         WHERE CR.ID_CHANNEL = ?
           AND CM.ID_USER = ?
         `, [channelID, userID]);
@@ -261,8 +261,8 @@ router.get('/getChRoomInfo/:chID/:roomID', (req, res) => {
                    TO_BASE64(U.PROFILE_PICTURE) as picture,
                    U.USER_STATUS                as userStatus
             FROM CHANNELS_ROOMS_MEMBERS CRMB
-                     LEFT JOIN CHANNELS_MEMBERS CM ON CM.ID_CHANNEL_MEMBER = CRMB.ID_CHANNEL_MEMBER
-                     LEFT JOIN USERS U ON U.ID_USER = CM.ID_USER
+                     INNER JOIN CHANNELS_MEMBERS CM ON CM.ID_CHANNEL_MEMBER = CRMB.ID_CHANNEL_MEMBER
+                     INNER JOIN USERS U ON U.ID_USER = CM.ID_USER
             WHERE CRMB.ID_CHANNEL_ROOM = ?
             `, [roomID]);
 
@@ -327,10 +327,10 @@ router.get('/getRoomMessages/:chID/:roomID/:limit', async (req, res) => {
                    CRM.DATE                     as date,
                    CRM.HIGHLIGHTED              as highlighted
             FROM CHANNELS_ROOMS_MESSAGES CRM
-                     LEFT JOIN channels_rooms_members CRMB ON CRMB.ID_CHANNEL_ROOM_MEMBER = CRM.ID_CHANNEL_ROOM_MEMBER
-                     LEFT JOIN CHANNELS_MEMBERS CM ON CM.ID_CHANNEL_MEMBER = CRMB.ID_CHANNEL_MEMBER
-                     LEFT JOIN CHANNELS C ON C.ID_CHANNEL = CM.ID_CHANNEL
-                     LEFT JOIN USERS U ON U.ID_USER = CM.ID_USER
+                     INNER JOIN CHANNELS_ROOMS_MEMBERS CRMB ON CRMB.ID_CHANNEL_ROOM_MEMBER = CRM.ID_CHANNEL_ROOM_MEMBER
+                     INNER JOIN CHANNELS_MEMBERS CM ON CM.ID_CHANNEL_MEMBER = CRMB.ID_CHANNEL_MEMBER
+                     INNER JOIN CHANNELS C ON C.ID_CHANNEL = CM.ID_CHANNEL
+                     INNER JOIN USERS U ON U.ID_USER = CM.ID_USER
             WHERE CRM.ID_CHANNEL_ROOM = ?
               AND CRM.DATE >= ?
             LIMIT ${limit}
