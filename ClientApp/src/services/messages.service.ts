@@ -10,7 +10,7 @@ import { ChannelPermissions, RoomPermissions } from 'src/interfaces/channel.inte
 import { UtilsService } from './utils.service';
 import { WebSocketService } from './websocket.service';
 import { environment } from 'src/environments/environment';
-import { UserStatus } from 'src/interfaces/account.interface';
+import { Account } from 'src/interfaces/account.interface';
 
 
 @Injectable({
@@ -90,6 +90,8 @@ export class MessagesService {
 
         this.chPermissions = resChannel.data.permissions as ChannelPermissions;
 
+        this.currentChannel.pendings = resChannel.data.pendings;
+
         this.onChannelChange.next();
 
         this.initChannelSockets();
@@ -124,7 +126,10 @@ export class MessagesService {
 
           this.roomPermissions = resRoom.data.permissions as RoomPermissions;
 
-          this.currentRoom.members = resRoom.data.members;
+          this.currentRoom.members = resRoom.data.members.map((member: Account) => {
+            member.picture = this._fileUpload.sanitizeIMG(member.picture);
+            return member;
+          });
 
           room.notifications = 0;
 
@@ -430,8 +435,23 @@ export class MessagesService {
     return this.http.get<ServerResponse>(`${environment.BASE_URL}/channels/getChRoomInfo/${channel.id}/${room.roomID}`);
   }
 
+  public API_changePendingStatus(channel: Channel, userID: number, status: boolean) {
+    return this.http.put<ServerResponse>(`${environment.BASE_URL}/channels/changePendingStatus`, {
+      chID: channel.id,
+      pendingID: userID,
+      status: status
+    });
+  }
+
   public API_changeChOrder(channels: Array<Channel>) {
-    return this.http.put<ServerResponse>(`${environment.BASE_URL}/channels/changeChOrder`, channels);
+
+    const body = channels.map((ch) => {
+      return {
+        id: ch.id
+      }
+    });
+
+    return this.http.put<ServerResponse>(`${environment.BASE_URL}/channels/changeChOrder`, body);
   }
 
   /**

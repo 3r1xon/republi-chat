@@ -90,8 +90,8 @@ BEGIN
                       FROM CHANNELS CH
                       WHERE CH.ID_CHANNEL = NEW.ID_CHANNEL) THEN
         INSERT INTO CHANNELS_PERMISSIONS(ID_CHANNEL_MEMBER, DELETE_MESSAGES, KICK_MEMBERS, BAN_MEMBERS,
-                                         SEND_MESSAGES, CREATE_ROOMS)
-        VALUES (NEW.ID_CHANNEL_MEMBER, TRUE, TRUE, TRUE, TRUE, TRUE);
+                                         SEND_MESSAGES, CREATE_ROOMS, ACCEPT_MEMBERS)
+        VALUES (NEW.ID_CHANNEL_MEMBER, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE);
     ELSE
         INSERT INTO CHANNELS_PERMISSIONS(ID_CHANNEL_MEMBER, DELETE_MESSAGES, KICK_MEMBERS, BAN_MEMBERS,
                                          SEND_MESSAGES, CREATE_ROOMS)
@@ -100,6 +100,36 @@ BEGIN
 
     INSERT INTO CHANNELS_ROOMS_MEMBERS(ID_CHANNEL_ROOM, ID_CHANNEL_MEMBER)
     SELECT ID_CHANNEL_ROOM, NEW.ID_CHANNEL_MEMBER FROM CHANNELS_ROOMS WHERE AUTO_JOIN = TRUE AND ID_CHANNEL = NEW.ID_CHANNEL;
+
+END;
+
+create or replace table republichat.channels_pendings
+(
+    ID_CHANNEL_PENDING bigint auto_increment
+        primary key,
+    ID_CHANNEL         bigint     not null,
+    ID_USER            bigint     null,
+    ACCEPTED           tinyint(1) null,
+    constraint channels_pendings_channels_ID_CHANNEL_fk
+        foreign key (ID_CHANNEL) references republichat.channels (ID_CHANNEL)
+            on update cascade on delete cascade,
+    constraint channels_pendings_users_ID_USER_fk
+        foreign key (ID_USER) references republichat.users (ID_USER)
+            on update cascade on delete cascade
+);
+
+create or replace definer = root@localhost trigger republichat.CHANNELS_PENDINGS_TRIGGER
+    after update
+    on republichat.channels_pendings
+    for each row
+BEGIN
+
+    IF NEW.ACCEPTED = 1 then
+        INSERT INTO CHANNELS_MEMBERS
+        (ID_USER, ID_CHANNEL)
+        VALUES (NEW.ID_USER, NEW.ID_CHANNEL);
+
+    end if;
 
 END;
 
@@ -113,6 +143,7 @@ create or replace table republichat.channels_permissions
     BAN_MEMBERS           tinyint(1) default 0 null,
     SEND_MESSAGES         tinyint(1) default 1 null,
     CREATE_ROOMS          tinyint(1) default 0 null,
+    ACCEPT_MEMBERS        tinyint(1) default 0 null,
     constraint FK_MEMBERS
         foreign key (ID_CHANNEL_MEMBER) references republichat.channels_members (ID_CHANNEL_MEMBER)
             on update cascade on delete cascade

@@ -17,7 +17,12 @@
 
     <mtd-chat></mtd-chat>
 
-    <mtd-channel-info *ngIf="_utils.settings.showServerGroup" @openRight></mtd-channel-info>
+    <ng-container *ngIf="_ms.currentChannel">
+
+      <mtd-channel-info *ngIf="_utils.settings.showServerGroup" @openRight></mtd-channel-info>
+
+    </ng-container>
+
 
   </div>
 

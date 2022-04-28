@@ -11,10 +11,6 @@
   (onTab)="channelsTab = $event"
 >
 
-  <!-- <small *ngIf="channels[channelsTab]?.sections.length == 0">
-    {{channels[channelsTab]?.tabname}} is empty.
-  </small> -->
-
   <div
     *ngIf="channels[channelsTab].tabname == 'Channels'"
     cdkDropList
@@ -37,7 +33,7 @@
         header
         cdkDragHandle
         [repContext]="channelContext"
-        [message]="section"
+        [message]="filterChannel(section)"
         [hold]="_ms.currentChannel?.id == section.id"
         backgroundColor="#202124"
       >
@@ -81,6 +77,12 @@
       </div>
 
     </rep-accordion>
+  </div>
+
+  <div
+    *ngIf="channels[channelsTab].tabname == 'Friends'"
+  >
+
   </div>
 
 </rep-tabs>

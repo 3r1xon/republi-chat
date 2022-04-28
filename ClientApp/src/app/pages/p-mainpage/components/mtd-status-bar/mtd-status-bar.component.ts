@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { Account } from 'src/interfaces/account.interface';
 import { UtilsService } from 'src/services/utils.service';
 import { REPButton } from 'src/interfaces/repbutton.interface';
+import { MessagesService } from 'src/services/messages.service';
 
 @Component({
   selector: 'mtd-status-bar',
@@ -17,6 +18,7 @@ export class MTDStatusBarComponent {
 
   constructor(
     public _utils: UtilsService,
+    private _ms: MessagesService,
     private router: Router
   ) { }
 
@@ -48,6 +50,7 @@ export class MTDStatusBarComponent {
       name: "Close Group",
       icon: "group",
       tooltip: "Close/open right side-bar",
+      visible: () => this._ms.currentChannel,
       onClick: () => {
 
         if (this._utils.isMobile) {

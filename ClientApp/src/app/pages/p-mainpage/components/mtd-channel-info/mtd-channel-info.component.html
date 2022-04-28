@@ -5,35 +5,54 @@
   (onTab)="serverInfoTab = $event"
 >
 
-  <small *ngIf="serverInfo[serverInfoTab]?.sections.length == 0">{{serverInfo[serverInfoTab]?.tabname}} is Empty.</small>
-
-
   <ng-container
-    *ngFor="let member of getOnlineMembers(); let i = index;"
+    *ngIf="serverInfo[serverInfoTab].tabname == 'Members'"
   >
 
-    <rep-separator *ngIf="i == 0">Online</rep-separator>
-
-    <rep-namebox
-      [status]="member.userStatus"
-      [message]="member"
+    <ng-container
+      *ngFor="let member of getOnlineMembers(); let i = index;"
     >
-    </rep-namebox>
+
+      <rep-separator *ngIf="i == 0">Online</rep-separator>
+
+      <rep-namebox
+        [status]="member.userStatus"
+        [message]="member"
+      >
+      </rep-namebox>
+
+    </ng-container>
+
+
+    <ng-container
+      *ngFor="let member of getOfflineMembers(); let i = index;"
+    >
+
+      <rep-separator *ngIf="i == 0">Offline</rep-separator>
+
+      <rep-namebox
+        [status]="member.userStatus"
+        [message]="member"
+      >
+      </rep-namebox>
+
+    </ng-container>
 
   </ng-container>
 
 
   <ng-container
-    *ngFor="let member of getOfflineMembers(); let i = index;"
+    *ngIf="serverInfo[serverInfoTab].tabname == 'Pending'"
   >
 
-    <rep-separator *ngIf="i == 0">Offline</rep-separator>
-
-    <rep-namebox
-      [status]="member.userStatus"
-      [message]="member"
-    >
+    <rep-namebox header
+      *ngFor="let pending of _ms.currentChannel?.pendings"
+      [message]="pending"
+      [uniqueID]="pending.id"
+      [options]="_ms.chPermissions.acceptMembers ? pendingOptions : null"
+      >
     </rep-namebox>
+
 
   </ng-container>
 

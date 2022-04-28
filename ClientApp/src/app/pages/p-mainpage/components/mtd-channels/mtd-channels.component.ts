@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { Channel, Room } from 'src/interfaces/channel.interface';
-import { Message } from 'src/interfaces/message.interface';
 import { MessagesService } from 'src/services/messages.service';
 import { UserService } from 'src/services/user.service';
 import { UtilsService } from 'src/services/utils.service';
@@ -12,6 +11,7 @@ import {
 } from '@angular/cdk/drag-drop';
 import { Unsubscriber } from 'src/app/lib/rep-decorators';
 import { REPButton } from 'src/interfaces/repbutton.interface';
+import { Message } from 'src/interfaces/message.interface';
 
 @Component({
   selector: 'mtd-channels',
@@ -38,18 +38,6 @@ export class MTDChannelsComponent implements OnInit {
     });
 
   private fillSections() {
-    // const channelsRef = this.channels.find(tab => tab.tabname == "Channels");
-
-    // channelsRef.sections = this._ms.channels.map((ch) => {
-    //   return <Message>{
-    //     id: ch.id,
-    //     name: ch.name,
-    //     message: ch.code,
-    //     picture: ch.picture,
-    //     color: ch.color,
-    //     backgroundColor: ch.backgroundColor
-    //   };
-    // });
 
     if (this._ms.currentChannel == undefined) {
       const lastJoinedChannel = this._ms.getChannelByID(this._user.currentUser.lastJoinedChannel);
@@ -67,22 +55,24 @@ export class MTDChannelsComponent implements OnInit {
     }
   }
 
+  public filterChannel(ch: Message) {
+    ch.message = (ch as any).code;
+    return ch;
+  }
+
   public channelsTab: number = 0;
 
   public channels: Array<{
     tabname: string,
-    icon?: string,
-    // sections: Array<any>
+    icon?: string
   }> = [
     {
       tabname: "Channels",
       icon: "list",
-      // sections: this._ms.channels
     },
     {
       tabname: "Friends",
       icon: "people",
-      // sections: []
     }
   ];
 
@@ -111,14 +101,12 @@ export class MTDChannelsComponent implements OnInit {
 
   orderChannel(event: CdkDragDrop<Array<string>>) {
     moveItemInArray(
-      // this.channels[this.channelsTab].sections,
       this._ms.channels,
       event.previousIndex,
       event.currentIndex
     );
 
     this._ms.API_changeChOrder(this._ms.channels).toPromise();
-    // this._ms.API_changeChOrder(this.channels[this.channelsTab].sections).toPromise();
   }
 
   async addNew() {

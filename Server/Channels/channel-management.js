@@ -95,17 +95,26 @@ router.post('/addChannel', async (req, res) => {
       user.setChannel(channelID, async (err, user) => {
         if (err) {
           // It means the user is not in the desired channel so it can be added
-          await REPQuery.one(
+
+          const exists_pending = await REPQuery.one(
           `
-          INSERT INTO CHANNELS_MEMBERS
-              (ID_USER, ID_CHANNEL, JOIN_DATE)
-          VALUES (?, ?, ?)
-          `, [userID, channelID, new Date()]);
+          SELECT 1
+          FROM CHANNELS_PENDINGS CP
+          WHERE CP.ID_CHANNEL = ?
+            AND CP.ID_USER = ?
+          `, [channelID, userID]);
 
-          channel.name = name;
-          channel.code = code;
+          if (exists_pending)
+            return res.status(409).send({ success: false, message: "User already in pending list!" });
 
-          res.status(201).send({ success: true, data: channel });
+          await REPQuery.exec(
+          `
+          INSERT INTO CHANNELS_PENDINGS
+              (ID_CHANNEL, ID_USER)
+          VALUES (?, ?)
+          `, [channelID, userID]);
+
+          res.status(201).send({ success: true });
 
         } else {
 
@@ -189,10 +198,24 @@ router.get('/getChannelInfo/:id', (req, res) => {
         SELECT DELETE_MESSAGES as deleteMessage,
                KICK_MEMBERS    as kickMembers,
                BAN_MEMBERS     as banMembers,
-               SEND_MESSAGES   as sendMessages
+               SEND_MESSAGES   as sendMessages,
+               ACCEPT_MEMBERS  as acceptMembers
         FROM CHANNELS_PERMISSIONS
         WHERE ID_CHANNEL_MEMBER = ?
         `, [user.channelMemberID]);
+
+        const pendings = await REPQuery.load(
+        `
+        SELECT U.ID_USER                    as id,
+               U.USER_CODE                  as code,
+               U.COLOR                      as color,
+               U.BACKGROUND_COLOR           as backgroundColor,
+               U.NAME                       as name,
+               TO_BASE64(U.PROFILE_PICTURE) as picture
+        FROM CHANNELS_PENDINGS CP
+                 LEFT JOIN USERS U ON CP.ID_USER = U.ID_USER
+        WHERE CP.ID_CHANNEL = ?
+        `, [channelID]);
 
         REPTools.keysToBool(permissions);
 
@@ -205,7 +228,8 @@ router.get('/getChannelInfo/:id', (req, res) => {
               text: rooms?.filter(obj => obj.textRoom),
               vocal: rooms.filter(obj => !obj.textRoom)
             },
-            permissions: permissions
+            permissions: permissions,
+            pendings: pendings
           }
         });
       }
@@ -294,7 +318,52 @@ router.get('/getChRoomInfo/:chID/:roomID', (req, res) => {
 
 
 
-router.get('/getRoomMessages/:chID/:roomID/:limit', async (req, res) => {
+router.put('/changePendingStatus', (req, res) => {
+
+  try {
+    const userID    = res.locals._id;
+    const pendingID = req.body.pendingID;
+    const channelID = req.body.chID;
+    const user      = new DBUser(userID);
+
+    user.setChannel(channelID, async (chErr) => {
+      if (chErr) {
+        res.status(401).send({ success: false, message: "User not in channel!" });
+      } else {
+
+        const status = req.body.status;
+
+        await REPQuery.exec(
+        `
+        UPDATE CHANNELS_PENDINGS CP
+        SET CP.ACCEPTED = ?
+        WHERE CP.ID_CHANNEL = ?
+          AND CP.ID_USER = ?
+        `, [status, channelID, pendingID]);
+
+        await REPQuery.exec(
+        `
+        DELETE
+        FROM CHANNELS_PENDINGS
+        WHERE ID_CHANNEL = ?
+          AND ID_USER = ?
+        `, [channelID, pendingID]);
+
+        res.status(200).send({ success: true });
+      }
+
+    });
+  } catch (error) {
+    console.log(clc.red(error));
+
+    res.status(500).send({ success: false, message: `Internal server error!` });
+  }
+
+});
+
+
+
+router.get('/getRoomMessages/:chID/:roomID/:limit', (req, res) => {
 
   const userID    = res.locals._id;
   const roomID    = req.params.roomID;

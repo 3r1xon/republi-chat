@@ -119,16 +119,14 @@ export class PNewChannelComponent {
 
           if (res.success) {
 
-            this._ms.channels.push(res.data);
-
             this.formAdd.setValue({
               channelName: '',
               channelCode: ''
             });
 
             this._utils.showRequest(
-              "Channel found and added",
-              `The channel "${channel.name}" has been successfully added, you can now find it at the main page!`,
+              "Channel found, you're on the waiting list",
+              `The channel "${channel.name}" has been successfully found, you now have to wait until you are accepted in!`,
               [
                 {
                   name: "Mainpage",

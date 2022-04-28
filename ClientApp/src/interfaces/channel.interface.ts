@@ -7,6 +7,7 @@ export interface Channel {
     text: Array<Room>,
     vocal: Array<Room>
   },
+  pendings?: Array<Account>;
   code?: string;
   picture?: any;
   color?: string;
@@ -29,6 +30,7 @@ export interface ChannelPermissions {
   kickMembers: boolean;
   banMembers: boolean;
   sendMessages: boolean;
+  acceptMembers: boolean;
 }
 
 export interface RoomPermissions {
