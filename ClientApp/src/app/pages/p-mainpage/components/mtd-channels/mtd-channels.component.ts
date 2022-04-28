@@ -38,18 +38,18 @@ export class MTDChannelsComponent implements OnInit {
     });
 
   private fillSections() {
-    const channelsRef = this.channels.find(tab => tab.tabname == "Channels");
+    // const channelsRef = this.channels.find(tab => tab.tabname == "Channels");
 
-    channelsRef.sections = this._ms.channels.map((ch) => {
-      return <Message>{
-        id: ch.id,
-        name: ch.name,
-        message: ch.code,
-        picture: ch.picture,
-        color: ch.color,
-        backgroundColor: ch.backgroundColor
-      };
-    });
+    // channelsRef.sections = this._ms.channels.map((ch) => {
+    //   return <Message>{
+    //     id: ch.id,
+    //     name: ch.name,
+    //     message: ch.code,
+    //     picture: ch.picture,
+    //     color: ch.color,
+    //     backgroundColor: ch.backgroundColor
+    //   };
+    // });
 
     if (this._ms.currentChannel == undefined) {
       const lastJoinedChannel = this._ms.getChannelByID(this._user.currentUser.lastJoinedChannel);
@@ -72,17 +72,17 @@ export class MTDChannelsComponent implements OnInit {
   public channels: Array<{
     tabname: string,
     icon?: string,
-    sections: Array<any>
+    // sections: Array<any>
   }> = [
     {
       tabname: "Channels",
       icon: "list",
-      sections: this._ms.channels
+      // sections: this._ms.channels
     },
     {
       tabname: "Friends",
       icon: "people",
-      sections: []
+      // sections: []
     }
   ];
 
@@ -111,12 +111,14 @@ export class MTDChannelsComponent implements OnInit {
 
   orderChannel(event: CdkDragDrop<Array<string>>) {
     moveItemInArray(
-      this.channels[this.channelsTab].sections,
+      // this.channels[this.channelsTab].sections,
+      this._ms.channels,
       event.previousIndex,
       event.currentIndex
     );
 
-    this._ms.API_changeChOrder(this.channels[this.channelsTab].sections).toPromise();
+    this._ms.API_changeChOrder(this._ms.channels).toPromise();
+    // this._ms.API_changeChOrder(this.channels[this.channelsTab].sections).toPromise();
   }
 
   async addNew() {

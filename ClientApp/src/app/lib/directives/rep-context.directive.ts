@@ -94,7 +94,7 @@ export class REPContextDirective implements OnInit {
       const eventNames = ["click", "contextmenu"];
 
       eventNames.forEach((eName) => {
-        const unsub = this.renderer.listen(document, eName, (e) => {
+        const unsub = this.renderer.listen(document, eName, (e: MouseEvent) => {
 
           compRef.destroy();
 
