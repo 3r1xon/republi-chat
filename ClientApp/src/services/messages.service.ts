@@ -313,6 +313,7 @@ export class MessagesService {
                 } break;
 
                 case "NEW_MEMBER": {
+                  // this.currentChannel..push(obj);
 
                 } break;
               }
@@ -323,10 +324,9 @@ export class MessagesService {
     this.chSubscriptions
     .push(
       this._webSocket.listen("pendings")
-        .subscribe((obj: string) => {
-          const pending = JSON.parse(obj);
+        .subscribe((obj: any) => {
 
-          this.currentChannel.pendings.push(pending);
+          this.currentChannel.pendings.push(obj);
         })
     );
   }

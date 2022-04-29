@@ -1,9 +1,17 @@
-<!-- <div class="obscure">
+<div class="obscure"
+  *ngIf="show"
+  (click)="close()"
+>
 
-  <div class="rep-entries" cdkDrag>
+  <div
+    class="rep-entries"
+    cdkDragBoundary=".obscure"
+    cdkDrag
+    repStop
+  >
 
     <div class="bar" cdkDragHandle>
-      <button class="back">
+      <button class="back" (click)="close()">
         <mat-icon>close</mat-icon>
       </button>
     </div>
@@ -12,4 +20,4 @@
 
   </div>
 
-</div> -->
+</div>

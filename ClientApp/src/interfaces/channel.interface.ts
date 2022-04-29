@@ -30,6 +30,7 @@ export interface ChannelPermissions {
   kickMembers: boolean;
   banMembers: boolean;
   sendMessages: boolean;
+  createRooms: boolean;
   acceptMembers: boolean;
 }
 

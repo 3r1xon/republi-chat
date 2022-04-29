@@ -1,15 +1,26 @@
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  Output
+} from '@angular/core';
 
 @Component({
   selector: 'rep-entries',
   templateUrl: './rep-entries.component.html',
   styleUrls: ['./rep-entries.component.scss']
 })
-export class REPEntriesComponent implements OnInit {
+export class REPEntriesComponent {
 
-  constructor() { }
+  @Input()
+  public show: boolean = false;
 
-  ngOnInit(): void {
+  @Output()
+  public showChange: EventEmitter<boolean> = new EventEmitter();
+
+  close() {
+    this.show = false;
+    this.showChange.emit(this.show);
   }
 
 }

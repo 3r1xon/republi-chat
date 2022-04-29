@@ -118,21 +118,18 @@ router.post('/addChannel', async (req, res) => {
           const user_data = await REPQuery.one(
           `
           SELECT U.USER_CODE        as code,
-                  U.PROFILE_PICTURE  as picture,
-                  U.COLOR            as color,
-                  U.BACKGROUND_COLOR as backgroundColor,
-                  U.NAME             as name
+                 U.PROFILE_PICTURE  as picture,
+                 U.COLOR            as color,
+                 U.BACKGROUND_COLOR as backgroundColor,
+                 U.NAME             as name
           FROM USERS U
           WHERE U.ID_USER = ?
           `, [userID]);
 
-          io.to(`ch${channelID}`).emit("pendings", JSON.stringify({
+          io.to(`ch${channelID}`).emit("pendings", {
             id: userID,
-            name: user_data.name,
-            code: user_data.code,
-            picture: user_data.picture,
-            backgroundColor: user_data.backgroundColor
-          }));
+            ...user_data
+          });
 
           res.status(201).send({ success: true });
 
@@ -219,6 +216,7 @@ router.get('/getChannelInfo/:id', (req, res) => {
                KICK_MEMBERS    as kickMembers,
                BAN_MEMBERS     as banMembers,
                SEND_MESSAGES   as sendMessages,
+               CREATE_ROOMS    as createRooms,
                ACCEPT_MEMBERS  as acceptMembers
         FROM CHANNELS_PERMISSIONS
         WHERE ID_CHANNEL_MEMBER = ?
@@ -338,6 +336,46 @@ router.get('/getChRoomInfo/:chID/:roomID', (req, res) => {
 
 
 
+router.post('/addChRoom', (req, res) => {
+
+  try {
+    console.log(req.body);
+    const userID = res.locals._id;
+    const user   = new DBUser(userID);
+
+    const room = req.body;
+
+    const equivalentFields = {
+      roomName: "ROOM_NAME",
+      textRoom: "TEXT_ROOM",
+      autoJoin: "AUTO_JOIN"
+    };
+
+    const managedSQL = REPQuery.manageUpdateSQL("CHANNELS_ROOMS", equivalentFields, room);
+
+    console.log(managedSQL);
+    // const SQL_UPDATE =
+    // `
+    // ${managedSQL.SQL}
+    // WHERE ID_CHANNEL = ?
+    // `;
+
+    // managedSQL.orderedValues.push(userID);
+
+    // await REPQuery.exec(SQL_UPDATE, managedSQL.orderedValues);
+
+    res.status(500).send({ success: false, message: `Internal server error!` });
+
+  } catch (error) {
+    console.log(clc.red(err));
+
+    res.status(500).send({ success: false, message: "Internal server error!" });
+  }
+
+});
+
+
+
 router.put('/changePendingStatus', (req, res) => {
 
   try {
@@ -368,6 +406,28 @@ router.put('/changePendingStatus', (req, res) => {
         WHERE ID_CHANNEL = ?
           AND ID_USER = ?
         `, [channelID, pendingID]);
+
+        if (status) {
+
+          const new_user = await REPQuery.one(
+          `
+          SELECT U.USER_CODE        as code,
+                 U.PROFILE_PICTURE  as picture,
+                 U.COLOR            as color,
+                 U.BACKGROUND_COLOR as backgroundColor,
+                 U.NAME             as name,
+                 U.USER_STATUS      as userStatus
+          FROM USERS U
+          WHERE U.ID_USER = ?
+          `, [pendingID]);
+
+          io.to(`ch${channelID}`).emit("members", {
+            id: pendingID,
+            emitType: "NEW_MEMBER",
+            ...new_user
+          });
+
+        }
 
         res.status(200).send({ success: true });
       }

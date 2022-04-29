@@ -1,5 +1,39 @@
 <div id="mainpage" [@.disabled]="!hasLoaded">
 
+  <rep-entries
+    [(show)]="roomCreation"
+  >
+
+    <form class="create-room" [formGroup]="form">
+
+      <h1>Create room</h1>
+
+      <rep-input
+        formControlName="roomName"
+        placeholder="Room name"
+        maxLength="30"
+        required="true"
+      >
+      </rep-input>
+
+      Auto join
+
+      <rep-toggle
+        formControlName="autoJoin"
+      ></rep-toggle>
+
+      <rep-button
+        background="success"
+        [enabled]="canSave()"
+        (onClick)="save()"
+      >
+        Create
+      </rep-button>
+
+    </form>
+
+  </rep-entries>
+
   <mtd-status-bar [user]="_user.currentUser"></mtd-status-bar>
 
   <div class="main">

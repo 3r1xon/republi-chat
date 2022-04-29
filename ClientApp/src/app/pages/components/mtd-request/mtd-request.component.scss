@@ -24,7 +24,6 @@
 
     .bar {
       width: 100%;
-      height: 40px;
       display: flex;
       flex-direction: row-reverse;
       align-items: center;
@@ -34,21 +33,14 @@
       cursor: move;
 
       .back {
-        width: 30px;
-        height: 30px;
-        margin: 10px;
-        color: var(--WHITE);
-        border-radius: 50%;
-        @include flexCenter(row);
+        margin: 5px;
+        font-size: 28px;
+        display: grid;
         background: transparent;
-        right: 0;
-        border: 1px solid var(--GREY);
+        border: none;
+        place-items: center;
+        color: var(--DANGER);
         cursor: pointer;
-        transition: 100ms;
-
-        &:hover {
-          background: lighten($color: #1e1e1e, $amount: 15);
-        }
       }
     }
 

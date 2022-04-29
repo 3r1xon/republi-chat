@@ -178,6 +178,7 @@ router.post('/authorize', Auth.HTTPAuthToken, async (req, res) => {
            U.NAME                       as name,
            U.COLOR                      as color,
            U.BACKGROUND_COLOR           as backgroundColor,
+           U.BIOGRAPHY                  as biography,
            U.EMAIL                      as email,
            TO_BASE64(U.PROFILE_PICTURE) as picture,
            U.LAST_JOINED_CHANNEL        as lastJoinedChannel,
@@ -216,6 +217,7 @@ router.post('/logIn', async (req, res) => {
            U.NAME                       as name,
            U.COLOR                      as color,
            U.BACKGROUND_COLOR           as backgroundColor,
+           U.BIOGRAPHY                  as biography,
            U.EMAIL                      as email,
            TO_BASE64(U.PROFILE_PICTURE) as picture,
            U.VERIFIED                   as verified,
@@ -320,6 +322,7 @@ router.put('/editProfile', [Auth.HTTPAuthToken, /*upload.single("image")*/], asy
       name: "NAME",
       email: "EMAIL",
       picture: "PROFILE_PICTURE",
+      biography: "BIOGRAPHY",
       code: "USER_CODE"
     };
 

@@ -18,6 +18,10 @@ module.exports = {
       .max(255),
 
     picture: Joi.string()
+      .optional(),
+
+    biography: Joi.string()
+      .max(200)
       .optional()
 
   }),
