@@ -1,14 +1,15 @@
-const express  = require('express');
-const Auth     = require('../Authentication/auth');
-const REPTools = require('../Tools/rep-tools');
-const router   = express.Router();
-const REPQuery = require('../Database/rep-query');
-const multer   = require('multer');
-const upload   = multer({});
-const fm       = require('date-fns');
-const clc      = require('cli-color');
-const DBUser   = require('../Authentication/db-user');
+const express           = require('express');
+const Auth              = require('../Authentication/auth');
+const REPTools          = require('../Tools/rep-tools');
+const router            = express.Router();
+const REPQuery          = require('../Database/rep-query');
+const multer            = require('multer');
+const upload            = multer({});
+const fm                = require('date-fns');
+const clc               = require('cli-color');
+const DBUser            = require('../Authentication/db-user');
 const { channelSchema } = require('../Tools/schemas');
+const { io }            = require('../start');
 
 
 router.use(Auth.HTTPAuthToken);
@@ -113,6 +114,25 @@ router.post('/addChannel', async (req, res) => {
               (ID_CHANNEL, ID_USER)
           VALUES (?, ?)
           `, [channelID, userID]);
+
+          const user_data = await REPQuery.one(
+          `
+          SELECT U.USER_CODE        as code,
+                  U.PROFILE_PICTURE  as picture,
+                  U.COLOR            as color,
+                  U.BACKGROUND_COLOR as backgroundColor,
+                  U.NAME             as name
+          FROM USERS U
+          WHERE U.ID_USER = ?
+          `, [userID]);
+
+          io.to(`ch${channelID}`).emit("pendings", JSON.stringify({
+            id: userID,
+            name: user_data.name,
+            code: user_data.code,
+            picture: user_data.picture,
+            backgroundColor: user_data.backgroundColor
+          }));
 
           res.status(201).send({ success: true });
 

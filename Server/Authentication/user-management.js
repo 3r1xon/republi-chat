@@ -59,7 +59,7 @@ router.post('/signUp', async (req, res) => {
 
           const email = new REPEmail();
 
-          email.sendMail(
+          await email.sendMail(
             user.email,
             "RepubliChat email verification",
             `

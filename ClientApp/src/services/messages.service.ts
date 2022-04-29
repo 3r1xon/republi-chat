@@ -319,6 +319,16 @@ export class MessagesService {
 
             })
         );
+
+    this.chSubscriptions
+    .push(
+      this._webSocket.listen("pendings")
+        .subscribe((obj: string) => {
+          const pending = JSON.parse(obj);
+
+          this.currentChannel.pendings.push(pending);
+        })
+    );
   }
 
 
