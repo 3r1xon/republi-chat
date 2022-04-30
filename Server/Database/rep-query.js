@@ -55,6 +55,45 @@ class REPQuery {
             orderedValues: orderedValues
         };
     }
+
+    static manageInsertSQL = (TABLE_NAME, equivalentFields, values) => {
+        let SQL_INSERT =
+        `
+        INSERT INTO
+        ${TABLE_NAME}
+        (`;
+
+        let SQL_Values =
+        `
+        VALUES
+        (`;
+
+        const orderedValues = [];
+
+        const last = Object.keys(values).length;
+
+        let i = 0;
+        for (const key in values) {
+            SQL_INSERT += `${equivalentFields[key]}`;
+            SQL_Values += "?";
+
+            if (i + 1 != last) {
+                SQL_INSERT += ", ";
+                SQL_Values += ", ";
+            }
+
+            orderedValues.push(values[key]);
+            i++;
+        }
+
+        SQL_INSERT += ")";
+        SQL_INSERT += SQL_Values + ")";
+
+        return {
+            SQL: SQL_INSERT,
+            orderedValues: orderedValues
+        };
+    }
 }
 
 

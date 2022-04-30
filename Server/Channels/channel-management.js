@@ -339,32 +339,26 @@ router.get('/getChRoomInfo/:chID/:roomID', (req, res) => {
 router.post('/addChRoom', (req, res) => {
 
   try {
-    console.log(req.body);
-    const userID = res.locals._id;
-    const user   = new DBUser(userID);
+    const userID    = res.locals._id;
+    const user      = new DBUser(userID);
+    const channelID = req.body.id;
 
-    const room = req.body;
+    user.setChannel(channelID, (err) => {
+      if (err) {
+        res.status(401).send({ success: false, message: "User not in channel!" });
+      } else {
 
-    const equivalentFields = {
-      roomName: "ROOM_NAME",
-      textRoom: "TEXT_ROOM",
-      autoJoin: "AUTO_JOIN"
-    };
+        const room = req.body;
 
-    const managedSQL = REPQuery.manageUpdateSQL("CHANNELS_ROOMS", equivalentFields, room);
-
-    console.log(managedSQL);
-    // const SQL_UPDATE =
-    // `
-    // ${managedSQL.SQL}
-    // WHERE ID_CHANNEL = ?
-    // `;
-
-    // managedSQL.orderedValues.push(userID);
-
-    // await REPQuery.exec(SQL_UPDATE, managedSQL.orderedValues);
-
-    res.status(500).send({ success: false, message: `Internal server error!` });
+        user.addRoom(room, (err) => {
+          if (err) {
+            res.status(401).send({ success: false, message: err });
+          } else {
+            res.status(200).send({ success: true });
+          }
+        });
+      }
+    });
 
   } catch (error) {
     console.log(clc.red(err));

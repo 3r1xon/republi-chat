@@ -6,25 +6,11 @@
   flex-direction: column;
   background: var(--LIGHT-DARK);
 
-  .create-room {
-    margin: 10px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-
-    rep-toggle {
-      margin: 5px;
-    }
-
-    rep-input {
-      margin: 20px;
-    }
-
-    rep-button {
-      margin: 10px;
-      align-self: flex-end;
-    }
+  mtd-room-creation {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    z-index: 999;
   }
 
   .main {

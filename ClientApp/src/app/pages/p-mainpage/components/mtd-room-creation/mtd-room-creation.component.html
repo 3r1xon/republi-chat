@@ -1,0 +1,38 @@
+<rep-entries
+  [(show)]="mainpage.roomCreation"
+>
+
+  <form class="create-room" [formGroup]="form">
+
+    <h1>Create room</h1>
+
+    <rep-input
+      formControlName="roomName"
+      placeholder="Room name"
+      maxLength="30"
+      required="true"
+    >
+    </rep-input>
+
+    <span class="align">
+      Auto join
+
+      <rep-info tooltip="When enabled everyone in this channel will automatically join this room"></rep-info>
+    </span>
+
+    <rep-toggle
+      formControlName="autoJoin"
+    ></rep-toggle>
+
+    <rep-button
+      background="success"
+      type="submit"
+      [enabled]="canSave()"
+      (onClick)="save()"
+    >
+      Create
+    </rep-button>
+
+  </form>
+
+</rep-entries>

@@ -97,10 +97,8 @@ class DBUser {
 
 
   // Verifies if the user has a permission based on the current channel.
+  // WHEN ROOM IS NOT SET THIS FUNCTION WILL EVALUATE ONLY GLOBAL PERMISSIONS!
   async hasPermission(permission, callback = nocb) {
-
-    if (this.roomID == undefined) 
-      return callback(new Error("Room is not set. Did you call setRoom?"), null);
 
     try {
 
@@ -109,13 +107,24 @@ class DBUser {
       SELECT CP.DELETE_MESSAGES,
              CP.KICK_MEMBERS,
              CP.BAN_MEMBERS,
-             CP.SEND_MESSAGES
+             CP.SEND_MESSAGES,
+             CP.CREATE_ROOMS,
+             CP.ACCEPT_MEMBERS
       FROM CHANNELS_PERMISSIONS CP
                INNER JOIN CHANNELS_MEMBERS CM ON CM.ID_CHANNEL_MEMBER = CP.ID_CHANNEL_MEMBER
       WHERE CP.ID_CHANNEL_MEMBER = ?
         AND CM.BANNED = ?
         AND CM.KICKED = ?
       `, [this.channelMemberID, false, false]);
+
+      if (this.roomID == undefined) {
+        if (global[permission]) {
+          callback(null, this);
+          return;
+        } else {
+          return callback(new Error("User does not have the required permission!"), null);
+        }
+      }
 
       const room = await REPQuery.one(
       `
@@ -347,6 +356,47 @@ class DBUser {
 
 
   async kickMember() {
+
+  }
+
+
+
+  async addRoom(room, callback = nocb) {
+
+    if (this.channelID == undefined)
+      return callback(new Error("Channel is not set. Did you call setChannel?"), null);
+
+    this.hasPermission(permissions.createRooms, async (err) => {
+      if (err) {
+        console.log(err)
+
+        callback(err, null);
+      } else {
+
+        console.log(room)
+
+        try {
+          const new_room = await REPQuery.one(
+          `
+          INSERT INTO CHANNELS_ROOMS
+          (ID_CHANNEL, ID_CHANNEL_MEMBER, ROOM_NAME, TEXT_ROOM, AUTO_JOIN)
+          VALUES
+          (?, ?, ?, ?, ?)
+          RETURNING ID_CHANNEL_ROOM
+          `, [this.channelID, this.channelMemberID, room.roomName, room.textRoom, room.autoJoin]);
+
+          // io.to(`ch${this.channelID}`).emit("");
+
+          callback(null, this);
+
+        } catch (error) {
+          console.log(error)
+
+          callback(error, null);
+        }
+      }
+
+    });
 
   }
 

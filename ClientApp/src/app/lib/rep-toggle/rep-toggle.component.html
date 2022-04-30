@@ -5,7 +5,7 @@
       type="checkbox"
       [(ngModel)]="checked"
       [checked]="checked"
-      (ngModelChange)="checkedChange.emit(checked)"
+      (ngModelChange)="onChange($event)"
     >
     <span class="slider"></span>
   </label>

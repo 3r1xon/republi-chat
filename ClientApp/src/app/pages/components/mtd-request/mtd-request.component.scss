@@ -12,15 +12,19 @@
 
   .dialog {
     width: 40%;
-    height: 30%;
-    min-width: 400px;
-    min-height: 300px;
+    max-height: 45%;
+    max-width: 50%;
+    min-width: 50%;
     border-radius: 5px;
     @include flexCenter(column);
     background: var(--LIGHT-DARK);
     border: none;
     -webkit-box-shadow: 5px 5px 15px 5px #00000080;
     box-shadow: 5px 5px 15px 5px #00000080;
+
+    rep-separator {
+      width: 90%;
+    }
 
     .bar {
       width: 100%;
@@ -29,7 +33,7 @@
       align-items: center;
       border-top-left-radius: 5px;
       border-top-right-radius: 5px;
-      background: var(--DARK);
+      background: var(--LIGHT-DARK);
       cursor: move;
 
       .back {
@@ -74,5 +78,31 @@
       flex-direction: row-reverse;
       align-items: center;
     }
+
+  }
+
+  @media only screen and (max-width: 400px) {
+
+    .message {
+
+      p {
+        font-size: 14px;
+      }
+    }
+
+    .title {
+
+      h1 {
+        font-size: 21px;
+      }
+    }
+
+    .dialog {
+      width: 90%;
+      max-width: 90%;
+      min-width: 90%;
+      min-height: 50%;
+    }
+
   }
 }

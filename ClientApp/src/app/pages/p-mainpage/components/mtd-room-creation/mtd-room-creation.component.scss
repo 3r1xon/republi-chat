@@ -1,0 +1,33 @@
+rep-entries {
+
+  .create-room {
+    margin: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    rep-toggle {
+      margin: 5px;
+    }
+
+    rep-input {
+      margin: 20px;
+    }
+
+    rep-button {
+      margin: 10px;
+      align-self: flex-end;
+    }
+
+    .align {
+      display: flex;
+      align-items: center;
+
+      rep-info {
+        margin: 5px;
+      }
+    }
+  }
+}
+

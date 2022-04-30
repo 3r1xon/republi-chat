@@ -10,6 +10,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MTDModule } from '../components/mtd-module.module';
+import { MTDRoomCreationComponent } from './components/mtd-room-creation/mtd-room-creation.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 
 
@@ -19,17 +21,20 @@ import { MTDModule } from '../components/mtd-module.module';
     MTDChannelsComponent,
     MTDChannelInfoComponent,
     MTDStatusBarComponent,
+    MTDRoomCreationComponent,
   ],
   exports: [
     MTDChatComponent,
     MTDChannelsComponent,
     MTDChannelInfoComponent,
     MTDStatusBarComponent,
+    MTDRoomCreationComponent
   ],
   imports: [
     CommonModule,
     AppRoutingModule,
     REPModule,
+    ReactiveFormsModule,
     MatIconModule,
     MatTooltipModule,
     DragDropModule,

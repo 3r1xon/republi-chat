@@ -56,4 +56,8 @@ export abstract class REPManager {
     return dirties;
   }
 
+  public setDirty(value: string) {
+    this.values.controls[value].markAsDirty();
+  }
+
 }

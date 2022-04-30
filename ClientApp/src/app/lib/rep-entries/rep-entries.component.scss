@@ -3,15 +3,16 @@
 .obscure {
   width: 100%;
   height: 100%;
-  position: fixed;
-  z-index: 999;
   background: var(--OBSCURE);
   display: grid;
   place-items: center;
 
   .rep-entries {
     border-radius: 5px;
-    background: var(--DARK);
+    background: var(--LIGHT-DARK);
+    -webkit-box-shadow: 5px 5px 15px 5px #00000080;
+    box-shadow: 5px 5px 15px 5px #00000080;
+
 
     .bar {
       width: 100%;
@@ -22,6 +23,7 @@
       border-top-left-radius: 5px;
       border-top-right-radius: 5px;
       background: var(--LIGHT-DARK);
+
       cursor: move;
 
       .back {

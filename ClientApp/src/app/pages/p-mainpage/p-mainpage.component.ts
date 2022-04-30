@@ -8,10 +8,6 @@ import {
 import { openLeft, openRight } from 'src/app/lib/rep-animations';
 import { Unsubscriber } from 'src/app/lib/rep-decorators';
 import { Subscription } from 'rxjs';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { REPManager } from 'src/app/lib/rep-manager';
-import { HttpClient } from '@angular/common/http';
-import { environment } from 'src/environments/environment';
 
 
 @Component({
@@ -23,28 +19,19 @@ import { environment } from 'src/environments/environment';
   ]
 })
 @Unsubscriber
-export class PMainpageComponent extends REPManager implements OnInit {
+export class PMainpageComponent implements OnInit {
 
   constructor(
     public _user: UserService,
     public _ms: MessagesService,
     public _utils: UtilsService,
-    public http: HttpClient,
-    private fb: FormBuilder
-  ) {
-    super(http);
-  }
+  ) { }
 
 
   ngOnInit(): void {
     // Should be called only one time
     // since getChannels invoke next
     // and other tasks will run
-
-    this.setValues(this.form);
-
-    this.setSaveAPI("POST", `${environment.BASE_URL}/channels/addChRoom`);
-
     if (this._ms.channels.length == 0)
       this._ms.getChannels();
 
@@ -76,22 +63,6 @@ export class PMainpageComponent extends REPManager implements OnInit {
       }
     }
   }
-
-  public form: FormGroup = this.fb.group({
-    roomName: ['',
-      [
-        Validators.maxLength(30),
-        Validators.minLength(1),
-        // No more than one white space allowed before each word
-        Validators.pattern(/^([a-zA-Z0-9]+\s)*[a-zA-Z0-9]+$/)
-      ]
-    ],
-    autoJoin: [true,
-      [
-        Validators.required
-      ]
-    ],
-  });
 
   public hasLoaded: boolean = false;
 

@@ -13,7 +13,7 @@ import {
 export class REPEntriesComponent {
 
   @Input()
-  public show: boolean = false;
+  public show: boolean = true;
 
   @Output()
   public showChange: EventEmitter<boolean> = new EventEmitter();
