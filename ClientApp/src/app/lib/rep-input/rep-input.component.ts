@@ -1,4 +1,11 @@
-import { Component, Input, Output, EventEmitter, OnInit, forwardRef } from '@angular/core';
+import {
+  Component,
+  Input,
+  Output,
+  EventEmitter,
+  OnInit,
+  forwardRef
+} from '@angular/core';
 import {
   trigger,
   state,
@@ -85,6 +92,9 @@ export class REPInputComponent implements OnInit, ControlValueAccessor {
     this.disabled = !flag;
     this.color = !flag ? 'grey' : 'royalblue';
   }
+
+  @Input()
+  public autofocus: boolean = false;
 
   @Input()
   public tooltip: string;

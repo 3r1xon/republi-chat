@@ -5,6 +5,7 @@
   height: 100%;
   @include flexCenter(row);
   display: flex;
+  position: relative;
 
   button {
     width: 75px;
@@ -27,8 +28,31 @@
     }
   }
 
+  .anti-spam {
+    display: flex;
+    align-items: center;
+    position: absolute;
+    bottom: 0;
+    animation: appearFromBelow 150ms;
+    pointer-events: none;
+
+    mat-icon {
+      font-size: 21px;
+    }
+  }
+
   rep-textarea {
     width: 70%;
     height: 100%;
+  }
+}
+
+@keyframes appearFromBelow {
+  0% {
+    margin-bottom: -10px;
+  }
+
+  100% {
+    margin-bottom: 0;
   }
 }

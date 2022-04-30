@@ -15,14 +15,34 @@
     </rep-input>
 
     <span class="align">
-      Auto join
 
-      <rep-info tooltip="When enabled everyone in this channel will automatically join this room"></rep-info>
+      <span class="column">
+
+        <span style="display: flex; align-items: center;">
+          Auto join
+
+          <rep-info tooltip="When enabled everyone in this channel will automatically join this room"></rep-info>
+        </span>
+
+
+        <rep-toggle
+          formControlName="autoJoin"
+        ></rep-toggle>
+      </span>
+
+      <span class="column">
+
+        <span style="display: flex; align-items: center;">
+          Text room
+          <rep-info tooltip="Text room or vocal room"></rep-info>
+        </span>
+
+        <rep-toggle
+        formControlName="textRoom"
+        ></rep-toggle>
+      </span>
+
     </span>
-
-    <rep-toggle
-      formControlName="autoJoin"
-    ></rep-toggle>
 
     <rep-button
       background="success"

@@ -13,6 +13,8 @@
       <input
         [placeholder]="getPlaceholder()"
         [disabled]="disabled"
+        repFocus
+        [repFocusEnabled]="autofocus"
         [type]="type"
         [(ngModel)]="text"
         (focus)="onFocus()"

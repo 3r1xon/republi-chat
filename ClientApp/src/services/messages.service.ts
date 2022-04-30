@@ -156,10 +156,10 @@ export class MessagesService {
       // TODO:
       // Join a vocal room
       this.currentVocalRoom = room;
-      // WIP!
-      this.currentChannel.rooms.vocal.find(room => room.roomID == this.currentVocalRoom.roomID).connected = [];
 
-      this.currentChannel.rooms.vocal.find(room => room.roomID == this.currentVocalRoom.roomID).connected.push(this._user.currentUser);
+      this.currentVocalRoom.connected ??= [];
+
+      this.currentVocalRoom.connected.push(this._user.currentUser);
     }
   }
 
@@ -271,27 +271,81 @@ export class MessagesService {
 
     this.chSubscriptions
       .push(
-        this._webSocket.listen("rmNotifications")
-          .subscribe((obj: string) => {
-            const notification = JSON.parse(obj);
+        this._webSocket.listen("channel")
+          .subscribe((obj: any) => {
 
-            if (notification.room != this.currentRoom.roomID) {
+            switch(obj.emitType) {
 
-              const ref = this.currentChannel.rooms.text
-                .find(room => room.roomID == notification.room);
+              case "ROOM_NOTIFICATION": {
+                const notification = obj;
 
-              if (ref) {
+                if (notification.room != this.currentRoom.roomID) {
 
-                if (notification.type == "+") {
-                  ref.notifications++;
-                } else {
-                  if (ref.notifications - 1 >= 0) {
-                    ref.notifications--;
+                  const ref = this.currentChannel.rooms.text
+                    .find(room => room.roomID == notification.room);
+
+                  if (ref) {
+
+                    ref.notifications ??= 0;
+
+                    if (notification.type == "+") {
+                      ref.notifications++;
+                    } else {
+                      if (ref.notifications - 1 >= 0) {
+                        ref.notifications--;
+                      }
+                    }
                   }
-                }
-              }
 
+                }
+              } break;
+
+              case "NEW_ROOM": {
+
+                if (obj.textRoom) {
+                  this.currentChannel.rooms.text
+                    .push(obj);
+                } else {
+                  this.currentChannel.rooms.vocal
+                    .push(obj);
+                }
+              } break;
+
+              case "DELETE_ROOM": {
+
+                const indexText = this.currentChannel.rooms.text
+                  .findIndex(room => room.roomID == obj.roomID);
+
+                if (this.currentChannel.rooms.text[indexText]) {
+
+                  if (this.currentChannel.rooms.text[indexText].roomID == this.currentRoom.roomID) {
+
+                    this.joinRoom(this.currentChannel, this.currentChannel.rooms.text[0]);
+                  }
+
+                  this.currentChannel.rooms.text.splice(indexText, 1);
+
+                  return;
+                }
+
+                const indexVocal = this.currentChannel.rooms.vocal
+                  .findIndex(room => room.roomID == obj.roomID);
+
+                if (this.currentChannel.rooms.vocal[indexVocal]) {
+
+                  if (this.currentChannel.rooms.vocal[indexVocal].roomID == this.currentRoom.roomID) {
+
+                    this.joinRoom(this.currentChannel, this.currentChannel.rooms.text[0]);
+                  }
+
+                  this.currentChannel.rooms.vocal.splice(indexVocal, 1);
+
+                  return;
+                }
+
+              }
             }
+
           })
       );
 
@@ -427,6 +481,10 @@ export class MessagesService {
    */
   public API_addChannel(channel: Channel) {
     return this.http.post<ServerResponse>(`${environment.BASE_URL}/channels/addChannel`, channel);
+  }
+
+  public API_deleteRoom(channel: Channel, room: Room) {
+    return this.http.delete<ServerResponse>(`${environment.BASE_URL}/channels/deleteRoom/${channel.id}/${room.roomID}`);
   }
 
   public API_getChannels() {

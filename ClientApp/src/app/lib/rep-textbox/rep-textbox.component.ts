@@ -1,5 +1,4 @@
 import {
-  ChangeDetectionStrategy,
   Component,
   EventEmitter,
   Input,
@@ -12,8 +11,7 @@ import { REPTextareaComponent } from '../rep-textarea/rep-textarea.component';
 @Component({
   selector: 'rep-textbox',
   templateUrl: './rep-textbox.component.html',
-  styleUrls: ['./rep-textbox.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  styleUrls: ['./rep-textbox.component.scss']
 })
 export class REPTextBoxComponent {
 
@@ -24,18 +22,23 @@ export class REPTextBoxComponent {
   @Input()
   public enabled: boolean = true;
 
+  @Input()
+  public msgMaxLength: number;
+
+  @Input()
+  public spamProtectionFor: number = 1500;
+
   @Output()
   public sendMessage = new EventEmitter<string>();
 
   @Output()
   public upload = new EventEmitter();
 
-  @Input()
-  public msgMaxLength: number;
-
   @ViewChild(REPTextareaComponent) REPTextArea: REPTextareaComponent;
 
   public trigger: boolean = false;
+
+  public showSpamProtection: boolean = false;
 
   public setTextValue(txt: string) {
     this.form.setValue({ text: txt });
@@ -50,8 +53,26 @@ export class REPTextBoxComponent {
     ]
   });
 
+  private lastInsertionDate: number;
+
   public send(event) {
     if (this.form.valid && this.enabled) {
+
+      const diff = new Date().getTime() - this.lastInsertionDate;
+
+      if (diff < this.spamProtectionFor) {
+
+        if (this.showSpamProtection) return;
+
+        this.showSpamProtection = true;
+
+        setTimeout(() => {
+          this.showSpamProtection = false;
+        }, diff);
+
+        return;
+      }
+
       const txt = this.form.value["text"].trim();
 
       this.historyIndex = null;
@@ -63,6 +84,11 @@ export class REPTextBoxComponent {
       this.form.reset();
 
       this.trigger = false;
+
+      this.lastInsertionDate = new Date().getTime();
+
+      this.showSpamProtection = false;
+
     } else this.trigger = true;
   }
 

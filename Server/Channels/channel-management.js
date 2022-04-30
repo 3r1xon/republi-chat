@@ -370,6 +370,41 @@ router.post('/addChRoom', (req, res) => {
 
 
 
+router.delete('/deleteRoom/:channelID/:roomID', (req, res) => {
+
+  try {
+    const userID    = res.locals._id;
+    const user      = new DBUser(userID);
+    const channelID = req.params.channelID;
+
+    user.setChannel(channelID, (err) => {
+      if (err) {
+        res.status(401).send({ success: false, message: "User not in channel!" });
+      } else {
+
+        const roomID = req.params.roomID;
+
+        user.deleteRoom(roomID, (err) => {
+          if (err) {
+            res.status(401).send({ success: false, message: err });
+          } else {
+            res.status(200).send({ success: true });
+          }
+        });
+
+      }
+    });
+
+  } catch (error) {
+    console.log(clc.red(err));
+
+    res.status(500).send({ success: false, message: "Internal server error!" });
+  }
+
+});
+
+
+
 router.put('/changePendingStatus', (req, res) => {
 
   try {

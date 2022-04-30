@@ -47,13 +47,13 @@ export class MTDChatComponent {
     });
 
   public readonly msgOptions: Array<REPButton> = [
-    {
-      name: "Edit",
-      icon: "edit",
-      visible: (msgIndex: number) => this._ms.messages[msgIndex].auth,
-      onClick: (msgIndex: number) => {
-      }
-    },
+    // {
+    //   name: "Edit",
+    //   icon: "edit",
+    //   visible: (msgIndex: number) => this._ms.messages[msgIndex].auth,
+    //   onClick: (msgIndex: number) => {
+    //   }
+    // },
     {
       name: "Report",
       icon: "flag",

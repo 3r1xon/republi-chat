@@ -29,6 +29,7 @@ import { REPTabsComponent } from './rep-tabs/rep-tabs.component';
 import { REPContextDirective } from './directives/rep-context.directive';
 import { REPStopDirective } from './directives/rep-stop.directive';
 import { REPEntriesComponent } from './rep-entries/rep-entries.component';
+import { REPFocus } from './directives/rep-focus.directive';
 
 
 
@@ -58,6 +59,7 @@ import { REPEntriesComponent } from './rep-entries/rep-entries.component';
 
     REPStopDirective,
     REPContextDirective,
+    REPFocus,
   ],
   exports: [
     REPTextBoxComponent,

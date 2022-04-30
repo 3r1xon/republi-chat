@@ -9,6 +9,7 @@ io.on("connection", (socket) => {
   const userID = socket.auth._id;
 
   const user = new DBUser(userID);
+  socket.join(`user${userID}`);
 
   user.setOnline();
 
@@ -33,6 +34,7 @@ io.on("connection", (socket) => {
         socket.leave(`ch${channel}`);
 
         socket.join(`ch${rqChannel}`);
+
         user.setLastJoinedChannel();
 
         user.setRoom(rqRoom, async (roomErr) => {

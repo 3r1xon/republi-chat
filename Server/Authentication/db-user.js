@@ -185,7 +185,7 @@ class DBUser {
 
 
 
-  async sendMessage(msg, callback = nocb) {
+  sendMessage(msg, callback = nocb) {
     this.hasPermission(permissions.sendMessages, async (err) => {
       if (err) {
         callback(err, null);
@@ -226,10 +226,11 @@ class DBUser {
 
           io.to(`rm${this.roomID}`).emit("message", JSON.stringify(message));
 
-          io.to(`ch${this.channelID}`).emit("rmNotifications", JSON.stringify({
+          io.to(`ch${this.channelID}`).emit("channel", {
             room: this.roomID,
-            type: "+"
-          }));
+            type: "+",
+            emitType: "ROOM_NOTIFICATION"
+          });
 
           callback(null, this);
         }
@@ -274,7 +275,7 @@ class DBUser {
 
 
 
-  async deleteMessage(msgID, callback = nocb) {
+  deleteMessage(msgID, callback = nocb) {
     this.msgBelong(msgID, (noAuth) => {
 
       const delMsg = async () => {
@@ -288,10 +289,11 @@ class DBUser {
 
           io.to(`rm${this.roomID}`).emit("deleteMessage", `${msgID}`);
 
-          io.to(`ch${this.channelID}`).emit("rmNotifications", JSON.stringify({
+          io.to(`ch${this.channelID}`).emit("channel", {
             room: this.roomID,
-            type: "-"
-          }));
+            type: "-",
+            emitType: "ROOM_NOTIFICATION"
+          });
 
           callback(null, this);
 
@@ -318,7 +320,7 @@ class DBUser {
 
 
 
-  async banMember(memberID) {
+  banMember(memberID) {
     this.hasPermission(permissions.banMembers, async (err) => {
       if (err) {
         console.log(clc.red(err));
@@ -355,13 +357,13 @@ class DBUser {
 
 
 
-  async kickMember() {
+  kickMember() {
 
   }
 
 
 
-  async addRoom(room, callback = nocb) {
+  addRoom(room, callback = nocb) {
 
     if (this.channelID == undefined)
       return callback(new Error("Channel is not set. Did you call setChannel?"), null);
@@ -373,8 +375,6 @@ class DBUser {
         callback(err, null);
       } else {
 
-        console.log(room)
-
         try {
           const new_room = await REPQuery.one(
           `
@@ -382,10 +382,16 @@ class DBUser {
           (ID_CHANNEL, ID_CHANNEL_MEMBER, ROOM_NAME, TEXT_ROOM, AUTO_JOIN)
           VALUES
           (?, ?, ?, ?, ?)
-          RETURNING ID_CHANNEL_ROOM
+          RETURNING ID_CHANNEL_ROOM as roomID
           `, [this.channelID, this.channelMemberID, room.roomName, room.textRoom, room.autoJoin]);
 
-          // io.to(`ch${this.channelID}`).emit("");
+          const send = room.autoJoin ? `ch${this.channelID}` : `user${this.userID}`;
+
+          io.to(send).emit("channel", {
+            roomID: new_room.roomID,
+            ...room,
+            emitType: "NEW_ROOM"
+          });
 
           callback(null, this);
 
@@ -398,6 +404,43 @@ class DBUser {
 
     });
 
+  }
+
+
+
+  deleteRoom(roomID, callback = nocb) {
+
+    this.hasPermission(permissions.createRooms, async (err) => {
+      if (err) {
+        console.log(err)
+
+        callback(err, null);
+      } else {
+
+        try {
+
+          await REPQuery.exec(
+          `
+          DELETE FROM
+          CHANNELS_ROOMS
+          WHERE ID_CHANNEL_ROOM = ?
+          `, [roomID]);
+
+          io.to(`ch${this.channelID}`).emit("channel", {
+            roomID: roomID,
+            emitType: "DELETE_ROOM"
+          });
+
+          callback(null, this);
+
+        } catch (error) {
+          console.log(error)
+
+          callback(error, null);
+        }
+      }
+
+    });
   }
 
 

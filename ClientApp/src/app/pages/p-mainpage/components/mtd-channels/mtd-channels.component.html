@@ -39,21 +39,16 @@
         repStop
       >
 
+        <rep-actions onlyIcons="true" [actions]="channelActions"></rep-actions>
+
         <rep-separator *ngIf="_ms.currentChannel.rooms?.text.length > 0">
           Text rooms
-
-          <rep-icon-button
-            *ngIf="_ms.chPermissions.createRooms"
-            (onClick)="mainpage.openRoomCreation()"
-            class="room-buttons"
-          >
-            add
-          </rep-icon-button>
-
         </rep-separator>
 
         <rep-room
           *ngFor="let room of _ms.currentChannel.rooms?.text"
+          [repContext]="roomOptions"
+          [repUniqueID]="room.roomID"
           [roomName]="room.roomName"
           [textRoom]="room.textRoom"
           [notifications]="room.notifications"
@@ -71,6 +66,8 @@
           [roomName]="room.roomName"
           [textRoom]="room.textRoom"
           [members]="room.connected"
+          [repContext]="roomOptions"
+          [repUniqueID]="room.roomID"
           [hold]="_ms.isInRoom(room)"
           (click)="selectRoom(room)"
         >

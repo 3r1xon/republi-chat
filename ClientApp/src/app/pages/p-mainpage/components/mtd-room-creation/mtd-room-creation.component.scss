@@ -27,6 +27,14 @@ rep-entries {
       rep-info {
         margin: 5px;
       }
+
+      .column {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        margin: 25px;
+      }
     }
   }
 }
