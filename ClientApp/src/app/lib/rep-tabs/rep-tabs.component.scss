@@ -6,6 +6,7 @@
   height: 100%;
   background: var(--LIGHT-DARK);
   overflow-x: hidden;
+  position: relative;
 
   .tabs {
     width: 100%;
@@ -60,9 +61,11 @@
     height: 25px;
     margin: 5px;
     border-radius: 10px;
-    background: var(--OBSCURE);
+    background: var(--GREY);
     color: var(--SUCCESS);
     border: none;
+    position: absolute;
+    bottom: 0;
     @include flexCenter(row);
     cursor: pointer;
     transition: 150ms;

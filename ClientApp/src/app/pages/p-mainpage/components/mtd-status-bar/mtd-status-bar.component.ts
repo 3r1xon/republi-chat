@@ -24,9 +24,6 @@ export class MTDStatusBarComponent {
     private router: Router
   ) { }
 
-  @Input()
-  public user: Account;
-
   @HostListener('document:keydown.escape', ['$event'])
   onEscape(event: KeyboardEvent) {
     const key = event.key;

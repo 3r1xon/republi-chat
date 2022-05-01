@@ -15,7 +15,6 @@
 
     <rep-accordion
       *ngFor="let section of _ms.channels; let i = index"
-      #channels
       [open]="_ms.channels[i]?.open || section?.id == _ms.currentChannel?.id"
       (click)="selectChannel(section)"
       cdkDrag
@@ -24,7 +23,6 @@
     >
 
       <rep-namebox
-        #namebox
         header
         cdkDragHandle
         [message]="filterChannel(section)"
@@ -37,7 +35,6 @@
         *ngIf="_ms.currentChannel?.id == section.id"
         class="rooms"
         body
-        repStop
       >
 
         <rep-actions onlyIcons="true" [actions]="channelActions"></rep-actions>
@@ -60,7 +57,9 @@
 
 
         <ng-container
-          *ngFor="let room of _ms.currentChannel.rooms | filterVocalRooms; let rmIndex = index;"
+          *ngFor="
+          let room of _ms.currentChannel.rooms | filterVocalRooms;
+          let rmIndex = index;"
         >
 
           <rep-separator *ngIf="rmIndex == 0">

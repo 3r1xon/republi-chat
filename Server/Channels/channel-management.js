@@ -175,7 +175,7 @@ router.get('/getChannels', async (req, res) => {
 
   } catch (error) {
     console.log(clc.red(error));
-    res.status(500).send({ success: false, message: `Internal server error!!` });
+    res.status(500).send({ success: false, message: `Internal server error!` });
   }
 
 });
@@ -202,6 +202,7 @@ router.get('/getChannelInfo/:id', (req, res) => {
         SELECT CR.ID_CHANNEL_ROOM   as roomID,
                CR.ROOM_NAME         as roomName,
                CR.TEXT_ROOM         as textRoom,
+               CR.AUTO_JOIN         as autoJoin,
                CRMB.UNREAD_MESSAGES as notifications
         FROM CHANNELS_ROOMS CR
                 INNER JOIN CHANNELS_ROOMS_MEMBERS CRMB ON CRMB.ID_CHANNEL_ROOM = CR.ID_CHANNEL_ROOM
@@ -445,7 +446,7 @@ router.put('/changePendingStatus', (req, res) => {
                  U.USER_STATUS      as userStatus
           FROM USERS U
           WHERE U.ID_USER = ?
-          `, [userID]);
+          `, [pendingID]);
 
           io.to(`ch${channelID}`).emit("members", {
             id: pendingID,

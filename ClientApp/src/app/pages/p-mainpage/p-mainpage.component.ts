@@ -6,8 +6,6 @@ import {
   OnInit,
 } from '@angular/core';
 import { openLeft, openRight } from 'src/app/lib/rep-animations';
-import { Unsubscriber } from 'src/app/lib/rep-decorators';
-import { Subscription } from 'rxjs';
 
 
 @Component({
@@ -18,7 +16,6 @@ import { Subscription } from 'rxjs';
     openRight("100ms", "-250px")
   ]
 })
-@Unsubscriber
 export class PMainpageComponent implements OnInit {
 
   constructor(
@@ -28,40 +25,30 @@ export class PMainpageComponent implements OnInit {
   ) { }
 
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     // Should be called only one time
-    // since getChannels invoke next
-    // and other tasks will run
     if (this._ms.channels.length == 0)
-      this._ms.getChannels();
+      await this._ms.getChannels();
 
-    this.fillSections();
-
-    Promise.resolve().then(() => {
-      this.hasLoaded = true;
-    });
-  }
-
-  protected readonly channelSubscription: Subscription = this._ms.channelChanges
-    .subscribe(() => {
-      this.fillSections();
-    });
-
-  private fillSections() {
-    if (this._ms.currentChannel == undefined) {
+    if (this._ms.currentChannel == null) {
       const lastJoinedChannel = this._ms.getChannelByID(this._user.currentUser.lastJoinedChannel);
 
       if (lastJoinedChannel) {
-        this._ms.joinChannel(lastJoinedChannel);
+        await this._ms.joinChannel(lastJoinedChannel);
+
       } else {
 
         const channel = this._ms.channels[0];
 
-        if (channel && this._ms.currentChannel == undefined) {
-          this._ms.joinChannel(channel);
+        if (channel && this._ms.currentChannel == null) {
+          await this._ms.joinChannel(channel);
         }
       }
     }
+
+    Promise.resolve().then(() => {
+      this.hasLoaded = true;
+    });
   }
 
   public hasLoaded: boolean = false;

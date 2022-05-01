@@ -5,7 +5,7 @@ import { UserService } from './user.service';
 import { ServerResponse } from 'src/interfaces/response.interface';
 import { FileUploadService } from './file-upload.service';
 import { Channel, Room } from 'src/interfaces/channel.interface';
-import { Subject, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { ChannelPermissions, RoomPermissions } from 'src/interfaces/channel.interface';
 import { UtilsService } from './utils.service';
 import { WebSocketService } from './websocket.service';
@@ -46,35 +46,27 @@ export class MessagesService {
 
   private channelsSubscriptions: Array<Subscription> = [];
 
-  public onRoomChange: Subject<any> = new Subject<any>();
-
-  public onChannelChange: Subject<any> = new Subject<any>();
-
-  public channelChanges: Subject<any> = new Subject<any>();
-
-  public roomChanges: Subject<any> = new Subject<any>();
-
   /**
    * Get the current user channels.
    *
    */
-  public getChannels() {
-    this.API_getChannels()
-    .toPromise()
-    .then(
-      (res: ServerResponse) => {
-        if (res.success) {
-          this.channels = res.data;
+  public async getChannels() {
 
-          // this.destroyChSubscriptions();
-          this.initChannelsSockets();
+    await this.API_getChannels()
+      .toPromise()
+      .then(
+        (res: ServerResponse) => {
+          if (res.success) {
 
-          this.channelChanges.next();
+            this.channels = res.data;
+
+            this.initChannelsSockets();
+          }
         }
-      }
-    ).catch(() => {
-      this._utils.showBugReport("Server error!", "There has been an error while fetching the channels!");
-    });
+      ).catch(() => {
+
+        this._utils.showBugReport("Server error!", "There has been an error while fetching the channels!");
+      });
   }
 
   /**
@@ -83,19 +75,17 @@ export class MessagesService {
    * @param channel The channel object you want to join into.
    *
    */
-  public joinChannel(channel: Channel) {
+  public async joinChannel(channel: Channel) {
 
-    this.API_getChannelInfo(channel)
+    await this.API_getChannelInfo(channel)
       .toPromise()
-      .then((resChannel: ServerResponse) => {
+      .then(async (resChannel: ServerResponse) => {
 
         this.currentChannel = channel;
 
         this.chPermissions = resChannel.data.permissions as ChannelPermissions;
 
         this.currentChannel.pendings = resChannel.data.pendings;
-
-        this.onChannelChange.next();
 
         this.initChannelSockets();
 
@@ -104,17 +94,16 @@ export class MessagesService {
         const lastJoinedRoom = this.getRoomByID(this._user.currentUser.lastJoinedRoom);
 
         if (lastJoinedRoom) {
-          this.joinRoom(channel, lastJoinedRoom);
+          await this.joinRoom(channel, lastJoinedRoom);
 
         } else if (this.currentChannel.rooms.length > 0) {
 
           const room = this.currentChannel.rooms
             .find(room => room.textRoom == true);
 
-          this.joinRoom(channel, room);
+          await this.joinRoom(channel, room);
         }
 
-        this.roomChanges.next();
       })
       .catch(() => {
         this._utils.showBugReport("Server error!", "There has been an error while joining the channel!");
@@ -123,13 +112,13 @@ export class MessagesService {
 
 
 
-  public joinRoom(channel: Channel, room: Room) {
+  public async joinRoom(channel: Channel, room: Room) {
 
     if (room.textRoom) {
 
-      this.API_getChRoomInfo(channel, room)
+      await this.API_getChRoomInfo(channel, room)
         .toPromise()
-        .then((resRoom: ServerResponse) => {
+        .then(async (resRoom: ServerResponse) => {
 
           this.currentRoom = room;
 
@@ -142,7 +131,7 @@ export class MessagesService {
 
           room.notifications = 0;
 
-          this.API_getRoomMessages(channel, room, 50)
+          await this.API_getRoomMessages(channel, room, 50)
             .toPromise()
             .then((res: ServerResponse) => {
 
@@ -152,7 +141,7 @@ export class MessagesService {
                   return this.mapMsg(msg);
                 });
 
-                this.onRoomChange.next();
+                // this.onRoomChange.next();
 
                 this.initRoomSockets();
               }
@@ -190,15 +179,7 @@ export class MessagesService {
 
 
   public isInRoom(room: Room): boolean {
-    if (room.textRoom) {
-      if (room.roomID == this.currentRoom?.roomID)
-        return true;
-    } else {
-      if (room.roomID == this.currentVocalRoom?.roomID)
-        return true;
-    }
-
-    return false;
+    return room.roomID == this.currentRoom?.roomID || room.roomID == this.currentVocalRoom?.roomID;
   }
 
 
@@ -253,13 +234,13 @@ export class MessagesService {
     this.msSubscriptions
     .push(
       this._webSocket.listen("connect")
-        .subscribe(() => {
+        .subscribe(async () => {
           const channel = this.currentChannel;
 
           if (this.currentRoom) {
             this.currentRoom = null;
 
-            this.joinChannel(channel);
+            await this.joinChannel(channel);
           }
         })
     );
@@ -281,7 +262,7 @@ export class MessagesService {
     this.chSubscriptions
       .push(
         this._webSocket.listen("channel")
-          .subscribe((obj: any) => {
+          .subscribe(async (obj: any) => {
 
             switch(obj.emitType) {
 
@@ -319,14 +300,18 @@ export class MessagesService {
                 const index = this.currentChannel.rooms
                   .findIndex(room => room.roomID == obj.roomID);
 
-                if (this.currentChannel.rooms[index]) {
+                const room = this.currentChannel.rooms[index];
+
+                if (room) {
+
+                  if (this.isInRoom(room) && this.currentChannel.rooms[0])
+                    await this.joinRoom(this.currentChannel, this.currentChannel.rooms[0]);
 
                   this.currentChannel.rooms.splice(index, 1);
-
-                  return;
                 }
 
-              }
+              } break;
+
             }
 
           })
@@ -350,7 +335,10 @@ export class MessagesService {
                 } break;
 
                 case "NEW_MEMBER": {
-                  // this.currentChannel..push(obj);
+
+                  if (this.currentRoom.autoJoin) {
+                    this.currentRoom.members.push(obj);
+                  }
 
                 } break;
               }
@@ -385,7 +373,10 @@ export class MessagesService {
 
                 this.channels.push(obj);
 
-                this._utils.showRequest("New channel added", `Personnel of channel ${obj.name} have accepted you. The channel is now in your list.`);
+                this._utils.showRequest(
+                  "New channel added",
+                  `Personnel of channel ${obj.name} have accepted you. The channel is now in your list.`
+                );
 
               } break;
 

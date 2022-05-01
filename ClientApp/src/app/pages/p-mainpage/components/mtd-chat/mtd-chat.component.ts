@@ -1,7 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { Subscription } from 'rxjs';
 import { REPChatComponent } from 'src/app/lib/rep-chat/rep-chat.component';
-import { Unsubscriber } from 'src/app/lib/rep-decorators';
 import { Room } from 'src/interfaces/channel.interface';
 import { Message } from 'src/interfaces/message.interface';
 import { REPButton } from 'src/interfaces/repbutton.interface';
@@ -13,7 +11,6 @@ import { UtilsService } from 'src/services/utils.service';
   templateUrl: './mtd-chat.component.html',
   styleUrls: ['./mtd-chat.component.scss']
 })
-@Unsubscriber
 export class MTDChatComponent {
 
   constructor(
@@ -23,28 +20,28 @@ export class MTDChatComponent {
 
   @ViewChild(REPChatComponent) private chat: REPChatComponent;
 
-  private prevRoom: Room;
+  // private prevRoom: Room;
 
-  protected readonly roomChanges: Subscription = this._ms.onRoomChange
-    .subscribe(() => {
+  // protected readonly roomChanges: Subscription = this._ms.onRoomChange
+  //   .subscribe(() => {
 
-      // Ensures each room chat maintains the text
-      // that is not sent yet
-      if (this.prevRoom) {
-        this.prevRoom.draft = this.chat.getText();
+  //     // Ensures each room chat maintains the text
+  //     // that is not sent yet
+  //     if (this.prevRoom) {
+  //       this.prevRoom.draft = this.chat.getText();
 
-        if (this._ms.currentRoom.draft) {
-          this.chat.setText(this._ms.currentRoom.draft);
-        } else {
-          this.chat.setText(null);
-        }
+  //       if (this._ms.currentRoom.draft) {
+  //         this.chat.setText(this._ms.currentRoom.draft);
+  //       } else {
+  //         this.chat.setText(null);
+  //       }
 
-      }
+  //     }
 
-      this.prevRoom = this._ms.currentRoom;
+  //     this.prevRoom = this._ms.currentRoom;
 
-      this.chat.reset();
-    });
+  //     this.chat.reset();
+  //   });
 
   public readonly msgOptions: Array<REPButton> = [
     // {
@@ -182,10 +179,10 @@ export class MTDChatComponent {
   }
 
   displayChatName() {
-    if (!this._ms.currentChannel?.name)
+    if (!this._ms.currentChannel || !this._ms.currentRoom)
       return '';
 
-    return this._ms.currentChannel?.name + " - " + this._ms.currentRoom?.roomName;
+    return this._ms.currentChannel.name + " - " + this._ms.currentRoom.roomName;
   }
 
   sendChannelMessage(message: string) {

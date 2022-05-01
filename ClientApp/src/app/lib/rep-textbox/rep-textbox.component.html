@@ -17,6 +17,7 @@
     (send)="send($event)"
     [enabled]="enabled"
     [maxLength]="msgMaxLength"
+    [(text)]="text"
     placeholder="Send a message..."
     [style.animation]="trigger ? 'shake 200ms' : ''"
     [style.opacity]="form.valid ? '1' : '0.5'"

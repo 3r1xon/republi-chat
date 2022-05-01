@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Host, OnDestroy, ViewChildren } from '@angular/core';
+import { Component, Host } from '@angular/core';
 import { Router } from '@angular/router';
 import { Channel, Room } from 'src/interfaces/channel.interface';
 import { MessagesService } from 'src/services/messages.service';
@@ -16,7 +16,7 @@ import { REPButton } from 'src/interfaces/repbutton.interface';
   templateUrl: './mtd-channels.component.html',
   styleUrls: ['./mtd-channels.component.scss']
 })
-export class MTDChannelsComponent implements AfterViewInit, OnDestroy {
+export class MTDChannelsComponent {
 
   constructor(
     public _ms: MessagesService,
@@ -25,27 +25,8 @@ export class MTDChannelsComponent implements AfterViewInit, OnDestroy {
     private router: Router
   ) { }
 
-  ngAfterViewInit(): void {
-    this.channels.changes.subscribe(() => {
-      // if (
-      //   this._ms.currentChannel == null
-      //   &&
-      //   this._ms.channels.length > 0
-      //   ) {
-      //     // this._ms.joinChannel(this._ms.channels[0]);
-      // }
-    });
-  }
-
-  ngOnDestroy(): void {
-    this.channels.changes.unsubscribe();
-  }
-
-  @ViewChildren('channels')
-  private channels: any;
-
   public filterChannel(ch: Message) {
-    ch.message = (ch as any).code;
+    ch.message = "#" + (ch as any).code;
     return ch;
   }
 
@@ -75,6 +56,7 @@ export class MTDChannelsComponent implements AfterViewInit, OnDestroy {
       icon: "delete",
       color: "danger",
       visible: () => this._ms.chPermissions.createRooms,
+      enabled: () => this._ms.currentChannel.rooms.length != 1,
       onClick: (roomID) => {
 
         const room = {
@@ -107,6 +89,7 @@ export class MTDChannelsComponent implements AfterViewInit, OnDestroy {
       icon: "remove",
       color: "warning",
       visible: () => !this._ms.chPermissions.createRooms,
+      enabled: (roomID) => !this._ms.chPermissions.createRooms && !this._ms.getRoomByID(roomID).autoJoin,
       onClick: () => {
 
       }
@@ -130,15 +113,15 @@ export class MTDChannelsComponent implements AfterViewInit, OnDestroy {
   ];
 
   selectChannel(channel: Channel) {
-    if (channel.id == this._ms.currentChannel.id)
+    if (channel.id == this._ms.currentChannel?.id)
       return;
 
     this._ms.joinChannel(channel);
   }
 
-  selectRoom(room: Room) {
+  async selectRoom(room: Room) {
     if (!this._ms.isInRoom(room)) {
-      this._ms.joinRoom(this._ms.currentChannel, room);
+      await this._ms.joinRoom(this._ms.currentChannel, room);
     }
   }
 

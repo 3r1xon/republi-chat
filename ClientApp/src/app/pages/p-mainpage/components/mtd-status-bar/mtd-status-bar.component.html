@@ -1,26 +1,35 @@
 <div class="status-bar">
 
   <div class="profile">
+
     <rep-profile-pic routerLink="/settings/profile"
-      [src]="user.picture"
-      [letter]="user.name[0]"
-      [color]="user.backgroundColor"
+      [src]="_user.currentUser.picture"
+      [letter]="_user.currentUser.name[0]"
+      [color]="_user.currentUser.backgroundColor"
       [status]="_user.currentUser.userStatus"
       width="40px"
       height="40px"
     >
     </rep-profile-pic>
-    <p [style.color]="user.color">{{user.name}}</p>
+
+    <span>
+      <p [style.color]="_user.currentUser.color">{{_user.currentUser.name}}</p>
+      <p>#{{_user.currentUser.code}}</p>
+    </span>
+
   </div>
 
   <div class="right">
+
     <mat-icon class="connection" [ngClass]="{
       'connected': _utils.wsConnected,
       'disconnected': !_utils.wsConnected
     }" matTooltip="Connection">
-    settings_ethernet
+      settings_ethernet
     </mat-icon>
+
     <rep-actions onlyIcons="true" [actions]="navigations"></rep-actions>
+
   </div>
 
 </div>

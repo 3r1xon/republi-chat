@@ -1,6 +1,7 @@
 <div class="submenu">
   <rep-button
-    *ngFor="let section of subMenu" matRipple
+    *ngFor="let section of subMenu"
+    matRipple
     (mouseenter)="section.highlighted = true"
     (mouseleave)="section.highlighted = false"
     [icon]="section.icon"

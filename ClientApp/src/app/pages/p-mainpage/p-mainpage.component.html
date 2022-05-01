@@ -1,12 +1,16 @@
 <div id="mainpage" [@.disabled]="!hasLoaded">
 
-  <mtd-status-bar [user]="_user.currentUser"></mtd-status-bar>
+  <mtd-status-bar></mtd-status-bar>
 
   <mtd-room-creation *ngIf="roomCreation"></mtd-room-creation>
 
   <div class="main">
 
-    <mtd-channels *ngIf="_utils.settings.showChannels" @openLeft></mtd-channels>
+    <mtd-channels
+      *ngIf="_utils.settings.showChannels"
+      @openLeft
+    >
+    </mtd-channels>
 
     <div
       *ngIf="_utils.settings.showChannels || _utils.settings.showServerGroup"
@@ -19,12 +23,11 @@
 
     <mtd-chat></mtd-chat>
 
-    <ng-container *ngIf="_ms.currentChannel">
-
-      <mtd-channel-info *ngIf="_utils.settings.showServerGroup" @openRight></mtd-channel-info>
-
-    </ng-container>
-
+    <mtd-channel-info
+      *ngIf="_ms.currentChannel && _utils.settings.showServerGroup"
+      @openRight
+    >
+    </mtd-channel-info>
 
   </div>
 

@@ -86,6 +86,21 @@ export class REPChatComponent implements AfterViewInit, OnDestroy {
   @Input()
   public dateFormat: string = "longDate";
 
+  private _draft: string = '';
+
+  @Input()
+  public set draft(txt: string) {
+    this._draft = txt;
+    this.draftChange.emit(this._draft);
+  };
+
+  public get draft(): string {
+    return this._draft;
+  }
+
+  @Output()
+  public draftChange: EventEmitter<string> = new EventEmitter();
+
   @Output()
   public sendMessage = new EventEmitter();
 

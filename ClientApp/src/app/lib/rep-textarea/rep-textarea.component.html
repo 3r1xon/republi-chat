@@ -10,7 +10,7 @@
     (keydown.enter)="submitHandler($event)"
     name="text"
     [(ngModel)]="text"
-    (ngModelChange)="onChange($event)"
+    (ngModelChange)="textChange.emit(text)"
     [disabled]="!enabled"
     [style.cursor]="enabled ? 'text' : 'not-allowed'"
     [style.background]="background"

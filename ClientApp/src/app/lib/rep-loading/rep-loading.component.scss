@@ -4,6 +4,7 @@
   width: 100%;
   height: 100vh;
   background: var(--OBSCURE);
+  backdrop-filter: blur(1px);
   position: fixed;
   z-index: 9999;
   @include flexCenter(row);

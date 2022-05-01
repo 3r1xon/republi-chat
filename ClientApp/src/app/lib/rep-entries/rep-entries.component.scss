@@ -4,14 +4,15 @@
   width: 100%;
   height: 100%;
   background: var(--OBSCURE);
+  backdrop-filter: blur(1px);
   display: grid;
   place-items: center;
 
   .rep-entries {
-    border-radius: 5px;
-    background: var(--LIGHT-DARK);
-    -webkit-box-shadow: 5px 5px 15px 5px #00000080;
-    box-shadow: 5px 5px 15px 5px #00000080;
+    border-radius: 12px;
+    background: var(--LIGHT-GREY);
+    -webkit-box-shadow: 2px 2px 7px 2px #00000038;
+    box-shadow: 2px 2px 7px 2px #00000038;
 
 
     .bar {
@@ -20,9 +21,9 @@
       display: flex;
       flex-direction: row-reverse;
       align-items: center;
-      border-top-left-radius: 5px;
-      border-top-right-radius: 5px;
-      background: var(--LIGHT-DARK);
+      border-top-left-radius: 12px;
+      border-top-right-radius: 12px;
+      background: var(--LIGHT-GREY);
       cursor: move;
 
       .back {

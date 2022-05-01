@@ -18,6 +18,7 @@ export interface Room {
   connected?: Array<Account>;
   members: Array<Account>;
   notifications?: number;
+  autoJoin: boolean;
   draft?: string;
 }
 

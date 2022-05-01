@@ -44,14 +44,31 @@ export class REPTextBoxComponent {
     this.form.setValue({ text: txt });
   }
 
+  private _text: string = '';
+
+  @Input()
+  public set text(txt: string) {
+    if (txt)
+      this.form.setValue({ text: txt });
+    this._text = txt;
+    this.textChange.emit(this.text);
+  };
+
+  public get text() {
+    return this._text;
+  }
+
   public form: FormGroup = this.fb.group({
-    text: ['',
+    text: [this.text,
       [
         Validators.required,
         Validators.max(2000),
       ]
     ]
   });
+
+  @Output()
+  public textChange = new EventEmitter<string>();
 
   private lastInsertionDate: number;
 

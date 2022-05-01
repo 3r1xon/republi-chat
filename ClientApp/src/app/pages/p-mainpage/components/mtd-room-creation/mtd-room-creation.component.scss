@@ -7,17 +7,22 @@ rep-entries {
     justify-content: center;
     align-items: center;
 
+    h1 {
+      align-self: flex-start;
+      margin-left: 30px;
+    }
+
     rep-toggle {
       margin: 5px;
     }
 
     rep-input {
-      margin: 20px;
+      margin: 30px 20px 30px 20px;
     }
 
     rep-separator {
       width: 90%;
-      margin: 5px;
+      margin: 10px;
     }
 
     rep-button {

@@ -5,6 +5,7 @@
   (onTab)="serverInfoTab = $event"
 >
 
+  <!-- First tab -->
   <ng-container
     *ngIf="
       serverInfo[serverInfoTab].tabname == 'Members'
@@ -15,7 +16,11 @@
     <rep-separator>Online</rep-separator>
 
     <ng-container
-      *ngFor="let member of _ms.currentRoom.members | filterOnlineMembers; trackBy trackByID; let i = index;"
+      *ngFor="
+      let member of _ms.currentRoom.members | filterOnlineMembers;
+      trackBy trackByID;
+      let i = index;
+      "
     >
 
       <rep-namebox
@@ -26,8 +31,13 @@
 
     </ng-container>
 
+
+
     <ng-container
-      *ngFor="let member of _ms.currentRoom.members | filterOfflineMembers; trackBy trackByID; let i = index;"
+      *ngFor="
+      let member of _ms.currentRoom.members | filterOfflineMembers;
+      trackBy trackByID;
+      let i = index;"
     >
 
       <rep-separator *ngIf="i == 0">Offline</rep-separator>
@@ -43,6 +53,9 @@
   </ng-container>
 
 
+
+
+  <!-- Second tab -->
   <ng-container
     *ngIf="serverInfo[serverInfoTab].tabname == 'Pending'"
   >

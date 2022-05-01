@@ -37,6 +37,7 @@
     <rep-textbox
       [msgMaxLength]="msgMaxLength"
       [enabled]="textboxEnabled"
+      [(text)]="draft"
       (sendMessage)="send($event)"
     ></rep-textbox>
 

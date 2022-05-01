@@ -65,9 +65,7 @@ export class REPTextareaComponent implements OnInit, ControlValueAccessor {
     this.send.emit(event);
   }
 
-  onChange: any = () => {
-    this.textChange.emit(this.text);
-  }
+  onChange: any = () => {}
 
   onTouch: any = () => {};
 
