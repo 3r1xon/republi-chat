@@ -76,6 +76,7 @@ export class UtilsService {
           {
             name: "No",
             background: "success",
+            autofocus: true,
             icon: "not_interested",
             onClick: () => {
               this.rqsBody.visible = false;
@@ -93,6 +94,7 @@ export class UtilsService {
             name: "Close",
             background: "success",
             icon: "not_interested",
+            autofocus: true,
             onClick: () => {
               this.rqsBody.visible = false;
             }

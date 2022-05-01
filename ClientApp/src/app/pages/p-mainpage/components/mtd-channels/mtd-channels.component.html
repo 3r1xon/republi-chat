@@ -4,7 +4,7 @@
   (onNew)="addNew()"
   (onTab)="tabIndex = $event"
 >
-
+  <!-- First tab -->
   <div
     *ngIf="tabs[tabIndex].tabname == 'Channels'"
     cdkDropList
@@ -42,12 +42,12 @@
 
         <rep-actions onlyIcons="true" [actions]="channelActions"></rep-actions>
 
-        <rep-separator *ngIf="_ms.currentChannel.rooms?.text.length > 0">
+        <rep-separator>
           Text rooms
         </rep-separator>
 
         <rep-room
-          *ngFor="let room of _ms.currentChannel.rooms?.text"
+          *ngFor="let room of _ms.currentChannel.rooms | filterTextRooms"
           [repContext]="roomOptions"
           [repUniqueID]="room.roomID"
           [roomName]="room.roomName"
@@ -58,27 +58,35 @@
         >
         </rep-room>
 
-        <rep-separator *ngIf="_ms.currentChannel.rooms?.vocal.length > 0">
-          Vocal rooms
-        </rep-separator>
 
-        <rep-room
-          *ngFor="let room of _ms.currentChannel.rooms?.vocal"
-          [roomName]="room.roomName"
-          [textRoom]="room.textRoom"
-          [members]="room.connected"
-          [repContext]="roomOptions"
-          [repUniqueID]="room.roomID"
-          [hold]="_ms.isInRoom(room)"
-          (click)="selectRoom(room)"
+        <ng-container
+          *ngFor="let room of _ms.currentChannel.rooms | filterVocalRooms; let rmIndex = index;"
         >
-        </rep-room>
+
+          <rep-separator *ngIf="rmIndex == 0">
+            Vocal rooms
+          </rep-separator>
+
+          <rep-room
+            [roomName]="room.roomName"
+            [textRoom]="room.textRoom"
+            [members]="room.connected"
+            [repContext]="roomOptions"
+            [repUniqueID]="room.roomID"
+            [hold]="_ms.isInRoom(room)"
+            (click)="selectRoom(room)"
+          >
+          </rep-room>
+
+        </ng-container>
 
       </div>
 
     </rep-accordion>
   </div>
 
+
+  <!-- Second tab -->
   <div
     *ngIf="tabs[tabIndex].tabname == 'Friends'"
   >

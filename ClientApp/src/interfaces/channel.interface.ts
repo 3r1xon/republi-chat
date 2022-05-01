@@ -3,10 +3,7 @@ import { Account } from "./account.interface";
 export interface Channel {
   id?: number;
   name: string;
-  rooms?: {
-    text: Array<Room>,
-    vocal: Array<Room>
-  },
+  rooms?: Array<Room>;
   pendings?: Array<Account>;
   code?: string;
   picture?: any;

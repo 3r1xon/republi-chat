@@ -99,6 +99,9 @@ export class REPButtonComponent {
   }
 
   @Input()
+  public autofocus: boolean = false;
+
+  @Input()
   public uniqueID: number;
 
   @Output()

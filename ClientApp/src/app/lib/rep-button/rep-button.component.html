@@ -3,6 +3,8 @@
     class="master"
     #trigger
     [disabled]="!enabled"
+    repFocus
+    [repFocusEnabled]="autofocus"
     [type]="type"
     (click)="checkClick($event)"
     [matTooltip]="tooltip"

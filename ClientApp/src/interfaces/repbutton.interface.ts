@@ -6,6 +6,7 @@ export interface REPButton {
   route?: string;
   tooltip?: string;
   type?: string;
+  autofocus?: boolean;
   outline?: boolean;
   hotkey?: string;
   enabled?: Function;

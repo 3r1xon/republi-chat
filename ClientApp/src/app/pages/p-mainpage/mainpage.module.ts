@@ -14,6 +14,8 @@ import { MTDRoomCreationComponent } from './components/mtd-room-creation/mtd-roo
 import { ReactiveFormsModule } from '@angular/forms';
 import { FilterOnlineMembersPipe } from 'src/pipes/filter-online-members.pipe';
 import { FilterOfflineMembersPipe } from 'src/pipes/filter-offline-members.pipe';
+import { FilterVocalRoomsPipe } from 'src/pipes/filter-vocal-rooms.pipe';
+import { FilterTextRoomsPipe } from 'src/pipes/filter-text-rooms.pipe';
 
 
 
@@ -26,7 +28,9 @@ import { FilterOfflineMembersPipe } from 'src/pipes/filter-offline-members.pipe'
     MTDRoomCreationComponent,
 
     FilterOnlineMembersPipe,
-    FilterOfflineMembersPipe
+    FilterOfflineMembersPipe,
+    FilterVocalRoomsPipe,
+    FilterTextRoomsPipe
   ],
   exports: [
     MTDChatComponent,

@@ -105,8 +105,14 @@ export class MessagesService {
 
         if (lastJoinedRoom) {
           this.joinRoom(channel, lastJoinedRoom);
-        } else if (this.currentChannel.rooms.text.length > 0)
-          this.joinRoom(channel, this.currentChannel.rooms.text[0]);
+
+        } else if (this.currentChannel.rooms.length > 0) {
+
+          const room = this.currentChannel.rooms
+            .find(room => room.textRoom == true);
+
+          this.joinRoom(channel, room);
+        }
 
         this.roomChanges.next();
       })
@@ -284,8 +290,7 @@ export class MessagesService {
 
                 if (notification.room != this.currentRoom.roomID) {
 
-                  const ref = this.currentChannel.rooms.text
-                    .find(room => room.roomID == notification.room);
+                  const ref = this.getRoomByID(notification.room);
 
                   if (ref) {
 
@@ -305,43 +310,18 @@ export class MessagesService {
 
               case "NEW_ROOM": {
 
-                if (obj.textRoom) {
-                  this.currentChannel.rooms.text
-                    .push(obj);
-                } else {
-                  this.currentChannel.rooms.vocal
-                    .push(obj);
-                }
+                this.currentChannel.rooms.push(obj);
+
               } break;
 
               case "DELETE_ROOM": {
 
-                const indexText = this.currentChannel.rooms.text
+                const index = this.currentChannel.rooms
                   .findIndex(room => room.roomID == obj.roomID);
 
-                if (this.currentChannel.rooms.text[indexText]) {
+                if (this.currentChannel.rooms[index]) {
 
-                  if (this.currentChannel.rooms.text[indexText].roomID == this.currentRoom.roomID) {
-
-                    this.joinRoom(this.currentChannel, this.currentChannel.rooms.text[0]);
-                  }
-
-                  this.currentChannel.rooms.text.splice(indexText, 1);
-
-                  return;
-                }
-
-                const indexVocal = this.currentChannel.rooms.vocal
-                  .findIndex(room => room.roomID == obj.roomID);
-
-                if (this.currentChannel.rooms.vocal[indexVocal]) {
-
-                  if (this.currentChannel.rooms.vocal[indexVocal].roomID == this.currentRoom.roomID) {
-
-                    this.joinRoom(this.currentChannel, this.currentChannel.rooms.text[0]);
-                  }
-
-                  this.currentChannel.rooms.vocal.splice(indexVocal, 1);
+                  this.currentChannel.rooms.splice(index, 1);
 
                   return;
                 }
@@ -424,8 +404,7 @@ export class MessagesService {
 
 
   public getRoomByID(roomID: number): Room {
-    const allRooms = [...this.currentChannel.rooms.text, ...this.currentChannel.rooms.vocal];
-    return allRooms.find(room => room.roomID == roomID);
+    return this.currentChannel.rooms.find(room => room.roomID == roomID);
   }
 
 

@@ -242,10 +242,7 @@ router.get('/getChannelInfo/:id', (req, res) => {
         res.status(200).send({
           success: true,
           data: {
-            rooms: {
-              text: rooms?.filter(obj => obj.textRoom),
-              vocal: rooms.filter(obj => !obj.textRoom)
-            },
+            rooms: rooms,
             permissions: permissions,
             pendings: pendings
           }

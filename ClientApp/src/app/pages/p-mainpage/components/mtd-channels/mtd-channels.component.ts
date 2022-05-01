@@ -85,12 +85,11 @@ export class MTDChannelsComponent implements AfterViewInit, OnDestroy {
 
           this._ms.API_deleteRoom(this._ms.currentChannel, room as Room)
             .toPromise()
-            .then(() => {
-              this._utils.showRequest("Success", "Room deleted successfully!");
-            })
             .catch(() => {
-              this._utils.showRequest("Error", "There has been an error while deleting the room!");
-
+              this._utils.showRequest(
+                "Error",
+                "There has been an error while deleting the room!"
+              );
             });
         };
 

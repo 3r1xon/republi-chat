@@ -7,7 +7,7 @@ import { Account, UserStatus } from 'src/interfaces/account.interface';
 })
 export class FilterOfflineMembersPipe implements PipeTransform {
 
-  transform(members: Array<Account>, ...args: unknown[]): unknown {
+  transform(members: Array<Account>, ...args: unknown[]): Array<Account> {
     return members.filter(member => member.userStatus == UserStatus.offline);
   }
 
