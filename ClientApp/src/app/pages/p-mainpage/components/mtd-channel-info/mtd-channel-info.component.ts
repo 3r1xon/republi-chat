@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { UserStatus } from 'src/interfaces/account.interface';
+import { Account } from 'src/interfaces/account.interface';
 import { REPButton } from 'src/interfaces/repbutton.interface';
 import { MessagesService } from 'src/services/messages.service';
 
@@ -11,16 +11,8 @@ import { MessagesService } from 'src/services/messages.service';
 export class MTDChannelInfoComponent {
 
   constructor(
-    private _ms: MessagesService
+    public _ms: MessagesService
   ) { }
-
-  getOnlineMembers() {
-    return this._ms.currentRoom?.members.filter(user => user.userStatus == UserStatus.online);
-  }
-
-  getOfflineMembers() {
-    return this._ms.currentRoom?.members.filter(user => user.userStatus == UserStatus.offline);
-  }
 
   public serverInfoTab: number = 0;
 
@@ -72,5 +64,9 @@ export class MTDChannelInfoComponent {
       }
     }
   ];
+
+  trackByID(index: number, member: Account) {
+    return member.id;
+  }
 
 }

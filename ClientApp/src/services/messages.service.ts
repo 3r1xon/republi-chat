@@ -405,6 +405,8 @@ export class MessagesService {
 
                 this.channels.push(obj);
 
+                this._utils.showRequest("New channel added", `Personnel of channel ${obj.name} have accepted you. The channel is now in your list.`);
+
               } break;
 
             }

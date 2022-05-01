@@ -1,12 +1,12 @@
 <rep-tabs
-  class="channels"
-  [entries]="channels"
+  class="tabs"
+  [entries]="tabs"
   (onNew)="addNew()"
-  (onTab)="channelsTab = $event"
+  (onTab)="tabIndex = $event"
 >
 
   <div
-    *ngIf="channels[channelsTab].tabname == 'Channels'"
+    *ngIf="tabs[tabIndex].tabname == 'Channels'"
     cdkDropList
     [cdkDropListData]="_ms.channels"
     class="list"
@@ -15,6 +15,7 @@
 
     <rep-accordion
       *ngFor="let section of _ms.channels; let i = index"
+      #channels
       [open]="_ms.channels[i]?.open || section?.id == _ms.currentChannel?.id"
       (click)="selectChannel(section)"
       cdkDrag
@@ -79,7 +80,7 @@
   </div>
 
   <div
-    *ngIf="channels[channelsTab].tabname == 'Friends'"
+    *ngIf="tabs[tabIndex].tabname == 'Friends'"
   >
 
   </div>

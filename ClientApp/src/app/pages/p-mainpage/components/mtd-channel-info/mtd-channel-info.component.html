@@ -6,14 +6,17 @@
 >
 
   <ng-container
-    *ngIf="serverInfo[serverInfoTab].tabname == 'Members'"
+    *ngIf="
+      serverInfo[serverInfoTab].tabname == 'Members'
+      &&
+      _ms.currentRoom
+    "
   >
+    <rep-separator>Online</rep-separator>
 
     <ng-container
-      *ngFor="let member of getOnlineMembers(); let i = index;"
+      *ngFor="let member of _ms.currentRoom.members | filterOnlineMembers; trackBy trackByID; let i = index;"
     >
-
-      <rep-separator *ngIf="i == 0">Online</rep-separator>
 
       <rep-namebox
         [status]="member.userStatus"
@@ -23,9 +26,8 @@
 
     </ng-container>
 
-
     <ng-container
-      *ngFor="let member of getOfflineMembers(); let i = index;"
+      *ngFor="let member of _ms.currentRoom.members | filterOfflineMembers; trackBy trackByID; let i = index;"
     >
 
       <rep-separator *ngIf="i == 0">Offline</rep-separator>

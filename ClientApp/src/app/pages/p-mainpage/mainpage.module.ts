@@ -12,6 +12,8 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MTDModule } from '../components/mtd-module.module';
 import { MTDRoomCreationComponent } from './components/mtd-room-creation/mtd-room-creation.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { FilterOnlineMembersPipe } from 'src/pipes/filter-online-members.pipe';
+import { FilterOfflineMembersPipe } from 'src/pipes/filter-offline-members.pipe';
 
 
 
@@ -22,6 +24,9 @@ import { ReactiveFormsModule } from '@angular/forms';
     MTDChannelInfoComponent,
     MTDStatusBarComponent,
     MTDRoomCreationComponent,
+
+    FilterOnlineMembersPipe,
+    FilterOfflineMembersPipe
   ],
   exports: [
     MTDChatComponent,
