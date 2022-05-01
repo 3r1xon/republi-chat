@@ -44,6 +44,8 @@ export class MessagesService {
 
   private chSubscriptions: Array<Subscription> = [];
 
+  private channelsSubscriptions: Array<Subscription> = [];
+
   public onRoomChange: Subject<any> = new Subject<any>();
 
   public onChannelChange: Subject<any> = new Subject<any>();
@@ -64,7 +66,8 @@ export class MessagesService {
         if (res.success) {
           this.channels = res.data;
 
-          this.destroyChSubscriptions();
+          // this.destroyChSubscriptions();
+          this.initChannelsSockets();
 
           this.channelChanges.next();
         }
@@ -387,6 +390,31 @@ export class MessagesService {
 
 
 
+  private initChannelsSockets(): void {
+
+    this.destroyChannelsSubscriptions();
+
+    this.channelsSubscriptions
+      .push(
+        this._webSocket.listen("channels")
+          .subscribe((obj: any) => {
+
+            switch(obj.emitType) {
+
+              case "NEW_CHANNEL": {
+
+                this.channels.push(obj);
+
+              } break;
+
+            }
+
+          })
+      )
+  }
+
+
+
   public getChannelByID(channelID: number): Channel {
     return this.channels.find(ch => ch.id == channelID);
   }
@@ -542,6 +570,13 @@ export class MessagesService {
       subscription.unsubscribe();
     });
     this.chSubscriptions = [];
+  }
+
+  public destroyChannelsSubscriptions() {
+    this.channelsSubscriptions.map((subscription) => {
+      subscription.unsubscribe();
+    });
+    this.channelsSubscriptions = [];
   }
 
 }

@@ -448,12 +448,39 @@ router.put('/changePendingStatus', (req, res) => {
                  U.USER_STATUS      as userStatus
           FROM USERS U
           WHERE U.ID_USER = ?
-          `, [pendingID]);
+          `, [userID]);
 
           io.to(`ch${channelID}`).emit("members", {
             id: pendingID,
             emitType: "NEW_MEMBER",
-            ...new_user
+            code: new_user.code,
+            picture: new_user.picture,
+            color: new_user.color,
+            backgroundColor: new_user.backgroundColor,
+            name: new_user.name,
+            userStatus: new_user.userStatus
+          });
+
+          const channel = await REPQuery.one(
+          `
+          SELECT C.ID_CHANNEL       as id,
+                 C.NAME             as name,
+                 C.CHANNEL_CODE     as code,
+                 C.PICTURE          as picture,
+                 C.COLOR            as color,
+                 C.BACKGROUND_COLOR as backgroundColor
+          FROM CHANNELS C
+          WHERE C.ID_CHANNEL = ?
+          `, [channelID]);
+
+          io.to(`user${pendingID}`).emit("channels", {
+            id: channel.id,
+            emitType: "NEW_CHANNEL",
+            name: channel.name,
+            code: channel.code,
+            picture: channel.picture,
+            color: channel.color,
+            backgroundColor: channel.backgroundColor
           });
 
         }

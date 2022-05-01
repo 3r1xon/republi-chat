@@ -570,7 +570,15 @@ class DBUser {
 
 
 
-  async setOffline() {
+  async setOffline(force = false) {
+
+    if (force == false) {
+
+      const sockets = await io.in(`user${this.userID}`).fetchSockets();
+
+      if (sockets.length != 0)
+        return;
+    }
 
     await REPQuery.exec(
     `

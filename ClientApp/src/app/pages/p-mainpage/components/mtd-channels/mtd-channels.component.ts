@@ -112,8 +112,9 @@ export class MTDChannelsComponent {
   ];
 
   selectChannel(channel: Channel) {
-    if (channel.id == this._ms.currentChannel.id)
-      return;
+    if (this._ms.currentChannel != undefined)
+      if (channel.id == this._ms.currentChannel.id)
+        return;
 
     this._ms.joinChannel(channel);
   }

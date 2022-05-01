@@ -182,7 +182,8 @@ router.post('/authorize', Auth.HTTPAuthToken, async (req, res) => {
            U.EMAIL                      as email,
            TO_BASE64(U.PROFILE_PICTURE) as picture,
            U.LAST_JOINED_CHANNEL        as lastJoinedChannel,
-           U.LAST_JOINED_ROOM           as lastJoinedRoom
+           U.LAST_JOINED_ROOM           as lastJoinedRoom,
+           1                            as userStatus
     FROM USERS U
     WHERE U.ID_USER = ?
       AND U.DELETED IS NOT TRUE
@@ -193,6 +194,7 @@ router.post('/authorize', Auth.HTTPAuthToken, async (req, res) => {
     res.status(401).send({ success: false, message: "There has been an error with the token authentication!"});
   } catch(err) {
     console.log(clc.red(err));
+
     res.status(500).send({ success: false, message: "Internal server error!" });
   }
 });
@@ -222,7 +224,8 @@ router.post('/logIn', async (req, res) => {
            TO_BASE64(U.PROFILE_PICTURE) as picture,
            U.VERIFIED                   as verified,
            U.LAST_JOINED_CHANNEL        as lastJoinedChannel,
-           U.LAST_JOINED_ROOM           as lastJoinedRoom
+           U.LAST_JOINED_ROOM           as lastJoinedRoom,
+           1                            as userStatus
     FROM USERS U
     WHERE U.EMAIL = ?
       AND U.PASSWORD = ?

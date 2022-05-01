@@ -8,6 +8,7 @@ import { Account } from 'src/interfaces/account.interface';
 import { UtilsService } from 'src/services/utils.service';
 import { REPButton } from 'src/interfaces/repbutton.interface';
 import { MessagesService } from 'src/services/messages.service';
+import { UserService } from 'src/services/user.service';
 
 @Component({
   selector: 'mtd-status-bar',
@@ -18,6 +19,7 @@ export class MTDStatusBarComponent {
 
   constructor(
     public _utils: UtilsService,
+    public _user: UserService,
     private _ms: MessagesService,
     private router: Router
   ) { }
