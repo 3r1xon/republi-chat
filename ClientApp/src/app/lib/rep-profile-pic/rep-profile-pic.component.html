@@ -20,19 +20,29 @@
     [style.background]="color"
     [style.minHeight]="height"
     [style.maxHeight]="height"
+  >
+
+    <span
+      *ngIf="letter"
+      [style.fontSize]="span.offsetWidth / 1.5 + 'px'"
     >
-    <span *ngIf="letter" [style.fontSize]="span.offsetWidth / 1.5 + 'px'">{{letter[0]}}</span>
+      {{letter[0]}}
+    </span>
+
   </span>
 
   <span
+    *ngIf="status != null"
     class="user-status"
+    [style.outline]="'4px solid ' + background"
     [ngClass]="{
       'offline': status == 0,
       'online': status == 1,
       'do-not-disturb': status == 2,
-      'sleeping': status == 3
+      'inactive': status == 3
     }"
     [matTooltip]="statuses[status]"
-  ></span>
+  >
+  </span>
 
 </div>

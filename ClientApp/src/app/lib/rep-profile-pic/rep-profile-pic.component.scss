@@ -22,6 +22,8 @@
     border-radius: 50%;
     margin: 10px 6px 2px 5px;
     position: absolute;
+    display: grid;
+    place-items: center;
     right: 0;
     bottom: 0;
   }
@@ -31,16 +33,32 @@
 
 .online {
   background: var(--SUCCESS);
+  box-shadow: 0 0 1px 0px var(--SUCCESS) inset,
+              0 0 1px 0px var(--SUCCESS);
 }
 
 .offline {
   background: var(--DANGER);
+  box-shadow: 0 0 1px 0px var(--DANGER) inset,
+              0 0 1px 0px var(--DANGER);
 }
 
 .do-not-disturb {
+  background: var(--DANGER);
+  box-shadow: 0 0 1px 0px var(--DANGER) inset,
+              0 0 1px 0px var(--DANGER);
 
+  &::after {
+    content: '';
+    background: var(--VERY-DARK);
+    width: 8px;
+    height: 2px;
+    border-radius: 2px;
+  }
 }
 
-.sleeping {
+.inactive {
   background: var(--WARNING);
+  box-shadow: 0 0 1px 0px var(--WARNING) inset,
+              0 0 1px 0px var(--WARNING);
 }

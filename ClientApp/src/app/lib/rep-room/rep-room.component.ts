@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Account } from 'src/interfaces/account.interface';
 import { expand } from '../rep-animations';
 

@@ -18,5 +18,5 @@ export enum UserStatus {
   "Offline" = 0,
   "Online" = 1,
   "Do not disturb" = 2,
-  "Sleeping" = 3
+  "Inactive" = 3
 }

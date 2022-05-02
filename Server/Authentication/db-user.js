@@ -557,6 +557,7 @@ class DBUser {
         return;
     }
 
+
     await REPQuery.exec(
     `
     UPDATE USERS

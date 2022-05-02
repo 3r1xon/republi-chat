@@ -1,22 +1,32 @@
 <button
-    *ngIf="visible"
-    class="master"
-    #trigger
-    [disabled]="!enabled"
-    repFocus
-    [repFocusEnabled]="autofocus"
-    [type]="type"
-    (click)="checkClick($event)"
-    [matTooltip]="tooltip"
-    >
-    <div class="flat-button" matRipple [matRippleTrigger]="trigger" [ngStyle]="{
-        'background': outline ? 'transparent' : background,
-        'cursor': enabled ? 'pointer' : 'default',
-        'box-shadow': '0 0 0 1px ' + background
-      }">
-        <p [style.color]="outline ? background : color">
-          <ng-content></ng-content>
-        </p>
-      <mat-icon [style.color]="outline ? background : color" *ngIf="icon">{{icon}}</mat-icon>
-    </div>
+  *ngIf="visible"
+  class="master"
+  #trigger
+  [disabled]="!enabled"
+  repFocus
+  [repFocusEnabled]="autofocus"
+  [type]="type"
+  (click)="checkClick($event)"
+  [matTooltip]="tooltip"
+>
+
+  <div
+    class="flat-button"
+    matRipple
+    [matRippleTrigger]="trigger"
+    [ngStyle]="{
+      'background': outline ? 'transparent' : background,
+      'cursor': enabled ? 'pointer' : 'default',
+      'box-shadow': '0 0 0 1px ' + background
+    }"
+  >
+
+    <p [style.color]="outline ? background : color">
+      <ng-content></ng-content>
+    </p>
+
+    <mat-icon *ngIf="icon" [style.color]="outline ? background : color">{{icon}}</mat-icon>
+
+  </div>
+
 </button>

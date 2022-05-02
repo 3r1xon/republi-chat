@@ -21,6 +21,9 @@ export class REPProfilePicComponent {
   @Input()
   public height: string = "45px";
 
+  @Input()
+  public background: string = "#202124";
+
   private _color: string = "royalblue";
 
   @Input()

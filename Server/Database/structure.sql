@@ -20,6 +20,7 @@ create or replace table republichat.users
     BACKGROUND_COLOR    varchar(7)                   null,
     BIOGRAPHY           varchar(200)                 null,
     USER_STATUS         int                          null,
+    LAST_USER_STATUS    int                          null,
     VERIFIED            tinyint(1) default 0         null,
     LAST_JOINED_CHANNEL bigint                       null,
     LAST_JOINED_ROOM    bigint                       null,

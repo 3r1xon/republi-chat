@@ -77,6 +77,13 @@ export class MTDStatusBarComponent {
       }
     },
     {
+      name: "Inactive",
+      color: "warning",
+      onClick: () => {
+        this._user.changeUserStatus(UserStatus.Inactive);
+      }
+    },
+    {
       name: "Offline",
       color: "danger",
       onClick: () => {
@@ -85,6 +92,7 @@ export class MTDStatusBarComponent {
     },
     {
       name: "Do not disturb",
+      color: "danger",
       onClick: () => {
         this._user.changeUserStatus(UserStatus['Do not disturb']);
       }

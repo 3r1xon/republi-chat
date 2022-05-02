@@ -26,7 +26,7 @@
       background: var(--LIGHT-GREY);
       cursor: move;
 
-      .back {
+      .close {
         margin: 5px;
         font-size: 28px;
         display: grid;
@@ -35,6 +35,10 @@
         place-items: center;
         color: var(--DANGER);
         cursor: pointer;
+
+        &:hover {
+          color: lighten(#c62828, $amount: 5%);
+        }
       }
     }
   }

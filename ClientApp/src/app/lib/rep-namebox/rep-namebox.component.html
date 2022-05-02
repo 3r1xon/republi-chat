@@ -4,6 +4,8 @@
   }"
   [style.animation]="message.highlighted && !hold ? 'highlight 1s forwards' : ''"
   [style.background]="backgroundColor"
+  (mouseenter)="hovering = true"
+  (mouseleave)="hovering = false"
 >
 
   <div
@@ -17,6 +19,7 @@
       [src]="message.picture"
       [letter]="message.name"
       [color]="message.backgroundColor"
+      [background]="hovering ? '#121212' : '#202124'"
       (click)="onUserClick.emit('onUserClick')"
     >
     </rep-profile-pic>

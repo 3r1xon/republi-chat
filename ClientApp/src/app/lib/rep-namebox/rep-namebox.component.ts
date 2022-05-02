@@ -65,6 +65,8 @@ export class REPNameBoxComponent implements AfterViewInit {
 
   public pictureError: boolean = false;
 
+  public hovering: boolean = false;
+
   clickHandler() {
     this.onClick.emit();
   }
