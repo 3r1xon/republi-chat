@@ -547,32 +547,9 @@ class DBUser {
 
 
 
-  async setOnline() {
+  async setUserStatus(status, force = false) {
 
-    await REPQuery.exec(
-    `
-    UPDATE USERS
-    SET USER_STATUS = ?
-    WHERE ID_USER = ?
-    `, [userStatus.online, this.userID]);
-
-    this.joinedChannels = await this.getJoinedChannels();
-
-    this.joinedChannels.forEach((ch) => {
-      io.to(`ch${ch.channelID}`).emit("members", {
-        emitType: "MEMBER_STATUS",
-        userID: this.userID,
-        status: userStatus.online
-      });
-    });
-
-  }
-
-
-
-  async setOffline(force = false) {
-
-    if (force == false) {
+    if (force == false && status == userStatus.offline) {
 
       const sockets = await io.in(`user${this.userID}`).fetchSockets();
 
@@ -585,7 +562,7 @@ class DBUser {
     UPDATE USERS
     SET USER_STATUS = ?
     WHERE ID_USER = ?
-    `, [userStatus.offline, this.userID]);
+    `, [status, this.userID]);
 
     this.joinedChannels = await this.getJoinedChannels();
 
@@ -593,10 +570,14 @@ class DBUser {
       io.to(`ch${ch.channelID}`).emit("members", {
         emitType: "MEMBER_STATUS",
         userID: this.userID,
-        status: userStatus.offline
+        status: status
       });
     });
 
+    io.to(`user${this.userID}`).emit("userChanges", {
+      emitType: "CHANGE_STATUS",
+      status: status
+    });
   }
 }
 

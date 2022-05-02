@@ -1,7 +1,9 @@
-const express = require('express');
-const { io }  = require('../start');
-const DBUser  = require('../Authentication/db-user');
-const router  = express.Router();
+const express    = require('express');
+const { io }     = require('../start');
+const DBUser     = require('../Authentication/db-user');
+const userStatus = require('../Authentication/user-status');
+const clc        = require('cli-color');
+const router     = express.Router();
 
 
 io.on("connection", (socket) => {
@@ -11,7 +13,7 @@ io.on("connection", (socket) => {
   const user = new DBUser(userID);
   socket.join(`user${userID}`);
 
-  user.setOnline();
+  user.setUserStatus(userStatus.online);
 
   let room;
 
@@ -70,11 +72,28 @@ io.on("connection", (socket) => {
 
   });
 
+
+  socket.on("userChanges", (change) => {
+
+    switch(change.emitType) {
+
+      case "STATUS_CHANGE": {
+
+        user.setUserStatus(change.status, true);
+
+      } break;
+
+    }
+
+  })
+
+
   socket.on("disconnect", async () => {
     if (user.roomMemberID)
       await user.unwatch();
 
-    user.setOffline();
+    user.setUserStatus(userStatus.offline);
+
   });
 
 });

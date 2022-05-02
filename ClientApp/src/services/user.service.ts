@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@angular/core';
+import { Inject, Injectable, Injector } from '@angular/core';
 import {
   ActivatedRouteSnapshot,
   CanActivate,
@@ -8,7 +8,7 @@ import {
 } from '@angular/router';
 import { Observable } from 'rxjs';
 import { ServerResponse } from 'src/interfaces/response.interface';
-import { Account } from 'src/interfaces/account.interface';
+import { Account, UserStatus } from 'src/interfaces/account.interface';
 import { HttpClient } from '@angular/common/http';
 import { CookieService } from 'ngx-cookie-service';
 import { FileUploadService } from './file-upload.service';
@@ -16,6 +16,7 @@ import { UtilsService } from './utils.service';
 import { DOCUMENT } from '@angular/common';
 import { Settings } from 'src/interfaces/settings.interface';
 import { environment } from 'src/environments/environment';
+import { WebSocketService } from './websocket.service';
 
 @Injectable({
   providedIn: 'root'
@@ -28,6 +29,7 @@ export class UserService implements CanActivate {
     private _fileUpload: FileUploadService,
     private _utils: UtilsService,
     private cookieService: CookieService,
+    private injector: Injector,
     @Inject(DOCUMENT) private document: Document
   ) { }
 
@@ -58,6 +60,9 @@ export class UserService implements CanActivate {
           this.currentUser.picture = this._fileUpload.sanitizeIMG(this.currentUser.picture);
           this.userAuth = true;
           this.loadSettings();
+
+          this.initUserSockets();
+
           await this.router.navigate(['mainpage']);
         }
       });
@@ -69,7 +74,7 @@ export class UserService implements CanActivate {
    * @param force If the user authorization has been lost, when true redirect is set to 'unauthorized'.
    *
    */
-  public logOut(force?: boolean) {
+  public logOut(force?: boolean): void {
     this.userAuth = false;
 
     const del = async () => {
@@ -95,7 +100,7 @@ export class UserService implements CanActivate {
       });
   }
 
-  public loadSettings() {
+  public loadSettings(): void {
     this.API_getSettings()
       .toPromise()
       .then((response) => {
@@ -106,6 +111,25 @@ export class UserService implements CanActivate {
           this._utils.settings.showChannels = false;
         }
       });
+  }
+
+  public initUserSockets(): void {
+
+    this.injector
+      .get(WebSocketService)
+      .listen("userChanges")
+      .subscribe((obj: any) => {
+
+        switch(obj.emitType) {
+
+          case "CHANGE_STATUS": {
+
+            this.currentUser.userStatus = obj.status;
+
+          } break;
+
+        }
+    });
   }
 
   public API_signup(user) {
@@ -167,5 +191,14 @@ export class UserService implements CanActivate {
    */
   public API_getSettings() {
     return this.http.get<ServerResponse>(`${environment.BASE_URL}/authentication/getSettings`);
+  }
+
+  public changeUserStatus(status: UserStatus): void {
+    this.injector
+      .get(WebSocketService)
+      .emit("userChanges", {
+        status: status,
+        emitType: "STATUS_CHANGE"
+      });
   }
 }

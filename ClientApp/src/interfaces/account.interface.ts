@@ -15,6 +15,8 @@ export interface Account {
 
 
 export enum UserStatus {
-  offline = 0,
-  online = 1
+  "Offline" = 0,
+  "Online" = 1,
+  "Do not disturb" = 2,
+  "Sleeping" = 3
 }

@@ -2,11 +2,14 @@
 
   <div class="profile">
 
-    <rep-profile-pic routerLink="/settings/profile"
+    <rep-profile-pic
       [src]="_user.currentUser.picture"
       [letter]="_user.currentUser.name[0]"
       [color]="_user.currentUser.backgroundColor"
       [status]="_user.currentUser.userStatus"
+      [repContext]="changeStatus"
+      repMode="click"
+      [repEnableHighlight]="false"
       width="40px"
       height="40px"
     >

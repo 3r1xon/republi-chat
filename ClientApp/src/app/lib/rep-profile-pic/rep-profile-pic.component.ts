@@ -32,6 +32,8 @@ export class REPProfilePicComponent {
   @Input()
   public status: UserStatus;
 
+  public statuses = UserStatus;
+
   public get color() {
     return this._color;
   }

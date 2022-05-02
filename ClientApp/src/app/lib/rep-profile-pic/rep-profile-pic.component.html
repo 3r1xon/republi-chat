@@ -24,9 +24,15 @@
     <span *ngIf="letter" [style.fontSize]="span.offsetWidth / 1.5 + 'px'">{{letter[0]}}</span>
   </span>
 
-  <span class="user-status" [ngClass]="{
-    'online': status == 1,
-    'offline': status == 0
-  }"></span>
+  <span
+    class="user-status"
+    [ngClass]="{
+      'offline': status == 0,
+      'online': status == 1,
+      'do-not-disturb': status == 2,
+      'sleeping': status == 3
+    }"
+    [matTooltip]="statuses[status]"
+  ></span>
 
 </div>

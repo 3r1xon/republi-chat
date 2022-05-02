@@ -141,8 +141,6 @@ export class MessagesService {
                   return this.mapMsg(msg);
                 });
 
-                // this.onRoomChange.next();
-
                 this.initRoomSockets();
               }
             })
@@ -325,6 +323,7 @@ export class MessagesService {
               switch(obj.emitType) {
 
                 case "MEMBER_STATUS": {
+
                   const mrmbRef = this.currentRoom.members
                     .find(mrmb => mrmb.id == obj.userID);
 
@@ -458,6 +457,7 @@ export class MessagesService {
   public highlightMessage(_id: number) {
     this._webSocket.emit("highlightMessage", _id);
   }
+
 
   /**
    * API that create a channel.

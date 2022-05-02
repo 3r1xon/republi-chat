@@ -8,7 +8,7 @@ import { Account, UserStatus } from 'src/interfaces/account.interface';
 export class FilterOnlineMembersPipe implements PipeTransform {
 
   transform(members: Array<Account>, ...args: unknown[]): Array<Account> {
-    return members.filter(member => member.userStatus == UserStatus.online);
+    return members.filter(member => member.userStatus == UserStatus.Online);
   }
 
 }

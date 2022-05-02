@@ -83,11 +83,12 @@ export class REPContextDirective implements OnInit {
         `${event.pageY}px`
     );
 
-    this.renderer.setAttribute(
-      this.elRef.nativeElement,
-      "style",
-      "background: #9595951a !important"
-    );
+    if (this.highlight)
+      this.renderer.setAttribute(
+        this.elRef.nativeElement,
+        "style",
+        "background: #9595951a !important"
+      );
 
     setTimeout(() => {
 
@@ -105,11 +106,12 @@ export class REPContextDirective implements OnInit {
           if (this.elRef.nativeElement.contains(e.target))
             return;
 
-          this.renderer.setStyle(
-            this.elRef.nativeElement,
-            "background",
-            null
-          );
+          if (this.highlight)
+            this.renderer.setStyle(
+              this.elRef.nativeElement,
+              "background",
+              null
+            );
 
         });
 
@@ -122,11 +124,12 @@ export class REPContextDirective implements OnInit {
 
         resize();
 
-        this.renderer.setStyle(
-          this.elRef.nativeElement,
-          "background",
-          null
-        );
+        if (this.highlight)
+          this.renderer.setStyle(
+            this.elRef.nativeElement,
+            "background",
+            null
+          );
       });
     });
   }
@@ -142,6 +145,9 @@ export class REPContextDirective implements OnInit {
 
   @Input('repEnabled')
   public enabled: boolean = true;
+
+  @Input('repEnableHighlight')
+  public highlight: boolean = true;
 
   @Output()
   public repState: EventEmitter<boolean> = new EventEmitter();

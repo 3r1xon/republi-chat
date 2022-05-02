@@ -75,6 +75,9 @@ export class PLoginComponent {
             this._user.currentUser.picture = this._fileUpload.sanitizeIMG(this._user.currentUser.picture);
             this._user.userAuth = true;
             this._user.loadSettings();
+
+            this._user.initUserSockets();
+
             await this.router.navigate(['mainpage']);
           })
           .catch((response) => {

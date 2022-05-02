@@ -1,14 +1,13 @@
 import {
   Component,
   HostListener,
-  Input,
 } from '@angular/core';
 import { Router } from '@angular/router';
-import { Account } from 'src/interfaces/account.interface';
 import { UtilsService } from 'src/services/utils.service';
 import { REPButton } from 'src/interfaces/repbutton.interface';
 import { MessagesService } from 'src/services/messages.service';
 import { UserService } from 'src/services/user.service';
+import { UserStatus } from 'src/interfaces/account.interface';
 
 @Component({
   selector: 'mtd-status-bar',
@@ -67,5 +66,28 @@ export class MTDStatusBarComponent {
         this.router.navigate(['settings']);
       }
     },
+  ];
+
+  public readonly changeStatus: Array<REPButton> = [
+    {
+      name: "Online",
+      color: "success",
+      onClick: () => {
+        this._user.changeUserStatus(UserStatus.Online);
+      }
+    },
+    {
+      name: "Offline",
+      color: "danger",
+      onClick: () => {
+        this._user.changeUserStatus(UserStatus.Offline);
+      }
+    },
+    {
+      name: "Do not disturb",
+      onClick: () => {
+        this._user.changeUserStatus(UserStatus['Do not disturb']);
+      }
+    }
   ];
 }

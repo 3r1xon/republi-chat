@@ -13,7 +13,6 @@
       _ms.currentRoom
     "
   >
-    <rep-separator>Online</rep-separator>
 
     <ng-container
       *ngFor="
@@ -22,6 +21,8 @@
       let i = index;
       "
     >
+
+      <rep-separator *ngIf="i == 0">Online</rep-separator>
 
       <rep-namebox
         [status]="member.userStatus"

@@ -183,7 +183,7 @@ router.post('/authorize', Auth.HTTPAuthToken, async (req, res) => {
            TO_BASE64(U.PROFILE_PICTURE) as picture,
            U.LAST_JOINED_CHANNEL        as lastJoinedChannel,
            U.LAST_JOINED_ROOM           as lastJoinedRoom,
-           1                            as userStatus
+           U.USER_STATUS                as userStatus
     FROM USERS U
     WHERE U.ID_USER = ?
       AND U.DELETED IS NOT TRUE
@@ -225,7 +225,7 @@ router.post('/logIn', async (req, res) => {
            U.VERIFIED                   as verified,
            U.LAST_JOINED_CHANNEL        as lastJoinedChannel,
            U.LAST_JOINED_ROOM           as lastJoinedRoom,
-           1                            as userStatus
+           U.USER_STATUS                as userStatus
     FROM USERS U
     WHERE U.EMAIL = ?
       AND U.PASSWORD = ?
