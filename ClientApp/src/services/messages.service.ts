@@ -522,6 +522,13 @@ export class MessagesService {
     return this.http.put<ServerResponse>(`${environment.BASE_URL}/channels/changeChOrder`, body);
   }
 
+  public API_changeRoomsOrder(channel: Channel, rooms: Array<Room>) {
+    return this.http.put<ServerResponse>(`${environment.BASE_URL}/channels/changeChOrder`, {
+      chID: channel.id,
+      rooms: rooms
+    });
+  }
+
   /**
    * Destroys the joined channel subscriptions.
    *

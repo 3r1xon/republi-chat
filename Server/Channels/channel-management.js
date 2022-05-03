@@ -583,4 +583,23 @@ router.put('/changeChOrder', async (req, res) => {
 });
 
 
+
+router.put('/changeRoomsOrder', async (req, res) => {
+
+  try {
+
+    const rooms = req.body;
+    const userID = res.locals._id;
+
+
+
+  } catch(error) {
+    console.log(clc.red(error));
+
+    res.status(500).send({ success: false, message: "Internal server error!" });
+  }
+
+});
+
+
 module.exports = router;

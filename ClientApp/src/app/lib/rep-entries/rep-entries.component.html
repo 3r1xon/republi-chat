@@ -10,12 +10,16 @@
     repStop
   >
 
-    <div class="bar" cdkDragHandle>
-      <button class="close" (click)="close()">
-        <mat-icon>close</mat-icon>
-      </button>
-    </div>
+  <div class="bar">
 
+    <div class="handle" cdkDragHandle></div>
+
+    <button class="close" (click)="close()">
+      <mat-icon>close</mat-icon>
+    </button>
+
+  </div>
+    
     <ng-content></ng-content>
 
   </div>

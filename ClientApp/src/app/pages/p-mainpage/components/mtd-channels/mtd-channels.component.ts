@@ -135,6 +135,15 @@ export class MTDChannelsComponent {
     this._ms.API_changeChOrder(this._ms.channels).toPromise();
   }
 
+  orderRoom(event: CdkDragDrop<Array<string>>) {
+    moveItemInArray(
+      this._ms.currentChannel.rooms,
+      event.previousIndex,
+      event.currentIndex
+    );
+
+  }
+
   async addNew() {
     await this.router.navigateByUrl('/settings/newchannel');
   }

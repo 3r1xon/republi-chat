@@ -35,10 +35,14 @@
         *ngIf="_ms.currentChannel?.id == section.id"
         class="rooms"
         body
+        cdkDropList
+        [cdkDropListData]="_ms.currentChannel.rooms"
+        (cdkDropListDropped)="orderRoom($event)"
       >
 
         <rep-actions onlyIcons="true" [actions]="channelActions"></rep-actions>
 
+        <!-- Rooms -->
         <rep-separator>
           Text rooms
         </rep-separator>
@@ -52,6 +56,10 @@
           [notifications]="room.notifications"
           [hold]="_ms.isInRoom(room)"
           (click)="selectRoom(room)"
+          cdkDrag
+          [cdkDragDisabled]="!_ms.chPermissions.createRooms"
+          cdkDragLockAxis="y"
+          cdkDragBoundary=".rooms"
         >
         </rep-room>
 
