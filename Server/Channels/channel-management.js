@@ -10,6 +10,7 @@ const clc               = require('cli-color');
 const DBUser            = require('../Authentication/db-user');
 const { channelSchema } = require('../Tools/schemas');
 const { io }            = require('../start');
+const permissions       = require('../Authentication/permissions');
 
 
 router.use(Auth.HTTPAuthToken);
@@ -585,26 +586,41 @@ router.put('/changeChOrder', async (req, res) => {
 
 
 
-router.put('/changeRoomsOrder', async (req, res) => {
+router.put('/changeRoomsOrder', (req, res) => {
 
   try {
 
     const rooms = req.body.rooms;
     const channelID = req.body.chID;
+    const userID = res.locals._id;
+    const user = new DBUser(userID);
 
-    let i = 0;
-    for (const room of rooms) {
-      await REPQuery.exec(
-      `
-      UPDATE CHANNELS_ROOMS CR
-      SET CR.ORDER = ?
-      WHERE CR.ID_CHANNEL_ROOM = ?
-        AND CR.ID_CHANNEL = ?
-      `, [i, room.roomID, channelID]);
-      i++;
-    }
+    user.setChannel(channelID, (err) => {
+      if (err) {
+        res.status(401).send({ success: false, message: "User not in channel!" });
+      } else {
+        user.hasPermission(permissions.createRooms, async (err) => {
+          if (err) {
+            res.status(401).send({ success: false, message: err });
+          } else {
 
-    res.status(200).send({ success: true });
+            let i = 0;
+            for (const room of rooms) {
+              await REPQuery.exec(
+              `
+              UPDATE CHANNELS_ROOMS CR
+              SET CR.ORDER = ?
+              WHERE CR.ID_CHANNEL_ROOM = ?
+                AND CR.ID_CHANNEL = ?
+              `, [i, room.roomID, channelID]);
+              i++;
+            }
+
+            res.status(200).send({ success: true });
+          }
+        });
+      }
+    });
 
   } catch(error) {
     console.log(clc.red(error));
