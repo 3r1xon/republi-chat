@@ -516,16 +516,23 @@ export class MessagesService {
     const body = channels.map((ch) => {
       return {
         id: ch.id
-      }
+      };
     });
 
     return this.http.put<ServerResponse>(`${environment.BASE_URL}/channels/changeChOrder`, body);
   }
 
   public API_changeRoomsOrder(channel: Channel, rooms: Array<Room>) {
-    return this.http.put<ServerResponse>(`${environment.BASE_URL}/channels/changeChOrder`, {
+
+    const filteredRooms = rooms.map((rm) => {
+      return {
+        roomID: rm.roomID
+      };
+    });
+
+    return this.http.put<ServerResponse>(`${environment.BASE_URL}/channels/changeRoomsOrder`, {
       chID: channel.id,
-      rooms: rooms
+      rooms: filteredRooms
     });
   }
 

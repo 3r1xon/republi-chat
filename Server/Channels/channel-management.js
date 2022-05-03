@@ -209,6 +209,7 @@ router.get('/getChannelInfo/:id', (req, res) => {
                 INNER JOIN CHANNELS_MEMBERS CM ON CM.ID_CHANNEL_MEMBER = CRMB.ID_CHANNEL_MEMBER
         WHERE CR.ID_CHANNEL = ?
           AND CM.ID_USER = ?
+        ORDER BY CR.TEXT_ROOM DESC, CR.ORDER
         `, [channelID, userID]);
 
         const permissions = await REPQuery.one(
@@ -350,7 +351,7 @@ router.post('/addChRoom', (req, res) => {
 
         user.addRoom(room, (err) => {
           if (err) {
-            res.status(401).send({ success: false, message: err });
+            // res.status(401).send({ success: false, message: err });
           } else {
             res.status(200).send({ success: true });
           }
@@ -588,10 +589,22 @@ router.put('/changeRoomsOrder', async (req, res) => {
 
   try {
 
-    const rooms = req.body;
-    const userID = res.locals._id;
+    const rooms = req.body.rooms;
+    const channelID = req.body.chID;
 
+    let i = 0;
+    for (const room of rooms) {
+      await REPQuery.exec(
+      `
+      UPDATE CHANNELS_ROOMS CR
+      SET CR.ORDER = ?
+      WHERE CR.ID_CHANNEL_ROOM = ?
+        AND CR.ID_CHANNEL = ?
+      `, [i, room.roomID, channelID]);
+      i++;
+    }
 
+    res.status(200).send({ success: true });
 
   } catch(error) {
     console.log(clc.red(error));

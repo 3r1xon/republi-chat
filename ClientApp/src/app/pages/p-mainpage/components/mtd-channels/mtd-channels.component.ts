@@ -136,16 +136,24 @@ export class MTDChannelsComponent {
   }
 
   orderRoom(event: CdkDragDrop<Array<string>>) {
+
+    this._ms.currentChannel.rooms = this._ms.currentChannel.rooms
+      .sort((a: any, b: any) => b.textRoom - a.textRoom);
+
     moveItemInArray(
       this._ms.currentChannel.rooms,
       event.previousIndex,
       event.currentIndex
     );
 
+    this._ms.API_changeRoomsOrder(
+      this._ms.currentChannel,
+      this._ms.currentChannel.rooms
+    ).toPromise();
   }
 
-  async addNew() {
-    await this.router.navigateByUrl('/settings/newchannel');
+  addNew() {
+    this.router.navigateByUrl('/settings/newchannel');
   }
 
 }

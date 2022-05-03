@@ -43,49 +43,60 @@
         <rep-actions onlyIcons="true" [actions]="channelActions"></rep-actions>
 
         <!-- Rooms -->
-        <rep-separator>
-          Text rooms
-        </rep-separator>
+        <div class="rooms textRooms">
 
-        <rep-room
-          *ngFor="let room of _ms.currentChannel.rooms | filterTextRooms"
-          [repContext]="roomOptions"
-          [repUniqueID]="room.roomID"
-          [roomName]="room.roomName"
-          [textRoom]="room.textRoom"
-          [notifications]="room.notifications"
-          [hold]="_ms.isInRoom(room)"
-          (click)="selectRoom(room)"
-          cdkDrag
-          [cdkDragDisabled]="!_ms.chPermissions.createRooms"
-          cdkDragLockAxis="y"
-          cdkDragBoundary=".rooms"
-        >
-        </rep-room>
-
-
-        <ng-container
-          *ngFor="
-          let room of _ms.currentChannel.rooms | filterVocalRooms;
-          let rmIndex = index;"
-        >
-
-          <rep-separator *ngIf="rmIndex == 0">
-            Vocal rooms
+          <rep-separator>
+            Text rooms
           </rep-separator>
 
           <rep-room
-            [roomName]="room.roomName"
-            [textRoom]="room.textRoom"
-            [members]="room.connected"
+            *ngFor="let room of _ms.currentChannel.rooms | filterTextRooms"
             [repContext]="roomOptions"
             [repUniqueID]="room.roomID"
+            [roomName]="room.roomName"
+            [textRoom]="room.textRoom"
+            [notifications]="room.notifications"
             [hold]="_ms.isInRoom(room)"
             (click)="selectRoom(room)"
+            cdkDrag
+            [cdkDragDisabled]="!_ms.chPermissions.createRooms"
+            cdkDragLockAxis="y"
+            cdkDragBoundary=".textRooms"
           >
           </rep-room>
 
-        </ng-container>
+        </div>
+
+        <div class="rooms vocalRooms">
+
+          <ng-container
+            *ngFor="
+            let room of _ms.currentChannel.rooms | filterVocalRooms;
+            let rmIndex = index;"
+          >
+
+            <rep-separator *ngIf="rmIndex == 0">
+              Vocal rooms
+            </rep-separator>
+
+            <rep-room
+              [roomName]="room.roomName"
+              [textRoom]="room.textRoom"
+              [members]="room.connected"
+              [repContext]="roomOptions"
+              [repUniqueID]="room.roomID"
+              [hold]="_ms.isInRoom(room)"
+              (click)="selectRoom(room)"
+              cdkDrag
+              [cdkDragDisabled]="!_ms.chPermissions.createRooms"
+              cdkDragLockAxis="y"
+              cdkDragBoundary=".vocalRooms"
+            >
+            </rep-room>
+
+          </ng-container>
+
+        </div>
 
       </div>
 

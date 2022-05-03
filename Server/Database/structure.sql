@@ -160,6 +160,7 @@ create or replace table republichat.channels_rooms
     ROOM_NAME         varchar(30) collate utf8mb4_unicode_ci null,
     TEXT_ROOM         tinyint(1) default 1                   null,
     AUTO_JOIN         tinyint(1) default 0                   null,
+    `ORDER`           int        default 0                   null,
     constraint channels_rooms_channels_ID_CHANNEL_fk
         foreign key (ID_CHANNEL) references republichat.channels (ID_CHANNEL)
             on update cascade on delete cascade,

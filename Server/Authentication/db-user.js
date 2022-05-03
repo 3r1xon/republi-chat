@@ -376,14 +376,22 @@ class DBUser {
       } else {
 
         try {
+
+          const last_room = await REPQuery.one(
+          `
+          SELECT MAX(CR.ORDER) as max
+          FROM CHANNELS_ROOMS CR
+          WHERE CR.ID_CHANNEL = ?
+          `, [this.channelID]);
+
           const new_room = await REPQuery.one(
           `
           INSERT INTO CHANNELS_ROOMS
-          (ID_CHANNEL, ID_CHANNEL_MEMBER, ROOM_NAME, TEXT_ROOM, AUTO_JOIN)
+          (ID_CHANNEL, ID_CHANNEL_MEMBER, ROOM_NAME, TEXT_ROOM, AUTO_JOIN, CHANNELS_ROOMS.ORDER)
           VALUES
-          (?, ?, ?, ?, ?)
+          (?, ?, ?, ?, ?, ?)
           RETURNING ID_CHANNEL_ROOM as roomID
-          `, [this.channelID, this.channelMemberID, room.roomName, room.textRoom, room.autoJoin]);
+          `, [this.channelID, this.channelMemberID, room.roomName, room.textRoom, room.autoJoin, last_room.max + 1]);
 
           const send = room.autoJoin ? `ch${this.channelID}` : `user${this.userID}`;
 
