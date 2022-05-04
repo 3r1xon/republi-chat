@@ -1,7 +1,7 @@
 <div class="rep-accordion">
 
   <div class="header"
-    (click)="open = !open"
+    (click)="open = !open; onExpand.emit(open)"
   >
     <ng-content select="[header]"></ng-content>
   </div>

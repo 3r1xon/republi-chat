@@ -11,7 +11,7 @@ const { io }         = require('../start');
 const model          = require('nanoid');
 const { userSchema } = require('../Tools/schemas');
 const clc            = require('cli-color');
-
+const userStatus     = require('./user-status');
 
 router.post('/signUp', async (req, res) => {
 
@@ -225,7 +225,8 @@ router.post('/logIn', async (req, res) => {
            U.VERIFIED                   as verified,
            U.LAST_JOINED_CHANNEL        as lastJoinedChannel,
            U.LAST_JOINED_ROOM           as lastJoinedRoom,
-           U.USER_STATUS                as userStatus
+           U.USER_STATUS                as userStatus,
+           U.LAST_USER_STATUS           as lastUserStatus
     FROM USERS U
     WHERE U.EMAIL = ?
       AND U.PASSWORD = ?
@@ -243,6 +244,7 @@ router.post('/logIn', async (req, res) => {
 
         return;
       }
+
 
       const sid = model.nanoid(process.env.SID_SIZE);
 

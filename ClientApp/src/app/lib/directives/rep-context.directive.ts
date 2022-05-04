@@ -103,9 +103,6 @@ export class REPContextDirective implements OnInit {
 
           unsub();
 
-          if (this.elRef.nativeElement.contains(e.target))
-            return;
-
           if (this.highlight)
             this.renderer.setStyle(
               this.elRef.nativeElement,

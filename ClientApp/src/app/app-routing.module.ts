@@ -30,6 +30,7 @@ const routes: Routes = [
       { path: 'profile', component: PProfileComponent, pathMatch: 'full' },
       { path: 'privacy', component: PPrivacyComponent, pathMatch: 'full' },
       { path: 'newchannel', component: PNewChannelComponent, pathMatch: 'full'},
+      { path: 'channelsettings/:channelID', component: PChannelSettingsComponent, pathMatch: 'full' },
       { path: 'channelsettings', component: PChannelSettingsComponent, pathMatch: 'full' },
       { path: 'appearance', component: PAppearanceComponent, pathMatch: 'full' }
     ],

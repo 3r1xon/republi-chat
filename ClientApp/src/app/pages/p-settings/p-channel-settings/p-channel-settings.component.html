@@ -1,10 +1,39 @@
 <div id="p-channelsettings">
 
-  <rep-namebox
-    *ngFor="let section of _ms.channels; let i = index"
-    [message]="section"
-    [options]="chOptions"
+  <rep-accordion
+    *ngFor="let section of channels; let i = index"
+    [open]="section.open"
+    (onExpand)="expandChannel(i)"
   >
-  </rep-namebox>
+
+    <rep-namebox
+      header
+      [message]="section"
+      [hold]="section.open"
+    >
+    </rep-namebox>
+
+    <div
+      class="body"
+      body
+    >
+
+      <rep-separator>Members</rep-separator>
+
+      <rep-accordion
+      *ngFor="let member of _ms.currentRoom.members"
+      class="members"
+      >
+
+      <rep-namebox
+      header
+      [message]="member"
+      ></rep-namebox>
+
+    </rep-accordion>
+
+    </div>
+
+  </rep-accordion>
 
 </div>

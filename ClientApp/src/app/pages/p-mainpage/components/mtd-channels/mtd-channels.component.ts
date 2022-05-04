@@ -45,7 +45,7 @@ export class MTDChannelsComponent {
       icon: "tune",
       tooltip: "Go to channel settings",
       onClick: () => {
-        this.router.navigateByUrl('/settings/channelsettings');
+        this.router.navigateByUrl(`/settings/channelsettings/${this._ms.currentChannel.id}`);
       }
     }
   ];
@@ -132,7 +132,12 @@ export class MTDChannelsComponent {
       event.currentIndex
     );
 
-    this._ms.API_changeChOrder(this._ms.channels).toPromise();
+    this._ms.API_changeChOrder(
+      this._ms.channels[event.previousIndex],
+      this._ms.channels[event.currentIndex],
+      event.previousIndex,
+      event.currentIndex
+    ).toPromise();
   }
 
   orderRoom(event: CdkDragDrop<Array<string>>) {
@@ -148,7 +153,10 @@ export class MTDChannelsComponent {
 
     this._ms.API_changeRoomsOrder(
       this._ms.currentChannel,
-      this._ms.currentChannel.rooms
+      this._ms.currentChannel.rooms[event.previousIndex],
+      this._ms.currentChannel.rooms[event.currentIndex],
+      event.previousIndex,
+      event.currentIndex
     ).toPromise();
   }
 

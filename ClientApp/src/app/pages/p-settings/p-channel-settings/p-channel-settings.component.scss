@@ -1,6 +1,35 @@
 #p-channelsettings {
-    width: 100%;
-    height: 100%;
-    animation: fadeIn 250ms;
+  width: 100%;
+  height: 100%;
+  animation: fadeIn 250ms;
 
+  rep-accordion {
+    user-select: none;
+    display: flex;
+
+    rep-namebox {
+      cursor: pointer;
+    }
+  }
+
+  .body {
+    width: 100%;
+    background: var(--LIGHT-GREY);
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  rep-separator {
+    width: 90%;
+    margin: 10px;
+  }
+
+
+  .members {
+    width: 95%;
+    margin: 5px 0 5px 5px;
+    align-self: flex-end;
+  }
 }

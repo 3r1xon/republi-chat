@@ -11,6 +11,7 @@ import { UtilsService } from './utils.service';
 import { WebSocketService } from './websocket.service';
 import { environment } from 'src/environments/environment';
 import { Account } from 'src/interfaces/account.interface';
+import { moveItemInArray } from '@angular/cdk/drag-drop';
 
 
 @Injectable({
@@ -310,6 +311,20 @@ export class MessagesService {
 
               } break;
 
+              case "ROOM_ORDER": {
+
+                if (obj.emitter != this._user.currentUser.id) {
+
+                  moveItemInArray(
+                    this.currentChannel.rooms,
+                    obj.previousIndex,
+                    obj.currentIndex,
+                  );
+
+                }
+
+              } break;
+
             }
 
           })
@@ -511,28 +526,22 @@ export class MessagesService {
     });
   }
 
-  public API_changeChOrder(channels: Array<Channel>) {
-
-    const body = channels.map((ch) => {
-      return {
-        id: ch.id
-      };
+  public API_changeChOrder(previousChannel: Channel, currentChannel: Channel, previousIndex: number, currentIndex: number) {
+    return this.http.put<ServerResponse>(`${environment.BASE_URL}/channels/changeChOrder`, {
+      previousChannel: previousChannel.id,
+      currentChannel: currentChannel.id,
+      previousIndex: previousIndex,
+      currentIndex: currentIndex
     });
-
-    return this.http.put<ServerResponse>(`${environment.BASE_URL}/channels/changeChOrder`, body);
   }
 
-  public API_changeRoomsOrder(channel: Channel, rooms: Array<Room>) {
-
-    const filteredRooms = rooms.map((rm) => {
-      return {
-        roomID: rm.roomID
-      };
-    });
-
+  public API_changeRoomsOrder(channel: Channel, previousRoom: Room, currentRoom: Room, previousIndex: number, currentIndex: number) {
     return this.http.put<ServerResponse>(`${environment.BASE_URL}/channels/changeRoomsOrder`, {
       chID: channel.id,
-      rooms: filteredRooms
+      previousRoom: previousRoom.roomID,
+      currentRoom: currentRoom.roomID,
+      previousIndex: previousIndex,
+      currentIndex: currentIndex
     });
   }
 

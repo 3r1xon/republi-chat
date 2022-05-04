@@ -59,6 +59,7 @@
             [hold]="_ms.isInRoom(room)"
             (click)="selectRoom(room)"
             cdkDrag
+            [cdkDragStartDelay]="_utils.isMobile ? 200 : 0"
             [cdkDragDisabled]="!_ms.chPermissions.createRooms"
             cdkDragLockAxis="y"
             cdkDragBoundary=".textRooms"
@@ -89,6 +90,7 @@
               (click)="selectRoom(room)"
               cdkDrag
               [cdkDragDisabled]="!_ms.chPermissions.createRooms"
+              [cdkDragStartDelay]="_utils.isMobile ? 200 : 0"
               cdkDragLockAxis="y"
               cdkDragBoundary=".vocalRooms"
             >
@@ -101,6 +103,7 @@
       </div>
 
     </rep-accordion>
+
   </div>
 
 

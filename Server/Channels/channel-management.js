@@ -559,23 +559,26 @@ router.put('/changeChOrder', async (req, res) => {
 
   try {
 
-    const channels = req.body;
+    const { previousChannel, currentChannel, previousIndex, currentIndex } = req.body;
     const userID = res.locals._id;
 
-    let i = 0;
-    for (const channel of channels) {
-      await REPQuery.exec(
-      `
-      UPDATE CHANNELS_MEMBERS CM
-      SET CM.ORDER = ?
-      WHERE CM.ID_USER = ?
-        AND CM.ID_CHANNEL = ?
-      `, [i, userID, channel.id]);
-      i++;
-    }
+    await REPQuery.exec(
+    `
+    UPDATE CHANNELS_MEMBERS CM
+    SET CM.ORDER = ?
+    WHERE CM.ID_CHANNEL = ?
+      AND CM.ID_USER = ?
+    `, [previousIndex, previousChannel, userID]);
+
+    await REPQuery.exec(
+    `
+    UPDATE CHANNELS_MEMBERS CM
+    SET CM.ORDER = ?
+    WHERE CM.ID_CHANNEL = ?
+      AND CM.ID_USER = ?
+    `, [currentIndex, currentChannel, userID]);
 
     res.status(200).send({ success: true });
-
   }
   catch(error) {
     console.log(clc.red(error));
@@ -590,7 +593,6 @@ router.put('/changeRoomsOrder', (req, res) => {
 
   try {
 
-    const rooms = req.body.rooms;
     const channelID = req.body.chID;
     const userID = res.locals._id;
     const user = new DBUser(userID);
@@ -604,17 +606,28 @@ router.put('/changeRoomsOrder', (req, res) => {
             res.status(401).send({ success: false, message: err });
           } else {
 
-            let i = 0;
-            for (const room of rooms) {
-              await REPQuery.exec(
-              `
-              UPDATE CHANNELS_ROOMS CR
-              SET CR.ORDER = ?
-              WHERE CR.ID_CHANNEL_ROOM = ?
-                AND CR.ID_CHANNEL = ?
-              `, [i, room.roomID, channelID]);
-              i++;
-            }
+            const { previousRoom, currentRoom, previousIndex, currentIndex } = req.body;
+
+            await REPQuery.exec(
+            `
+            UPDATE CHANNELS_ROOMS CR
+            SET CR.ORDER = ?
+            WHERE CR.ID_CHANNEL_ROOM = ?
+            `, [previousIndex, previousRoom]);
+
+            await REPQuery.exec(
+            `
+            UPDATE CHANNELS_ROOMS CR
+            SET CR.ORDER = ?
+            WHERE CR.ID_CHANNEL_ROOM = ?
+            `, [currentIndex, currentRoom]);
+
+            io.to(`ch${channelID}`).emit("channel", {
+              emitType: "ROOM_ORDER",
+              emitter: userID,
+              previousIndex: previousIndex,
+              currentIndex: currentIndex
+            });
 
             res.status(200).send({ success: true });
           }

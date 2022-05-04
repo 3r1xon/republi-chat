@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 import { expand } from '../rep-animations';
 
 @Component({
@@ -17,5 +17,8 @@ export class REPAccordionComponent {
 
   @Input()
   public open: boolean = false;
+
+  @Output()
+  public onExpand: EventEmitter<boolean> = new EventEmitter();
 
 }

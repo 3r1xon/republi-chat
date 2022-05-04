@@ -17,7 +17,7 @@ export class PSettingsComponent implements OnInit {
   constructor(
     private _user: UserService,
     private _utils: UtilsService,
-    private router: Router
+    private router: Router,
   ) { }
 
   ngOnInit(): void {
@@ -70,7 +70,7 @@ export class PSettingsComponent implements OnInit {
     },
   ];
 
-  public currentRoute: string = this.menus.find(menu => menu.route == this.router.url).name;
+  public currentRoute: string = this.menus.find(menu => menu.route == this.router.url)?.name;
 
   async changeRoute(index: number) {
     if (this.menus[index].route)
