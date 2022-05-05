@@ -11,7 +11,6 @@ import { ServerResponse } from 'src/interfaces/response.interface';
 import { Account, UserStatus } from 'src/interfaces/account.interface';
 import { HttpClient } from '@angular/common/http';
 import { CookieService } from 'ngx-cookie-service';
-import { FileUploadService } from './file-upload.service';
 import { UtilsService } from './utils.service';
 import { DOCUMENT } from '@angular/common';
 import { Settings } from 'src/interfaces/settings.interface';
@@ -26,7 +25,6 @@ export class UserService implements CanActivate {
   constructor(
     private http: HttpClient,
     private router: Router,
-    private _fileUpload: FileUploadService,
     private _utils: UtilsService,
     private cookieService: CookieService,
     private injector: Injector,
@@ -57,7 +55,6 @@ export class UserService implements CanActivate {
       .then(async (res: ServerResponse) => {
         if (res.success) {
           this.currentUser = res.data as Account;
-          this.currentUser.picture = this._fileUpload.sanitizeIMG(this.currentUser.picture);
           this.userAuth = true;
           this.loadSettings();
 

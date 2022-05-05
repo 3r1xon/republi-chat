@@ -4,7 +4,6 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Account } from 'src/interfaces/account.interface';
 import { REPButton } from 'src/interfaces/repbutton.interface';
-import { FileUploadService } from 'src/services/file-upload.service';
 import { UserService } from 'src/services/user.service';
 import { UtilsService } from 'src/services/utils.service';
 
@@ -18,7 +17,6 @@ export class PLoginComponent {
   constructor(
     private _user: UserService,
     private _utils: UtilsService,
-    private _fileUpload: FileUploadService,
     private router: Router,
     private fb: FormBuilder,
     private cd: ChangeDetectorRef,
@@ -72,7 +70,6 @@ export class PLoginComponent {
           .toPromise()
           .then(async (response) => {
             this._user.currentUser = <Account>response.data.user;
-            this._user.currentUser.picture = this._fileUpload.sanitizeIMG(this._user.currentUser.picture);
             this._user.userAuth = true;
             this._user.loadSettings();
 

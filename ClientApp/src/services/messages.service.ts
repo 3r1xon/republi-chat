@@ -3,7 +3,6 @@ import { Injectable } from '@angular/core';
 import { Message } from 'src/interfaces/message.interface';
 import { UserService } from './user.service';
 import { ServerResponse } from 'src/interfaces/response.interface';
-import { FileUploadService } from './file-upload.service';
 import { Channel, Room } from 'src/interfaces/channel.interface';
 import { Subscription } from 'rxjs';
 import { ChannelPermissions, RoomPermissions } from 'src/interfaces/channel.interface';
@@ -21,7 +20,6 @@ export class MessagesService {
 
   constructor(
     private _user: UserService,
-    private _fileUpload: FileUploadService,
     private _utils: UtilsService,
     private _webSocket: WebSocketService,
     private http: HttpClient
@@ -125,10 +123,7 @@ export class MessagesService {
 
           this.roomPermissions = resRoom.data.permissions as RoomPermissions;
 
-          this.currentRoom.members = resRoom.data.members.map((member: Account) => {
-            member.picture = this._fileUpload.sanitizeIMG(member.picture);
-            return member;
-          });
+          this.currentRoom.members = resRoom.data.members;
 
           room.notifications = 0;
 
@@ -163,7 +158,6 @@ export class MessagesService {
 
 
   public mapMsg(msg: Message): Message {
-    msg.picture = this._fileUpload.sanitizeIMG(msg.picture);
     msg.date = msg.date ? new Date(msg.date) : null;
     msg.auth = this.chPermissions.id === msg.author;
     return msg;

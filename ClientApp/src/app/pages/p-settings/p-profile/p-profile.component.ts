@@ -3,7 +3,6 @@ import { Component, OnInit } from '@angular/core';
 import { Message } from 'src/interfaces/message.interface';
 import { ServerResponse } from 'src/interfaces/response.interface';
 import { REPButton } from 'src/interfaces/repbutton.interface';
-import { FileUploadService } from 'src/services/file-upload.service';
 import { UserService } from 'src/services/user.service';
 import { UtilsService } from 'src/services/utils.service';
 import { environment } from 'src/environments/environment';
@@ -18,7 +17,6 @@ export class PProfileComponent extends REPManager implements OnInit {
 
   constructor(
     public _user: UserService,
-    public _fileUpload: FileUploadService,
     public http: HttpClient,
     private _utils: UtilsService,
     private fb: FormBuilder,

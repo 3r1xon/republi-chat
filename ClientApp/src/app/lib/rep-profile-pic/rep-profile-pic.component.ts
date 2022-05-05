@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { UserStatus } from 'src/interfaces/account.interface';
 
 @Component({
@@ -7,13 +8,31 @@ import { UserStatus } from 'src/interfaces/account.interface';
   styleUrls: ['./rep-profile-pic.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class REPProfilePicComponent {
+export class REPProfilePicComponent implements OnInit {
+
+  constructor(
+    private sanitizer: DomSanitizer
+  ) { }
+
+  ngOnInit(): void {
+
+    if (this.src == null) return;
+
+    const extensions = {
+      "/": "jpg",
+      "i": "png",
+      "R": "gif",
+      "U": "webp"
+    };
+
+    this.src = this.sanitizer.bypassSecurityTrustResourceUrl(`data:image/${extensions[this.src[0]]};base64,` + this.src);
+  }
 
   @Input()
   public letter: string;
 
   @Input()
-  public src: string;
+  public src: SafeResourceUrl;
 
   @Input()
   public width: string = "45px";
