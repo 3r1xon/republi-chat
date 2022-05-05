@@ -10,8 +10,11 @@ export class REPFocus {
   ) { }
 
   ngAfterViewInit(){
-    if (this.enabled)
-      this.elRef.nativeElement.focus();
+    if (this.enabled) {
+      Promise.resolve().then(() => {
+        this.elRef.nativeElement.focus();
+      });
+    }
   }
 
   @Input('repFocusEnabled')
