@@ -263,6 +263,53 @@ router.get('/getChannelInfo/:id', (req, res) => {
 
 
 
+router.get('/getChannelMembers/:chID', (req, res) => {
+
+  try {
+
+    const userID = res.locals._id;
+    const channelID = req.params.chID;
+
+    const user = new DBUser(userID);
+
+    user.setChannel(channelID, async (chErr) => {
+      if (chErr) {
+        res.status(401).send({ success: false, message: "User not in channel!" });
+      } else {
+
+        const members = await REPQuery.load(
+        `
+        SELECT U.ID_USER                    as id,
+               U.USER_CODE                  as code,
+               U.COLOR                      as color,
+               U.BACKGROUND_COLOR           as backgroundColor,
+               U.NAME                       as name,
+               TO_BASE64(U.PROFILE_PICTURE) as picture,
+               U.USER_STATUS                as userStatus
+        FROM CHANNELS_MEMBERS CM
+                  INNER JOIN USERS U ON U.ID_USER = CM.ID_USER
+        WHERE CM.ID_CHANNEL = ?
+        `, channelID);
+
+        res.status(200).send(
+        {
+          success: true,
+          data: members
+        });
+      }
+    })
+
+
+  } catch (error) {
+    console.log(clc.red(error));
+
+    res.status(500).send({ success: false, message: `Internal server error!!` });
+  }
+
+});
+
+
+
 router.get('/getChRoomInfo/:chID/:roomID', (req, res) => {
 
   try {

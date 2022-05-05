@@ -90,6 +90,25 @@ export class REPContextDirective implements OnInit {
         "background: #9595951a !important"
       );
 
+    const close = () => {
+
+      compRef.destroy();
+
+      this.repState.emit(false);
+
+      if (this.highlight)
+        this.renderer.setStyle(
+          this.elRef.nativeElement,
+          "background",
+          null
+        );
+    };
+
+    compRef.instance.onSelection.subscribe(() => {
+      close();
+      compRef.instance.onSelection.unsubscribe();
+    });
+
     setTimeout(() => {
 
       const eventNames = ["click", "contextmenu"];
@@ -97,36 +116,21 @@ export class REPContextDirective implements OnInit {
       eventNames.forEach((eName) => {
         const unsub = this.renderer.listen(document, eName, (e: MouseEvent) => {
 
-          compRef.destroy();
-
-          this.repState.emit(false);
+          if (compRef.location.nativeElement.contains(e.target))
+            return;
 
           unsub();
 
-          if (this.highlight)
-            this.renderer.setStyle(
-              this.elRef.nativeElement,
-              "background",
-              null
-            );
-
+          close();
         });
 
       });
 
       const resize = this.renderer.listen("window", "resize", () => {
-        compRef.destroy();
-
-        this.repState.emit(false);
 
         resize();
 
-        if (this.highlight)
-          this.renderer.setStyle(
-            this.elRef.nativeElement,
-            "background",
-            null
-          );
+        close();
       });
     });
   }

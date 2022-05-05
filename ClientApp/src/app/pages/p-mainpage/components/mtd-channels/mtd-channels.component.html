@@ -18,6 +18,7 @@
       [open]="_ms.channels[i]?.open || section?.id == _ms.currentChannel?.id"
       (click)="selectChannel(section)"
       cdkDrag
+      [cdkDragStartDelay]="_utils.isMobile ? 200 : 0"
       cdkDragLockAxis="y"
       cdkDragBoundary=".list"
     >

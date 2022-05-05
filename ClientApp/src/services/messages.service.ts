@@ -514,6 +514,10 @@ export class MessagesService {
     return this.http.get<ServerResponse>(`${environment.BASE_URL}/channels/getChannelInfo/${channel.id}`);
   }
 
+  public API_getChannelMembers(channel: Channel) {
+    return this.http.get<ServerResponse>(`${environment.BASE_URL}/channels/getChannelMembers/${channel.id}`);
+  }
+
   public API_getChRoomInfo(channel: Channel, room: Room) {
     return this.http.get<ServerResponse>(`${environment.BASE_URL}/channels/getChRoomInfo/${channel.id}/${room.roomID}`);
   }

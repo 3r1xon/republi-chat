@@ -21,14 +21,24 @@
       <rep-separator>Members</rep-separator>
 
       <rep-accordion
-      *ngFor="let member of _ms.currentRoom.members"
-      class="members"
+        *ngFor="let member of currentChMembers"
+        class="members"
       >
 
-      <rep-namebox
-      header
-      [message]="member"
-      ></rep-namebox>
+        <rep-namebox
+          header
+          [message]="member"
+        >
+        </rep-namebox>
+
+        <div
+          body
+          class="permissions"
+        >
+
+          <rep-separator>{{member.name}}'s permissions</rep-separator>
+
+        </div>
 
     </rep-accordion>
 

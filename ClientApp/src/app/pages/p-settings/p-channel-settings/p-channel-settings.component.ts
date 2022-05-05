@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Account } from 'src/interfaces/account.interface';
 import { Channel } from 'src/interfaces/channel.interface';
+import { ServerResponse } from 'src/interfaces/response.interface';
 import { MessagesService } from 'src/services/messages.service';
 import { UtilsService } from 'src/services/utils.service';
 
@@ -21,15 +23,21 @@ export class PChannelSettingsComponent implements OnInit {
 
     if (channelID) {
 
-      const ch = this.channels.find(ch => ch.id == +channelID);
+      const chIndex = this.channels.findIndex(ch => ch.id == +channelID);
 
-      if (ch) {
-        (ch as any).open = true;
+      if (chIndex != -1) {
+        this.expandChannel(chIndex);
       }
     }
   }
 
-  public channels: Array<Channel> = this._ms.channels.slice();
+  public channels: Array<Channel> = JSON.parse(JSON.stringify(this._ms.channels));
+
+  public currentChMembers: Array<Account> = [];
+
+  public permissionList: Array<any> = [
+
+  ];
 
   public tabs: Array<{
     tabname: string,
@@ -52,9 +60,24 @@ export class PChannelSettingsComponent implements OnInit {
   }
 
   public expandChannel(index: number): void {
+    // if (this.channels[index].id == th)
     this.channels.forEach(ch => (ch as any).open = false);
 
-    (this.channels[index] as any).open = true;
+    this._ms.API_getChannelMembers(this.channels[index])
+      .toPromise()
+      .then((res: ServerResponse) => {
+
+        this.currentChMembers = res.data;
+
+        (this.channels[index] as any).open = true;
+      })
+      .catch(() => {
+        this._utils.showRequest(
+          "Error",
+          "Unable to get channel members!",
+        );
+      });
+
   }
 
 }
