@@ -2,12 +2,12 @@ const REPQuery = require('./Database/rep-query');
 const userStatus = require('./Authentication/user-status');
 
 // All operations regarding the application
-// that should be done when server crashes or shut down
+// that should be done when the server crashes or shuts down
 // must be done here
 
-const restoreUserStatuses = () => {
+const restoreUserStatuses = async () => {
 
-    REPQuery.exec(
+    await REPQuery.exec(
     `
     UPDATE USERS
     SET USER_STATUS = ?
