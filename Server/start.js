@@ -10,7 +10,7 @@ const cookieParser = require('cookie-parser');
 const Auth         = require('./Authentication/auth');
 const port         = process.env.PORT;
 
-
+require('./restart-operations');
 
 const server = (() => {
 
