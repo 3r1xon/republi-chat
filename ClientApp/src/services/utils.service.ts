@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnInit } from '@angular/core';
 import { Request } from 'src/interfaces/request.interface';
 import { REPButton } from 'src/interfaces/repbutton.interface';
 import { BugReport } from 'src/interfaces/bugreport.interface';
@@ -6,17 +6,26 @@ import { UAParser } from 'ua-parser-js';
 import { Settings } from 'src/interfaces/settings.interface';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
-import { MediaMatcher } from '@angular/cdk/layout';
+import { BreakpointState, MediaMatcher } from '@angular/cdk/layout';
+import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
-export class UtilsService {
+export class UtilsService implements OnInit {
 
   constructor(
     private http: HttpClient,
-    private media: MediaMatcher
+    private media: MediaMatcher,
   ) { }
+
+  ngOnInit(): void {
+    // this.media.matchMedia('(max-width: 400px)')
+    //   .addEventListener("change", () => {
+    //     console.log("hey")
+    //     this.mobileListener.next();
+    //   });
+  }
 
   // Every HTTP Request, except black listed ones, will set
   // this variable to true till a response has been received
@@ -30,6 +39,8 @@ export class UtilsService {
   public get isMobile() {
     return this.media.matchMedia('(max-width: 400px)').matches;
   }
+
+  public mobileListener: Subject<any> = new Subject();
 
   /**
    * Default settings

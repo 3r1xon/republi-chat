@@ -9,7 +9,6 @@ import { ChannelPermissions, RoomPermissions } from 'src/interfaces/channel.inte
 import { UtilsService } from './utils.service';
 import { WebSocketService } from './websocket.service';
 import { environment } from 'src/environments/environment';
-import { Account } from 'src/interfaces/account.interface';
 import { moveItemInArray } from '@angular/cdk/drag-drop';
 
 
@@ -319,6 +318,27 @@ export class MessagesService {
 
               } break;
 
+              case "BAN_MEMBER": {
+
+                if (obj.memberID == this.chPermissions.id) {
+
+                  this._utils.showRequest(
+                    "Banned",
+                    `You have been banned from this channel.`
+                  );
+
+                  const index = this.channels.findIndex(ch => ch.id == this.currentChannel.id);
+
+                  if (index != -1) {
+                    this.channels.splice(index, 1);
+
+                    this.leaveChannel();
+                  }
+
+                }
+
+              } break;
+
             }
 
           })
@@ -408,8 +428,16 @@ export class MessagesService {
 
 
 
-  public leaveChannel(channel: Channel) {
+  public async leaveChannel() {
+    this.destroyMsSubscriptions();
+    this.destroyChSubscriptions();
+    this.messages = [];
+    this.currentChannel = null;
+    this.currentRoom = null;
 
+    if (this.channels.length > 0) {
+      await this.joinChannel(this.channels[0]);
+    }
   }
 
   /**
@@ -438,14 +466,11 @@ export class MessagesService {
    * @param _id The ID of the user you want to ban.
    */
   public banUser(room: Channel, _id: number) {
-    this._webSocket.emit("ban", {
-      room: room.id,
-      _id: _id
-    });
+    this._webSocket.emit("banUser", _id);
   }
 
   /**
-   * Ban a user in the current channel on a channel.
+   * Kick a user in the current channel on a channel.
    *
    * @param room The ID of the channel.
    *

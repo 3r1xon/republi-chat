@@ -6,6 +6,9 @@ import {
   OnInit,
 } from '@angular/core';
 import { openLeft, openRight } from 'src/app/lib/rep-animations';
+import { Unsubscriber } from 'src/app/lib/rep-decorators';
+import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
+import { Subscription } from 'rxjs';
 
 
 @Component({
@@ -16,12 +19,14 @@ import { openLeft, openRight } from 'src/app/lib/rep-animations';
     openRight("100ms", "-250px")
   ]
 })
+@Unsubscriber
 export class PMainpageComponent implements OnInit {
 
   constructor(
     public _user: UserService,
     public _ms: MessagesService,
     public _utils: UtilsService,
+    public breakpointObserver: BreakpointObserver
   ) { }
 
 
@@ -49,7 +54,16 @@ export class PMainpageComponent implements OnInit {
     Promise.resolve().then(() => {
       this.hasLoaded = true;
     });
+
   }
+
+  protected mobileListener: Subscription = this.breakpointObserver
+    .observe(['(max-width: 400px)'])
+    .subscribe((state: BreakpointState) => {
+      if (state.matches) {
+        this._utils.settings.showServerGroup = false;
+      }
+    });
 
   public hasLoaded: boolean = false;
 

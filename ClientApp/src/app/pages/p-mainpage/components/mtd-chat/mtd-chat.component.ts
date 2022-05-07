@@ -83,10 +83,13 @@ export class MTDChatComponent {
       }
     },
     {
-      name: "Kick",
+      name: "Kick from room",
       icon: "remove_circle_outline",
       color: "warning",
       visible: (msgIndex: number) => {
+
+        if (this._ms.currentRoom.textRoom) return false;
+
         if (this._ms.messages[msgIndex].auth) {
           return false;
         }

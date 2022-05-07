@@ -72,6 +72,11 @@ io.on("connection", (socket) => {
 
   });
 
+  socket.on("banUser", (memberID) => {
+
+    user.banMember(memberID);
+
+  });
 
   socket.on("userChanges", (change) => {
 

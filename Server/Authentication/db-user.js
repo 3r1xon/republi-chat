@@ -320,39 +320,65 @@ class DBUser {
 
 
 
-  banMember(memberID) {
-    this.hasPermission(permissions.banMembers, async (err) => {
-      if (err) {
-        console.log(clc.red(err));
-      } else {
+  async banMember(memberID, callback = nocb) {
+    // this.hasPermission(permissions.banMembers, async (err) => {
+    //   if (err) {
+    //     console.log(err);
+
+    //     callback(err, null);
+    //   } else {
 
         if (this.channelMemberID != memberID) {
           try {
-            // await REPQuery.exec(
-            // `
-            // UPDATE 
-            // CHANNELS_MEMBERS
-            // SET
-            // BANNED = ?
-            // WHERE ID_CHANNEL_MEMBER = ?
-            // AND ID_CHANNEL = ?
-            // `, [true, memberID, rqRoom]);
+
+            await REPQuery.exec(
+            `
+            UPDATE CHANNELS_MEMBERS
+            SET BANNED = ?
+            WHERE ID_CHANNEL_MEMBER = ?
+              AND ID_CHANNEL = ?
+            `, [true, memberID, this.channelID]);
 
             const user = await REPQuery.one(
             `
-            SELECT ID_USER
+            SELECT ID_USER as userID
             FROM CHANNELS_MEMBERS
             WHERE ID_CHANNEL_MEMBER = ?
             `, [memberID]);
 
-            io.to(`ch${this.channelID}`).emit("ban", memberID);
+            const watching_rooms = await REPQuery.load(
+            `
+            SELECT CRM.ID_CHANNEL_ROOM as roomID
+            FROM CHANNELS_MEMBERS CM
+                     LEFT JOIN CHANNELS_ROOMS_MEMBERS CRM ON CRM.ID_CHANNEL_MEMBER = CM.ID_CHANNEL_MEMBER
+            WHERE CM.ID_CHANNEL_MEMBER = ?
+              AND CRM.WATCHING = ?
+            `, [memberID, true]);
+
+            const sockets = await io.in(`user${user.userID}`).fetchSockets();
+
+            io.to(`ch${this.channelID}`).emit("channel", {
+              emitType: "BAN_MEMBER",
+              memberID: memberID
+            });
+
+            sockets.forEach((socket) => {
+              socket.leave(`ch${this.channelID}`);
+
+              watching_rooms.forEach((room) => {
+                socket.leave(`rm${room.roomID}`);
+              });
+
+            });
 
           } catch(error) {
-            console.log(clc.red(error));
+            console.log(error);
+
+            callback(error, null);
           }
         }
-      }
-    });
+      // }
+    // });
   }
 
 
