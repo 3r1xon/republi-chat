@@ -9,6 +9,7 @@ export interface Channel {
   picture?: any;
   color?: string;
   backgroundColor?: string;
+  founder?: number;
 }
 
 export interface Room {

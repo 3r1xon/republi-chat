@@ -41,7 +41,7 @@
         cursor: pointer;
 
         &:hover {
-          color: lighten(#c62828, $amount: 5%);
+          color: lighten(#c62828, $amount: 10%);
         }
       }
     }

@@ -28,13 +28,18 @@
 
     .bar {
       width: 100%;
+      height: 40px;
       display: flex;
-      flex-direction: row-reverse;
       align-items: center;
       border-top-left-radius: 5px;
       border-top-right-radius: 5px;
       background: var(--LIGHT-DARK);
-      cursor: move;
+
+      .handle {
+        width: 100%;
+        height: 100%;
+        cursor: move;
+      }
 
       .back {
         margin: 5px;
@@ -45,6 +50,10 @@
         place-items: center;
         color: var(--DANGER);
         cursor: pointer;
+
+        &:hover {
+          color: lighten(#c62828, $amount: 10%);
+        }
       }
     }
 

@@ -9,7 +9,9 @@
     [cdkDragDisabled]="_utils.isMobile"
   >
 
-    <div class="bar" cdkDragHandle>
+    <div class="bar">
+
+      <div class="handle" cdkDragHandle></div>
 
       <button class="back" (click)="hideRequest()">
         <mat-icon>close</mat-icon>

@@ -109,6 +109,17 @@ router.post('/addChannel', async (req, res) => {
           if (exists_pending)
             return res.status(409).send({ success: false, message: "User already in pending list!" });
 
+          const ban_check = await REPQuery.one(
+          `
+          SELECT CM.BANNED as banned
+          FROM CHANNELS_MEMBERS CM
+          WHERE CM.ID_CHANNEL = ?
+            AND CM.ID_USER = ?
+          `, [channelID, userID]);
+
+          if (ban_check.banned)
+            return res.status(409).send({ success: false, message: "You have been banned from this channel!" });
+
           await REPQuery.exec(
           `
           INSERT INTO CHANNELS_PENDINGS
@@ -118,11 +129,11 @@ router.post('/addChannel', async (req, res) => {
 
           const user_data = await REPQuery.one(
           `
-          SELECT U.USER_CODE        as code,
-                 U.PROFILE_PICTURE  as picture,
-                 U.COLOR            as color,
-                 U.BACKGROUND_COLOR as backgroundColor,
-                 U.NAME             as name
+          SELECT U.USER_CODE         as code,
+                  U.PROFILE_PICTURE  as picture,
+                  U.COLOR            as color,
+                  U.BACKGROUND_COLOR as backgroundColor,
+                  U.NAME             as name
           FROM USERS U
           WHERE U.ID_USER = ?
           `, [userID]);
@@ -163,7 +174,8 @@ router.get('/getChannels', async (req, res) => {
            C.CHANNEL_CODE     as code,
            C.PICTURE          as picture,
            C.COLOR            as color,
-           C.BACKGROUND_COLOR as backgroundColor
+           C.BACKGROUND_COLOR as backgroundColor,
+           C.ID_USER          as founder
     FROM CHANNELS C
              INNER JOIN CHANNELS_MEMBERS CM ON CM.ID_CHANNEL = C.ID_CHANNEL
     WHERE CM.ID_USER = ?
@@ -289,7 +301,9 @@ router.get('/getChannelMembers/:chID', (req, res) => {
         FROM CHANNELS_MEMBERS CM
                   INNER JOIN USERS U ON U.ID_USER = CM.ID_USER
         WHERE CM.ID_CHANNEL = ?
-        `, channelID);
+          AND CM.BANNED = ?
+          AND CM.KICKED = ?
+        `, [channelID, false, false]);
 
         res.status(200).send(
         {
@@ -353,7 +367,9 @@ router.get('/getChRoomInfo/:chID/:roomID', (req, res) => {
                      INNER JOIN CHANNELS_MEMBERS CM ON CM.ID_CHANNEL_MEMBER = CRMB.ID_CHANNEL_MEMBER
                      INNER JOIN USERS U ON U.ID_USER = CM.ID_USER
             WHERE CRMB.ID_CHANNEL_ROOM = ?
-            `, [roomID]);
+              AND CM.BANNED = ?
+              AND CM.KICKED = ?
+            `, [roomID, false, false]);
 
             REPTools.keysToBool(permissions);
 
@@ -399,7 +415,7 @@ router.post('/addChRoom', (req, res) => {
 
         user.addRoom(room, (err) => {
           if (err) {
-            // res.status(401).send({ success: false, message: err });
+            res.status(401).send({ success: false, message: err });
           } else {
             res.status(200).send({ success: true });
           }
@@ -467,21 +483,49 @@ router.put('/changePendingStatus', (req, res) => {
 
         const status = req.body.status;
 
-        await REPQuery.exec(
+        const kick_check = await REPQuery.one(
         `
-        UPDATE CHANNELS_PENDINGS CP
-        SET CP.ACCEPTED = ?
-        WHERE CP.ID_CHANNEL = ?
-          AND CP.ID_USER = ?
-        `, [status, channelID, pendingID]);
-
-        await REPQuery.exec(
-        `
-        DELETE
-        FROM CHANNELS_PENDINGS
-        WHERE ID_CHANNEL = ?
-          AND ID_USER = ?
+        SELECT CM.ID_CHANNEL_MEMBER as memberID,
+               CM.KICKED            as kicked
+        FROM CHANNELS_MEMBERS CM
+        WHERE CM.ID_CHANNEL = ?
+          AND CM.ID_USER = ?
         `, [channelID, pendingID]);
+
+        const deletePending = async () => {
+          await REPQuery.exec(
+          `
+          DELETE
+          FROM CHANNELS_PENDINGS
+          WHERE ID_CHANNEL = ?
+            AND ID_USER = ?
+          `, [channelID, pendingID]);
+        };
+
+        if (status == true && kick_check.kicked) {
+
+          REPQuery.exec(
+          `
+          UPDATE CHANNELS_MEMBERS CM
+          SET CM.KICKED = ?
+          WHERE CM.ID_CHANNEL_MEMBER = ?
+          `, [false, kick_check.memberID]);
+
+          await deletePending();
+
+        } else {
+
+          await REPQuery.exec(
+          `
+          UPDATE CHANNELS_PENDINGS CP
+          SET CP.ACCEPTED = ?
+          WHERE CP.ID_CHANNEL = ?
+            AND CP.ID_USER = ?
+          `, [status, channelID, pendingID]);
+
+          await deletePending();
+
+        }
 
         if (status) {
 
@@ -681,6 +725,38 @@ router.put('/changeRoomsOrder', (req, res) => {
         });
       }
     });
+
+  } catch(error) {
+    console.log(clc.red(error));
+
+    res.status(500).send({ success: false, message: "Internal server error!" });
+  }
+
+});
+
+
+
+router.put('/leaveChannel', async (req, res) => {
+
+  try {
+
+    const channelID = req.body.chID;
+    const userID = res.locals._id;
+
+    await REPQuery.exec(
+    `
+    UPDATE CHANNELS_MEMBERS CM
+    SET CM.KICKED = ?
+    WHERE CM.ID_CHANNEL = ?
+      AND CM.ID_USER = ?
+    `, [true, channelID, userID]);
+
+    io.to(`user${userID}`).emit("channels", {
+      emitType: "LEAVE_CHANNEL",
+      channelID: channelID
+    });
+
+    res.status(200).send({ success: true });
 
   } catch(error) {
     console.log(clc.red(error));

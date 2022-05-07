@@ -10,6 +10,7 @@ import {
 import { Message } from 'src/interfaces/message.interface';
 import { PMainpageComponent } from '../../p-mainpage.component';
 import { REPButton } from 'src/interfaces/repbutton.interface';
+import { UserService } from 'src/services/user.service';
 
 @Component({
   selector: 'mtd-channels',
@@ -21,6 +22,7 @@ export class MTDChannelsComponent {
   constructor(
     public _ms: MessagesService,
     public _utils: UtilsService,
+    private _user: UserService,
     @Host() public mainpage: PMainpageComponent,
     private router: Router
   ) { }
@@ -47,6 +49,26 @@ export class MTDChannelsComponent {
       onClick: () => {
         this.router.navigateByUrl(`/settings/channelsettings/${this._ms.currentChannel.id}`);
       }
+    },
+  ];
+
+  public chActionsContext: Array<REPButton> = [
+    {
+      name: "Leave",
+      icon: "delete",
+      color: "danger",
+      tooltip: "Leave channel",
+      enabled: (channel: Channel) => channel.founder != this._user.currentUser.id,
+      onClick: (channel: Channel) => {
+        this._ms.API_leaveChannel(channel)
+          .toPromise()
+          .catch(() => {
+            this._utils.showRequest(
+              "Error",
+              "There has been an error while leaving the channel!"
+            );
+          });
+      }
     }
   ];
 
@@ -56,12 +78,16 @@ export class MTDChannelsComponent {
       icon: "delete",
       color: "danger",
       visible: () => this._ms.chPermissions.createRooms,
-      enabled: () => this._ms.currentChannel.rooms.length != 1,
-      onClick: (roomID) => {
+      enabled: (room: Room) => {
 
-        const room = {
-          roomID: roomID
-        };
+        if (room.textRoom) {
+          return this._ms.currentChannel.rooms
+            .filter(rm => rm.textRoom)?.length != 1;
+        }
+
+        return true;
+      },
+      onClick: (room: Room) => {
 
         const deleteRoom = () => {
 
@@ -89,7 +115,7 @@ export class MTDChannelsComponent {
       icon: "remove",
       color: "warning",
       visible: () => !this._ms.chPermissions.createRooms,
-      enabled: (roomID) => !this._ms.chPermissions.createRooms && !this._ms.getRoomByID(roomID).autoJoin,
+      enabled: (room: Room) => !this._ms.chPermissions.createRooms && !this._ms.getRoomByID(room.roomID).autoJoin,
       onClick: () => {
 
       }

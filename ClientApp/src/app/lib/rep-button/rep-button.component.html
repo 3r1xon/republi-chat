@@ -8,6 +8,10 @@
   [type]="type"
   (click)="checkClick($event)"
   [matTooltip]="tooltip"
+  [ngClass]="{
+    'enabled': enabled,
+    'active': enabled
+  }"
 >
 
   <div

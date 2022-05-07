@@ -139,7 +139,7 @@ export class REPContextDirective implements OnInit {
   public menu: Array<REPButton>;
 
   @Input('repUniqueID')
-  public uniqueID: number;
+  public uniqueID: any;
 
   @Input('repMode')
   public mode: string = "contextmenu" || "click";

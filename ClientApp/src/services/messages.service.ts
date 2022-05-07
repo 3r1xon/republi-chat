@@ -320,7 +320,7 @@ export class MessagesService {
 
               case "BAN_MEMBER": {
 
-                if (obj.memberID == this.chPermissions.id) {
+                if (obj.userID == this._user.currentUser.id) {
 
                   this._utils.showRequest(
                     "Banned",
@@ -408,10 +408,28 @@ export class MessagesService {
 
               } break;
 
+              case "LEAVE_CHANNEL": {
+
+                const i = this.channels.findIndex(ch => ch.id == obj.channelID);
+
+                if (this.channels[i]) {
+
+                  const channel = this.channels[i];
+
+                  this.channels.splice(i, 1);
+
+                  if (channel.id == this.currentChannel.id)
+                    this.leaveChannel();
+
+                }
+
+              } break;
+
             }
 
           })
-      )
+      );
+
   }
 
 
@@ -515,6 +533,12 @@ export class MessagesService {
    */
   public API_addChannel(channel: Channel) {
     return this.http.post<ServerResponse>(`${environment.BASE_URL}/channels/addChannel`, channel);
+  }
+
+  public API_leaveChannel(channel: Channel) {
+    return this.http.put<ServerResponse>(`${environment.BASE_URL}/channels/leaveChannel`, {
+      chID: channel.id
+    });
   }
 
   public API_deleteRoom(channel: Channel, room: Room) {

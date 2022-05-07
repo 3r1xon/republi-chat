@@ -1,6 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
 import { REPChatComponent } from 'src/app/lib/rep-chat/rep-chat.component';
-import { Room } from 'src/interfaces/channel.interface';
 import { Message } from 'src/interfaces/message.interface';
 import { REPButton } from 'src/interfaces/repbutton.interface';
 import { MessagesService } from 'src/services/messages.service';
@@ -51,13 +50,13 @@ export class MTDChatComponent {
     //   onClick: (msgIndex: number) => {
     //   }
     // },
-    {
-      name: "Report",
-      icon: "flag",
-      visible: (msgIndex: number) => !this._ms.messages[msgIndex].auth,
-      onClick: (msgIndex: number) => {
-      }
-    },
+    // {
+    //   name: "Report",
+    //   icon: "flag",
+    //   visible: (msgIndex: number) => !this._ms.messages[msgIndex].auth,
+    //   onClick: (msgIndex: number) => {
+    //   }
+    // },
     {
       name: "Highlight",
       icon: "star",
@@ -80,51 +79,6 @@ export class MTDChatComponent {
         this._utils.showRequest("Delete message", "Are you sure you want to delete this message?", () => {
           this._ms.deleteMessage(this._ms.messages[msgIndex].id);
         });
-      }
-    },
-    {
-      name: "Kick from room",
-      icon: "remove_circle_outline",
-      color: "warning",
-      visible: (msgIndex: number) => {
-
-        if (this._ms.currentRoom.textRoom) return false;
-
-        if (this._ms.messages[msgIndex].auth) {
-          return false;
-        }
-
-        return this._ms.chPermissions.kickMembers;
-      },
-      onClick: (msgIndex: number) => {
-        const msg = this._ms.messages[msgIndex];
-
-        this._utils.showRequest(`Kick ${msg.name}`, `Are you sure you want to kick out ${msg.name}? He will be able to rejoin later...`, () => {
-
-        });
-      }
-    },
-    {
-      name: "Ban",
-      icon: "delete_forever",
-      color: "danger",
-      visible: (msgIndex: number) => {
-        if (this._ms.messages[msgIndex].auth) {
-          return false;
-        }
-
-        return this._ms.chPermissions.banMembers;
-      },
-      onClick: (msgIndex: number) => {
-        const msg = this._ms.messages[msgIndex];
-
-        this._utils.showRequest(
-          `Ban ${msg.name}`,
-          `Are you sure you want to ban ${msg.name}? He will NOT be able to rejoin later till his ban is revoked!`,
-          () => {
-            this._ms.banUser(this._ms.currentChannel, msg.author);
-          }
-        );
       }
     }
   ];

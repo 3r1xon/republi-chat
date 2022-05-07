@@ -72,9 +72,9 @@ io.on("connection", (socket) => {
 
   });
 
-  socket.on("banUser", (memberID) => {
+  socket.on("banUser", (userID) => {
 
-    user.banMember(memberID);
+    user.banMember(userID);
 
   });
 

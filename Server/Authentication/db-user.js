@@ -102,6 +102,20 @@ class DBUser {
 
     try {
 
+      const pm = {
+        global: [
+          "DELETE_MESSAGES",
+          "BAN_MEMBERS",
+          "SEND_MESSAGES",
+          "CREATE_ROOMS",
+          "ACCEPT_MEMBERS"
+        ],
+        room: [
+          "SEND_MESSAGES",
+          "DELETE_MESSAGES"
+        ]
+      };
+
       const global = await REPQuery.one(
       `
       SELECT CP.DELETE_MESSAGES,
@@ -117,13 +131,12 @@ class DBUser {
         AND CM.KICKED = ?
       `, [this.channelMemberID, false, false]);
 
-      if (this.roomID == undefined) {
+      if (!pm.room.some(pm => pm == permission)) {
         if (global[permission]) {
-          callback(null, this);
-          return;
-        } else {
-          return callback(new Error("User does not have the required permission!"), null);
+          return callback(null, this);
         }
+
+        return callback(new Error("User does not have the required permission!"), null);
       }
 
       const room = await REPQuery.one(
@@ -320,46 +333,39 @@ class DBUser {
 
 
 
-  async banMember(memberID, callback = nocb) {
-    // this.hasPermission(permissions.banMembers, async (err) => {
-    //   if (err) {
-    //     console.log(err);
+  async banMember(userID, callback = nocb) {
+    this.hasPermission(permissions.banMembers, async (err) => {
+      if (err) {
+        console.log(err);
 
-    //     callback(err, null);
-    //   } else {
+        callback(err, null);
+      } else {
 
-        if (this.channelMemberID != memberID) {
+        if (this.userID != userID) {
           try {
 
             await REPQuery.exec(
             `
             UPDATE CHANNELS_MEMBERS
             SET BANNED = ?
-            WHERE ID_CHANNEL_MEMBER = ?
+            WHERE ID_USER = ?
               AND ID_CHANNEL = ?
-            `, [true, memberID, this.channelID]);
-
-            const user = await REPQuery.one(
-            `
-            SELECT ID_USER as userID
-            FROM CHANNELS_MEMBERS
-            WHERE ID_CHANNEL_MEMBER = ?
-            `, [memberID]);
+            `, [true, userID, this.channelID]);
 
             const watching_rooms = await REPQuery.load(
             `
             SELECT CRM.ID_CHANNEL_ROOM as roomID
             FROM CHANNELS_MEMBERS CM
                      LEFT JOIN CHANNELS_ROOMS_MEMBERS CRM ON CRM.ID_CHANNEL_MEMBER = CM.ID_CHANNEL_MEMBER
-            WHERE CM.ID_CHANNEL_MEMBER = ?
+            WHERE CM.ID_USER = ?
               AND CRM.WATCHING = ?
-            `, [memberID, true]);
+            `, [userID, true]);
 
-            const sockets = await io.in(`user${user.userID}`).fetchSockets();
+            const sockets = await io.in(`user${userID}`).fetchSockets();
 
             io.to(`ch${this.channelID}`).emit("channel", {
               emitType: "BAN_MEMBER",
-              memberID: memberID
+              userID: userID
             });
 
             sockets.forEach((socket) => {
@@ -377,8 +383,8 @@ class DBUser {
             callback(error, null);
           }
         }
-      // }
-    // });
+      }
+    });
   }
 
 
@@ -613,6 +619,10 @@ class DBUser {
       emitType: "CHANGE_STATUS",
       status: status
     });
+  }
+
+  async getSockets() {
+    return await io.in(`user${this.userID}`).fetchSockets();
   }
 }
 

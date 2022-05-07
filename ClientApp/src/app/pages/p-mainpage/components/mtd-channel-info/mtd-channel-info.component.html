@@ -25,6 +25,8 @@
       <rep-separator *ngIf="i == 0">Online</rep-separator>
 
       <rep-namebox
+        [repContext]="memberOptions"
+        [repUniqueID]="member"
         [status]="member.userStatus"
         [message]="member"
       >
@@ -46,6 +48,8 @@
       <rep-namebox
         [status]="member.userStatus"
         [message]="member"
+        [repContext]="memberOptions"
+        [repUniqueID]="member"
       >
       </rep-namebox>
 
@@ -61,10 +65,12 @@
     *ngIf="serverInfo[serverInfoTab].tabname == 'Pending'"
   >
 
+    <small *ngIf="_ms.currentChannel?.pendings.length == 0">Waiting list is empty.</small>
+
     <rep-namebox header
       *ngFor="let pending of _ms.currentChannel?.pendings"
       [message]="pending"
-      [uniqueID]="pending.id"
+      [uniqueID]="pending"
       [options]="_ms.chPermissions.acceptMembers ? pendingOptions : null"
       >
     </rep-namebox>
