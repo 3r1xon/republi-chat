@@ -136,7 +136,7 @@ export class MessagesService {
                   return this.mapMsg(msg);
                 });
 
-                this.initRoomSockets();
+                this.initTextRoomSockets();
               }
             })
             .catch(() => {
@@ -176,7 +176,7 @@ export class MessagesService {
 
 
 
-  private initRoomSockets(): void {
+  private initTextRoomSockets(): void {
 
     this.destroyMsSubscriptions();
 
@@ -184,7 +184,7 @@ export class MessagesService {
 
     const room = this.currentRoom;
 
-    this._webSocket.emit("joinRoom", {
+    this._webSocket.emit("joinTextRoom", {
       channel: channel.id,
       room: room.roomID
     });

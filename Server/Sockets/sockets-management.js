@@ -15,16 +15,18 @@ io.on("connection", (socket) => {
 
   user.setUserStatus(userStatus.online);
 
-  let room;
+  let textRoom;
+
+  let vocalRoom;
 
   let channel;
 
-  socket.on("joinRoom", async (obj) => {
+  socket.on("joinTextRoom", async (obj) => {
 
     const rqRoom = obj.room;
     const rqChannel = obj.channel;
 
-    socket.leave(`rm${room}`);
+    socket.leave(`rm${textRoom}`);
 
     if (user.roomMemberID)
       await user.unwatch();
@@ -45,13 +47,17 @@ io.on("connection", (socket) => {
           } else {
 
             socket.join(`rm${rqRoom}`);
-            room = rqRoom;
+            textRoom = rqRoom;
             user.watch();
             user.setLastJoinedRoom();
           }
         });
       }
     });
+  });
+
+  socket.on("joinVocalRoom", async (obj) => { 
+
   });
 
   socket.on("message", (msg) => {
@@ -90,7 +96,7 @@ io.on("connection", (socket) => {
 
     }
 
-  })
+  });
 
 
   socket.on("disconnect", async () => {
