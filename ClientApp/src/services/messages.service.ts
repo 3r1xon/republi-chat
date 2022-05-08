@@ -520,7 +520,11 @@ export class MessagesService {
    *
    */
   public API_createChannel(channel: Channel) {
-    return this.http.post<ServerResponse>(`${environment.BASE_URL}/channels/createChannel`, channel);
+    const fd = new FormData();
+    fd.append("name", channel.name);
+    fd.append("image", channel.picture, channel.picture?.name);
+
+    return this.http.post<ServerResponse>(`${environment.BASE_URL}/channels/createChannel`, fd);
   }
 
   /**

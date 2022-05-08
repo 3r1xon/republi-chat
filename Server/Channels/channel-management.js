@@ -21,7 +21,7 @@ router.post('/createChannel', upload.single("image"), async (req, res) => {
 
   const channel = {
     name: req.body.name,
-    picture: req.body.picture
+    picture: req.file?.buffer
   };
 
   const { error } = channelSchema.validate(channel);
@@ -50,7 +50,13 @@ router.post('/createChannel', upload.single("image"), async (req, res) => {
         INSERT INTO CHANNELS
             (ID_USER, NAME, CHANNEL_CODE, PICTURE, CREATION_DATE, BACKGROUND_COLOR)
         VALUES (?, ?, ?, ?, ?, ?)
-        RETURNING ID_CHANNEL as id, NAME as name, CHANNEL_CODE as code, PICTURE as picture, COLOR as color, BACKGROUND_COLOR as backgroundColor
+        RETURNING
+          ID_CHANNEL         as id,
+          NAME               as name,
+          CHANNEL_CODE       as code,
+          TO_BASE64(PICTURE) as picture,
+          COLOR              as color,
+          BACKGROUND_COLOR   as backgroundColor
         `, [userID, channel.name, code, channel.picture, creationDate, REPTools.randomHex()]);
 
         // Triggers will take care of the rest
@@ -169,13 +175,13 @@ router.get('/getChannels', async (req, res) => {
 
     const channels = await REPQuery.load(
     `
-    SELECT C.ID_CHANNEL       as id,
-           C.NAME             as name,
-           C.CHANNEL_CODE     as code,
-           C.PICTURE          as picture,
-           C.COLOR            as color,
-           C.BACKGROUND_COLOR as backgroundColor,
-           C.ID_USER          as founder
+    SELECT C.ID_CHANNEL         as id,
+           C.NAME               as name,
+           C.CHANNEL_CODE       as code,
+           TO_BASE64(C.PICTURE) as picture,
+           C.COLOR              as color,
+           C.BACKGROUND_COLOR   as backgroundColor,
+           C.ID_USER            as founder
     FROM CHANNELS C
              INNER JOIN CHANNELS_MEMBERS CM ON CM.ID_CHANNEL = C.ID_CHANNEL
     WHERE CM.ID_USER = ?

@@ -40,6 +40,9 @@ export class REPImgUploadComponent implements OnInit, ControlValueAccessor {
   @Input()
   public backgroundColor: string;
 
+  @Input()
+  public maxSize: number;
+
   @Output()
   public image: EventEmitter<any> = new EventEmitter();
 
@@ -79,6 +82,10 @@ export class REPImgUploadComponent implements OnInit, ControlValueAccessor {
     } else {
 
       file = file[0];
+
+      if (this.maxSize && file.size > this.maxSize) {
+        return;
+      }
 
       const reader = new FileReader();
 
