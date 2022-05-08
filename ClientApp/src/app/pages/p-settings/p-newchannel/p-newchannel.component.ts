@@ -53,7 +53,7 @@ export class PNewChannelComponent {
 
   public readonly newChannelActions: Array<REPButton> = [
     {
-      name: "Create channel",
+      name: "Create",
       icon: "save",
       type: "submit",
       enabled: () => this.formCreation.valid,
@@ -64,7 +64,7 @@ export class PNewChannelComponent {
 
   public readonly existingChannelActions: Array<REPButton> = [
     {
-      name: "Add channel",
+      name: "Add",
       icon: "add",
       enabled: () => this.formAdd.valid,
       type: "submit",

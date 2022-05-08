@@ -9,20 +9,23 @@
 
   rep-separator {
     width: 100%;
-    margin-bottom: 15px;
   }
 
-  p, h1 {
+  h1 {
     align-self: flex-start;
-    margin-bottom: 15px;
+    margin: 15px;
+  }
+
+  .flex {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
 
   p {
     color: var(--OBSCURE_SECONDARY);
-  }
-
-  h1 {
-    margin-bottom: 15px;
+    margin: 0 0 0 10px;
   }
 
   rep-input {
@@ -59,8 +62,9 @@
     }
   }
 
-  rep-actions {
-    width: 100%;
-    margin: 15px 0 15px -20px;
+  @media only screen and (max-width: 450px) {
+    p {
+      font-size: 14px;
+    }
   }
 }

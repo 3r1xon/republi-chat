@@ -21,7 +21,7 @@
       <rep-separator>Members</rep-separator>
 
       <rep-accordion
-        *ngFor="let member of currentChMembers"
+        *ngFor="let member of selectedChannel?.members"
         class="members"
       >
 
@@ -40,7 +40,7 @@
 
         </div>
 
-    </rep-accordion>
+      </rep-accordion>
 
     </div>
 

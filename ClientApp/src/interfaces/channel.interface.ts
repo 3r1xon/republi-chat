@@ -5,6 +5,7 @@ export interface Channel {
   name: string;
   rooms?: Array<Room>;
   pendings?: Array<Account>;
+  members?: Array<Account>;
   code?: string;
   picture?: any;
   color?: string;
