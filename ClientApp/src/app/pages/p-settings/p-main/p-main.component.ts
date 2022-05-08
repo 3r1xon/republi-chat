@@ -4,6 +4,9 @@ import { REPButton } from 'src/interfaces/repbutton.interface';
 import { UserService } from 'src/services/user.service';
 import { openLeftNoDestroy } from 'src/app/lib/rep-animations';
 import { UtilsService } from 'src/services/utils.service';
+import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
+import { Subscription } from 'rxjs';
+import { Unsubscriber } from 'src/app/lib/rep-decorators';
 
 @Component({
   templateUrl: './p-main.component.html',
@@ -12,12 +15,14 @@ import { UtilsService } from 'src/services/utils.service';
     openLeftNoDestroy("250px", "100ms")
   ]
 })
+@Unsubscriber
 export class PSettingsComponent implements OnInit {
 
   constructor(
     private _user: UserService,
     private _utils: UtilsService,
     private router: Router,
+    public breakpointObserver: BreakpointObserver
   ) { }
 
   ngOnInit(): void {
@@ -25,6 +30,14 @@ export class PSettingsComponent implements OnInit {
       this.navOpen = false;
     }
   }
+
+  protected mobileListener: Subscription = this.breakpointObserver
+    .observe(['(max-width: 400px)'])
+    .subscribe((state: BreakpointState) => {
+      if (state.matches) {
+        this.navOpen = false;
+      }
+    });
 
   public navOpen: boolean = true;
 

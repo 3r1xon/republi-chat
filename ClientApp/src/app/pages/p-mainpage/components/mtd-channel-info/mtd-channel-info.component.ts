@@ -94,8 +94,7 @@ export class MTDChannelInfoComponent {
       name: "Ban",
       icon: "delete_forever",
       color: "danger",
-      visible: () => this._ms.chPermissions.banMembers,
-      enabled: (member: Account) => member.id != this._user.currentUser.id,
+      visible: (member: Account) => this._ms.chPermissions.banMembers && member.id != this._user.currentUser.id,
       onClick: (member: Account) => {
 
         this._utils.showRequest(

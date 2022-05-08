@@ -38,7 +38,6 @@ export class REPContextDirective implements OnInit {
 
     if (selectedText) return;
 
-    // TODO: Test this line
     event.preventDefault();
 
     const component = this.componentFactory.resolveComponentFactory(REPWindowComponent);
@@ -104,9 +103,10 @@ export class REPContextDirective implements OnInit {
         );
     };
 
-    compRef.instance.onSelection.subscribe(() => {
+    compRef.instance.onSelection.subscribe((e) => {
       close();
       compRef.instance.onSelection.unsubscribe();
+      e.stopPropagation();
     });
 
     setTimeout(() => {
@@ -116,8 +116,9 @@ export class REPContextDirective implements OnInit {
       eventNames.forEach((eName) => {
         const unsub = this.renderer.listen(document, eName, (e: MouseEvent) => {
 
-          if (compRef.location.nativeElement.contains(e.target))
+          if (compRef.location.nativeElement.contains(e.target)) {
             return;
+          }
 
           unsub();
 

@@ -1,5 +1,4 @@
 import {
-  ChangeDetectionStrategy,
   Component,
   EventEmitter,
   forwardRef,
@@ -14,7 +13,6 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
   selector: 'rep-img-upload',
   templateUrl: './rep-img-upload.component.html',
   styleUrls: ['./rep-img-upload.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -45,12 +43,6 @@ export class REPImgUploadComponent implements OnInit, ControlValueAccessor {
   @Output()
   public image: EventEmitter<any> = new EventEmitter();
 
-  private base64textString = [];
-
-  onChange: any = () => { };
-
-  onTouch: any = () => { };
-
   sanitizeIMG() {
     if (this.src == null) return;
 
@@ -64,42 +56,44 @@ export class REPImgUploadComponent implements OnInit, ControlValueAccessor {
     this.src = this.sanitizer.bypassSecurityTrustResourceUrl(`data:image/${extensions[this.src[0]]};base64,` + this.src);
   }
 
+  onChange: any = () => {
+    this.image.emit(this.src);
+  };
+
+  onTouch: any = () => { };
+
   registerOnChange(fn: any): void {
     this.onChange = fn;
   }
 
   registerOnTouched(fn: any): void {
-
+    this.onTouch = fn;
   }
 
   writeValue(file: any) {
-    if (file) {
+    if (typeof file == 'string') {
       this.src = file;
+
+      this.sanitizeIMG();
+
+    } else {
 
       file = file[0];
 
-      console.log(file);
-      if (file) {
+      const reader = new FileReader();
 
-        this.sanitizeIMG();
-        const reader = new FileReader();
+      reader.onload = this.handleReaderLoaded.bind(this);
 
-        reader.onload = this.handleReaderLoaded.bind(this);
+      reader.readAsBinaryString(file);
 
-        if(this.base64textString.length > 0) {
+      this.image.emit(this.src);
 
-          reader.readAsBinaryString(file);
-
-          console.log(file)
-
-          this.image.emit(this.base64textString);
-        }
-      }
+      this.onChange(this.src);
 
     }
   }
 
   handleReaderLoaded(e) {
-    this.base64textString.push('data:image/png;base64,' + btoa(e.target.result));
+    this.src = 'data:image/png;base64,' + btoa(e.target.result);
   }
 }

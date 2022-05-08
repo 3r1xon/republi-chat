@@ -60,14 +60,23 @@ export class MTDChannelsComponent {
       tooltip: "Leave channel",
       enabled: (channel: Channel) => channel.founder != this._user.currentUser.id,
       onClick: (channel: Channel) => {
-        this._ms.API_leaveChannel(channel)
-          .toPromise()
-          .catch(() => {
-            this._utils.showRequest(
-              "Error",
-              "There has been an error while leaving the channel!"
-            );
-          });
+
+        this._utils.showRequest(
+          "Are you sure?",
+          `You're about to leave ${channel.name}, are you sure you want to continue?`,
+          () => {
+
+            this._ms.API_leaveChannel(channel)
+              .toPromise()
+              .catch(() => {
+                this._utils.showRequest(
+                  "Error",
+                  "There has been an error while leaving the channel!"
+                );
+              });
+          }
+        );
+
       }
     }
   ];

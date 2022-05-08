@@ -21,8 +21,6 @@
       [cdkDragStartDelay]="_utils.isMobile ? 200 : 0"
       cdkDragLockAxis="y"
       cdkDragBoundary=".list"
-      [repContext]="chActionsContext"
-      [repUniqueID]="section"
     >
 
       <rep-namebox
@@ -31,6 +29,8 @@
         [message]="filterChannel(section)"
         [hold]="_ms.currentChannel?.id == section.id"
         backgroundColor="#202124"
+        [repContext]="chActionsContext"
+        [repUniqueID]="section"
       >
       </rep-namebox>
 

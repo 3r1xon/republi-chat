@@ -313,8 +313,6 @@ router.put('/editProfile', [Auth.HTTPAuthToken, /*upload.single("image")*/], asy
 
   try {
 
-    // const file = req.file.buffer;
-
     const user = req.body;
 
     const { error } = userSchema.validate(user);

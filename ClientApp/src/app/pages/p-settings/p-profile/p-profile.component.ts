@@ -30,6 +30,7 @@ export class PProfileComponent extends REPManager implements OnInit {
     this.setSaveAPI("PUT", `${environment.BASE_URL}/authentication/editProfile`);
 
     this.valueChanges.subscribe((change) => {
+      console.log(change);
       this.exampleMsg.name = change.name;
     });
   }
@@ -48,8 +49,10 @@ export class PProfileComponent extends REPManager implements OnInit {
         Validators.maxLength(200)
       ]
     ],
-    picture: [this._user.currentUser.picture
+    picture: [this._user.currentUser.picture,
+      [
 
+      ]
     ]
   });
 
@@ -73,7 +76,7 @@ export class PProfileComponent extends REPManager implements OnInit {
       background: "success",
       onClick: () => {
         this.save()
-            .then((response: ServerResponse) => {
+          .then((response: ServerResponse) => {
             const newValues = response.data;
 
             for (const key in newValues) {
@@ -81,7 +84,7 @@ export class PProfileComponent extends REPManager implements OnInit {
             }
 
             this.reset();
-          })
+           })
           .catch((response: HttpErrorResponse) => {
             console.log(response)
             this._utils.showRequest(
@@ -103,23 +106,6 @@ export class PProfileComponent extends REPManager implements OnInit {
       onClick: () => { this.deleteProfile(); }
     }
   ];
-
-  async onChange(event) {
-
-    // const file = <File>event[0];
-
-    // const fd = new FormData();
-    // fd.append("image", file, file.name);
-
-    // const res = await this.http.put<ServerResponse>(
-    // `${environment.BASE_URL}/authentication/editProfile`,
-    // fd
-    // ).toPromise();
-
-    // if (res.success) {
-    //   this._user.currentUser.picture = this._fileUpload.sanitizeIMG(res.data);
-    // }
-  }
 
   deleteProfile() {
 
