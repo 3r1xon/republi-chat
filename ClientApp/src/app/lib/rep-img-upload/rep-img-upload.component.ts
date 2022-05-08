@@ -81,6 +81,8 @@ export class REPImgUploadComponent implements OnInit, ControlValueAccessor {
 
     } else {
 
+      if (file.length == 0) return;
+
       file = file[0];
 
       if (this.maxSize && file.size > this.maxSize) {

@@ -1,16 +1,27 @@
 <div class="rep-img-upload">
 
   <label for="file-input">
-    <img *ngIf="src != null" [src]="src" class="picture"/>
-    <rep-profile-pic
-      *ngIf="src == null"
-      [letter]="letter"
-      [color]="backgroundColor"
-      width="75px"
-      height="75px"
-    ></rep-profile-pic>
+
+    <img
+      *ngIf="src != null"
+      [src]="src"
+      class="picture"
+    />
+
   </label>
+
+  <rep-profile-pic
+    *ngIf="src == null"
+    [letter]="letter"
+    [color]="backgroundColor"
+    width="75px"
+    height="75px"
+  ></rep-profile-pic>
+
   <input id="file-input" type="file" (change)="writeValue($event.target.files)" />
+
   <mat-icon>file_upload</mat-icon>
+
+  <small *ngIf="maxSize != null">{{maxSize / 1000 + 'kb max'}}</small>
 
 </div>

@@ -9,6 +9,11 @@
   align-items: center;
   position: relative;
 
+  label {
+    width: 100%;
+    height: 100%;
+  }
+
   .picture {
     width: 100%;
     height: 100%;
@@ -46,6 +51,18 @@
     mat-icon {
       color: var(--VERY-DARK);
     }
+
+    small {
+      display: flex;
+    }
+  }
+
+  small {
+    position: absolute;
+    text-align: center;
+    display: none;
+    opacity: 0.9;
+    pointer-events: none;
   }
 
 
