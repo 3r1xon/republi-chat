@@ -309,11 +309,14 @@ router.delete('/logout', Auth.HTTPAuthToken, async (req, res) => {
 
 
 
-router.put('/editProfile', [Auth.HTTPAuthToken, /*upload.single("image")*/], async (req, res) => {
+router.put('/editProfile', [Auth.HTTPAuthToken, upload.single("image")], async (req, res) => {
 
   try {
 
     const user = req.body;
+
+    if (req.file?.buffer)
+      user.picture = req.file.buffer;
 
     const { error } = userSchema.validate(user);
 
@@ -356,10 +359,12 @@ router.put('/editProfile', [Auth.HTTPAuthToken, /*upload.single("image")*/], asy
 
     await REPQuery.exec(SQL_UPDATE, managedSQL.orderedValues);
 
+    if (user.picture)
+      user.picture = user.picture.toString("base64");
+
     res.status(201).send({
       success: true,
       data: user
-      // data: file.toString("base64")
     });
 
   } catch(err) {

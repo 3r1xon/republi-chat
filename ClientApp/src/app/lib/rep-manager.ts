@@ -31,7 +31,17 @@ export abstract class REPManager {
   public save(): Promise<any> {
     const saveValues = this.getDirties();
 
-    return this.http[this.API_METHOD](this.API_URL, saveValues).toPromise();
+    const fd = new FormData();
+
+    for (const key in saveValues) {
+      if (saveValues[key] instanceof File) {
+        fd.append("image", saveValues[key], saveValues[key].name);
+      } else {
+        fd.append(key, saveValues[key]);
+      }
+    }
+
+    return this.http[this.API_METHOD](this.API_URL, fd).toPromise();
   };
 
   public canSave(): boolean {

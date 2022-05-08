@@ -17,7 +17,7 @@ module.exports = {
       .min(8)
       .max(255),
 
-    picture: Joi.string()
+    picture: Joi.binary()
       .optional(),
 
     biography: Joi.string()
@@ -31,7 +31,7 @@ module.exports = {
       .min(3)
       .max(30),
 
-    picture: Joi.string()
+    picture: Joi.binary()
       .allow(null)
   }),
 

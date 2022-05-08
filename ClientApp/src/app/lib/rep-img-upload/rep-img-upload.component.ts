@@ -56,9 +56,7 @@ export class REPImgUploadComponent implements OnInit, ControlValueAccessor {
     this.src = this.sanitizer.bypassSecurityTrustResourceUrl(`data:image/${extensions[this.src[0]]};base64,` + this.src);
   }
 
-  onChange: any = () => {
-    this.image.emit(this.src);
-  };
+  onChange: any = () => { };
 
   onTouch: any = () => { };
 
@@ -71,6 +69,8 @@ export class REPImgUploadComponent implements OnInit, ControlValueAccessor {
   }
 
   writeValue(file: any) {
+    if (file == null) return;
+
     if (typeof file == 'string') {
       this.src = file;
 
@@ -86,9 +86,9 @@ export class REPImgUploadComponent implements OnInit, ControlValueAccessor {
 
       reader.readAsBinaryString(file);
 
-      this.image.emit(this.src);
+      this.image.emit(file);
 
-      this.onChange(this.src);
+      this.onChange(file);
 
     }
   }

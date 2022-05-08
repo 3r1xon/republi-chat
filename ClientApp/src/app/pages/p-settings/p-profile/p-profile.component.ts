@@ -30,7 +30,6 @@ export class PProfileComponent extends REPManager implements OnInit {
     this.setSaveAPI("PUT", `${environment.BASE_URL}/authentication/editProfile`);
 
     this.valueChanges.subscribe((change) => {
-      console.log(change);
       this.exampleMsg.name = change.name;
     });
   }

@@ -9,6 +9,16 @@
   background: var(--VERY-DARK);
   color: #FFFFFF;
 
+  mtd-emoji-background {
+    width: 100%;
+    height: 100%;
+  }
+
+  .wrap {
+    position: absolute;
+    @include flexCenter(column);
+  }
+
   .security {
     font-size: 48px;
     @include flexCenter(row);

@@ -1,25 +1,31 @@
 <div id="unauthorized">
 
-  <div class="message">
+  <mtd-emoji-background></mtd-emoji-background>
 
-    <mat-icon class="danger security">gpp_bad</mat-icon>
-    <h1>Not authorized <span class="danger">(401)</span></h1>
+  <div class="wrap">
 
-    <div>
+    <div class="message">
 
-      <p>
-        The system detected you were trying to perform a malicious operation
-        <br>
-        or your session has expired, you have been disconnected for safety reasons.
-        <br>
-        If you're experiencing this issue frequently we advice you to delete the browser cache.
-      </p>
+      <mat-icon class="danger security">gpp_bad</mat-icon>
+      <h1>Not authorized <span class="danger">(401)</span></h1>
+
+      <div>
+
+        <p>
+          The system detected you were trying to perform a malicious operation
+          <br>
+          or your session has expired, you have been disconnected for safety reasons.
+          <br>
+          If you're experiencing this issue frequently we advice you to delete the browser cache.
+        </p>
+
+      </div>
 
     </div>
 
-  </div>
+    <rep-button routerLink="/login">Log In</rep-button>
 
-  <rep-button routerLink="/login">Log In</rep-button>
+  </div>
 
   <mtd-footer></mtd-footer>
 
