@@ -12,10 +12,12 @@
 
       <a role="tab"
         (click)="selectTab(i)"
-        [ngClass]="{
-          'normal': currentIndex != i,
-          'hovered': currentIndex == i
-        }"
+        [style.borderBottom]="
+          currentIndex == i ?
+            '2px solid ' + theme
+            :
+            '2px solid transparent'
+        "
       >
         {{tab.tabname}}
         <mat-icon *ngIf="tab.icon">{{tab.icon}}</mat-icon>

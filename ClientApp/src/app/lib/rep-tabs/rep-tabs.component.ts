@@ -14,14 +14,17 @@ export class REPTabsComponent {
     icon: string
   }>;
 
+  @Input()
+  public add: boolean = true;
+
+  @Input()
+  public theme: string = "royalblue";
+
   @Output()
   public onNew = new EventEmitter();
 
   @Output()
   public onTab = new EventEmitter();
-
-  @Input()
-  public add: boolean = true;
 
   public currentIndex: number = 0;
 
