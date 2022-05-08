@@ -32,7 +32,7 @@ export class PSettingsComponent implements OnInit {
   }
 
   protected mobileListener: Subscription = this.breakpointObserver
-    .observe(['(max-width: 400px)'])
+    .observe(['(max-width: 450px)'])
     .subscribe((state: BreakpointState) => {
       if (state.matches) {
         this.navOpen = false;

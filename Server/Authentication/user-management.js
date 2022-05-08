@@ -286,8 +286,8 @@ router.delete('/logout', Auth.HTTPAuthToken, async (req, res) => {
 
   try {
 
-    const userID     = res.locals._id;
-    const sid        = res.locals.sid;
+    const userID = res.locals._id;
+    const sid    = res.locals.sid;
 
     await REPQuery.exec(
     `

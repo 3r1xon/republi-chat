@@ -58,7 +58,7 @@ export class PMainpageComponent implements OnInit {
   }
 
   protected mobileListener: Subscription = this.breakpointObserver
-    .observe(['(max-width: 400px)'])
+    .observe(['(max-width: 450px)'])
     .subscribe((state: BreakpointState) => {
       if (state.matches) {
         this._utils.settings.showServerGroup = false;

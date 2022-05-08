@@ -6,7 +6,10 @@
 
   <form class="channel-info column" [formGroup]="formCreation">
 
-    <rep-img-upload [letter]="formCreation.value.channelName"></rep-img-upload>
+    <rep-img-upload
+      formControlName="picture"
+      [letter]="formCreation.value.channelName"
+    ></rep-img-upload>
 
     <rep-input
       formControlName="channelName"

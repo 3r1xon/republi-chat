@@ -1,4 +1,4 @@
-import { Injectable, OnInit } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Request } from 'src/interfaces/request.interface';
 import { REPButton } from 'src/interfaces/repbutton.interface';
 import { BugReport } from 'src/interfaces/bugreport.interface';
@@ -12,20 +12,12 @@ import { Subject } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class UtilsService implements OnInit {
+export class UtilsService {
 
   constructor(
     private http: HttpClient,
     private media: MediaMatcher,
   ) { }
-
-  ngOnInit(): void {
-    // this.media.matchMedia('(max-width: 400px)')
-    //   .addEventListener("change", () => {
-    //     console.log("hey")
-    //     this.mobileListener.next();
-    //   });
-  }
 
   // Every HTTP Request, except black listed ones, will set
   // this variable to true till a response has been received
@@ -37,7 +29,7 @@ export class UtilsService implements OnInit {
   public rqsBody: Request;
 
   public get isMobile() {
-    return this.media.matchMedia('(max-width: 400px)').matches;
+    return this.media.matchMedia('(max-width: 450px)').matches;
   }
 
   public mobileListener: Subject<any> = new Subject();

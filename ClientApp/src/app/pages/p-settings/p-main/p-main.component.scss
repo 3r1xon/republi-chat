@@ -78,7 +78,7 @@
         position: relative;
         align-items: center;
 
-        @media only screen and (max-width: 400px) {
+        @media only screen and (max-width: 450px) {
           margin-top: 45px;
           width: 100%;
         }
@@ -117,7 +117,7 @@
     }
   }
 
-  @media only screen and (max-width: 400px) {
+  @media only screen and (max-width: 450px) {
     .menu {
       position: absolute;
       left: 0;
@@ -130,6 +130,7 @@
       position: absolute;
       background: var(--OBSCURE);
     }
+
   }
 }
 

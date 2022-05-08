@@ -22,18 +22,32 @@ export class PNewChannelComponent {
   ) { }
 
   public formCreation: FormGroup = this.fb.group({
-    channelImage: [null],
+    picture: [null,
+      [
+
+      ]
+    ],
     channelName: ['',
-      [Validators.minLength(3), Validators.maxLength(30)]
-    ]
+      [
+        Validators.minLength(3),
+        Validators.maxLength(30)
+      ]
+    ],
   });
 
   public formAdd: FormGroup = this.fb.group({
     channelName: ['',
-      [Validators.required, Validators.maxLength(30)]
+      [
+        Validators.required,
+        Validators.maxLength(30)
+      ]
     ],
     channelCode: ['0001',
-      [Validators.required, Validators.maxLength(4),  Validators.minLength(4)]
+      [
+        Validators.required,
+        Validators.maxLength(4),
+        Validators.minLength(4)
+      ]
     ]
   });
 
@@ -63,7 +77,7 @@ export class PNewChannelComponent {
 
     const channel: Channel = {
       name: this.formCreation.value.channelName,
-      picture: null
+      picture: this.formCreation.value.picture
     };
 
     this._ms.API_createChannel(channel)
@@ -77,7 +91,7 @@ export class PNewChannelComponent {
 
             this.formCreation.setValue({
               channelName: '',
-              channelImage: null
+              picture: null
             });
 
             this._utils.showRequest(
