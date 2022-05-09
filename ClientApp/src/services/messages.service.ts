@@ -211,7 +211,7 @@ export class MessagesService {
       this._webSocket.listen("voice")
         .subscribe((audio: ArrayBuffer) => {
 
-
+          console.log(audio);
         })
     );
 
@@ -220,6 +220,9 @@ export class MessagesService {
     this.document.defaultView.navigator.mediaDevices
       .getUserMedia({ audio: true })
       .then((stream) => {
+
+        const mediaRecorder = new MediaRecorder(stream);
+        mediaRecorder.start();
 
         // const audioContext = new AudioContext();
 

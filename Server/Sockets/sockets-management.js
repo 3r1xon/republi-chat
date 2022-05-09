@@ -118,6 +118,7 @@ io.on("connection", (socket) => {
 
   socket.on("voice", (audio) => {
 
+    console.log(audio);
     io.to(`vocalRm${vocalRoom}`).emit("voice", audio);
 
   });
