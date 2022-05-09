@@ -417,6 +417,12 @@ export class MessagesService {
                     this.leaveChannel();
                   }
 
+                } else {
+                  const index = this.currentRoom.members.findIndex(member => member.id == obj.userID);
+
+                  if (index != -1) {
+                    this.currentRoom.members.splice(index, 1);
+                  }
                 }
 
               } break;
@@ -533,6 +539,7 @@ export class MessagesService {
     this.destroyChSubscriptions();
     this.messages = [];
     this.currentChannel = null;
+    this.chPermissions = null;
     this.currentRoom = null;
 
     if (this.channels.length > 0) {
@@ -621,6 +628,10 @@ export class MessagesService {
    */
   public API_addChannel(channel: Channel) {
     return this.http.post<ServerResponse>(`${environment.BASE_URL}/channels/addChannel`, channel);
+  }
+
+  public API_deleteChannel(channel: Channel) {
+    return this.http.delete<ServerResponse>(`${environment.BASE_URL}/channels/deleteChannel/${channel.id}`);
   }
 
   public API_leaveChannel(channel: Channel) {

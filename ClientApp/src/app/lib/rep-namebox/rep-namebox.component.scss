@@ -24,7 +24,6 @@
   }
 
   .descr-info {
-    width: 100%;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -33,16 +32,16 @@
     word-break: normal;
 
     span {
-      display: flex;
-    }
-
-    .username {
-      cursor: pointer;
       white-space: nowrap;
       text-overflow: ellipsis;
+      display: flex;
 
-      &:hover {
-        text-decoration: underline;
+      p {
+        cursor: pointer;
+
+        &:hover {
+          text-decoration: underline;
+        }
       }
     }
 

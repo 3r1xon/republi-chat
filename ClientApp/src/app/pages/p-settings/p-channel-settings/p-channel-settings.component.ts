@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Channel } from 'src/interfaces/channel.interface';
+import { REPButton } from 'src/interfaces/repbutton.interface';
 import { ServerResponse } from 'src/interfaces/response.interface';
 import { MessagesService } from 'src/services/messages.service';
+import { UserService } from 'src/services/user.service';
 import { UtilsService } from 'src/services/utils.service';
 
 @Component({
@@ -14,6 +16,7 @@ export class PChannelSettingsComponent implements OnInit {
   constructor(
     public _ms: MessagesService,
     private _utils: UtilsService,
+    private _user: UserService,
     private route: ActivatedRoute
   ) { }
 
@@ -29,6 +32,66 @@ export class PChannelSettingsComponent implements OnInit {
       }
     }
   }
+
+  public channelContext: Array<REPButton> = [
+    {
+      name: "Delete",
+      icon: "delete",
+      color: "danger",
+      visible: (channel: Channel) => channel.founder == this._user.currentUser.id,
+      onClick: (channel: Channel) => {
+
+        this._utils.showRequest(
+          "WARNING!",
+          `You're about to DELETE PERMANENTLY ${channel.name}, all messages and members will be lost, are you sure you want to continue?`,
+          () => {
+
+            this._ms.API_deleteChannel(channel)
+              .toPromise()
+              .then(() => {
+                const i = this.channels.findIndex(ch => ch.id == channel.id);
+
+                if (i != -1) {
+                  this.channels.splice(i, 1);
+                }
+              })
+              .catch(() => {
+                this._utils.showRequest(
+                  "Error",
+                  "There has been an error while deleting the channel!"
+                );
+              });
+          }
+        );
+      }
+    },
+    {
+      name: "Leave",
+      icon: "delete",
+      color: "danger",
+      tooltip: "Leave channel",
+      visible: (channel: Channel) => channel.founder != this._user.currentUser.id,
+      onClick: (channel: Channel) => {
+
+        this._utils.showRequest(
+          "Are you sure?",
+          `You're about to leave ${channel.name}, are you sure you want to continue?`,
+          () => {
+
+            this._ms.API_leaveChannel(channel)
+              .toPromise()
+              .catch(() => {
+                this._utils.showRequest(
+                  "Error",
+                  "There has been an error while leaving the channel!"
+                );
+              });
+          }
+        );
+
+      }
+    }
+  ];
 
   public channels: Array<Channel> = JSON.parse(JSON.stringify(this._ms.channels));
 

@@ -484,6 +484,20 @@ class DBUser {
 
 
 
+  async isChannelFounder() {
+
+    const founderID = await REPQuery.one(
+    `
+    SELECT ID_USER as userID
+    FROM CHANNELS
+    WHERE ID_CHANNEL = ?
+    `, this.channelID);
+
+    return founderID.userID == this.userID;
+  }
+
+
+
   async watch(callback = nocb) {
     try {
       await REPQuery.exec(
@@ -527,7 +541,6 @@ class DBUser {
       callback(error, null);
     }
   }
-
 
 
   async setLastJoinedChannel(callback = nocb) {

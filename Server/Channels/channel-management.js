@@ -74,6 +74,59 @@ router.post('/createChannel', upload.single("image"), async (req, res) => {
 
 
 
+router.delete('/deleteChannel/:channelID', (req, res) => {
+
+  try {
+    const userID    = res.locals._id;
+    const channelID = req.params.channelID;
+    const user      = new DBUser(userID);
+
+    user.setChannel(channelID, async (err) => {
+      if (err) {
+        res.status(401).send({ success: false, message: "User not in channel!" });
+      } else {
+
+        if (await user.isChannelFounder()) {
+
+          const members = await REPQuery.load(
+          `
+          SELECT ID_USER as userID
+          FROM CHANNELS_MEMBERS
+          WHERE ID_CHANNEL = ?
+          `, [channelID]);
+
+          await REPQuery.exec(
+          `
+          DELETE
+          FROM CHANNELS
+          WHERE ID_CHANNEL = ?
+          `, [channelID]);
+
+          for (const member of members) {
+
+            io.to(`user${member.userID}`).emit("channels", {
+              emitType: "LEAVE_CHANNEL",
+              channelID: channelID
+            });
+
+          }
+
+          res.status(201).send({ success: true });
+        }
+      }
+
+    });
+
+  } catch(error) {
+    console.log(clc.red(error));
+
+    res.status(500).send({ success: false, message: `Internal server error!` });
+  }
+
+});
+
+
+
 router.post('/addChannel', async (req, res) => {
 
   const { name, code } = req.body;
@@ -123,7 +176,7 @@ router.post('/addChannel', async (req, res) => {
             AND CM.ID_USER = ?
           `, [channelID, userID]);
 
-          if (ban_check.banned)
+          if (ban_check?.banned)
             return res.status(409).send({ success: false, message: "You have been banned from this channel!" });
 
           await REPQuery.exec(
@@ -509,7 +562,7 @@ router.put('/changePendingStatus', (req, res) => {
           `, [channelID, pendingID]);
         };
 
-        if (status == true && kick_check.kicked) {
+        if (status == true && kick_check?.kicked == true) {
 
           REPQuery.exec(
           `
