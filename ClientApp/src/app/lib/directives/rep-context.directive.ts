@@ -25,12 +25,12 @@ export class REPContextDirective implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.renderer.listen(this.elRef.nativeElement, this.mode, (event) => {
+    this.renderer.listen(this.elRef.nativeElement, this.mode, (event: MouseEvent) => {
       this.onEvent(event);
     });
   }
 
-  public onEvent(event: any): void
+  public onEvent(event: MouseEvent): void
   {
     if (!this.enabled) return;
 
@@ -113,7 +113,7 @@ export class REPContextDirective implements OnInit {
 
       const eventNames = ["click", "contextmenu"];
 
-      eventNames.forEach((eName) => {
+      eventNames.forEach((eName: string) => {
         const unsub = this.renderer.listen(document, eName, (e: MouseEvent) => {
 
           if (compRef.location.nativeElement.contains(e.target)) {
