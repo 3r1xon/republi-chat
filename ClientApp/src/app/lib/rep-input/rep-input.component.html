@@ -10,6 +10,7 @@
   }">
 
     <span class="main-content">
+
       <input
         [placeholder]="getPlaceholder()"
         [disabled]="disabled"
@@ -23,8 +24,17 @@
         [autocomplete]="autocomplete"
         [maxlength]="maxLength"
       />
-      <mat-icon [style.color]="color" *ngIf="icon">{{icon}}</mat-icon>
+
+      <mat-icon
+        *ngIf="icon"
+        class="icon"
+        [style.color]="placeholderAnimated || text != '' ? color : borderColor"
+      >
+        {{icon}}
+      </mat-icon>
+
       <rep-info *ngIf="tooltip" [tooltip]="tooltip" [background]="placeholderAnimated ? color : borderColor"></rep-info>
+
     </span>
 
     <label class="placeholder" [ngStyle]="{

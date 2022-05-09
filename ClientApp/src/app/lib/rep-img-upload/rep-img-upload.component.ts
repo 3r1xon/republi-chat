@@ -3,11 +3,10 @@ import {
   EventEmitter,
   forwardRef,
   Input,
-  OnInit,
   Output
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { SafeResourceUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'rep-img-upload',
@@ -21,15 +20,7 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
     }
   ]
 })
-export class REPImgUploadComponent implements OnInit, ControlValueAccessor {
-
-  constructor(
-    private sanitizer: DomSanitizer
-  ) { }
-
-  ngOnInit(): void {
-    this.sanitizeIMG();
-  }
+export class REPImgUploadComponent implements ControlValueAccessor {
 
   @Input()
   public src: SafeResourceUrl;
@@ -45,19 +36,6 @@ export class REPImgUploadComponent implements OnInit, ControlValueAccessor {
 
   @Output()
   public image: EventEmitter<any> = new EventEmitter();
-
-  sanitizeIMG() {
-    if (this.src == null) return;
-
-    const extensions = {
-      "/": "jpg",
-      "i": "png",
-      "R": "gif",
-      "U": "webp"
-    };
-
-    this.src = this.sanitizer.bypassSecurityTrustResourceUrl(`data:image/${extensions[this.src[0]]};base64,` + this.src);
-  }
 
   onChange: any = () => { };
 
@@ -76,8 +54,6 @@ export class REPImgUploadComponent implements OnInit, ControlValueAccessor {
 
     if (typeof file == 'string') {
       this.src = file;
-
-      this.sanitizeIMG();
 
     } else {
 

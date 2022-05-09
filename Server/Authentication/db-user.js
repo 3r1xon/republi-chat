@@ -143,8 +143,7 @@ class DBUser {
       `
       SELECT CRP.${permission}
       FROM CHANNELS_ROOMS_PERMISSIONS CRP
-               INNER JOIN CHANNELS_ROOMS_MEMBERS CRM ON CRM.ID_CHANNEL_ROOM_MEMBER = CRP.ID_CHANNEL_ROOM_MEMBER
-      WHERE CRM.ID_CHANNEL_ROOM_MEMBER = ?
+      WHERE CRP.ID_CHANNEL_ROOM_MEMBER = ?
       `, [this.roomMemberID]);
 
       REPTools.keysToBool(global, room);

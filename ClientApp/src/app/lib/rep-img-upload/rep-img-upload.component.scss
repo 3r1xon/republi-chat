@@ -12,23 +12,20 @@
   label {
     width: 100%;
     height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
-  .picture {
+  rep-profile-pic {
     width: 100%;
     height: 100%;
-    border-radius: 50%;
-    transition: 100ms;
-    -webkit-user-drag: none;
     cursor: pointer;
+    transition: 100ms;
 
     &:hover {
       opacity: 0.5;
     }
-  }
-
-  rep-profile-pic {
-    cursor: pointer;
   }
 
   mat-icon {

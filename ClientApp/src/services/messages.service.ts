@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { Message } from 'src/interfaces/message.interface';
 import { UserService } from './user.service';
 import { ServerResponse } from 'src/interfaces/response.interface';
@@ -10,6 +10,7 @@ import { UtilsService } from './utils.service';
 import { WebSocketService } from './websocket.service';
 import { environment } from 'src/environments/environment';
 import { moveItemInArray } from '@angular/cdk/drag-drop';
+import { DOCUMENT } from '@angular/common';
 
 
 @Injectable({
@@ -21,7 +22,8 @@ export class MessagesService {
     private _user: UserService,
     private _utils: UtilsService,
     private _webSocket: WebSocketService,
-    private http: HttpClient
+    private http: HttpClient,
+    @Inject(DOCUMENT) private document: Document
   ) { }
 
   public messages: Array<Message> = [];
@@ -41,6 +43,8 @@ export class MessagesService {
   private msSubscriptions: Array<Subscription> = [];
 
   private chSubscriptions: Array<Subscription> = [];
+
+  private vocalSubscriptions: Array<Subscription> = [];
 
   private channelsSubscriptions: Array<Subscription> = [];
 
@@ -151,6 +155,8 @@ export class MessagesService {
       this.currentVocalRoom.connected ??= [];
 
       this.currentVocalRoom.connected.push(this._user.currentUser);
+
+      this.initVocalRoomSockets();
     }
   }
 
@@ -172,6 +178,71 @@ export class MessagesService {
 
   public isInRoom(room: Room): boolean {
     return room.roomID == this.currentRoom?.roomID || room.roomID == this.currentVocalRoom?.roomID;
+  }
+
+
+
+  private initVocalRoomSockets(): void {
+
+    this.destroyVocalSubscriptions();
+
+    const channel = this.currentChannel;
+
+    const room = this.currentRoom;
+
+    this._webSocket.emit("joinVocalRoom", {
+      channel: channel.id,
+      room: room.roomID
+    });
+
+    this.vocalSubscriptions
+    .push(
+      this._webSocket.listen("voice")
+        .subscribe((audio: ArrayBuffer) => {
+
+
+        })
+    );
+
+
+    // WORK IN PROGRESS
+    this.document.defaultView.navigator.mediaDevices
+      .getUserMedia({ audio: true })
+      .then((stream) => {
+
+        // const audioContext = new AudioContext();
+
+        // const gain_node = audioContext.createGain();
+        // gain_node.connect( audioContext.destination );
+
+        // const microphone_stream = audioContext.createMediaStreamSource(stream);
+        // // microphone_stream.connect(gain_node);
+
+        // const script_processor_fft_node = audioContext.createScriptProcessor(2048, 1, 1);
+        // script_processor_fft_node.connect(gain_node);
+
+        // const BUFF_SIZE = 16384;
+
+        // const analyserNode = audioContext.createAnalyser();
+        // analyserNode.smoothingTimeConstant = 0;
+        // analyserNode.fftSize = 2048;
+
+        // const script_processor_node = audioContext.createScriptProcessor(BUFF_SIZE, 1, 1);
+
+        // microphone_stream.connect(script_processor_node);
+
+        // script_processor_fft_node.onaudioprocess = () => {
+
+        //   const audioBuffer = new Uint8Array(analyserNode.frequencyBinCount);
+        //   analyserNode.getByteFrequencyData(audioBuffer);
+
+        //   this._webSocket.emit("voice", audioBuffer);
+
+        // };
+
+      });
+
+
   }
 
 
@@ -623,6 +694,13 @@ export class MessagesService {
       subscription.unsubscribe();
     });
     this.channelsSubscriptions = [];
+  }
+
+  public destroyVocalSubscriptions() {
+    this.vocalSubscriptions.map((subscription) => {
+      subscription.unsubscribe();
+    });
+    this.vocalSubscriptions = [];
   }
 
 }

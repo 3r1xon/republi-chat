@@ -11,6 +11,7 @@ io.on("connection", (socket) => {
   const userID = socket.auth._id;
 
   const user = new DBUser(userID);
+
   socket.join(`user${userID}`);
 
   user.setUserStatus(userStatus.online);
@@ -56,10 +57,6 @@ io.on("connection", (socket) => {
     });
   });
 
-  socket.on("joinVocalRoom", async (obj) => { 
-
-  });
-
   socket.on("message", (msg) => {
 
     user.sendMessage(msg);
@@ -98,12 +95,30 @@ io.on("connection", (socket) => {
 
   });
 
-
   socket.on("disconnect", async () => {
     if (user.roomMemberID)
       await user.unwatch();
 
     user.setUserStatus(userStatus.offline);
+
+  });
+
+
+
+  // Vocal
+  socket.on("joinVocalRoom", async (obj) => {
+
+    socket.leave(`vocalRm${vocalRoom}`);
+
+    vocalRoom = obj.room;
+
+    socket.join(`vocalRm${obj.room}`);
+
+  });
+
+  socket.on("voice", (audio) => {
+
+    io.to(`vocalRm${vocalRoom}`).emit("voice", audio);
 
   });
 

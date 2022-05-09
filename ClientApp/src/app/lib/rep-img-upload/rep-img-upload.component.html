@@ -2,21 +2,15 @@
 
   <label for="file-input">
 
-    <img
-      *ngIf="src != null"
+    <rep-profile-pic
+      [letter]="letter"
+      [color]="backgroundColor"
       [src]="src"
-      class="picture"
-    />
+      width="75px"
+      height="75px"
+    ></rep-profile-pic>
 
   </label>
-
-  <rep-profile-pic
-    *ngIf="src == null"
-    [letter]="letter"
-    [color]="backgroundColor"
-    width="75px"
-    height="75px"
-  ></rep-profile-pic>
 
   <input id="file-input" type="file" (change)="writeValue($event.target.files)" />
 
