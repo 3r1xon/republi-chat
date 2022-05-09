@@ -67,7 +67,10 @@ export class MessagesService {
         }
       ).catch(() => {
 
-        this._utils.showBugReport("Server error!", "There has been an error while fetching the channels!");
+        this._utils.showBugReport(
+          "Server error!",
+          "There has been an error while fetching the channels!"
+        );
       });
   }
 
@@ -108,7 +111,11 @@ export class MessagesService {
 
       })
       .catch(() => {
-        this._utils.showBugReport("Server error!", "There has been an error while joining the channel!");
+
+        this._utils.showBugReport(
+          "Server error!",
+          "There has been an error while joining the channel!"
+        );
       });
   }
 
@@ -144,7 +151,11 @@ export class MessagesService {
               }
             })
             .catch(() => {
-              this._utils.showBugReport("Server error!", "There has been an error while requesting the messages!");
+
+              this._utils.showBugReport(
+                "Server error!",
+                "There has been an error while requesting the messages!"
+              );
             });
         });
     } else {
@@ -593,7 +604,9 @@ export class MessagesService {
   public API_createChannel(channel: Channel) {
     const fd = new FormData();
     fd.append("name", channel.name);
-    fd.append("image", channel.picture, channel.picture?.name);
+
+    if (channel.picture instanceof File)
+      fd.append("image", channel.picture, channel.picture?.name);
 
     return this.http.post<ServerResponse>(`${environment.BASE_URL}/channels/createChannel`, fd);
   }

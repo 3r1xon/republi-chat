@@ -21,7 +21,7 @@ router.post('/createChannel', upload.single("image"), async (req, res) => {
 
   const channel = {
     name: req.body.name,
-    picture: req.file?.buffer
+    picture: req.file?.buffer ?? null
   };
 
   const { error } = channelSchema.validate(channel);
@@ -412,6 +412,7 @@ router.post('/addChRoom', (req, res) => {
     const user      = new DBUser(userID);
     const channelID = req.body.id;
 
+
     user.setChannel(channelID, (err) => {
       if (err) {
         res.status(401).send({ success: false, message: "User not in channel!" });
@@ -650,6 +651,7 @@ router.get('/getRoomMessages/:chID/:roomID/:limit', (req, res) => {
     }
   });
 });
+
 
 
 router.put('/changeChOrder', async (req, res) => {

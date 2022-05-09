@@ -33,15 +33,25 @@ export abstract class REPManager {
 
     const fd = new FormData();
 
+    let hasBlob = false;
+
     for (const key in saveValues) {
       if (saveValues[key] instanceof File) {
         fd.append("image", saveValues[key], saveValues[key].name);
+        hasBlob = true;
       } else {
         fd.append(key, saveValues[key]);
       }
     }
 
-    return this.http[this.API_METHOD](this.API_URL, fd).toPromise();
+    // If save values have an image it means
+    // there is multer middleware that will read
+    // form data
+    if (hasBlob) {
+      return this.http[this.API_METHOD](this.API_URL, fd).toPromise();
+    }
+
+    return this.http[this.API_METHOD](this.API_URL, saveValues).toPromise();
   };
 
   public canSave(): boolean {
