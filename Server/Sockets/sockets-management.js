@@ -6,13 +6,15 @@ const clc        = require('cli-color');
 const router     = express.Router();
 
 
-io.on("connection", (socket) => {
+io.on("connection", async (socket) => {
 
   const userID = socket.auth._id;
 
   const user = new DBUser(userID);
 
   socket.join(`user${userID}`);
+
+  await user.ready();
 
   user.setUserStatus(userStatus.online);
 
@@ -81,6 +83,23 @@ io.on("connection", (socket) => {
 
   });
 
+  socket.on("kick", (userID) => {
+
+    user.kickMember(userID);
+
+  });
+
+
+  socket.on("changePermission", (obj) => {
+
+    console.log(obj);
+    io.to(`ch${obj.channelID}`).emit("channel", {
+      emitType: "CHANGE_PERMISSION",
+      permission: obj.permission
+    });
+
+  });
+
   socket.on("userChanges", (change) => {
 
     switch(change.emitType) {
@@ -106,22 +125,22 @@ io.on("connection", (socket) => {
 
 
   // Vocal
-  socket.on("joinVocalRoom", async (obj) => {
+  // socket.on("joinVocalRoom", async (obj) => {
 
-    socket.leave(`vocalRm${vocalRoom}`);
+  //   socket.leave(`vocalRm${vocalRoom}`);
 
-    vocalRoom = obj.room;
+  //   vocalRoom = obj.room;
 
-    socket.join(`vocalRm${obj.room}`);
+  //   socket.join(`vocalRm${obj.room}`);
 
-  });
+  // });
 
-  socket.on("voice", (audio) => {
+  // socket.on("voice", (audio) => {
 
-    console.log(audio);
-    io.to(`vocalRm${vocalRoom}`).emit("voice", audio);
+  //   console.log(audio);
+  //   io.to(`vocalRm${vocalRoom}`).emit("voice", audio);
 
-  });
+  // });
 
 });
 

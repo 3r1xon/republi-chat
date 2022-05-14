@@ -3,7 +3,7 @@
   <rep-accordion
     *ngFor="let section of channels; let i = index"
     [open]="section.open"
-    (onExpand)="expandChannel(i)"
+    (onExpand)="expandChannel(section)"
   >
 
     <rep-namebox
@@ -16,33 +16,76 @@
     </rep-namebox>
 
     <div
+      *ngIf="section.founder == _user.currentUser.id"
       class="body"
       body
     >
 
-      <rep-separator>Members</rep-separator>
-
-      <rep-accordion
-        *ngFor="let member of selectedChannel?.members"
-        class="members"
+      <rep-tabs
+        class="channel-info"
+        [entries]="serverInfo"
+        [add]="false"
+        (onTab)="serverInfoTab = $event"
       >
 
-        <rep-namebox
-          header
-          [message]="member"
-        >
-        </rep-namebox>
-
-        <div
-          body
-          class="permissions"
+        <ng-container
+          *ngIf="selectedChannel?.members"
         >
 
-          <rep-separator>{{member.name}}'s permissions</rep-separator>
+          <rep-accordion
+            *ngFor="
+            let member of selectedChannel.members
+            |
+            filterMembers: serverInfo[serverInfoTab].tabname"
+            class="members"
+            (onExpand)="expandMember(member)"
+            [open]="member.open"
+          >
 
-        </div>
+            <rep-namebox
+              header
+              [message]="member"
+            >
+            </rep-namebox>
 
-      </rep-accordion>
+            <div
+              body
+              class="permissions"
+            >
+
+            <rep-actions [actions]="memberActions"></rep-actions>
+
+              <rep-separator>{{member.name}}'s permissions</rep-separator>
+
+              <ng-container
+                *ngFor="let permission of permissionList"
+              >
+
+                <div class="permission">
+
+                  <div>
+                    <h1>{{permission.name}}</h1>
+                    <p>{{permission.description}}</p>
+                  </div>
+
+                  <rep-toggle
+                    [(checked)]="permission.value"
+                    (checkedChange)="changePermission(permission)"
+                  >
+                  </rep-toggle>
+
+                </div>
+
+              </ng-container>
+
+            </div>
+
+          </rep-accordion>
+
+        </ng-container>
+
+      </rep-tabs>
+
 
     </div>
 

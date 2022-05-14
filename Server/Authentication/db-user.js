@@ -18,6 +18,7 @@ class DBUser {
   }
 
   userID;
+  socket;
 
   channelID;
   channelMemberID;
@@ -27,6 +28,13 @@ class DBUser {
   roomID;
   roomMemberID;
   roomJoinDate;
+
+  // Calling ready means the user has joined the
+  // room user + userID
+  async ready() {
+    this.socket = Array.from(await this.getSockets())[0];
+  }
+
 
 
   async setChannel(channel, callback = nocb) {
@@ -238,7 +246,7 @@ class DBUser {
 
           io.to(`rm${this.roomID}`).emit("message", JSON.stringify(message));
 
-          io.to(`ch${this.channelID}`).emit("channel", {
+          this.socket.broadcast.to(`ch${this.channelID}`).emit("channel", {
             room: this.roomID,
             type: "+",
             emitType: "ROOM_NOTIFICATION"
@@ -301,7 +309,7 @@ class DBUser {
 
           io.to(`rm${this.roomID}`).emit("deleteMessage", `${msgID}`);
 
-          io.to(`ch${this.channelID}`).emit("channel", {
+          this.socket.broadcast.to(`ch${this.channelID}`).emit("channel", {
             room: this.roomID,
             type: "-",
             emitType: "ROOM_NOTIFICATION"
@@ -351,15 +359,6 @@ class DBUser {
               AND ID_CHANNEL = ?
             `, [true, userID, this.channelID]);
 
-            const watching_rooms = await REPQuery.load(
-            `
-            SELECT CRM.ID_CHANNEL_ROOM as roomID
-            FROM CHANNELS_MEMBERS CM
-                     LEFT JOIN CHANNELS_ROOMS_MEMBERS CRM ON CRM.ID_CHANNEL_MEMBER = CM.ID_CHANNEL_MEMBER
-            WHERE CM.ID_USER = ?
-              AND CRM.WATCHING = ?
-            `, [userID, true]);
-
             const sockets = await io.in(`user${userID}`).fetchSockets();
 
             io.to(`ch${this.channelID}`).emit("channel", {
@@ -368,13 +367,14 @@ class DBUser {
             });
 
             sockets.forEach((socket) => {
-              socket.leave(`ch${this.channelID}`);
-
-              watching_rooms.forEach((room) => {
-                socket.leave(`rm${room.roomID}`);
+              socket.rooms.forEach((room) => {
+                if (room.startsWith("ch") || room.startsWith("rm")) {
+                  socket.leave(room);
+                }
               });
-
             });
+
+            callback(null, this);
 
           } catch(error) {
             console.log(error);
@@ -388,8 +388,50 @@ class DBUser {
 
 
 
-  kickMember() {
+  kickMember(userID, callback = nocb) {
+    this.hasPermission(permissions.kickMembers, async (err) => {
+      if (err) {
+        console.log(err);
 
+        callback(err, null);
+      } else {
+
+        if (this.userID != userID) {
+          try {
+
+            await REPQuery.exec(
+            `
+            UPDATE CHANNELS_MEMBERS
+            SET KICKED = ?
+            WHERE ID_USER = ?
+              AND ID_CHANNEL = ?
+            `, [true, userID, this.channelID]);
+
+            const sockets = await io.in(`user${userID}`).fetchSockets();
+
+            io.to(`ch${this.channelID}`).emit("channel", {
+              emitType: "KICK_MEMBER",
+              userID: userID
+            });
+
+            sockets.forEach((socket) => {
+              socket.rooms.forEach((room) => {
+                if (room.startsWith("ch") || room.startsWith("rm")) {
+                  socket.leave(room);
+                }
+              });
+            });
+
+            callback(null, this);
+
+          } catch(error) {
+            console.log(error);
+
+            callback(error, null);
+          }
+        }
+      }
+    });
   }
 
 
@@ -484,6 +526,29 @@ class DBUser {
 
 
 
+  async changePermission(permission, channelID, callback = nocb) {
+
+    // if (channelID == this.channelID) {
+
+    //   this.hasPermission(permission, async (err) => {
+    //     if (err) {
+    //       callback(err, null);
+    //     } else {
+
+    //       await REPQuery.exec(
+    //       `
+    //       UPDATE CHANNELS_PERMISSIONS CP
+    //       SET CP.${}
+    //       `);
+
+    //     }
+    //   });
+
+    // }
+  }
+
+
+
   async isChannelFounder() {
 
     const founderID = await REPQuery.one(
@@ -543,6 +608,7 @@ class DBUser {
   }
 
 
+
   async setLastJoinedChannel(callback = nocb) {
 
     try {
@@ -583,6 +649,7 @@ class DBUser {
       callback(error, null);
     }
   }
+
 
 
   async getJoinedChannels() {
@@ -632,6 +699,8 @@ class DBUser {
       status: status
     });
   }
+
+
 
   async getSockets() {
     return await io.in(`user${this.userID}`).fetchSockets();

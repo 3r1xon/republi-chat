@@ -6,6 +6,7 @@ export interface Account {
   backgroundColor?: string;
   userStatus?: UserStatus;
   biography?: string;
+  banned?: boolean;
   name: string;
   email: string;
   lastJoinedChannel: number;

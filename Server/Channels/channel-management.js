@@ -356,13 +356,15 @@ router.get('/getChannelMembers/:chID', (req, res) => {
                U.BACKGROUND_COLOR           as backgroundColor,
                U.NAME                       as name,
                TO_BASE64(U.PROFILE_PICTURE) as picture,
-               U.USER_STATUS                as userStatus
+               U.USER_STATUS                as userStatus,
+               CM.BANNED                    as banned
         FROM CHANNELS_MEMBERS CM
                   INNER JOIN USERS U ON U.ID_USER = CM.ID_USER
         WHERE CM.ID_CHANNEL = ?
-          AND CM.BANNED = ?
           AND CM.KICKED = ?
-        `, [channelID, false, false]);
+        `, [channelID, false]);
+
+        members.forEach(member => member.banned = !!member.banned);
 
         res.status(200).send(
         {
@@ -370,7 +372,60 @@ router.get('/getChannelMembers/:chID', (req, res) => {
           data: members
         });
       }
-    })
+    });
+
+
+  } catch (error) {
+    console.log(clc.red(error));
+
+    res.status(500).send({ success: false, message: `Internal server error!!` });
+  }
+
+});
+
+
+
+router.get('/getMemberPermissions/:chID/:memberID', (req, res) => {
+
+  try {
+
+    const userID    = res.locals._id;
+    const channelID = req.params.chID;
+    const memberID  = req.params.memberID;
+
+    const user = new DBUser(userID);
+
+    user.setChannel(channelID, async (chErr) => {
+      if (chErr) {
+        res.status(401).send({ success: false, message: "User not in channel!" });
+      } else {
+
+        const permissions = await REPQuery.one(
+        `
+        SELECT CP.DELETE_MESSAGES as deleteMessages,
+               CP.KICK_MEMBERS    as kickMembers,
+               CP.BAN_MEMBERS     as banMembers,
+               CP.SEND_MESSAGES   as sendMessages,
+               CP.CREATE_ROOMS    as createRooms,
+               CP.ACCEPT_MEMBERS  as acceptMembers
+        FROM CHANNELS_PERMISSIONS CP
+                 LEFT JOIN CHANNELS_MEMBERS CM ON CM.ID_CHANNEL_MEMBER = CP.ID_CHANNEL_MEMBER
+        WHERE CM.ID_USER = ?
+        `, [memberID]);
+
+        if (permissions) {
+
+          REPTools.keysToBool(permissions);
+
+          res.status(200).send(
+          {
+            success: true,
+            data: permissions
+          });
+
+        }
+      }
+    });
 
 
   } catch (error) {
@@ -446,7 +501,7 @@ router.get('/getChRoomInfo/:chID/:roomID', (req, res) => {
         });
 
       }
-    })
+    });
 
   } catch (error) {
     console.log(clc.red(error));

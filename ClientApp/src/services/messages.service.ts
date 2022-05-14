@@ -11,6 +11,7 @@ import { WebSocketService } from './websocket.service';
 import { environment } from 'src/environments/environment';
 import { moveItemInArray } from '@angular/cdk/drag-drop';
 import { DOCUMENT } from '@angular/common';
+import { Account } from 'src/interfaces/account.interface';
 
 
 @Injectable({
@@ -342,7 +343,6 @@ export class MessagesService {
           .subscribe(async (obj: any) => {
 
             switch(obj.emitType) {
-
               case "ROOM_NOTIFICATION": {
                 const notification = obj;
 
@@ -403,13 +403,22 @@ export class MessagesService {
 
               } break;
 
+              case "KICK_MEMBER":
               case "BAN_MEMBER": {
 
                 if (obj.userID == this._user.currentUser.id) {
 
+                  let warn = "Banned";
+                  let warnMessage = "You have been banned from this channel.";
+
+                  if (obj.emitType == "KICK_MEMBER") {
+                    warn = "Kicked";
+                    warnMessage = "You have been kicked from this channel.";
+                  }
+
                   this._utils.showRequest(
-                    "Banned",
-                    `You have been banned from this channel.`
+                    warn,
+                    warnMessage
                   );
 
                   const index = this.channels.findIndex(ch => ch.id == this.currentChannel.id);
@@ -427,6 +436,13 @@ export class MessagesService {
                     this.currentRoom.members.splice(index, 1);
                   }
                 }
+
+              } break;
+
+              case "CHANGE_PERMISSION": {
+
+                // console.log(obj)
+                this.chPermissions[obj.permission.permissionKey] = obj.permission.value;
 
               } break;
 
@@ -571,26 +587,19 @@ export class MessagesService {
   /**
    * Ban a user in the current channel on a channel.
    *
-   * @param room The ID of the channel.
-   *
    * @param _id The ID of the user you want to ban.
    */
-  public banUser(room: Channel, _id: number) {
+  public banUser(_id: number) {
     this._webSocket.emit("banUser", _id);
   }
 
   /**
    * Kick a user in the current channel on a channel.
    *
-   * @param room The ID of the channel.
-   *
    * @param _id The ID of the user you want to kick.
    */
-   public kickUser(room: Channel, _id: number) {
-    this._webSocket.emit("kick", {
-      room: room.id,
-      _id: _id
-    });
+   public kickUser(_id: number) {
+    this._webSocket.emit("kick", _id);
   }
 
   /**
@@ -600,6 +609,15 @@ export class MessagesService {
    */
   public highlightMessage(_id: number) {
     this._webSocket.emit("highlightMessage", _id);
+  }
+
+
+  public changePermission(channel: Channel, user: Account, permission: ChannelPermissions) {
+    this._webSocket.emit("changePermission", {
+      permission: permission,
+      channelID: channel.id,
+      userID: user.id
+    });
   }
 
 
@@ -661,6 +679,10 @@ export class MessagesService {
 
   public API_getChannelMembers(channel: Channel) {
     return this.http.get<ServerResponse>(`${environment.BASE_URL}/channels/getChannelMembers/${channel.id}`);
+  }
+
+  public API_getMemberPermissions(channel: Channel, user: Account) {
+    return this.http.get<ServerResponse>(`${environment.BASE_URL}/channels/getMemberPermissions/${channel.id}/${user.id}`);
   }
 
   public API_getChRoomInfo(channel: Channel, room: Room) {

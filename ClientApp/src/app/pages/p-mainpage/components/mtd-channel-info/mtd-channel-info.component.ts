@@ -20,7 +20,7 @@ export class MTDChannelInfoComponent {
 
   public serverInfoTab: number = 0;
 
-  public serverInfo: Array<{
+  public readonly serverInfo: Array<{
     tabname: string,
     icon?: string,
   }> = [
@@ -101,7 +101,23 @@ export class MTDChannelInfoComponent {
           `Ban ${member.name}`,
           `Are you sure you want to ban ${member.name}? He will NOT be able to rejoin later till his ban is revoked!`,
           () => {
-            this._ms.banUser(this._ms.currentChannel, member.id);
+            this._ms.banUser(member.id);
+          }
+        );
+      }
+    },
+    {
+      name: "Kick",
+      icon: "person_remove",
+      color: "warning",
+      visible: (member: Account) => this._ms.chPermissions.kickMembers && member.id != this._user.currentUser.id,
+      onClick: (member: Account) => {
+
+        this._utils.showRequest(
+          `Kick ${member.name}`,
+          `Are you sure you want to kick ${member.name}? He will be able to rejoin later if accepted!`,
+          () => {
+            this._ms.kickUser(member.id);
           }
         );
       }

@@ -29,6 +29,7 @@ import { REPModule } from './lib/rep.module';
 import { MatRippleModule } from '@angular/material/core';
 import { GlobalErrorHandler } from './pages/error-handler';
 import { MTDModule } from './pages/components/mtd-module.module';
+import { FilterMembersPipe } from 'src/pipes/filter-members-members.pipe';
 
 
 
@@ -48,6 +49,8 @@ import { MTDModule } from './pages/components/mtd-module.module';
     PNotFoundComponent,
     PAppearanceComponent,
     PVerificationComponent,
+
+    FilterMembersPipe,
   ],
   imports: [
     BrowserModule,

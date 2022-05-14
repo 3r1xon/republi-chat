@@ -60,7 +60,7 @@ export class PSettingsComponent implements OnInit {
     {
       name: "Channel settings",
       icon: "admin_panel_settings",
-      route: '/settings/channelsettings',
+      route: '/settings/channelsettings/',
     },
     {
       name: "Appearance",
@@ -83,7 +83,11 @@ export class PSettingsComponent implements OnInit {
     },
   ];
 
-  public currentRoute: string = this.menus.find(menu => menu.route == this.router.url)?.name;
+  public currentRoute: string = (() => {
+    const actualRoute = this.router.url.replace(/[0-9]/g, "");
+
+    return this.menus.find(menu => menu.route == actualRoute)?.name;
+  })();
 
   async changeRoute(index: number) {
     if (this.menus[index].route)
