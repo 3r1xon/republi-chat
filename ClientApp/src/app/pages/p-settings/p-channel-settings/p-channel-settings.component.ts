@@ -115,13 +115,13 @@ export class PChannelSettingsComponent implements OnInit {
       name: "Kick",
       icon: "person_remove",
       background: "warning",
-      onClick: (member: Account) => {
+      onClick: () => {
 
         this._utils.showRequest(
-          `Kick ${member.name}`,
-          `Are you sure you want to kick ${member.name}? He will be able to rejoin later if accepted!`,
+          `Kick ${this.selectedUser.name}`,
+          `Are you sure you want to kick ${this.selectedUser.name}? He will be able to rejoin later if accepted!`,
           () => {
-            this._ms.kickUser(member.id);
+            this._ms.kickUser(this.selectedUser.id);
           }
         );
       }
@@ -222,6 +222,9 @@ export class PChannelSettingsComponent implements OnInit {
 
   public expandMember(user: Account) {
     this.selectedChannel.members.forEach(member => (member as any).open = false);
+
+    if (user.id == this.selectedChannel.founder)
+      return;
 
     (user as any).open = true;
 

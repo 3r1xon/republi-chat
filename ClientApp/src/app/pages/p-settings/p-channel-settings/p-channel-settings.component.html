@@ -40,6 +40,9 @@
             class="members"
             (onExpand)="expandMember(member)"
             [open]="member.open"
+            [ngClass]="{
+              'grayed-out': member.id == selectedChannel.founder
+            }"
           >
 
             <rep-namebox

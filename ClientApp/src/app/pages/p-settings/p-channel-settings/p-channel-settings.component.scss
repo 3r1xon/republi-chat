@@ -66,4 +66,9 @@
   .channel-info {
     width: 100%;
   }
+
+  .grayed-out {
+    pointer-events: none;
+    opacity: 0.5;
+  }
 }
