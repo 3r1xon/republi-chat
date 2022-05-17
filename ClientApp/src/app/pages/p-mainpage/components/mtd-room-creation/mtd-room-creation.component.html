@@ -35,11 +35,12 @@
 
         <span style="display: flex; align-items: center;">
           Text room
-          <rep-info tooltip="Text room or vocal room"></rep-info>
+          <rep-info tooltip="(Not available) Text room or vocal room"></rep-info>
         </span>
 
         <rep-toggle
           formControlName="textRoom"
+          [enabled]="false"
         ></rep-toggle>
       </span>
 

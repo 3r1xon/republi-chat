@@ -32,6 +32,8 @@ export interface ChannelPermissions {
   sendMessages: boolean;
   createRooms: boolean;
   acceptMembers: boolean;
+  managePermissions: boolean;
+  importanceLevel: number;
 }
 
 export interface RoomPermissions {

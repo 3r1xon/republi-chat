@@ -91,8 +91,8 @@ BEGIN
                       FROM CHANNELS CH
                       WHERE CH.ID_CHANNEL = NEW.ID_CHANNEL) THEN
         INSERT INTO CHANNELS_PERMISSIONS(ID_CHANNEL_MEMBER, DELETE_MESSAGES, KICK_MEMBERS, BAN_MEMBERS,
-                                         SEND_MESSAGES, CREATE_ROOMS, ACCEPT_MEMBERS)
-        VALUES (NEW.ID_CHANNEL_MEMBER, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE);
+                                         SEND_MESSAGES, CREATE_ROOMS, ACCEPT_MEMBERS, MANAGE_PERMISSIONS)
+        VALUES (NEW.ID_CHANNEL_MEMBER, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE);
     ELSE
         INSERT INTO CHANNELS_PERMISSIONS(ID_CHANNEL_MEMBER, DELETE_MESSAGES, KICK_MEMBERS, BAN_MEMBERS,
                                          SEND_MESSAGES, CREATE_ROOMS)
@@ -145,6 +145,8 @@ create or replace table republichat.channels_permissions
     SEND_MESSAGES         tinyint(1) default 1 null,
     CREATE_ROOMS          tinyint(1) default 0 null,
     ACCEPT_MEMBERS        tinyint(1) default 0 null,
+    MANAGE_PERMISSIONS    tinyint(1) default 0 null,
+    IMPORTANCE_LEVEL      bigint     default 0 null,
     constraint FK_MEMBERS
         foreign key (ID_CHANNEL_MEMBER) references republichat.channels_members (ID_CHANNEL_MEMBER)
             on update cascade on delete cascade

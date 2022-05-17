@@ -6,7 +6,9 @@ const Permissions = {
     banMembers: "BAN_MEMBERS",
     sendMessages: "SEND_MESSAGES",
     createRooms: "CREATE_ROOMS",
-    acceptMembers: "ACCEPT_MEMBERS"
+    acceptMembers: "ACCEPT_MEMBERS",
+    managePermissions: "MANAGE_PERMISSIONS",
+    importanceLevel: "IMPORTANCE_LEVEL"
 };
 
 module.exports = Permissions;

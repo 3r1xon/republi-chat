@@ -16,7 +16,6 @@
     </rep-namebox>
 
     <div
-      *ngIf="section.founder == _user.currentUser.id"
       class="body"
       body
     >
@@ -72,10 +71,19 @@
                   </div>
 
                   <rep-toggle
+                    *ngIf="getType(permission.value) == 'boolean'"
                     [(checked)]="permission.value"
                     (checkedChange)="changePermission(permission)"
                   >
                   </rep-toggle>
+
+                  <rep-input
+                    *ngIf="getType(permission.value) == 'number'"
+                    type="number"
+                    size="small"
+                    placeholder="Level"
+                  >
+                  </rep-input>
 
                 </div>
 

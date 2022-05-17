@@ -19,7 +19,11 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
       useExisting: forwardRef(() => REPToggleComponent)
     }
   ],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  host: {
+    "[style.opacity]": "enabled ? '1' : '0.5'",
+    "[style.pointerEvents]": "enabled ? 'all' : 'none'",
+  },
 })
 export class REPToggleComponent implements ControlValueAccessor {
 
@@ -31,6 +35,9 @@ export class REPToggleComponent implements ControlValueAccessor {
 
   @Input()
   public iconOnFalse: string;
+
+  @Input()
+  public enabled: boolean = true;
 
   @Output()
   public checkedChange: EventEmitter<boolean> = new EventEmitter();

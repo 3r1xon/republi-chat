@@ -286,12 +286,14 @@ router.get('/getChannelInfo/:id', (req, res) => {
 
         const permissions = await REPQuery.one(
         `
-        SELECT DELETE_MESSAGES as deleteMessage,
-               KICK_MEMBERS    as kickMembers,
-               BAN_MEMBERS     as banMembers,
-               SEND_MESSAGES   as sendMessages,
-               CREATE_ROOMS    as createRooms,
-               ACCEPT_MEMBERS  as acceptMembers
+        SELECT DELETE_MESSAGES    as deleteMessage,
+               KICK_MEMBERS       as kickMembers,
+               BAN_MEMBERS        as banMembers,
+               SEND_MESSAGES      as sendMessages,
+               CREATE_ROOMS       as createRooms,
+               ACCEPT_MEMBERS     as acceptMembers,
+               MANAGE_PERMISSIONS as managePermissions,
+               IMPORTANCE_LEVEL   as importanceLevel
         FROM CHANNELS_PERMISSIONS
         WHERE ID_CHANNEL_MEMBER = ?
         `, [user.channelMemberID]);
@@ -402,12 +404,14 @@ router.get('/getMemberPermissions/:chID/:memberID', (req, res) => {
 
         const permissions = await REPQuery.one(
         `
-        SELECT CP.DELETE_MESSAGES as deleteMessages,
-               CP.KICK_MEMBERS    as kickMembers,
-               CP.BAN_MEMBERS     as banMembers,
-               CP.SEND_MESSAGES   as sendMessages,
-               CP.CREATE_ROOMS    as createRooms,
-               CP.ACCEPT_MEMBERS  as acceptMembers
+        SELECT CP.DELETE_MESSAGES    as deleteMessages,
+               CP.KICK_MEMBERS       as kickMembers,
+               CP.BAN_MEMBERS        as banMembers,
+               CP.SEND_MESSAGES      as sendMessages,
+               CP.CREATE_ROOMS       as createRooms,
+               CP.ACCEPT_MEMBERS     as acceptMembers,
+               CP.MANAGE_PERMISSIONS as managePermissions,
+               CP.IMPORTANCE_LEVEL   as importanceLevel
         FROM CHANNELS_PERMISSIONS CP
                  LEFT JOIN CHANNELS_MEMBERS CM ON CM.ID_CHANNEL_MEMBER = CP.ID_CHANNEL_MEMBER
         WHERE CM.ID_USER = ?
@@ -415,7 +419,11 @@ router.get('/getMemberPermissions/:chID/:memberID', (req, res) => {
 
         if (permissions) {
 
+          const importanceLevel = permissions.importanceLevel;
+
           REPTools.keysToBool(permissions);
+
+          permissions.importanceLevel = importanceLevel;
 
           res.status(200).send(
           {
@@ -423,6 +431,8 @@ router.get('/getMemberPermissions/:chID/:memberID', (req, res) => {
             data: permissions
           });
 
+        } else {
+          res.status(404).send({ success: false });
         }
       }
     });
@@ -858,6 +868,14 @@ router.put('/leaveChannel', async (req, res) => {
 
     const channelID = req.body.chID;
     const userID = res.locals._id;
+
+    const user = new DBUser(userID);
+
+    user.channelID = channelID;
+
+    if (user.isChannelFounder()) {
+      return res.status(403).send({ success: false });
+    }
 
     await REPQuery.exec(
     `

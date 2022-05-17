@@ -5,6 +5,7 @@
       type="checkbox"
       [(ngModel)]="checked"
       [checked]="checked"
+      [disabled]="!enabled"
       (ngModelChange)="onChange($event)"
     >
     <span class="slider"></span>

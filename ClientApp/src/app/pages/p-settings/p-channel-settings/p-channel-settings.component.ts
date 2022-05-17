@@ -99,7 +99,7 @@ export class PChannelSettingsComponent implements OnInit {
       name: "Ban",
       icon: "delete_forever",
       background: "danger",
-      // visible: () => this._ms.chPermissions.banMembers && member.id != this._user.currentUser.id,
+      visible: () => !this.selectedUser?.banned,
       onClick: () => {
 
         this._utils.showRequest(
@@ -112,9 +112,26 @@ export class PChannelSettingsComponent implements OnInit {
       }
     },
     {
+      name: "Revoke ban",
+      icon: "thumb_up",
+      background: "success",
+      visible: () => this.selectedUser?.banned,
+      onClick: () => {
+
+        this._utils.showRequest(
+          `Revoke ban for ${this.selectedUser.name}`,
+          `Are you sure you want to revoke ban for user ${this.selectedUser.name}? He will be able to join again!`,
+          () => {
+
+          }
+        );
+      }
+    },
+    {
       name: "Kick",
       icon: "person_remove",
       background: "warning",
+      visible: () => !this.selectedUser?.banned,
       onClick: () => {
 
         this._utils.showRequest(
@@ -138,7 +155,7 @@ export class PChannelSettingsComponent implements OnInit {
     name: string,
     description: string,
     permissionKey: string,
-    value: boolean
+    value: number | boolean
   }> = [
     {
       name: "Delete messages",
@@ -176,7 +193,23 @@ export class PChannelSettingsComponent implements OnInit {
       permissionKey: "acceptMembers",
       value: false
     },
+    {
+      name: "Manage permissions",
+      description: "BE CAREFUL, when on, this user will be able to give permissions to other members under his level",
+      permissionKey: "managePermissions",
+      value: false
+    },
+    {
+      name: "Importance level",
+      description: "Members with higher importance level will have more power",
+      permissionKey: "importanceLevel",
+      value: 0
+    },
   ];
+
+  public getType(value): string {
+    return typeof(value);
+  }
 
   public expandChannel(channel: Channel): void {
     if (channel.id == this.selectedChannel?.id) return;
@@ -186,7 +219,6 @@ export class PChannelSettingsComponent implements OnInit {
     this._ms.API_getChannelMembers(channel)
       .toPromise()
       .then((res: ServerResponse) => {
-
         this.selectedChannel = channel;
 
         this.selectedChannel.members = res.data;
@@ -224,6 +256,9 @@ export class PChannelSettingsComponent implements OnInit {
     this.selectedChannel.members.forEach(member => (member as any).open = false);
 
     if (user.id == this.selectedChannel.founder)
+      return;
+
+    if (this.selectedUser?.id == user.id)
       return;
 
     (user as any).open = true;
