@@ -37,6 +37,7 @@ REDIRECT_URI = https://developers.google.com/oauthplayground
 
 REFRESH_TOKEN = /*Google email service refresh token*/
 
+environment.prod.ts client-side should be changed as well.
 Then you can start the project using "docker-compose up -d".
 
 # Screenshots
