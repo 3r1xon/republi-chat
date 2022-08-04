@@ -37,6 +37,8 @@ REDIRECT_URI = https://developers.google.com/oauthplayground
 
 REFRESH_TOKEN = /*Google email service refresh token*/
 
+Then you can start the project using "docker-compose up -d".
+
 # Screenshots
 ![Alt text](https://github.com/3r1xon/republi-chat/blob/master/Screenshots/login.png?raw=true)
 
