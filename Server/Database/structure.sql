@@ -1,52 +1,51 @@
-create or replace table republichat.reports
-(
-    ID_REPORT bigint auto_increment
-        primary key,
-    TITLE     varchar(255)  null,
-    CALLSTACK varchar(2000) null
-);
+-- MariaDB dump 10.19  Distrib 10.5.16-MariaDB, for Linux (x86_64)
+--
+-- Host: localhost    Database: republichat
+-- ------------------------------------------------------
+-- Server version	10.5.16-MariaDB
 
-create or replace table republichat.users
-(
-    ID_USER             bigint auto_increment
-        primary key,
-    DELETED             tinyint(1)                   null,
-    USER_CODE           varchar(4)                   not null,
-    EMAIL               varchar(320)                 not null,
-    PASSWORD            varchar(255)                 not null,
-    NAME                varchar(30)                  null,
-    PROFILE_PICTURE     mediumblob                   null,
-    COLOR               varchar(7) default '#ffffff' null,
-    BACKGROUND_COLOR    varchar(7)                   null,
-    BIOGRAPHY           varchar(200)                 null,
-    USER_STATUS         int                          null,
-    LAST_USER_STATUS    int                          null,
-    VERIFIED            tinyint(1) default 0         null,
-    LAST_JOINED_CHANNEL bigint                       null,
-    LAST_JOINED_ROOM    bigint                       null,
-    constraint USERS_EMAIL_uindex
-        unique (EMAIL)
-)
-    charset = utf8mb3;
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
-create or replace table republichat.channels
-(
-    ID_CHANNEL       bigint auto_increment
-        primary key,
-    ID_USER          bigint                       not null,
-    NAME             varchar(30)                  not null,
-    CHANNEL_CODE     varchar(4)                   not null,
-    PICTURE          mediumblob                   null,
-    CREATION_DATE    datetime                     null,
-    COLOR            varchar(7) default '#ffffff' null,
-    BACKGROUND_COLOR varchar(7)                   null,
-    constraint CHANNELS_USERS_ID_USER_fk
-        foreign key (ID_USER) references republichat.users (ID_USER)
-            on update cascade on delete cascade
-)
-    charset = utf8mb3;
+--
+-- Table structure for table `channels`
+--
 
-create or replace definer = root@localhost trigger republichat.channels_trigger
+DROP TABLE IF EXISTS `channels`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `channels` (
+  `ID_CHANNEL` bigint(20) NOT NULL AUTO_INCREMENT,
+  `ID_USER` bigint(20) NOT NULL,
+  `NAME` varchar(30) NOT NULL,
+  `CHANNEL_CODE` varchar(4) NOT NULL,
+  `PICTURE` mediumblob DEFAULT NULL,
+  `CREATION_DATE` datetime DEFAULT NULL,
+  `COLOR` varchar(7) DEFAULT '#ffffff',
+  `BACKGROUND_COLOR` varchar(7) DEFAULT NULL,
+  PRIMARY KEY (`ID_CHANNEL`),
+  KEY `CHANNELS_USERS_ID_USER_fk` (`ID_USER`),
+  CONSTRAINT `CHANNELS_USERS_ID_USER_fk` FOREIGN KEY (`ID_USER`) REFERENCES `users` (`ID_USER`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_unicode_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'IGNORE_SPACE,STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 trigger republichat.channels_trigger
     after insert
     on republichat.channels
     for each row
@@ -64,25 +63,43 @@ BEGIN
     insert into channels_rooms(ID_CHANNEL, ID_CHANNEL_MEMBER, ROOM_NAME, TEXT_ROOM, AUTO_JOIN)
     values (NEW_ID_CHANNEL, NEW_ID_CHANNEL_MEMBER, 'Default', true, true);
 
-END;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 
-create or replace table republichat.channels_members
-(
-    ID_CHANNEL_MEMBER bigint auto_increment
-        primary key,
-    ID_CHANNEL        bigint                       not null,
-    ID_USER           bigint                       not null,
-    BANNED            tinyint(1) default 0         null,
-    KICKED            tinyint(1) default 0         null,
-    JOIN_DATE         datetime   default curdate() not null,
-    `ORDER`           bigint                       null,
-    constraint CHANNELS_MEMBERS_CHANNELS_ID_CHANNEL_fk
-        foreign key (ID_CHANNEL) references republichat.channels (ID_CHANNEL)
-            on update cascade on delete cascade
-)
-    charset = utf8mb3;
+--
+-- Table structure for table `channels_members`
+--
 
-create or replace definer = root@localhost trigger republichat.CHANNELS_MEMBERS_TRIGGER
+DROP TABLE IF EXISTS `channels_members`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `channels_members` (
+  `ID_CHANNEL_MEMBER` bigint(20) NOT NULL AUTO_INCREMENT,
+  `ID_CHANNEL` bigint(20) NOT NULL,
+  `ID_USER` bigint(20) NOT NULL,
+  `BANNED` tinyint(1) DEFAULT 0,
+  `KICKED` tinyint(1) DEFAULT 0,
+  `JOIN_DATE` datetime NOT NULL DEFAULT curdate(),
+  `ORDER` bigint(20) DEFAULT NULL,
+  PRIMARY KEY (`ID_CHANNEL_MEMBER`),
+  KEY `CHANNELS_MEMBERS_CHANNELS_ID_CHANNEL_fk` (`ID_CHANNEL`),
+  CONSTRAINT `CHANNELS_MEMBERS_CHANNELS_ID_CHANNEL_fk` FOREIGN KEY (`ID_CHANNEL`) REFERENCES `channels` (`ID_CHANNEL`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_unicode_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'IGNORE_SPACE,STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 trigger republichat.CHANNELS_MEMBERS_TRIGGER
     after insert
     on republichat.channels_members
     for each row
@@ -102,24 +119,42 @@ BEGIN
     INSERT INTO CHANNELS_ROOMS_MEMBERS(ID_CHANNEL_ROOM, ID_CHANNEL_MEMBER)
     SELECT ID_CHANNEL_ROOM, NEW.ID_CHANNEL_MEMBER FROM CHANNELS_ROOMS WHERE AUTO_JOIN = TRUE AND ID_CHANNEL = NEW.ID_CHANNEL;
 
-END;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 
-create or replace table republichat.channels_pendings
-(
-    ID_CHANNEL_PENDING bigint auto_increment
-        primary key,
-    ID_CHANNEL         bigint     not null,
-    ID_USER            bigint     null,
-    ACCEPTED           tinyint(1) null,
-    constraint channels_pendings_channels_ID_CHANNEL_fk
-        foreign key (ID_CHANNEL) references republichat.channels (ID_CHANNEL)
-            on update cascade on delete cascade,
-    constraint channels_pendings_users_ID_USER_fk
-        foreign key (ID_USER) references republichat.users (ID_USER)
-            on update cascade on delete cascade
-);
+--
+-- Table structure for table `channels_pendings`
+--
 
-create or replace definer = root@localhost trigger republichat.CHANNELS_PENDINGS_TRIGGER
+DROP TABLE IF EXISTS `channels_pendings`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `channels_pendings` (
+  `ID_CHANNEL_PENDING` bigint(20) NOT NULL AUTO_INCREMENT,
+  `ID_CHANNEL` bigint(20) NOT NULL,
+  `ID_USER` bigint(20) DEFAULT NULL,
+  `ACCEPTED` tinyint(1) DEFAULT NULL,
+  PRIMARY KEY (`ID_CHANNEL_PENDING`),
+  KEY `channels_pendings_channels_ID_CHANNEL_fk` (`ID_CHANNEL`),
+  KEY `channels_pendings_users_ID_USER_fk` (`ID_USER`),
+  CONSTRAINT `channels_pendings_channels_ID_CHANNEL_fk` FOREIGN KEY (`ID_CHANNEL`) REFERENCES `channels` (`ID_CHANNEL`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `channels_pendings_users_ID_USER_fk` FOREIGN KEY (`ID_USER`) REFERENCES `users` (`ID_USER`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_unicode_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'IGNORE_SPACE,STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 trigger republichat.CHANNELS_PENDINGS_TRIGGER
     after update
     on republichat.channels_pendings
     for each row
@@ -132,47 +167,69 @@ BEGIN
 
     end if;
 
-END;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 
-create or replace table republichat.channels_permissions
-(
-    ID_CHANNEL_PERMISSION bigint auto_increment
-        primary key,
-    ID_CHANNEL_MEMBER     bigint               not null,
-    DELETE_MESSAGES       tinyint(1) default 0 null,
-    KICK_MEMBERS          tinyint(1) default 0 null,
-    BAN_MEMBERS           tinyint(1) default 0 null,
-    SEND_MESSAGES         tinyint(1) default 1 null,
-    CREATE_ROOMS          tinyint(1) default 0 null,
-    ACCEPT_MEMBERS        tinyint(1) default 0 null,
-    MANAGE_PERMISSIONS    tinyint(1) default 0 null,
-    IMPORTANCE_LEVEL      bigint     default 0 null,
-    constraint FK_MEMBERS
-        foreign key (ID_CHANNEL_MEMBER) references republichat.channels_members (ID_CHANNEL_MEMBER)
-            on update cascade on delete cascade
-)
-    charset = utf8mb3;
+--
+-- Table structure for table `channels_permissions`
+--
 
-create or replace table republichat.channels_rooms
-(
-    ID_CHANNEL_ROOM   bigint auto_increment
-        primary key,
-    ID_CHANNEL        bigint                                 not null,
-    ID_CHANNEL_MEMBER bigint                                 not null,
-    ROOM_NAME         varchar(30) collate utf8mb4_unicode_ci null,
-    TEXT_ROOM         tinyint(1) default 1                   null,
-    AUTO_JOIN         tinyint(1) default 0                   null,
-    `ORDER`           int        default 0                   null,
-    constraint channels_rooms_channels_ID_CHANNEL_fk
-        foreign key (ID_CHANNEL) references republichat.channels (ID_CHANNEL)
-            on update cascade on delete cascade,
-    constraint channels_rooms_channels_members_ID_CHANNEL_MEMBER_fk
-        foreign key (ID_CHANNEL_MEMBER) references republichat.channels_members (ID_CHANNEL_MEMBER)
-            on update cascade on delete cascade
-)
-    charset = utf8mb3;
+DROP TABLE IF EXISTS `channels_permissions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `channels_permissions` (
+  `ID_CHANNEL_PERMISSION` bigint(20) NOT NULL AUTO_INCREMENT,
+  `ID_CHANNEL_MEMBER` bigint(20) NOT NULL,
+  `DELETE_MESSAGES` tinyint(1) DEFAULT 0,
+  `KICK_MEMBERS` tinyint(1) DEFAULT 0,
+  `BAN_MEMBERS` tinyint(1) DEFAULT 0,
+  `SEND_MESSAGES` tinyint(1) DEFAULT 1,
+  `CREATE_ROOMS` tinyint(1) DEFAULT 0,
+  `ACCEPT_MEMBERS` tinyint(1) DEFAULT 0,
+  `MANAGE_PERMISSIONS` tinyint(1) DEFAULT 0,
+  `IMPORTANCE_LEVEL` bigint(20) DEFAULT 0,
+  PRIMARY KEY (`ID_CHANNEL_PERMISSION`),
+  KEY `FK_MEMBERS` (`ID_CHANNEL_MEMBER`),
+  CONSTRAINT `FK_MEMBERS` FOREIGN KEY (`ID_CHANNEL_MEMBER`) REFERENCES `channels_members` (`ID_CHANNEL_MEMBER`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
-create or replace definer = root@localhost trigger republichat.CHANNELS_ROOMS_TRIGGER
+--
+-- Table structure for table `channels_rooms`
+--
+
+DROP TABLE IF EXISTS `channels_rooms`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `channels_rooms` (
+  `ID_CHANNEL_ROOM` bigint(20) NOT NULL AUTO_INCREMENT,
+  `ID_CHANNEL` bigint(20) NOT NULL,
+  `ID_CHANNEL_MEMBER` bigint(20) NOT NULL,
+  `ROOM_NAME` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `TEXT_ROOM` tinyint(1) DEFAULT 1,
+  `AUTO_JOIN` tinyint(1) DEFAULT 0,
+  `ORDER` int(11) DEFAULT 0,
+  PRIMARY KEY (`ID_CHANNEL_ROOM`),
+  KEY `channels_rooms_channels_ID_CHANNEL_fk` (`ID_CHANNEL`),
+  KEY `channels_rooms_channels_members_ID_CHANNEL_MEMBER_fk` (`ID_CHANNEL_MEMBER`),
+  CONSTRAINT `channels_rooms_channels_ID_CHANNEL_fk` FOREIGN KEY (`ID_CHANNEL`) REFERENCES `channels` (`ID_CHANNEL`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `channels_rooms_channels_members_ID_CHANNEL_MEMBER_fk` FOREIGN KEY (`ID_CHANNEL_MEMBER`) REFERENCES `channels_members` (`ID_CHANNEL_MEMBER`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_unicode_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'IGNORE_SPACE,STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 trigger republichat.CHANNELS_ROOMS_TRIGGER
     after insert
     on republichat.channels_rooms
     for each row
@@ -187,27 +244,44 @@ BEGIN
         INSERT INTO channels_rooms_members(ID_CHANNEL_MEMBER, ID_CHANNEL_ROOM) VALUES (NEW.ID_CHANNEL_MEMBER, NEW.ID_CHANNEL_ROOM);
     end if;
 
-END;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 
-create or replace table republichat.channels_rooms_members
-(
-    ID_CHANNEL_ROOM_MEMBER bigint auto_increment
-        primary key,
-    ID_CHANNEL_MEMBER      bigint                               null,
-    ID_CHANNEL_ROOM        bigint                               not null,
-    JOIN_DATE              datetime default current_timestamp() null,
-    UNREAD_MESSAGES        int      default 0                   null,
-    WATCHING               tinyint(1)                           null,
-    constraint CHANNELS_ROOMS_MEMBERS_CHANNELS_ROOMS_ID_CHANNEL_ROOM_FK
-        foreign key (ID_CHANNEL_ROOM) references republichat.channels_rooms (ID_CHANNEL_ROOM)
-            on update cascade on delete cascade,
-    constraint channels_rooms_members_channels_members_ID_CHANNEL_MEMBER_fk
-        foreign key (ID_CHANNEL_MEMBER) references republichat.channels_members (ID_CHANNEL_MEMBER)
-            on update cascade on delete cascade
-)
-    charset = utf8mb3;
+--
+-- Table structure for table `channels_rooms_members`
+--
 
-create or replace definer = root@localhost trigger republichat.CHANNELS_ROOMS_MEMBERS_TRIGGER
+DROP TABLE IF EXISTS `channels_rooms_members`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `channels_rooms_members` (
+  `ID_CHANNEL_ROOM_MEMBER` bigint(20) NOT NULL AUTO_INCREMENT,
+  `ID_CHANNEL_MEMBER` bigint(20) DEFAULT NULL,
+  `ID_CHANNEL_ROOM` bigint(20) NOT NULL,
+  `JOIN_DATE` datetime DEFAULT current_timestamp(),
+  `UNREAD_MESSAGES` int(11) DEFAULT 0,
+  `WATCHING` tinyint(1) DEFAULT NULL,
+  PRIMARY KEY (`ID_CHANNEL_ROOM_MEMBER`),
+  KEY `CHANNELS_ROOMS_MEMBERS_CHANNELS_ROOMS_ID_CHANNEL_ROOM_FK` (`ID_CHANNEL_ROOM`),
+  KEY `channels_rooms_members_channels_members_ID_CHANNEL_MEMBER_fk` (`ID_CHANNEL_MEMBER`),
+  CONSTRAINT `CHANNELS_ROOMS_MEMBERS_CHANNELS_ROOMS_ID_CHANNEL_ROOM_FK` FOREIGN KEY (`ID_CHANNEL_ROOM`) REFERENCES `channels_rooms` (`ID_CHANNEL_ROOM`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `channels_rooms_members_channels_members_ID_CHANNEL_MEMBER_fk` FOREIGN KEY (`ID_CHANNEL_MEMBER`) REFERENCES `channels_members` (`ID_CHANNEL_MEMBER`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_unicode_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'IGNORE_SPACE,STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 trigger republichat.CHANNELS_ROOMS_MEMBERS_TRIGGER
     after insert
     on republichat.channels_rooms_members
     for each row
@@ -223,27 +297,44 @@ BEGIN
         VALUES (NEW.ID_CHANNEL_ROOM_MEMBER);
     END IF;
 
-END;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 
-create or replace table republichat.channels_rooms_messages
-(
-    ID_CHANNEL_ROOM_MESSAGE bigint auto_increment
-        primary key,
-    ID_CHANNEL_ROOM         bigint                                   not null,
-    ID_CHANNEL_ROOM_MEMBER  bigint                                   not null,
-    MESSAGE                 varchar(2000) collate utf8mb4_unicode_ci null,
-    DATE                    datetime                                 null,
-    HIGHLIGHTED             tinyint(1) default 0                     null,
-    constraint FK_USERS
-        foreign key (ID_CHANNEL_ROOM_MEMBER) references republichat.channels_rooms_members (ID_CHANNEL_ROOM_MEMBER)
-            on update cascade on delete cascade,
-    constraint channels_messages_channels_rooms_ID_CHANNEL_ROOM_fk
-        foreign key (ID_CHANNEL_ROOM) references republichat.channels_rooms (ID_CHANNEL_ROOM)
-            on update cascade on delete cascade
-)
-    charset = utf8mb3;
+--
+-- Table structure for table `channels_rooms_messages`
+--
 
-create or replace definer = root@localhost trigger republichat.channels_rooms_messages
+DROP TABLE IF EXISTS `channels_rooms_messages`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `channels_rooms_messages` (
+  `ID_CHANNEL_ROOM_MESSAGE` bigint(20) NOT NULL AUTO_INCREMENT,
+  `ID_CHANNEL_ROOM` bigint(20) NOT NULL,
+  `ID_CHANNEL_ROOM_MEMBER` bigint(20) NOT NULL,
+  `MESSAGE` varchar(2000) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `DATE` datetime DEFAULT NULL,
+  `HIGHLIGHTED` tinyint(1) DEFAULT 0,
+  PRIMARY KEY (`ID_CHANNEL_ROOM_MESSAGE`),
+  KEY `FK_USERS` (`ID_CHANNEL_ROOM_MEMBER`),
+  KEY `channels_messages_channels_rooms_ID_CHANNEL_ROOM_fk` (`ID_CHANNEL_ROOM`),
+  CONSTRAINT `FK_USERS` FOREIGN KEY (`ID_CHANNEL_ROOM_MEMBER`) REFERENCES `channels_rooms_members` (`ID_CHANNEL_ROOM_MEMBER`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `channels_messages_channels_rooms_ID_CHANNEL_ROOM_fk` FOREIGN KEY (`ID_CHANNEL_ROOM`) REFERENCES `channels_rooms` (`ID_CHANNEL_ROOM`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_unicode_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'IGNORE_SPACE,STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 trigger republichat.channels_rooms_messages
     after insert
     on republichat.channels_rooms_messages
     for each row
@@ -254,9 +345,22 @@ BEGIN
     WHERE ID_CHANNEL_ROOM = NEW.ID_CHANNEL_ROOM
       AND WATCHING = FALSE;
 
-END;
-
-create or replace definer = root@localhost trigger republichat.channels_rooms_messages_delete
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_unicode_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'IGNORE_SPACE,STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 trigger republichat.channels_rooms_messages_delete
     after delete
     on republichat.channels_rooms_messages
     for each row
@@ -268,75 +372,163 @@ BEGIN
       AND WATCHING = FALSE
       AND UNREAD_MESSAGES > 0;
 
-END;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 
-create or replace table republichat.channels_rooms_permissions
-(
-    ID_CHANNEL_ROOM_PERMISSION bigint auto_increment
-        primary key,
-    ID_CHANNEL_ROOM_MEMBER     bigint     null,
-    SEND_MESSAGES              tinyint(1) null,
-    DELETE_MESSAGES            tinyint(1) null,
-    constraint FK_CRP_TO_CRM
-        foreign key (ID_CHANNEL_ROOM_MEMBER) references republichat.channels_rooms_members (ID_CHANNEL_ROOM_MEMBER)
-            on update cascade on delete cascade
-)
-    charset = utf8mb3;
+--
+-- Table structure for table `channels_rooms_permissions`
+--
 
-create or replace table republichat.sessions
-(
-    ID_SESSION      bigint auto_increment
-        primary key,
-    ID_USER         bigint      not null,
-    SID             varchar(50) not null,
-    SOCKET_ID       varchar(30) null,
-    BROWSER_NAME    varchar(30) null,
-    BROWSER_VERSION varchar(30) null,
-    LATITUDE        varchar(30) null,
-    LONGITUDE       varchar(30) null,
-    DATE            datetime    null,
-    constraint sessions_SESSION_ID_uindex
-        unique (SID),
-    constraint sessions_SOCKET_ID_uindex
-        unique (SOCKET_ID),
-    constraint FK_USERS_1
-        foreign key (ID_USER) references republichat.users (ID_USER)
-            on update cascade on delete cascade
-)
-    charset = utf8mb3;
+DROP TABLE IF EXISTS `channels_rooms_permissions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `channels_rooms_permissions` (
+  `ID_CHANNEL_ROOM_PERMISSION` bigint(20) NOT NULL AUTO_INCREMENT,
+  `ID_CHANNEL_ROOM_MEMBER` bigint(20) DEFAULT NULL,
+  `SEND_MESSAGES` tinyint(1) DEFAULT NULL,
+  `DELETE_MESSAGES` tinyint(1) DEFAULT NULL,
+  PRIMARY KEY (`ID_CHANNEL_ROOM_PERMISSION`),
+  KEY `FK_CRP_TO_CRM` (`ID_CHANNEL_ROOM_MEMBER`),
+  CONSTRAINT `FK_CRP_TO_CRM` FOREIGN KEY (`ID_CHANNEL_ROOM_MEMBER`) REFERENCES `channels_rooms_members` (`ID_CHANNEL_ROOM_MEMBER`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
-create or replace table republichat.settings
-(
-    ID_SETTING        bigint auto_increment
-        primary key,
-    ID_USER           bigint                                    not null,
-    SHOW_CHANNELS     tinyint(1)  default 1                     null,
-    SHOW_SERVER_GROUP tinyint(1)  default 1                     null,
-    ANIMATIONS        tinyint(1)  default 1                     null,
-    DATE_FORMAT       varchar(30) default 'dd/MM/yyyy HH:mm:ss' null,
-    constraint settings_ID_USER_uindex
-        unique (ID_USER),
-    constraint settings_users_ID_USER_fk
-        foreign key (ID_USER) references republichat.users (ID_USER)
-            on update cascade on delete cascade
-)
-    charset = utf8mb3;
+--
+-- Table structure for table `reports`
+--
 
-create or replace definer = root@localhost trigger republichat.settings_trigger
+DROP TABLE IF EXISTS `reports`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `reports` (
+  `ID_REPORT` bigint(20) NOT NULL AUTO_INCREMENT,
+  `TITLE` varchar(255) DEFAULT NULL,
+  `CALLSTACK` varchar(2000) DEFAULT NULL,
+  PRIMARY KEY (`ID_REPORT`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `sessions`
+--
+
+DROP TABLE IF EXISTS `sessions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `sessions` (
+  `ID_SESSION` bigint(20) NOT NULL AUTO_INCREMENT,
+  `ID_USER` bigint(20) NOT NULL,
+  `SID` varchar(50) NOT NULL,
+  `SOCKET_ID` varchar(30) DEFAULT NULL,
+  `BROWSER_NAME` varchar(30) DEFAULT NULL,
+  `BROWSER_VERSION` varchar(30) DEFAULT NULL,
+  `LATITUDE` varchar(30) DEFAULT NULL,
+  `LONGITUDE` varchar(30) DEFAULT NULL,
+  `DATE` datetime DEFAULT NULL,
+  PRIMARY KEY (`ID_SESSION`),
+  UNIQUE KEY `sessions_SESSION_ID_uindex` (`SID`),
+  UNIQUE KEY `sessions_SOCKET_ID_uindex` (`SOCKET_ID`),
+  KEY `FK_USERS_1` (`ID_USER`),
+  CONSTRAINT `FK_USERS_1` FOREIGN KEY (`ID_USER`) REFERENCES `users` (`ID_USER`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `settings`
+--
+
+DROP TABLE IF EXISTS `settings`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `settings` (
+  `ID_SETTING` bigint(20) NOT NULL AUTO_INCREMENT,
+  `ID_USER` bigint(20) NOT NULL,
+  `SHOW_CHANNELS` tinyint(1) DEFAULT 1,
+  `SHOW_SERVER_GROUP` tinyint(1) DEFAULT 1,
+  `ANIMATIONS` tinyint(1) DEFAULT 1,
+  `DATE_FORMAT` varchar(30) DEFAULT 'dd/MM/yyyy HH:mm:ss',
+  PRIMARY KEY (`ID_SETTING`),
+  UNIQUE KEY `settings_ID_USER_uindex` (`ID_USER`),
+  CONSTRAINT `settings_users_ID_USER_fk` FOREIGN KEY (`ID_USER`) REFERENCES `users` (`ID_USER`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `users`
+--
+
+DROP TABLE IF EXISTS `users`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `users` (
+  `ID_USER` bigint(20) NOT NULL AUTO_INCREMENT,
+  `DELETED` tinyint(1) DEFAULT NULL,
+  `USER_CODE` varchar(4) NOT NULL,
+  `EMAIL` varchar(320) NOT NULL,
+  `PASSWORD` varchar(255) NOT NULL,
+  `NAME` varchar(30) DEFAULT NULL,
+  `PROFILE_PICTURE` mediumblob DEFAULT NULL,
+  `COLOR` varchar(7) DEFAULT '#ffffff',
+  `BACKGROUND_COLOR` varchar(7) DEFAULT NULL,
+  `BIOGRAPHY` varchar(200) DEFAULT NULL,
+  `USER_STATUS` int(11) DEFAULT NULL,
+  `LAST_USER_STATUS` int(11) DEFAULT NULL,
+  `VERIFIED` tinyint(1) DEFAULT 0,
+  `LAST_JOINED_CHANNEL` bigint(20) DEFAULT NULL,
+  `LAST_JOINED_ROOM` bigint(20) DEFAULT NULL,
+  PRIMARY KEY (`ID_USER`),
+  UNIQUE KEY `USERS_EMAIL_uindex` (`EMAIL`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_unicode_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'IGNORE_SPACE,STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 trigger republichat.settings_trigger
     after insert
     on republichat.users
     for each row
-    insert into settings(ID_USER) values (NEW.ID_USER);
+    insert into settings(ID_USER) values (NEW.ID_USER) */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 
-create or replace table republichat.users_verifications
-(
-    ID_USER_VERIFICATION bigint auto_increment
-        primary key,
-    ID_USER              bigint      not null,
-    VERIFICATION_CODE    varchar(30) not null,
-    constraint users_verifications_VERIFICATION_CODE_uindex
-        unique (VERIFICATION_CODE),
-    constraint users_verifications_users_ID_USER_fk
-        foreign key (ID_USER) references republichat.users (ID_USER)
-            on update cascade on delete cascade
-);
+--
+-- Table structure for table `users_verifications`
+--
+
+DROP TABLE IF EXISTS `users_verifications`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `users_verifications` (
+  `ID_USER_VERIFICATION` bigint(20) NOT NULL AUTO_INCREMENT,
+  `ID_USER` bigint(20) NOT NULL,
+  `VERIFICATION_CODE` varchar(30) NOT NULL,
+  PRIMARY KEY (`ID_USER_VERIFICATION`),
+  UNIQUE KEY `users_verifications_VERIFICATION_CODE_uindex` (`VERIFICATION_CODE`),
+  KEY `users_verifications_users_ID_USER_fk` (`ID_USER`),
+  CONSTRAINT `users_verifications_users_ID_USER_fk` FOREIGN KEY (`ID_USER`) REFERENCES `users` (`ID_USER`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2022-08-03 14:37:39

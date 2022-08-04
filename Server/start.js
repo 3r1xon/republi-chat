@@ -16,15 +16,26 @@ const server = (() => {
 
   if (process.env.NODE_ENV) {
 
+    let key = null;
+    let cert = null;
+
+    try {
+      key = fs.readFileSync(process.env.CERT_KEY_PATH);
+      cert = fs.readFileSync(process.env.CERT_PATH);
+    } catch {
+      key = fs.readlink(process.env.CERT_KEY_PATH)
+      cert = fs.readlink(process.env.CERT_PATH)
+    }
+
     const httpsOptions = {
-      key: fs.readFileSync(process.env.CERT_KEY_PATH),
-      cert: fs.readFileSync(process.env.CERT_PATH),
+      key: key,
+      cert: cert,
       requestCert: false,
       rejectUnauthorized: false
     };
 
     return https.createServer(httpsOptions, app).listen(port, () =>
-      console.log(`Server listening at http://localhost:${port}`));
+      console.log(`Server listening at https://localhost:${port}`));
   }
 
   return app.listen(port, () =>
@@ -35,7 +46,7 @@ const server = (() => {
 const corsOptions = {
   origin: process.env.ORIGIN,
   credentials: true,
-  exposedHeaders: ['sid'],
+  exposedHeaders: ['sid']
 };
 
 const io = require('socket.io')(server, {
